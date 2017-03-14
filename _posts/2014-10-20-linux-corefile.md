@@ -4,7 +4,7 @@ title: linux corefile 设置
 date: 2014-10-15 19:08:12
 categories: Linux
 tags: 系统编程 
-excerpt: linux corefile 设置
+excerpt: linux corefile dump
 ---
 
 程序运行的过程中,可能会因为一些隐藏的bug导致崩溃,为了在出问题时，及时记录所在环境的情况，所以要设置core文件的产生。其实其本质就是把进程的内存保存到文件中去。

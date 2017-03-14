@@ -4,7 +4,7 @@ title: linux进程间通信-有名管道（FIFO）
 date: 2014-10-11 20:20:33
 categories: Linux
 tags: 系统编程
-excerpt: linux进程间通信-有名管道（FIFO）
+excerpt: linux process communication about FIFO
 ---
 
 ### 有名管道（FIFO）

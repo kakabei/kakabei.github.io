@@ -4,7 +4,7 @@ title: linux进程间通信-共享内存
 date: 2014-10-12 19:08:39
 categories: Linux
 tags: 系统编程
-excerpt: linux进程间通信-共享内存
+excerpt: linux process communication about share memory
 ---
 
 ### 一 共享内存介绍

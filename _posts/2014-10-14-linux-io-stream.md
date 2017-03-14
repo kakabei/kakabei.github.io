@@ -4,7 +4,7 @@ title: unix标准IO库
 date: 2014-10-13 20:08:12
 categories: Linux
 tags: 系统编程
-excerpt: unix标准IO库
+excerpt: unix about stream 
 ---
 
 ### 一 流和FILE对象

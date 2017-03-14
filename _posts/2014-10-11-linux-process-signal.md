@@ -4,7 +4,7 @@ title: linux进程间通信-信号（signal）
 date: 2014-10-11 22:02:39
 categories: Linux
 tags: 系统编程
-excerpt: linux进程间通信-信号（signal）
+excerpt: linux process communication about signal
 ---
 
 ### 信号（signal）

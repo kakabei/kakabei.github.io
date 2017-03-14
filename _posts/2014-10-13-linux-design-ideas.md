@@ -4,7 +4,7 @@ title: Linux Unix 设计思想
 date: 2014-10-13 20:08:12
 categories: Linux
 tags: 技术阅读
-excerpt: Linux Unix 设计思想
+excerpt: Linux Unix design ideas
 ---
 
 《Linux Unux 设计思想》 很小的一本书，讲的是设计unix的一些准则，但这些准则都不是强制性的。对了开发者在代码设计时，可以借鉴一二。

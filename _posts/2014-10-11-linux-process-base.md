@@ -4,7 +4,7 @@ title: linux进程基础
 date: 2014-10-11 19:40:30
 categories: Linux
 tags: 系统编程
-excerpt: linux进程基础
+excerpt: linux process base, 
 ---
 
 ### 一. 进程

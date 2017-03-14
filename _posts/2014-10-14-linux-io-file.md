@@ -4,7 +4,7 @@ title: unix文件IO
 date: 2014-10-13 20:08:12
 categories: Linux
 tags: 系统编程
-excerpt: unix文件IO
+excerpt: unix file I/O
 ---
 
 ### 一 不带缓冲的I/O

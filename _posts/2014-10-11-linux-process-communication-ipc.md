@@ -4,7 +4,7 @@ title: linux进程间通信-XSI IPC
 date: 2014-10-11 18:10:30
 categories: Linux
 tags: 系统编程
-excerpt: linux进程间通信-XSI IPC
+excerpt: linux process communication about XSI IPC
 ---
 
 ### 一 什么是XSI IPC

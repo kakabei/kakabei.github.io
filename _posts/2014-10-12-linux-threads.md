@@ -4,7 +4,7 @@ title: linux线程基础
 date: 2014-10-12 21:28:17
 categories: Linux
 tags: 系统编程
-excerpt: linux线程基础
+excerpt: linux threads 
 ---
 
 ### 一 程序的执行路线
