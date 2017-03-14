@@ -18,7 +18,7 @@ comments: no
 ### 联系方式：
 
 {% if site.qq %}
-ＱＱ：[{{ site.qq }}](tencent://message/?uin={{ site.qq }})
+QQ ：[{{ site.qq }}](tencent://message/?uin={{ site.qq }})
 {% endif %}
 网站：[{{ site.name }}]({{ site.url }})
 
@@ -26,9 +26,8 @@ comments: no
 
 GitHub：[http://github.com/{{ site.github }}](http://github.com/{{ site.github }})
 
-
 ----
 
-[![新浪微博](http://service.t.sina.com.cn/widget/qmd/1831504255/02345c5a/1.png)](http://weibo.com/p/1005051770097211/home?is_hot=1)
+[![新浪微博](http://service.t.sina.com.cn/widget/qmd/1770097211/11d27894/3.png)](http://weibo.com/p/1005051770097211/home?is_hot=1)
 
 ----
