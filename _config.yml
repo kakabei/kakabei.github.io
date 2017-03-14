@@ -1,16 +1,16 @@
 future: true
 permalink: /:title/
-url: http://hustcat.github.io
-name: YY哥
-author: hustcat
+url: http://blog.xyecho.com
+name: xyecho
+author: xyecho
 qq: 
-email: hustcat@gmail.com
-duoshuo: hustcat
+email: 1447675994@gmail.com
+duoshuo: xyecho
 beian: 
 cnzz: 
-weibo: hustcat
-github: hustcat
+weibo: xyecho
+github: xyecho
 paginate: 20
 highlighter: rouge
 truncate: true
-about: "YY哥(hustcat)"
+about: "xyecho(xyecho)"
