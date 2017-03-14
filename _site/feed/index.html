@@ -5,17 +5,17 @@
   >
   <channel>
     <title>xyecho</title>
-    <link href="http://localhost:4000/feed/" rel="self" />
-    <link href="http://localhost:4000" />
-    <lastBuildDate>2017-03-15T00:32:21+08:00</lastBuildDate>
+    <link href="http://blog.xyecho.com/feed/" rel="self" />
+    <link href="http://blog.xyecho.com" />
+    <lastBuildDate>2017-03-15T00:33:32+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
       <title>日志模块</title>
-      <link href="http://localhost:4000/model-log/"/>
+      <link href="http://blog.xyecho.com/model-log/"/>
       <pubDate>2016-12-15T17:23:53+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/model-log</guid>
+      <guid>http://blog.xyecho.com/model-log</guid>
       <content:encoded><![CDATA[<p>系统的开发，日志模块的是必不可少的。特别对于业务逻辑层的来说，有日志输出，很方便跟踪逻辑大概情况。但是对于底层的核心模块来说，日志输出反而成了累赘。日志的输出同样占有I/O。再者，对于底层的逻辑，一般都是比较复杂，核心。暴露出来也没必要。业务逻辑层同样没有必要去了解它。所以，一般的做法是：底层出错，返回错误编码。由上一层记录就OK了。</p>
 
 <p>日志模块一般可以分为 print/note、 debug、 warn、error。人个觉得这四个层次就够了。当然，也可多增加几个，例如，trac。我曾经用于特别的调试，只是一些非必现的问题调试，把日志输出到这层，方便查找。</p>
@@ -42,10 +42,10 @@
     
     <item>
       <title>余华-活着</title>
-      <link href="http://localhost:4000/alive/"/>
+      <link href="http://blog.xyecho.com/alive/"/>
       <pubDate>2016-10-15T17:23:53+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/alive</guid>
+      <guid>http://blog.xyecho.com/alive</guid>
       <content:encoded><![CDATA[<p>这本书是从微博上看网友介绍的，还是朋友介绍的，我也不记得了。在kindle上看有已经购买。应该是一次买了后，忘记了看了。这两天上下班在地铁上，就把它给看了。</p>
 
 <p>书里的主人公叫福贵。一个旧社会里的有钱人的少爷。年少时就一个败家子。按他妈的说法是上梁不正下梁歪。因为他老子年轻也也是败家子，败了家里的一百多亩田地。后来开窍了，好好的在经营自己的田地。他就边上厕所也会跑到自家的田地，可是就是肥水不流外人田的吧。老子还是蛮希望福贵能光大门楣的。结果还是一败家子。把他没败完的另一百多亩也败完了。</p>
@@ -71,10 +71,10 @@
     
     <item>
       <title>linux corefile 设置</title>
-      <link href="http://localhost:4000/linux-corefile/"/>
+      <link href="http://blog.xyecho.com/linux-corefile/"/>
       <pubDate>2014-10-16T03:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/linux-corefile</guid>
+      <guid>http://blog.xyecho.com/linux-corefile</guid>
       <content:encoded><![CDATA[<p>程序运行的过程中,可能会因为一些隐藏的bug导致崩溃,为了在出问题时，及时记录所在环境的情况，所以要设置core文件的产生。其实其本质就是把进程的内存保存到文件中去。</p>
 
 <h4 id="1core文件的生成开关和大小限制">1.core文件的生成开关和大小限制</h4>
@@ -136,10 +136,10 @@ bt
     
     <item>
       <title>liunx下调试gdb</title>
-      <link href="http://localhost:4000/linux-gdb/"/>
+      <link href="http://blog.xyecho.com/linux-gdb/"/>
       <pubDate>2014-10-15T17:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/linux-gdb</guid>
+      <guid>http://blog.xyecho.com/linux-gdb</guid>
       <content:encoded><![CDATA[<h3 id="一-单步执行和跟踪函数调用">一 单步执行和跟踪函数调用</h3>
 <p>例子源码：</p>
 
@@ -506,10 +506,10 @@ off: gdb将控制父进程和子进程。follow-fork-mode指定的进程将被�
     
     <item>
       <title>TCP协议杂记</title>
-      <link href="http://localhost:4000/tcp-base/"/>
+      <link href="http://blog.xyecho.com/tcp-base/"/>
       <pubDate>2014-10-15T17:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/tcp-base</guid>
+      <guid>http://blog.xyecho.com/tcp-base</guid>
       <content:encoded><![CDATA[<p>从四个方面来理解TCP协议
 1 TCP头部信息
 2 TCP 状态转移过程
@@ -600,10 +600,10 @@ TCP拥塞控制的四个部分：慢启动、拥塞避免、快速重传、快�
     
     <item>
       <title>unix 文件和目录</title>
-      <link href="http://localhost:4000/linux-dir/"/>
+      <link href="http://blog.xyecho.com/linux-dir/"/>
       <pubDate>2014-10-15T06:48:32+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/linux-dir</guid>
+      <guid>http://blog.xyecho.com/linux-dir</guid>
       <content:encoded><![CDATA[<ol>
   <li>设置用户ID和设置ID</li>
 </ol>
@@ -665,10 +665,10 @@ TCP拥塞控制的四个部分：慢启动、拥塞避免、快速重传、快�
     
     <item>
       <title>unix标准IO库</title>
-      <link href="http://localhost:4000/linux-io-stream/"/>
+      <link href="http://blog.xyecho.com/linux-io-stream/"/>
       <pubDate>2014-10-14T04:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/linux-io-stream</guid>
+      <guid>http://blog.xyecho.com/linux-io-stream</guid>
       <content:encoded><![CDATA[<h3 id="一-流和file对象">一 流和FILE对象</h3>
 <p>(1)当用标准 I/O库打开或创建一个文件时，我们已使一个流与一个文件相结合。</p>
 
@@ -778,10 +778,10 @@ type参数指定对该I/O 流的读、写方式，ANSI C规定type参数可以�
     
     <item>
       <title>unix文件IO</title>
-      <link href="http://localhost:4000/linux-io-file/"/>
+      <link href="http://blog.xyecho.com/linux-io-file/"/>
       <pubDate>2014-10-14T04:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/linux-io-file</guid>
+      <guid>http://blog.xyecho.com/linux-io-file</guid>
       <content:encoded><![CDATA[<h3 id="一-不带缓冲的io">一 不带缓冲的I/O</h3>
 <p>1、大多数UNIX文件I/O只需用到5个函数：open、read、write、lseek以及close。然后说明不同缓存器长度对read和write函数的影响。
 2、这些函数经常被称为不带缓冲的I/O。不带缓冲的指的是每个read和write都调用内核中的一个系统调用。</p>
@@ -1074,10 +1074,10 @@ type参数指定对该I/O 流的读、写方式，ANSI C规定type参数可以�
     
     <item>
       <title>Linux Unix 设计思想</title>
-      <link href="http://localhost:4000/linux-design-ideas/"/>
+      <link href="http://blog.xyecho.com/linux-design-ideas/"/>
       <pubDate>2014-10-14T04:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/linux-design-ideas</guid>
+      <guid>http://blog.xyecho.com/linux-design-ideas</guid>
       <content:encoded><![CDATA[<p>《Linux Unux 设计思想》 很小的一本书，讲的是设计unix的一些准则，但这些准则都不是强制性的。对了开发者在代码设计时，可以借鉴一二。</p>
 
 <p>准则一 ：小即是美
@@ -1094,10 +1094,10 @@ type参数指定对该I/O 流的读、写方式，ANSI C规定type参数可以�
     
     <item>
       <title>linux进程间关系</title>
-      <link href="http://localhost:4000/linux-process-id/"/>
+      <link href="http://blog.xyecho.com/linux-process-id/"/>
       <pubDate>2014-10-14T02:08:39+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/linux-process-id</guid>
+      <guid>http://blog.xyecho.com/linux-process-id</guid>
       <content:encoded><![CDATA[<p>1 每个进程都隶属于一个进程组，所以它有PID信息还有PGID。可以用pid_t getpgid( pid_t pid);
 2 每个进程组都有一个首领进程，其PGID和PID相同。进程组将一直存在，直到其中所有进程都退出，或者加入到其他进程组。
 3 setpgid(pid_t pid, pid_t pgid); 将PID为pid的进程的PGID设置为pgid。如果pid和pgid相同，则由pid指定的里程将被设置为进程首领。如果pid为0，则表示设置当前进程的PGID为pgid; 如果pgid为0.则使用pid作为目标PGID。
