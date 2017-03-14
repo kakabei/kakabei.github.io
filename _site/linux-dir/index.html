@@ -51,27 +51,39 @@
 </section>
 <section class="post">
 <ol>
-  <li>设置用户ID和设置ID
- （1）实际用户ID、实际组ID：  标识我们究竟是谁。这两个字段在登录时取自口令文件中的登录项。通常在一个登录会话间这些值并不改变，但是超级用户进程有方法改变它们。 
- （2）有效用户ID、有效组ID： 决定了我们的文件访问权限。
- （3）保存的设置组ID、保存的设置组ID:在执行一个程序时包含了有效用户ID和有效组ID的副本。</li>
+  <li>设置用户ID和设置ID</li>
 </ol>
 
+<p>(1)实际用户ID、实际组ID：  标识我们究竟是谁。这两个字段在登录时取自口令文件中的登录项。通常在一个登录会话间这些值并不改变，但是超级用户进程有方法改变它们。</p>
+
+<p>(2)有效用户ID、有效组ID： 决定了我们的文件访问权限。</p>
+
+<p>(3)保存的设置组ID、保存的设置组ID:在执行一个程序时包含了有效用户ID和有效组ID的副本。</p>
+
 <p>通常，有效用户ID等于实际用户ID，有效级ID等于实际组ID。
-当执行一个程序文件时，进程的有效用户ID通常就是实际用户ID，有效组ID通常是实际组ID。但是可以在文件模式字（st_mode）中设置一个特殊标志，其含义是“当执行此文件时将进程的有效用户ID设置为文件所有者的用户ID（st_uid）”。与此相类似，在文件模式字中可以调协另一位，它使用将此文件的进程的有效组ID设置为文件的组所有者ID（st_gid）。在文件模式籽中的这两位被称为设置用户ID（set-user-ID）位和设置组ID（set-group-ID）位。</p>
+当执行一个程序文件时，进程的有效用户ID通常就是实际用户ID，有效组ID通常是实际组ID。但是可以在文件模式字（st_mode）中设置一个特殊标志，其含义是“当执行此文件时将进程的有效用户ID设置为文件所有者的用户ID（st_uid）”。</p>
+
+<p>与此相类似，在文件模式字中可以调协另一位，它使用将此文件的进程的有效组ID设置为文件的组所有者ID（st_gid）。在文件模式籽中的这两位被称为设置用户ID（set-user-ID）位和设置组ID（set-group-ID）位。</p>
 
 <ol>
-  <li>access 函数 
-access 函数是按实际用户ID和实际组IDeas进行访问权限测试的。
-    <div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#inlude &lt;unistd.h&gt;
+  <li>access 函数</li>
+</ol>
+
+<p>access 函数是按实际用户ID和实际组IDeas进行访问权限测试的。</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#inlude &lt;unistd.h&gt;
 </span><span class="kt">int</span> <span class="n">access</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
-<span class="n">R_OK</span>    <span class="err">测试读权限</span>
-<span class="n">W_OK</span>   <span class="err">测试写权限</span>
-<span class="n">X_OK</span>    <span class="err">测试执行权限</span>
-<span class="n">F_OK</span>   <span class="err">测试文件是否存在</span>
 </code></pre>
-    </div>
-  </li>
+</div>
+
+<ul>
+  <li>R_OK  测试读权限</li>
+  <li>W_OK  测试写权限</li>
+  <li>X_OK  测试执行权限</li>
+  <li>F_OK  测试文件是否存在</li>
+</ul>
+
+<ol>
   <li>umask函数</li>
 </ol>
 
