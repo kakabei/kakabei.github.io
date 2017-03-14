@@ -1,0 +1,1096 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <rss version="2.0"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+  >
+  <channel>
+    <title>xyecho</title>
+    <link href="http://localhost:4000/feed/" rel="self" />
+    <link href="http://localhost:4000" />
+    <lastBuildDate>2017-03-14T22:12:14+08:00</lastBuildDate>
+    <webMaster>xyecho@gmail.com</webMaster>
+    
+    <item>
+      <title>日志模块</title>
+      <link href="http://localhost:4000/model-log/"/>
+      <pubDate>2016-12-15T17:23:53+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/model-log</guid>
+      <content:encoded><![CDATA[<p>系统的开发，日志模块的是必不可少的。特别对于业务逻辑层的来说，有日志输出，很方便跟踪逻辑大概情况。但是对于底层的核心模块来说，日志输出反而成了累赘。日志的输出同样占有I/O。再者，对于底层的逻辑，一般都是比较复杂，核心。暴露出来也没必要。业务逻辑层同样没有必要去了解它。所以，一般的做法是：底层出错，返回错误编码。由上一层记录就OK了。</p>
+
+<p>日志模块一般可以分为 print/note、 debug、 warn、error。人个觉得这四个层次就够了。当然，也可多增加几个，例如，trac。我曾经用于特别的调试，只是一些非必现的问题调试，把日志输出到这层，方便查找。</p>
+
+<p>对于这四层，是分开几个文件，还是在同一个文件中？ 其实这两种方式我都用过。这些年的经验，感觉写到同一个文件中，比较分四个文件要好。理由是很清楚的知道日志输出的前后时间顺序。当然分开成几个日志文件输出，也是有办法按时间查看的，只要用linux的一些工具手段而已。分开成几个文件的好处，就是一看就知道是否有错误输出了。同一个文件，只能在文件中查到才知道。</p>
+
+<p>无论是 apache,还是nignx，日志的输出都是分层，配置不同层次的，只有高于或等于它的才能被输出。当然，我们设计时也可以直接指定层次print、warn、error。</p>
+
+<p>有日志输出，就意味着有日志文件的管理。如文件大小、文件命名、所在目录、如何清理。
+一般，我的做法是日志文件的大小设计成可配置。在相关的配置文件中指定。
+二，日志文件的命名，我是按模块名来命名（即进程名）。或加上日期或日期在体现在目录上。
+三，所在目录，我选择是把所有的日志放到同一个Log目录下，千万别把分别放到不同模块的目录里面。这样做的好处是：我们可以系统中划出一个分区来，专门存放日志，和服务的进程分离开。这样做的理由是：如果日志输出过来，把硬盘空间爆了，不会影响到服务的运行。
+四，对清理， 我没有体现在于日志模块里，而是用计划任务做定时清理。</p>
+
+<p>日志模块应该有可配置性。 一般有：
+路径、文件大小、模块名、输出层次、</p>
+
+<p>日志的输出涉及到I/O。所以对效率是有一定的影响的。 必竞这是定文件的。有一个很不错的设计：就是日志写到队列（用共享内存实现 的）然后由专门的日志进程（logsvr）输出到文件中。这样日志输出就不会有I/O阻塞了，提高一些效率。</p>
+
+<p>下一回，把日志的模块整理好，分析一下。</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>余华-活着</title>
+      <link href="http://localhost:4000/alive/"/>
+      <pubDate>2016-10-15T17:23:53+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/alive</guid>
+      <content:encoded><![CDATA[<p>这本书是从微博上看网友介绍的，还是朋友介绍的，我也不记得了。在kindle上看有已经购买。应该是一次买了后，忘记了看了。这两天上下班在地铁上，就把它给看了。</p>
+
+<p>书里的主人公叫福贵。一个旧社会里的有钱人的少爷。年少时就一个败家子。按他妈的说法是上梁不正下梁歪。因为他老子年轻也也是败家子，败了家里的一百多亩田地。后来开窍了，好好的在经营自己的田地。他就边上厕所也会跑到自家的田地，可是就是肥水不流外人田的吧。老子还是蛮希望福贵能光大门楣的。结果还是一败家子。把他没败完的另一百多亩也败完了。</p>
+
+<p>最后他爸把所有的田契和房契都让人换成了铜钱，整整三大担。让福贵自己挑去还赌债。福贵把肩膀都磨破了。才知道祖辈挣下这些钱不知要累死多少人。他自己挑都快累死了。这时才知道他老子为什么不要银元要铜钱。
+破产后，他们只能去住茅草屋。没多久福贵的老子在拉屎的时候死了。家里能卖的东西也都卖光了。福贵只能去租田来种，可他是个就个少爷。可怜了他的老妈和老婆。
+话说他老婆也是个好女人。一个城里米行的小姐，也读过书。嫁给一个败家子。最后再怎么受苦也跟定他了。 在福贵去城里为他妈找大夫时，他被国民党抓了壮丁。一去就是五年，幸好没有死，被共产党俘虏后放了。到家时，他妈死了，大女儿在生病时聋哑啊。小儿子也不认识他了。</p>
+
+<p>然后，解放了，新中国成立了， 三反三反，大跃进，砸锅炼钢，文化大革命。开始了生产大队的大食堂的生活，最后没粮食了，食堂解散了，大伙都没有吃的。只能挖树根，然后说着要相信政府，相信党。可队长每一次都是空手而回的。大伙开始去乞讨，福贵的老婆说要去城里看望老父，其实就是去乞讨。却真的在街上碰到了父亲。（真想知道他们当时的场景）老父给她从自己的牙缝里省下的来小米。她高兴的回到家，福贵去不敢开社，因为知道一开灶全村都知道了。福贵要确认村里没有人才敢开灶。这让我想我爸说过一件。有一次，我开玩笑的对他说，如果中国经济真的不行了。我们是不是家里存点什么东西啊。他说：没什么用， 全村都没有，就我们家有，也是存不了的。想到爸之前的意思，他是不是以前就经历过这样的事。</p>
+
+<p>儿子在医院给他输血时，被抽空死了。聋哑女儿好不容易嫁了个好人歪头。却在难产也死了。老婆却一直在生病，在女儿死后三个月也死了。儿子女子都死了，她没什么好操心的了。她死后也有福贵料理后事。而福贵的后事也有他的外孙。所以她死得安心。接下来的，是他的女婿歪头也在工地出意外死了，留下了外孙和他相依为命。可最后，边他的外孙也在吃豆撑死了。在福贵年迈时，他所有的亲人都死了。</p>
+
+<p>他在床边放十块钱，全村的人都知道，那是给替他收尸的人的。他存了几年的钱，想为他外孙买头牛。却在看到别人宰杀一头老牛时，心生怜悯。买了一头老牛。村里人都是这牛活不过四五年，可他却不在意，他觉得自己的自己应该活不了那么久。</p>
+
+<p>写得比较朴素简单，文字很简单。但福贵的命却是很悲剧的。不过，过他福贵自己讲出来的人生却没有悲剧的感觉。可能这就是《活着》想表达的东西吧。</p>
+
+<p>最后想说的，那真个操蛋的年代 。</p>
+
+<p>– 深圳 北站</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>linux corefile 设置</title>
+      <link href="http://localhost:4000/linux-corefile/"/>
+      <pubDate>2014-10-16T03:08:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/linux-corefile</guid>
+      <content:encoded><![CDATA[<p>程序运行的过程中,可能会因为一些隐藏的bug导致崩溃,为了在出问题时，及时记录所在环境的情况，所以要设置core文件的产生。其实其本质就是把进程的内存保存到文件中去。</p>
+
+<h4 id="1core文件的生成开关和大小限制">1.core文件的生成开关和大小限制</h4>
+
+<p>1）使用ulimit -c命令可查看core文件的生成开关。若结果为0，则表示关闭了此功能，不会生成core文件。
+2）使用ulimit -c filesize命令，可以限制core文件的大小（filesize的单位为kbyte）。</p>
+
+<p>3）若ulimit -c unlimited，则表示core文件的大小不受限制。如果生成的信息超过此大小，将会被裁剪，最终生成一个不完整的core文件。在调试此core文件的时候，gdb会提示错误。</p>
+
+<h4 id="2core文件的名称和生成路径">2.core文件的名称和生成路径</h4>
+
+<p>若系统生成的core文件不带其他任何扩展名称，则全部命名为core。新的core文件生成将覆盖原来的core文件。</p>
+
+<p>1）/proc/sys/kernel/core_uses_pid可以控制core文件的文件名中是否添加pid作为扩展。文件内容为1，表示添加pid作为扩展名，生成的core文件格式为core.xxxx；为0则表示生成的core文件同一命名为core。
+可通过以下命令修改此文件：
+echo “1” &gt; /proc/sys/kernel/core_uses_pid</p>
+
+<p>2）proc/sys/kernel/core_pattern可以控制core文件保存位置和文件名格式。
+可通过以下命令修改此文件：
+echo “/corefile/core-%e-%p-%t” &gt; core_pattern，可以将core文件统一生成到/corefile目录下，产生的文件名为core-命令名-pid-时间戳
+以下是参数列表:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>%p - insert pid into filename 添加pid
+%u - insert current uid into filename 添加当前uid
+%g - insert current gid into filename 添加当前gid
+%s - insert signal that caused the coredump into the filename 添加导致产生core的信号
+%t - insert UNIX <span class="nb">time </span>that the coredump occurred into filename 添加core文件生成时的unix时间
+%h - insert hostname where the coredump happened into filename 添加主机名
+%e - insert coredumping executable name into filename 添加命令名
+</code></pre>
+</div>
+
+<h4 id="3core文件的查看">3.core文件的查看</h4>
+
+<p>core文件需要使用gdb来查看。</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>gdb ./a.out
+core-file core.xxxx
+</code></pre>
+</div>
+
+<p>使用bt命令即可看到程序出错的地方。
+以下两种命令方式具有相同的效果，但是在有些环境下不生效，所以推荐使用上面的命令。
+1）gdb -core=core.xxxx</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>file ./a.out
+bt
+</code></pre>
+</div>
+
+<p>2）gdb -c core.xxxx</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>file ./a.out
+bt
+</code></pre>
+</div>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>liunx下调试gdb</title>
+      <link href="http://localhost:4000/linux-gdb/"/>
+      <pubDate>2014-10-15T17:08:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/linux-gdb</guid>
+      <content:encoded><![CDATA[<h3 id="一-单步执行和跟踪函数调用">一 单步执行和跟踪函数调用</h3>
+<p>例子源码：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">int</span> <span class="nf">add_range</span><span class="p">(</span><span class="kt">int</span> <span class="n">low</span><span class="p">,</span> <span class="kt">int</span> <span class="n">high</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">low</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">sum</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">result</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+    <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"result[0]=%d</span><span class="se">\n</span><span class="s">result[1]=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>1、在编译时要加上-g选项，生成的可执行文件才能用gdb进行源码级调试。</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gcc -g main.c -o main
+<span class="gp">$ </span>gdb main
+</code></pre>
+</div>
+
+<p>gdb加-g编译时并不是把整个源文件嵌入到可执行文件中，所以在调试时必须保证gdb能找到源文件。</p>
+
+<p>2、帮助命令</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">help</span>
+</code></pre>
+</div>
+
+<p>进一步查看某一类别中有哪些命令，例如查看files类别下有哪些命令可用：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">help </span>files
+</code></pre>
+</div>
+
+<p>3、 list命令</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> list
+</code></pre>
+</div>
+
+<p>一次只列10行。
+gdb的很多常用命令有简写形式，例如list命令可以写成l，要列一个函数的源代码也可以用函数名做参数：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> l add_range
+</code></pre>
+</div>
+
+<p>4、退出gdb的环境</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> quit
+</code></pre>
+</div>
+
+<p>5、start命令开始执行程序</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> start
+Breakpoint 1 at 0x80483ad: file main.c, line 14.
+Starting program: /home/akaedu/main 
+main <span class="o">()</span> at main.c:14
+14 result[0] <span class="o">=</span> add_range<span class="o">(</span>1, 10<span class="o">)</span>;
+<span class="o">(</span>gdb<span class="o">)</span>
+</code></pre>
+</div>
+
+<p>6、next命令（简写为n）控制这些语句一条一条地执行。</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> n
+15 result[1] <span class="o">=</span> add_range<span class="o">(</span>1, 100<span class="o">)</span>;
+<span class="o">(</span>gdb<span class="o">)</span> （直接回车）
+16 <span class="nb">printf</span><span class="o">(</span><span class="s2">"result[0]=%d</span><span class="se">\n</span><span class="s2">result[1]=%d</span><span class="se">\n</span><span class="s2">"</span>, result[0], 
+result[1]<span class="o">)</span>;
+<span class="o">(</span>gdb<span class="o">)</span> （直接回车）
+result[0]<span class="o">=</span>55
+result[1]<span class="o">=</span>5105
+17 <span class="k">return </span>0;
+</code></pre>
+</div>
+
+<p>7、用step命令（简写为s）钻进add_range函数中去跟踪执行</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> s
+add_range <span class="o">(</span><span class="nv">low</span><span class="o">=</span>1, <span class="nv">high</span><span class="o">=</span>10<span class="o">)</span> at main.c:6
+6 <span class="k">for</span> <span class="o">(</span>i <span class="o">=</span> low; i &lt;<span class="o">=</span> high; i++<span class="o">)</span>
+</code></pre>
+</div>
+
+<p>8、backtrace命令（简写为bt）可以查看函数调用的栈帧</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> bt
+<span class="c">#0 add_range (low=1, high=10) at main.c:6</span>
+<span class="c">#1 0x080483c1 in main () at main.c:14</span>
+</code></pre>
+</div>
+
+<p>9 info命令（简写为i）查看add_range函数局部变量的值：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> i locals
+i <span class="o">=</span> 0
+sum <span class="o">=</span> 0
+</code></pre>
+</div>
+
+<p>10、frame命令（简写为f）选择1号栈帧然后再查看局部变量：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> f 1
+<span class="c">#1 0x080483c1 in main () at main.c:14</span>
+14 result[0] <span class="o">=</span> add_range<span class="o">(</span>1, 10<span class="o">)</span>;
+<span class="o">(</span>gdb<span class="o">)</span> i locals 
+result <span class="o">=</span> <span class="o">{</span>0, 0, 0, 0, 0, 0, 134513196, 225011984, -1208685768, -1081160480, 
+...
+-1208623680<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>11、用print命令（简写为p）打印出变量sum的值：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>gdb<span class="o">)</span> （直接回车）
+6 <span class="k">for</span> <span class="o">(</span>i <span class="o">=</span> low; i &lt;<span class="o">=</span> high; i++<span class="o">)</span>
+<span class="o">(</span>gdb<span class="o">)</span> p sum
+<span class="nv">$1</span> <span class="o">=</span> 3
+</code></pre>
+</div>
+
+<p>12、finish命令让程序一直运行到从当前函数返回为止：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> finish
+Run till <span class="nb">exit </span>from <span class="c">#0 add_range (low=1, high=10) at main.c:6</span>
+0x080483c1 <span class="k">in </span>main <span class="o">()</span> at main.c:14
+14 result[0] <span class="o">=</span> add_range<span class="o">(</span>1, 10<span class="o">)</span>;
+Value returned is <span class="nv">$2</span> <span class="o">=</span> 55
+</code></pre>
+</div>
+
+<h4 id="二--断点">二  断点</h4>
+<p>例子源码</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">input</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span> <span class="n">input</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">sum</span> <span class="o">=</span> <span class="n">sum</span><span class="o">*</span><span class="mi">10</span> <span class="o">+</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">;</span>
+       <span class="n">printf</span><span class="p">(</span><span class="s">"input=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">sum</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>1、display命令使得每次停下来的时候都显示当前sum的值，然后继续往下走。
+     undisplay命令可以取消跟踪显示，变量sum的编号是1，可以用undisplay 1命令取消它的跟踪显示</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> display sum
+1: sum <span class="o">=</span> -1208103488
+<span class="o">(</span>gdb<span class="o">)</span> n
+9 scanf<span class="o">(</span><span class="s2">"%s"</span>, input<span class="o">)</span>;
+1: sum <span class="o">=</span> 0
+<span class="o">(</span>gdb<span class="o">)</span> 
+123
+10 <span class="k">for</span> <span class="o">(</span>i <span class="o">=</span> 0; input[i] !<span class="o">=</span> <span class="s1">'\0'</span>; i++<span class="o">)</span>
+1: sum <span class="o">=</span> 0
+</code></pre>
+</div>
+
+<p>2、break命令的参数也可以是函数名，表示在某个函数开头设断点。现在用continue命令（简写为c）连续运行而非单步运行，程序到达断点会自动停下来，这样就可以停在下一次循环的开头。</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> l
+5 int sum <span class="o">=</span> 0, i;
+6 char input[5];
+7 
+8 <span class="k">while</span> <span class="o">(</span>1<span class="o">)</span> <span class="o">{</span>
+9 scanf<span class="o">(</span><span class="s2">"%s"</span>, input<span class="o">)</span>;
+10 <span class="k">for</span> <span class="o">(</span>i <span class="o">=</span> 0; input[i] !<span class="o">=</span> <span class="s1">'\0'</span>; i++<span class="o">)</span>
+11 sum <span class="o">=</span> sum<span class="k">*</span>10 + input[i] - <span class="s1">'0'</span>;
+12 <span class="nb">printf</span><span class="o">(</span><span class="s2">"input=%d</span><span class="se">\n</span><span class="s2">"</span>, sum<span class="o">)</span>;
+13 <span class="o">}</span>
+14 <span class="k">return </span>0;
+<span class="o">(</span>gdb<span class="o">)</span> b 9
+Breakpoint 2 at 0x80483bc: file main.c, line 9.
+<span class="o">(</span>gdb<span class="o">)</span> c
+Continuing.
+<span class="nv">input</span><span class="o">=</span>123
+Breakpoint 2, main <span class="o">()</span> at main.c:9
+9 scanf<span class="o">(</span><span class="s2">"%s"</span>, input<span class="o">)</span>;
+1: sum <span class="o">=</span> 123
+</code></pre>
+</div>
+
+<p>3、用info命令可以查看已经设置的断点：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>Breakpoint 3 at 0x8048411: file main.c, line 12.
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints
+Num Type Disp Enb Address What
+2 breakpoint keep y 0x080483c3 <span class="k">in </span>main at main.c:9
+breakpoint already hit 1 <span class="nb">time
+</span>3 breakpoint keep y 0x08048411 <span class="k">in </span>main at main.c:12
+</code></pre>
+</div>
+
+<p>4、每个断点都有一个编号，可以用编号指定删除某个断点：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> delete breakpoints 2
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints 
+Num Type Disp Enb Address What
+3 breakpoint keep y 0x08048411 <span class="k">in </span>main at main.c:12
+</code></pre>
+</div>
+
+<p>5、有时候一个断点暂时不用可以禁用掉而不必删除，这样以后想用的时候可以直接启用，而不必重新
+从代码里找应该在哪一行设断点：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> disable breakpoints 3
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints 
+Num Type Disp Enb Address What
+3 breakpoint keep n 0x08048411 <span class="k">in </span>main at main.c:12
+<span class="o">(</span>gdb<span class="o">)</span> <span class="nb">enable </span>3
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints 
+Num Type Disp Enb Address What
+3 breakpoint keep y 0x08048411 <span class="k">in </span>main at main.c:12
+<span class="o">(</span>gdb<span class="o">)</span> delete breakpoints 
+Delete all breakpoints? <span class="o">(</span>y or n<span class="o">)</span> y
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints
+No breakpoints or watchpoints.
+</code></pre>
+</div>
+
+<p>6、gdb的断点功能非常灵活，还可以设置断点在满足某个条件时才激活，例如我们仍然在循环开头设置断点，但是仅当sum不等于0时才中断，然后用run命令（简写为r）重新从程序开头连续运行：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">break </span>9 <span class="k">if </span>sum !<span class="o">=</span> 0
+Breakpoint 5 at 0x80483c3: file main.c, line 9.
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints 
+Num Type Disp Enb Address What
+5 breakpoint keep y 0x080483c3 <span class="k">in </span>main at main.c:9
+stop only <span class="k">if </span>sum !<span class="o">=</span> 0
+<span class="o">(</span>gdb<span class="o">)</span> r
+The program being debugged has been started already.
+Start it from the beginning? <span class="o">(</span>y or n<span class="o">)</span> y
+Starting program: /home/akaedu/main 
+123
+<span class="nv">input</span><span class="o">=</span>123
+Breakpoint 5, main <span class="o">()</span> at main.c:9
+9 
+</code></pre>
+</div>
+
+<h3 id="三-观察点">三 观察点</h3>
+
+<p>1、x命令打印指定存储单元的内容。7b是打印格式，b表示每个字节一组，7表示打印7组。</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> x/7b input
+0xbfb8f0a7: 0x31 0x32 0x33 0x34 0x35 
+0x00 0x00
+</code></pre>
+</div>
+
+<p>2 观察点</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> watch input[5]
+Hardware watchpoint 2: input[5]
+<span class="o">(</span>gdb<span class="o">)</span> i watchpoints 
+Num Type Disp Enb Address What
+2 hw watchpoint keep y input[5]
+</code></pre>
+</div>
+
+<p>四 段错误</p>
+
+<p>如果程序运行时出现段错误，用gdb可以很容易定位到究竟是哪一行引发的段错误，例如这个小程
+序：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">man</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="n">man</span><span class="p">);</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>
+
+<p>调试过程如下：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gdb main
+...
+<span class="o">(</span>gdb<span class="o">)</span> r
+Starting program: /home/akaedu/main 
+123
+Program received signal SIGSEGV, Segmentation fault.
+0xb7e1404b <span class="k">in </span>_IO_vfscanf <span class="o">()</span> from /lib/tls/i686/cmov/libc.so.6
+<span class="o">(</span>gdb<span class="o">)</span> bt
+<span class="c">#0 0xb7e1404b in _IO_vfscanf () from /lib/tls/i686/cmov/libc.so.6</span>
+<span class="c">#1 0xb7e1dd2b in scanf () from /lib/tls/i686/cmov/libc.so.6</span>
+<span class="c">#2 0x0804839f in main () at main.c:6</span>
+</code></pre>
+</div>
+
+<h3 id="五设置变量">五设置变量</h3>
+
+<p>有时候，在调试程序时，我们不单单只是查看运行时的变量，我们还可以直接设置程序中的变量，以模拟一些很难在测试中出现的情况，比较一些出错，或是switch的分支语句。使用set命令可以修改程序中的变量。</p>
+
+<p>另外，你知道gdb中也可以有变量吗？就像shell一样，gdb中的变量以$开头，比如你想打印一个数组中的个个元素，你可以这样：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">set</span> <span class="nv">$i</span> <span class="o">=</span> 0
+<span class="o">(</span>gdb<span class="o">)</span> p a[<span class="nv">$i</span>++]
+</code></pre>
+</div>
+
+<p>当然，这里只是给一个示例，表示程序的变量和gdb的变量是可以交互的。</p>
+
+<h3 id="六-调试宏">六 调试宏</h3>
+
+<p>在GDB下，我们无法print宏定义，因为宏是预编译的.所以要在GCC编译程序的时候，加上-ggdb3参数 就可以了。
+另外，你可以使用下述的GDB的宏调试命令 来查看相关的宏。
+info macro – 你可以查看这个宏在哪些文件里被引用了，以及宏定义是什么样的。
+macro – 你可以查看宏展开的样子。</p>
+
+<h3 id="七-命令行参数">七 命令行参数</h3>
+
+<p>有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：</p>
+
+<ul>
+  <li>gdb命令行的 –args 参数</li>
+  <li>gdb环境中 set args命令。</li>
+</ul>
+
+<h3 id="八-调试程序的子进程">八 调试程序的子进程</h3>
+
+<p>用的是follow-fork-mode这个参数。方法是：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nb">set </span>follow-fork-mode <span class="o">[</span>parent|child]
+
+</code></pre>
+</div>
+
+<p>parent: fork之后继续调试父进程，子进程不受影响。
+child: fork之后调试子进程，父进程不受影响。
+因此如果需要调试子进程，在启动gdb后：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">set </span>follow-fork-mode child
+<span class="nb">set </span>detach-on-fork <span class="o">[</span>on|off]
+</code></pre>
+</div>
+
+<p>on: 断开调试follow-fork-mode指定的进程。
+off: gdb将控制父进程和子进程。follow-fork-mode指定的进程将被调试，另一个进程置于暂停（suspended）状态。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>TCP协议杂记</title>
+      <link href="http://localhost:4000/tcp-base/"/>
+      <pubDate>2014-10-15T17:08:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/tcp-base</guid>
+      <content:encoded><![CDATA[<p>从四个方面来理解TCP协议
+1 TCP头部信息
+2 TCP 状态转移过程
+3 TCP 数据流
+4 TCP数据流的控制</p>
+
+<p>TCP为什么叫数据流：应用程序对数据的发送和接收是没有边界限制的。
+TCP为什么是可靠的：TCP协议采用发送应答机制，即发送端发送的每个TCP报文段都必须得到接收方的应答，其次，采用超时重传机制。</p>
+
+<p>UDP虽然说是不可靠服务，但是可以在上层协议来处理数据确认和超时重传。</p>
+
+<p>** TCP 固定头结构: **</p>
+
+<p><img src="/assets/network/tcp-base-1.png" alt="" /></p>
+
+<p>16位端口号：告知这个报文来自那个源端口和给上层协议或者应用那个目的端口。（注意IP是在IP协议层里的）
+32位序号：一次TCP通信（从TCP连接到断开）过程中某一个传输方向上的字节流的每个字节编号。
+32位确认号：用作对另一方发送来的TCP报文的响应。
+4位头部长度：标识该TCP头部多少个32bit字（4字节）因为4位最大能表示15，所以TCP头最长60字节。（15*4=60）
+6位标志们包含好下：
+（1）URG 表示紧急指针是否有效
+（2）ACK 表示确认号是否有效
+（3）PSH 提示接收端应用程序应该即人TCP接收缓冲区中读走数据，为接收后续数据腾出空间。
+（4）RST 表示要求对方重新连接。
+（5）SYN 表示请求建立一个连接。
+（6）FIN 表示通知对方本端村关闭连接。</p>
+
+<p>16位窗口大小:是TCP流量控制的一个手段。它告诉对方本端的TCP接收缓冲区还能容纳多少字节的数据，这样对方就可以控制发送数据的速度。
+16位校验和：同发送方填充。用CRC对数据作检验，这个校验不肥包括TCP头部，也包括数据部分，TCP可靠传输的一个生要保障。
+16位紧急指针：是一个正的偏移量，它和序号字段的值相加表示最后一个紧急数据的下一字节的序号。
+TCP头部选项：这部分最后含有40字节。
+kind=0：选项表结束选项
+kind=1：空操作（nop）选项
+kind=2：最大报文段长度选项，TCP模块通常将MSS设置为（MTU-40）字节（减掉的这40字节包括20字节 的TCP头部和20字节的IP头部）对以太网而言，MSS值是1460（1500-40）
+kind=3：窗口扩大因子选项 。窗口扩大因了选项只能出现在同步报文段中。
+kind=4：选择性确认 。使TCP模块只能重新发送丢失的TCP报文段、不用发送所有未被确认的 TCP报文段。
+kind=5：SACK实际工作的选项
+kind=8    时间戳选项 提供较为准确的计算通信双方之间的回路时间的方法。</p>
+
+<p><strong>半关闭状态</strong></p>
+
+<p>TCP 连接是全双工的，所以它允许两个方向的数据传输被独立关闭，通信的一端可艰送结束报文给对方，告诉它本端已经完成了数据的发送。但允许继续接收来息对方的数据 ，直到对方也发送结束报文段以关闭连接。TCP连接的这种状态称为半关闭状态。
+服务器和客户端应用程序 判断对方是否已经关闭连接的方法是：read系统调用返回0（收到结束报文段）。
+socket网络编程接口通过shutdown函数提供了对阗关闭的支持。</p>
+
+<p>连接超时 ~~</p>
+
+<p><strong>三次握手 四次挥手:</strong></p>
+
+<p><img src="/assets/network/tcp-base-2.png" alt="" /></p>
+
+<p>TIME_WAIT状态
+从图可以看，客户端连接在收到 服务器的结束报文段之后，并没有直接进入 CLOSED状态，而是转移到TIME_WAIT状态。在这个状态，客户端连接要等待一段时间为2MSL的时间。才能完全关闭。
+MSL是TCP报文段在刚和　的最大生存时间。</p>
+
+<p><strong>TIME_WAIT状态存在的原因有两点:</strong> 
+1）可靠地终止TCP连接
+2）保证让发来的TCP报文段有足够的时间被识别并丢弃。</p>
+
+<p>第一个原因：用于确认服务器结束报文段６和报文段７丢失。那么服务器重发结束报文段。因此客户端需要停留在某个以处理重复收到的结束报文段（即向服务器发送确认报文段）
+第二个原因：在linux系统上，一个TCP端口不能被同时打开多次（两次及以上）。当一个TCP连接处于TIME_WAIT状态时。我们将无法立即使用该连接占用着的端口来建立一个连接。如果不存在TIME_WAIT，则应用程序程序能够立即建立一个和刚关闭的连接相似的连接（同IP地址和端口号）这个新连接被称了连接的化身。它可能会接收到属于原来的连接的应用程序数据。这是不应该发的事。  <br />
+另外，历为TCP报文段的最大生存时间是MSL,所以坚持 2M  SL时间的TIME_WAIT状态能够确保网络上两具传输方向上接收到的、迟到的TCP报文都已经消失。因此一个新连接可能在2MSL时间后安全地建立。</p>
+
+<p>复位报文段
+在某些特殊条件下，TCP连接的一端会向另一端发送携带RST标志的报文段，即复位报文段。</p>
+
+<p>异常终止连接
+TCP提供了异常终止一个连接的方法，即给对方发送一个复位报文段。一旦发送了复位报文段，发送端所有排除等待的数据都将被丢弃。</p>
+
+<p>处理半打开连接
+服务器（或客户端）关闭或者异常终止了连接，而对方没有接收到结束报文段（比如发生了网络故障），此时，客户端（或服务端）还维持着原来的连接，而服务器（或客户端）即使重启，也已经没有该连接的任何信息了。我们将这种状态称为打开状态，处于这种连接称为半找连接。如果客户端（或服务器）往处于阗打开连接写入数据，则对方方将回应一个复位报文段。</p>
+
+<p>TCP交互数据流
+TCP报文段所携带的应用程序数据按照长度分为两种：交互数据和成块数据。交互灵气公包含很少的字节。使用交互数据的应用程序（或协议）对实时性求高。如telnet、ssh。成块数据的长度则通常用TCP报文段允许的最大数据长度。使用成块数据的应用程序 （协议）对传输效率要求高，如ftp。</p>
+
+<p>带外数据
+带外数据用于迅速通知对方本端发生的重要事件。因此，带外数据比普通数据（也称为带内数据）表更高的优先级。它应该总是立即被发送，而不论发送缓冲区中是否有排队等待发送的普通数据。
+UDP没有实现带外数据传输，TCP也没有真正的带外数据。不过TCP利用其头部中的紧急指针标志和紧急指针两个字段，给应用程序提供了一种紧急方式 。</p>
+
+<p>TCP超时重传
+TCP服务必须能够重传超时间内未收到确认的TCP报文段。为此， TCP报文段都维护一个重传定时器，该定时器在TCP报文段第一次被发送时启动。如果超时时间内未收到接收方的应答，TCP模块将重传TCP报文段并重置定时器。至于下次重传的超时时间如何选择，以及最多执行多少次重传，就是TCP的重传策略。一共会执行5次重传。次数可以系统相关配置更改。/proc/sys/net/ipv4/tcp_retries1和/proc/sys/net/ipv4/tcp_retries2 前者指定 在底IP接管之前TCP最少执行的重传次数，默认值是３，后者指定 连接放弃前TCP最多可以执行的重传次数，默认值是15。</p>
+
+<p>拥塞控制
+TCP拥塞控制的四个部分：慢启动、拥塞避免、快速重传、快速恢复、快速恢复。</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>unix 文件和目录</title>
+      <link href="http://localhost:4000/linux-dir/"/>
+      <pubDate>2014-10-15T06:48:32+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/linux-dir</guid>
+      <content:encoded><![CDATA[<ol>
+  <li>设置用户ID和设置ID
+ （1）实际用户ID、实际组ID：  标识我们究竟是谁。这两个字段在登录时取自口令文件中的登录项。通常在一个登录会话间这些值并不改变，但是超级用户进程有方法改变它们。 
+ （2）有效用户ID、有效组ID： 决定了我们的文件访问权限。
+ （3）保存的设置组ID、保存的设置组ID:在执行一个程序时包含了有效用户ID和有效组ID的副本。</li>
+</ol>
+
+<p>通常，有效用户ID等于实际用户ID，有效级ID等于实际组ID。
+当执行一个程序文件时，进程的有效用户ID通常就是实际用户ID，有效组ID通常是实际组ID。但是可以在文件模式字（st_mode）中设置一个特殊标志，其含义是“当执行此文件时将进程的有效用户ID设置为文件所有者的用户ID（st_uid）”。与此相类似，在文件模式字中可以调协另一位，它使用将此文件的进程的有效组ID设置为文件的组所有者ID（st_gid）。在文件模式籽中的这两位被称为设置用户ID（set-user-ID）位和设置组ID（set-group-ID）位。</p>
+
+<ol>
+  <li>access 函数 
+access 函数是按实际用户ID和实际组IDeas进行访问权限测试的。
+    <div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#inlude &lt;unistd.h&gt;
+</span><span class="kt">int</span> <span class="n">access</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
+<span class="n">R_OK</span>    <span class="err">测试读权限</span>
+<span class="n">W_OK</span>   <span class="err">测试写权限</span>
+<span class="n">X_OK</span>    <span class="err">测试执行权限</span>
+<span class="n">F_OK</span>   <span class="err">测试文件是否存在</span>
+</code></pre>
+    </div>
+  </li>
+  <li>umask函数</li>
+</ol>
+
+<p>umask函数为进程设置文件模式创建屏蔽字，并返回以前的值。</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include&lt;sys/stat.h&gt;
+</span><span class="n">mode_t</span> <span class="n">umask</span><span class="p">(</span><span class="n">mode_t</span> <span class="n">cmask</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<ol>
+  <li>chmod和fchmod函数</li>
+</ol>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/stat.h&gt;
+</span><span class="kt">int</span> <span class="n">chmod</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span> <span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
+<span class="kt">int</span> <span class="n">fchmod</span><span class="p">(</span><span class="kt">int</span> <span class="n">filedes</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>chmod 函数在指定的文件上进行操作，而fchmod函数则对已打开的文件进行操作。</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>unix标准IO库</title>
+      <link href="http://localhost:4000/linux-io-stream/"/>
+      <pubDate>2014-10-14T04:08:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/linux-io-stream</guid>
+      <content:encoded><![CDATA[<h3 id="一-流和file对象">一 流和FILE对象</h3>
+<p>（1）当用标准 I/O库打开或创建一个文件时，我们已使一个流与一个文件相结合。
+（2）当打开一个流时，标准 I/O函数fopen返回一个指向FILE对象的指针。该对象通常是一个结构，它包含了I/O 库为管理该流所需要的所有信息：用于实际 I/O的文件描述符，指向流缓存的指针，缓存的长度，当前在缓存中的字符数，出错标志等等。
+（3）对于ASCII字符集， 一个字符用一个字节表示。对于国际字符集，一个字符可用多个字节表示。标准I/O文件流可用于单字节或多字节的。当一个流最初被创建时，它并没有定向。如若在未定向的流上使用一个多字节I/O函数，则将该流的定向设置 宽定向的。若在未定向的流上使用一个单节I/O函数，则将该流的定向设置为字节定向的。只有两个函数可以改变的定向。freopen函数清除一个流的定向。fwide函数设置流的定向。</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;wchar.h&gt;
+</span><span class="kt">int</span> <span class="n">fwide</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
+<span class="c1">// 返回值：若流是宽定向的则返回正值，若流是字节定向的则返回负值，或者流是未定向的则返回0
+</span></code></pre>
+</div>
+
+<p>根据mode参数的不同值，fwide函数执行不同的工作：
+a)如若mode参数值为负，fwide将试图使指定的流是字节定向的。
+b)如若mode参数值为正，fwide将试图使指定的流是宽定向的。
+c)如若mode参数值为0，fwide将不试图设置流的定向，但返回标识流定向的值。
+d)注意，fwide并不改变忆定向流的定向。还应注意的是，fwide无出错返回。在调用fwide前先清除error，从fwide返回时检查errorno的值。</p>
+
+<h3 id="二-标准输入标准输出和标准出错">二 标准输入、标准输出和标准出错</h3>
+
+<p>对一个进程预定义了三个流，它们自动地可为进程使用：标准输入、标准输出和标准出错。
+我们可以用文件描述符 STDIN_FILENO,STDOUT_FILENO和STDERR_FILENO分别表示它们。
+这三个标准I/O流通过预定义文件指针 stdin,stdout和stderr加以引用。这三个文件指针同样定义在头文件<stdio.h>中。</stdio.h></p>
+
+<h3 id="三-缓存">三 缓存</h3>
+
+<p>1 标准I/O提供缓存的目的是尽可能减少使用 read和write调用的数量。
+2 标准I/O提供了三种类型的缓存：</p>
+
+<ul>
+  <li>
+    <p>全缓存。
+在这种情况下，当填满标准I/O缓存后才进行实际I/O操作。对于驻在磁盘上的文件通常是由标准IO库实施全缓存的。在一个流上执行第一次 I/O操作时，相关标准I/O函数通常调用malloc获得需使用的缓存。术语刷新（flush）说明标准 I/O缓存的写操作。缓存可由标准 I/O例程自动地刷新（例如当填满一个缓存时），或者可以调用函数fflush刷新一个流。值得引起注意的是在UNIX环境中，刷新有两种意思。在标准 I/O库方面，刷新意味着将缓存中的内容写到磁盘上（该缓存可以只是局部填写的） 。在终端驱动程序方面（例如在第 11章中所述的 tcflush函数），刷新表示丢弃已存在缓存中的数据。</p>
+  </li>
+  <li>
+    <p>行缓存
+在这种情况下，当在输入和输出中遇到新行符时，标准I/O库执行IO操作。这允许我们一次输出一个字符（用标准 I/O fputc函数），但只有在写了一行之后才进行实际 I/O操作。
+当流涉及一个终端时（例如标准输入和标准输出），典型地使用行缓存。对于行缓存有两个限制。
+第一个是：因为标准IO库用来收集每一行的缓存的长度是固定的，所以只要填满了缓存，那么即使还没有写一个新行符，也进行 I/O操作。
+第二个是：任何时候只要通过标准输入输出库要求从 ( a ) 一个不带缓存的流，或者 ( b ) 一个行缓存的流（它预先要求从内核得到数据）得到输入数据，那么就会造成刷新所有行缓存输出流。在 ( b )中带了一个在括号中的说明的理由是，所需的数据可能已在该缓存中，它并不要求内核在需要该数据时才进行该操作。很明显，从不带缓存的一个流中进行输入（ ( a )项）要求当时从内核得到数据。</p>
+  </li>
+  <li>
+    <p>不带缓存
+标准 I/O库不对字符进行缓存。如果用标准 I/O函数写若干字符到不带缓存的流中，则相当于用write系统调用函数将这些字符写至相关联的打开文件上。标准出错流stderr通常是不带缓存的，这就使得出错信息可以尽快显示出来，而不管它们是否含有一个新行字符。</p>
+  </li>
+</ul>
+
+<p>3 标准出错是不带缓冲的，打开 到终端设备的流是行缓冲的，其他所有流则是全缓冲的。</p>
+
+<p>4 对于流的缓冲可能通来两个函数更改缓冲类型：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">void</span> <span class="n">setbuf</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">);</span>
+<span class="kt">int</span> <span class="n">setvbut</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">);</span>
+<span class="c1">//返回值：若成功则返回0，若出错则返回非0值
+</span></code></pre>
+</div>
+
+<p>这些函数一定要在流已被打开后调用。
+强制刷新一个流。</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h &gt;
+</span><span class="kt">int</span> <span class="nf">fflush</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="n">f</span> <span class="n">p</span><span class="p">)</span> <span class="p">;</span>
+<span class="c1">//返回：若成功则为0，若出错则为EOF
+</span></code></pre>
+</div>
+
+<p>此函数使该流所有未写的数据都被传递至内核。作为一种特殊情形，如若 fp是NULL，则此函数刷新所有输出流。</p>
+
+<h4 id="四打开流">四、打开流</h4>
+
+<p>下列三个函数可用于打开一个标准 I/O流。</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">FILE</span> <span class="o">*</span><span class="nf">fopen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">)</span> <span class="p">;</span>
+<span class="kt">FILE</span> <span class="o">*</span><span class="n">freopen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">,</span> <span class="kt">FILE</span> <span class="o">*</span> <span class="n">fp</span><span class="p">);</span>
+<span class="kt">FILE</span> <span class="o">*</span><span class="nf">fdopen</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">)</span> <span class="p">;</span>
+<span class="c1">// 三个函数的返回：若成功则为文件指针，若出错则为 NULL
+</span></code></pre>
+</div>
+
+<p>这三个函数的区别是：
+(1) fopen 打开路径名由pathname 指示的一个文件。
+(2) freopen在一个特定的流上 (由f p指示)打开一个指定的文件（其路径名由pathname  指示），如若该流已经打开，则先关闭该流。此函数一般用于将一个指定的文件打开为一个预定义的流：标准输入、标准输出或标准出错。
+(3) fdopen 取一个现存的文件描述符（我们可能从open,dup,dup2,fcntl或pipe函数得到此文件描述符）并使一个标准的I/O流与该描述符相结合。此函数常用于由创建管道和网络通信通道函数获得的插述符。因为这些特殊类型的文件不能用标准 I/O fopen 函数打开，首先必须先调用设备专用函数以获得一个文件描述符，然后用 fdopen使一个标准I/O流与该描述符相结合。
+type参数指定对该I/O 流的读、写方式，ANSI C规定type参数可以有15种不同的值</p>
+
+<p><img src="/assets/linux/linux-io-stream-1.png" alt="" /></p>
+
+<p>当以读和 写类型打开一文件时，（type中+符号）， 具胡下列限制：
+（1）如果中间没有fflush、fseek、fsetpos或rewind，则在输出的后面不能直接跟随。
+（2）如果中间没有fseek、fsetpos或rewind，或者一个输入操作没有到达文件尾端，则在输入操作之后不能直接跟随输出。</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>unix文件IO</title>
+      <link href="http://localhost:4000/linux-io-file/"/>
+      <pubDate>2014-10-14T04:08:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/linux-io-file</guid>
+      <content:encoded><![CDATA[<h3 id="一-不带缓冲的io">一 不带缓冲的I/O</h3>
+<p>1、大多数UNIX文件I/O只需用到5个函数：open、read、write、lseek以及close。然后说明不同缓存器长度对read和write函数的影响。
+2、这些函数经常被称为不带缓冲的I/O。不带缓冲的指的是每个read和write都调用内核中的一个系统调用。</p>
+
+<h3 id="二-文件描述符">二 文件描述符</h3>
+<p>1、对于内核而言，所有打开文件都由文件描述符引用。文件描述符是一个非负整数。
+2、当打开一个现存文件或创建一个新文件时，内核向进程返回一个文件描述符。当读、写一个文件时，用open或creat返回的文件描述符标识该文件，将其作为参数传送给 read或write。
+3、按照惯例，UNIX shell使文件描述符 0与进程的标准输入相结合，文件描述符 1与标准输出相结合，文件描述符 2与标准出错输出相结合。
+4、在POSIX.1应用程序中，幻数0、1、2应被代换成符号常数STDIN_FILENO、STDOUT_FILENO和STDERR_FILENO。这些常数都定义在头文件<unistd.h>中。文件描述符的范围是0~OPEN_MAX（64个）。现在很多系统则将其增加至 63。</unistd.h></p>
+
+<h3 id="三-常用的函数">三 常用的函数</h3>
+
+<p>5个函数：open、read、write、lseek以及close</p>
+
+<p>1、open函数</p>
+
+<p>open函数打开或创建一个文件</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
+#include &lt;sys/stat.h&gt;
+#include &lt;fcntl.h&gt;
+</span><span class="kt">int</span> <span class="nf">open</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">oflag</span><span class="p">,...</span><span class="cm">/*, mode_t  mode */</span> <span class="p">)</span> <span class="p">;</span>
+</code></pre>
+</div>
+
+<p>返回：若成功为文件描述符，若出错为- 1</p>
+
+<p>pathname是要打开或创建的文件的名字。</p>
+
+<p>oflag参数可用来说明此函数的多个选择项。用下
+列一个或多个常数进行或运算构成 oflag参数(这些常数定义在<fcntl.h>头文件中)：</fcntl.h></p>
+<ul>
+  <li>O_RDONLY  只读打开。</li>
+  <li>O_WRONLY  只写打开。</li>
+  <li>O_RDWR  读、写打开。
+在这三个常数中应当只指定一个。</li>
+</ul>
+
+<p>下列常数则是可选择的：</p>
+<ul>
+  <li>O_APPEND         每次写时都加到文件的尾端。</li>
+  <li>O_CREAT            若此文件不存在则创建它。使用此选择项时，需同时说明第三个参数mode，用其说明该新文件的存取许可权位。</li>
+  <li>O_EXCL              如果同时指定了O_CREAT，而文件已经存在，则出错。这可测试一个文件是否存在，如果不存在则创建此文件成为一个原子操作。</li>
+  <li>O_TRUNC          如果此文件存在，而且为只读或只写成功打开，则将其长度截短为 0。</li>
+  <li>O_NOCTTY        如果pathname指的是终端设备，则不将此设备分配作为此进程的控制终端。</li>
+  <li>O_NONBLOCK  如果pathname指的是一个FIFO、一个块特殊文件或一个字符特殊文件，则此选择项为此文件的本次打开操作和后续的 I/O操作设置非阻塞方式。</li>
+  <li>O_SYNC            使每次write都等到物理I/O操作完成。</li>
+</ul>
+
+<p>2、creat函数</p>
+
+<p>用creat函数创建一个新文件</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
+#include &lt;sys/stat.h&gt;
+#include &lt;fcntl.h&gt;
+</span><span class="kt">int</span> <span class="nf">creat</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="n">mode_t</span>  <span class="n">mode</span><span class="p">)</span> <span class="p">;</span>
+</code></pre>
+</div>
+
+<p>返回：若成功为只写打开的文件描述符，若出错为- 1</p>
+
+<p>这个函数等于：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">open</span> <span class="p">(</span><span class="n">pathname</span><span class="p">,</span> <span class="n">O_WRONLY</span> <span class="err">｜</span><span class="n">O_CREAT</span><span class="err">｜</span><span class="n">O_TRUNC</span><span class="p">,</span>  <span class="n">mode</span><span class="p">)</span> <span class="p">;</span>
+</code></pre>
+</div>
+
+<p>不知道这个函数现在存在的意义是什么？</p>
+
+<p>3、close函数</p>
+
+<p>close函数关闭一个打开文件</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
+</span><span class="kt">int</span> <span class="n">close</span> <span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">)</span><span class="err">；</span>
+</code></pre>
+</div>
+
+<p>返回：若成功为 0，若出错为- 1
+关闭一个文件时也释放该进程加在该文件上的所有记录锁。
+当一个进程终止时，它所有的打开文件都由内核自动关闭。很多程序都使用这一功能而不显式地用close关闭打开的文件。（这个方式不是一个好习惯，建议不要用。）</p>
+
+<p>4、lseek 函数</p>
+
+<p>每个打开文件都有一个与其相关联的“当前文件位移量“。它是一个非负整数，用以度量从文件开始处计算的字节数。按系统默认，当打开一个文件时，除非指定 O_APPEND选择项，否则该位移量被设置为0。</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+</span><span class="kt">off_t</span> <span class="nf">lseek</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="kt">off_t</span>  <span class="n">offset</span><span class="p">,</span> <span class="kt">int</span> <span class="n">whence</span><span class="p">)</span> <span class="p">;</span>
+</code></pre>
+</div>
+
+<p>返回：若成功为新的文件位移，若出错为 	-1
+对参数offset  的解释与参数whence的值有关。</p>
+<ul>
+  <li>若whence是SEEK_SET，则将该文件的位移量设置为距文件开始处 offset 个字节。</li>
+  <li>若whence是SEEK_CUR，则将该文件的位移量设置为其当前值加offset, offset可为正或负。</li>
+  <li>若whence是SEEK_END，则将该文件的位移量设置为文件长度加offset, offset可为正或负。</li>
+</ul>
+
+<p>若lseek成功执行，则返回新的文件位移量。
+判断文件是否可能设置偏移量的方法：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">off_t</span> <span class="n">currpos</span><span class="p">;</span>
+<span class="n">currpos</span> <span class="o">=</span> <span class="n">lseek</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SEEK_CUR</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>这种方法也可用来确定所涉及的文件是否可以设置位移量。如果文件描述符引用的是一个管道或FIFO，则lseek返回-1，并将errno设置为EPIPE。
+文件位移量可以大于文件的当前长度，在这种情况下，对该文件的下一次写将延长该文件，并在文件中构成一个空调，这一点是允许的。位于文件中但没有写过的字节都被读为 0。</p>
+
+<p>5、read函数</p>
+
+<p>用read 函数从打开文件中读数据。</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
+</span><span class="kt">ssize_t</span> <span class="nf">read</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buff</span><span class="p">,</span> <span class="kt">size_t</span>  <span class="n">nbytes</span><span class="p">)</span> <span class="p">;</span>
+</code></pre>
+</div>
+
+<p>返回：读到的字节数，若已到文件尾为 0，若出错为- 1
+如read成功，则返回读到的字节数。如已到达文件的尾端，则返回 0。
+有多种情况可使实际读到的字节数少于要求读字节数：</p>
+<ul>
+  <li>读普通文件时，在读到要求字节数之前已到达了文件尾端。例如，若在到达文件尾端之前还有30个字节，而要求读100个字节，则read返回30，下一次再调用read时，它将返回 0 (文件尾端)。</li>
+  <li>当从终端设备读时，通常一次最多读一行。</li>
+  <li>当从网络读时，网络中的缓冲机构可能造成返回值小于所要求读的字节数。</li>
+  <li>某些面向记录的设备，例如磁带，一次最多返回一个记录。
+读操作从文件的当前位移量处开始，在成功返回之前，该位移量增加实际读得的字节数。</li>
+</ul>
+
+<p>6、write函数</p>
+
+<p>用write函数向打开文件写数据。</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
+</span><span class="kt">ssize_t</span> <span class="nf">write</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buff</span><span class="p">,</span> <span class="kt">size_t</span>  <span class="n">nbytes</span><span class="p">)</span> <span class="p">;</span>
+</code></pre>
+</div>
+
+<p>返回：若成功为已写的字节数，若出错为- 1
+其返回值通常与参数 nbytes的值不同，否则表示出错。 write出错的一个常见原因是：磁盘已写满，或者超过了对一个给定进程的文件长度限制 。
+对于普通文件，写操作从文件的当前位移量处开始。如果在打开该文件时，指定了O_APPEND选择项，则在每次写操作之前，将文件位移量设置在文件的当前结尾处。在一次成功写之后，该文件位移量增加实际写的字节数。</p>
+
+<p>7、文件共享</p>
+
+<p>UNIX支持在不同进程间共享打开文件。
+内核使用了三种数据结构，它们之间的关系决定了在文件共享方面一个进程对另一个进程
+可能产生的影响。</p>
+
+<p>(1)每个进程在进程表中都有一个记录项，每个记录项中有一张打开文件描述符表，可将其视为一个矢量，每个描述符占用一项。与每个文件描述符相关联的是:</p>
+<ul>
+  <li>文件描述符标志。</li>
+  <li>指向一个文件表项的指针.</li>
+</ul>
+
+<p>(2)内核为所有打开文件维持一张文件表。每个文件表项包含：</p>
+<ul>
+  <li>文件状态标志(读、写、增写、同步、非阻塞等 )。</li>
+  <li>当前文件位移量。</li>
+  <li>指向该文件v节点表项的指针。</li>
+</ul>
+
+<p>(3)每个打开文件（或设备）都有一个v节点结构。</p>
+<ul>
+  <li>v节点包含了文件类型和对此文件进行各种操作的函数的指针信息。</li>
+  <li>对于大多数文件，v 节点还包含了该文件的i节点（索引节点）。</li>
+  <li>这些信息是在打开文件时从盘上读入内存的，所以所有关于文件的信息都是快速可供使用的。例如， i 节点包含了文件的所有者、文件长度、文件所在的设备、指向文件在盘上所使用的实际数据块的指针等等。</li>
+  <li>Linux 没有使用v节点，而是使用了通用i节点结构。虽然两种实现有所不同，但在概念上，v节点与i节点是一样的。两者都指向文件系统特有的i节点结构。</li>
+</ul>
+
+<p>三个数据结构表的关系如下图：</p>
+
+<p><img src="/assets/linux/linux-io-file-1.png" alt="" /></p>
+
+<p>8、dup和dup2函数</p>
+
+<p>这两个函数都可用来复制一个现存的文件描述符。</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
+</span><span class="kt">int</span> <span class="nf">dup</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">)</span> <span class="p">;</span>
+<span class="kt">int</span> <span class="n">dup2</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="kt">int</span> <span class="n">filedes2</span><span class="p">)</span> <span class="p">;</span>
+</code></pre>
+</div>
+
+<p>两函数的返回：若成功为新的文件描述符，若出错为- 1
+(1)由dup返回的新文件描述符一定是当前可用文件描述符中的最小数值。
+(2)用 dup2则可以用filedes2参数指定新描述符的数值。如果 filedes2已经打开，则先将其关闭。如若 filedes等于filedes2，则dup2返回filedes2，而不关闭它。
+(3)这些函数返回的新文件描述符与参数 filedes共享同一个文件表项。
+(4)newfd = dup(1);当此函数开始执行时，假定下一个可用的描述符是 3 (这是非常有可能的，因为 0，1和2由shell打开)。因为两个描述符指向同一文件表项，所以它们共享同一文件状态标志 (读、写、添写等 )以及同一当前文件位移量。
+(5)复制一个描述符的另一种方法是使用 fcntl 函数，下一节将对该函数进行说明。实际上：
+调用：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">dup</span> <span class="p">(</span> <span class="n">filedes</span> <span class="p">)</span> <span class="p">;</span> 
+</code></pre>
+</div>
+
+<p>等效于：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">fcntl</span> <span class="p">(</span><span class="n">filedes</span><span class="p">,</span> <span class="n">F_DUPFD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>而调用：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">dup2</span><span class="p">(</span><span class="n">filedes</span><span class="p">,</span> <span class="n">filedes2</span><span class="p">)</span> <span class="err">；</span>
+</code></pre>
+</div>
+
+<p>等效于：</p>
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">close</span> <span class="p">(</span> <span class="n">filedes2</span> <span class="p">)</span> <span class="p">;</span>
+<span class="n">fcntl</span><span class="p">(</span><span class="n">filedes</span><span class="p">,</span> <span class="n">F_DUPFD</span><span class="p">,</span> <span class="n">filedes2</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>在最后一种情况下，dup2并不完全等同于close加上fcntl。它们之间的区别是：
+(1)dup2 是一个原子操作，而 close及fcntl则包括两个函数调用。有可能在 close和fcntl之间插入执行信号捕获函数，它可能修改文件描述符。 
+(2)在dup2和fcntl之间有某些不同的errno。</p>
+
+<p>9、fcntl 函数</p>
+
+<p>fcntl函数可以改变已经打开文件的性质</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;fcntl.h&gt;
+</span><span class="kt">int</span> <span class="nf">fcntl</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,...</span><span class="o">/*</span> <span class="kt">int</span>  <span class="n">arg</span> <span class="o">*</span> <span class="o">/</span> <span class="p">)</span> <span class="p">;</span>
+</code></pre>
+</div>
+
+<p>返回：若成功则依赖于 cmd(见下)，若出错为- 1
+(1)第三个参数总是一个整数，与上面所示函数原型中的注释部分相对应。但记录锁时，第三个参数则是指向一个结构的指针。
+(2)fcnt l函数有五种功能:</p>
+<ul>
+  <li>复制一个现存的描述符（cmd＝F_DUPFD）。</li>
+  <li>获得/设置文件描述符标记（cmd=F_GETFD或F_SETFD）。</li>
+  <li>获得/设置文件状态标志（cmd = F_GETFL或F_SETFL）。</li>
+  <li>获得/设置异步I/O有权（cmd = F_GETOWN或F_SETOWN）。</li>
+  <li>获得/设置记录锁（cmd = F_GETLK , F_ SETLK或F_ SETLKW）。</li>
+</ul>
+
+<p>(3)前七种我们将涉及与进程表项中各文件描述符相关联的文件描述符标志，以及每个文件表项中文件状态标志。</p>
+<ul>
+  <li>F_DUPFD  复制文件描述符filedes，新文件描述符作为函数值返回。它是尚未打开的各描述符中大于或等于第三个参数值（取为整型值）中各值的最小值。新描述符与 filedes共享同一文件表项 。但是，新描述符有它自己的一套文件描述符标志，其 FD_CLOEXEC文件描述符标志则被清除</li>
+  <li>F_GETFD  对应于filedes的文件描述符标志作为函数值返回。当前只定义了一个文件描述符标志FD_CLOEXEC。</li>
+  <li>F_SETFD  对于filedes设置文件描述符标志。新标志值按第三个参数 (取为整型值)设置。应当了解很多现存的涉及文件描述符标志的程序并不使用常数FD_ CLOEXEC，而是将此标志设置为0 (系统默认，在exec时不关闭)或1 (在exec时关闭)。</li>
+  <li>F_GETFL  对应于filedes的文件状态标志作为函数值返回。在说明 open函数时，已说明了文件状态标志。</li>
+  <li>F_SETFL  将文件状态标志设置为第三个参数的值 (取为整型值)。 可以更改的几个标志是：O_APPEND，O_NONBLOCK，O_SYNC和O_ ASYNC。</li>
+  <li>F_GETOWN  取当前接收SIGIO和SIGURG信号的进程ID或进程组ID。</li>
+  <li>F_SETOWN  设置接收SIGIO和SIGURG信号的进程ID或进程组ID。正的arg指定一个进程D，负的arg表示等于arg绝对值的一个进程组ID。</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">set_fl</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">)</span> <span class="cm">/*flags are file status flag */</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">val</span> <span class="o">=</span> <span class="n">fcnt</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_GETFL</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span> <span class="p">(</span><span class="s">"fctl F_GETFL error"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">val</span> <span class="o">|=</span> <span class="n">flags</span><span class="p">;</span> <span class="cm">/*turn on fags */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">val</span><span class="p">))</span><span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span> <span class="p">(</span><span class="s">"fcntl F_SETFL error"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>10、/dev/fd</p>
+
+<p>(1)比较新的系统都提供名为/dev/fd 的目录，其目录项是名为 0 、1、2 等的文件。打开文件/dev/fd/n等效于复制描述符 n (假定描述符n是打开的)在函数中调用：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">"/dev/fd/0"</span><span class="p">,</span> <span class="n">mode</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>大多数系统忽略所指定的mode，而另外一些则要求mode是所涉及的文件 ( 在这里则是标准输入)原先打开时所使用的mode的子集。因为上面的打开等效于：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">fd</span> <span class="o">=</span> <span class="n">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>描述符0和fd共享同一文件表项 。</p>
+
+<p>(2)某些系统提供路径名/dev /stdin , /dev/stdout 和/dev/stderr 。这些等效于/dev/fd/0 , /dev/fd/1和/dev/fd/2。</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Linux Unix 设计思想</title>
+      <link href="http://localhost:4000/linux-design-ideas/"/>
+      <pubDate>2014-10-14T04:08:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/linux-design-ideas</guid>
+      <content:encoded><![CDATA[<p>《Linux Unux 设计思想》 很小的一本书，讲的是设计unix的一些准则，但这些准则都不是强制性的。对了开发者在代码设计时，可以借鉴一二。</p>
+
+<p>准则一 ：小即是美
+准则二 ：让每一个程序只做好一件事
+准则三 ：尽快建立原型 
+准则四 ：舍高效率而取可移植性
+准则五 ：采用纯文本来存储数据
+准则六 ：充分利用软件的杠杆效应
+准则七 ：使用shell脚本来提高 杠杆效应和可移植性
+准则八 ：避免性的用户界面
+准则九 ：让每一个程序都成为过滤器</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>linux进程间关系</title>
+      <link href="http://localhost:4000/linux-process-id/"/>
+      <pubDate>2014-10-14T02:08:39+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/linux-process-id</guid>
+      <content:encoded><![CDATA[<p>1 每个进程都隶属于一个进程组，所以它有PID信息还有PGID。可以用pid_t getpgid( pid_t pid);
+2 每个进程组都有一个首领进程，其PGID和PID相同。进程组将一直存在，直到其中所有进程都退出，或者加入到其他进程组。
+3 setpgid(pid_t pid, pid_t pgid); 将PID为pid的进程的PGID设置为pgid。如果pid和pgid相同，则由pid指定的里程将被设置为进程首领。如果pid为0，则表示设置当前进程的PGID为pgid; 如果pgid为0.则使用pid作为目标PGID。
+4 一个进程只能设置自己的或者其子进程的PGID。并且当子进程调用 exec系列函数后，我们也不能再在父进程中对它设置PGID。</p>
+
+<p>会话
+一些有关联的进程组开成一个会话。创建一个会话的函数
+pid_t setsid(void);</p>
+
+<p>这个函数不能由进程组的首领进程调用。否则将产生一个错误。对于非组首领的进程，调用该函数不仅创建新会话，而且有如下额外效果：
+（1）调用进程成为会话的首领，此时该进程是新会话的唯一成员
+（2）新建一个进程组，其PGID就是调用进程的PID,调用进程成为该组的首领。
+（3）调用进程将甩开终端，（如果有的话）</p>
+
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

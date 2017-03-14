@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>日志模块</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>日志模块</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2016-12-15">2016-12-15</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#Linux" title="Linux">Linux</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#代码设计" title="代码设计">代码设计</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>系统的开发，日志模块的是必不可少的。特别对于业务逻辑层的来说，有日志输出，很方便跟踪逻辑大概情况。但是对于底层的核心模块来说，日志输出反而成了累赘。日志的输出同样占有I/O。再者，对于底层的逻辑，一般都是比较复杂，核心。暴露出来也没必要。业务逻辑层同样没有必要去了解它。所以，一般的做法是：底层出错，返回错误编码。由上一层记录就OK了。</p>
+
+<p>日志模块一般可以分为 print/note、 debug、 warn、error。人个觉得这四个层次就够了。当然，也可多增加几个，例如，trac。我曾经用于特别的调试，只是一些非必现的问题调试，把日志输出到这层，方便查找。</p>
+
+<p>对于这四层，是分开几个文件，还是在同一个文件中？ 其实这两种方式我都用过。这些年的经验，感觉写到同一个文件中，比较分四个文件要好。理由是很清楚的知道日志输出的前后时间顺序。当然分开成几个日志文件输出，也是有办法按时间查看的，只要用linux的一些工具手段而已。分开成几个文件的好处，就是一看就知道是否有错误输出了。同一个文件，只能在文件中查到才知道。</p>
+
+<p>无论是 apache,还是nignx，日志的输出都是分层，配置不同层次的，只有高于或等于它的才能被输出。当然，我们设计时也可以直接指定层次print、warn、error。</p>
+
+<p>有日志输出，就意味着有日志文件的管理。如文件大小、文件命名、所在目录、如何清理。
+一般，我的做法是日志文件的大小设计成可配置。在相关的配置文件中指定。
+二，日志文件的命名，我是按模块名来命名（即进程名）。或加上日期或日期在体现在目录上。
+三，所在目录，我选择是把所有的日志放到同一个Log目录下，千万别把分别放到不同模块的目录里面。这样做的好处是：我们可以系统中划出一个分区来，专门存放日志，和服务的进程分离开。这样做的理由是：如果日志输出过来，把硬盘空间爆了，不会影响到服务的运行。
+四，对清理， 我没有体现在于日志模块里，而是用计划任务做定时清理。</p>
+
+<p>日志模块应该有可配置性。 一般有：
+路径、文件大小、模块名、输出层次、</p>
+
+<p>日志的输出涉及到I/O。所以对效率是有一定的影响的。 必竞这是定文件的。有一个很不错的设计：就是日志写到队列（用共享内存实现 的）然后由专门的日志进程（logsvr）输出到文件中。这样日志输出就不会有I/O阻塞了，提高一些效率。</p>
+
+<p>下一回，把日志的模块整理好，分析一下。</p>
+
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/alive/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a   class="pageNavInvalid"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/xyecho/hustcat.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/xyecho/hustcat.github.io/edit/gh-pages/_posts/2016-12-15-model-log.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/xyecho/hustcat.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a href="http://hustcat.cnblogs.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

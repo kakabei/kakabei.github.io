@@ -4,7 +4,7 @@ url: http://blog.xyecho.com
 name: xyecho
 author: xyecho
 qq: 
-email: 1447675994@gmail.com
+email: xyecho@gmail.com
 duoshuo: xyecho
 beian: 
 cnzz: 
@@ -14,3 +14,4 @@ paginate: 20
 highlighter: rouge
 truncate: true
 about: "xyecho(xyecho)"
+gems: [jekyll-paginate]

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>liunx下调试gdb</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>liunx下调试gdb</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2014-10-15">2014-10-15</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#Linux" title="Linux">Linux</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<h3 id="一-单步执行和跟踪函数调用">一 单步执行和跟踪函数调用</h3>
+<p>例子源码：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">int</span> <span class="nf">add_range</span><span class="p">(</span><span class="kt">int</span> <span class="n">low</span><span class="p">,</span> <span class="kt">int</span> <span class="n">high</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">low</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">sum</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">result</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+    <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"result[0]=%d</span><span class="se">\n</span><span class="s">result[1]=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>1、在编译时要加上-g选项，生成的可执行文件才能用gdb进行源码级调试。</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gcc -g main.c -o main
+<span class="gp">$ </span>gdb main
+</code></pre>
+</div>
+
+<p>gdb加-g编译时并不是把整个源文件嵌入到可执行文件中，所以在调试时必须保证gdb能找到源文件。</p>
+
+<p>2、帮助命令</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">help</span>
+</code></pre>
+</div>
+
+<p>进一步查看某一类别中有哪些命令，例如查看files类别下有哪些命令可用：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">help </span>files
+</code></pre>
+</div>
+
+<p>3、 list命令</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> list
+</code></pre>
+</div>
+
+<p>一次只列10行。
+gdb的很多常用命令有简写形式，例如list命令可以写成l，要列一个函数的源代码也可以用函数名做参数：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> l add_range
+</code></pre>
+</div>
+
+<p>4、退出gdb的环境</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> quit
+</code></pre>
+</div>
+
+<p>5、start命令开始执行程序</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> start
+Breakpoint 1 at 0x80483ad: file main.c, line 14.
+Starting program: /home/akaedu/main 
+main <span class="o">()</span> at main.c:14
+14 result[0] <span class="o">=</span> add_range<span class="o">(</span>1, 10<span class="o">)</span>;
+<span class="o">(</span>gdb<span class="o">)</span>
+</code></pre>
+</div>
+
+<p>6、next命令（简写为n）控制这些语句一条一条地执行。</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> n
+15 result[1] <span class="o">=</span> add_range<span class="o">(</span>1, 100<span class="o">)</span>;
+<span class="o">(</span>gdb<span class="o">)</span> （直接回车）
+16 <span class="nb">printf</span><span class="o">(</span><span class="s2">"result[0]=%d</span><span class="se">\n</span><span class="s2">result[1]=%d</span><span class="se">\n</span><span class="s2">"</span>, result[0], 
+result[1]<span class="o">)</span>;
+<span class="o">(</span>gdb<span class="o">)</span> （直接回车）
+result[0]<span class="o">=</span>55
+result[1]<span class="o">=</span>5105
+17 <span class="k">return </span>0;
+</code></pre>
+</div>
+
+<p>7、用step命令（简写为s）钻进add_range函数中去跟踪执行</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> s
+add_range <span class="o">(</span><span class="nv">low</span><span class="o">=</span>1, <span class="nv">high</span><span class="o">=</span>10<span class="o">)</span> at main.c:6
+6 <span class="k">for</span> <span class="o">(</span>i <span class="o">=</span> low; i &lt;<span class="o">=</span> high; i++<span class="o">)</span>
+</code></pre>
+</div>
+
+<p>8、backtrace命令（简写为bt）可以查看函数调用的栈帧</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> bt
+<span class="c">#0 add_range (low=1, high=10) at main.c:6</span>
+<span class="c">#1 0x080483c1 in main () at main.c:14</span>
+</code></pre>
+</div>
+
+<p>9 info命令（简写为i）查看add_range函数局部变量的值：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> i locals
+i <span class="o">=</span> 0
+sum <span class="o">=</span> 0
+</code></pre>
+</div>
+
+<p>10、frame命令（简写为f）选择1号栈帧然后再查看局部变量：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> f 1
+<span class="c">#1 0x080483c1 in main () at main.c:14</span>
+14 result[0] <span class="o">=</span> add_range<span class="o">(</span>1, 10<span class="o">)</span>;
+<span class="o">(</span>gdb<span class="o">)</span> i locals 
+result <span class="o">=</span> <span class="o">{</span>0, 0, 0, 0, 0, 0, 134513196, 225011984, -1208685768, -1081160480, 
+...
+-1208623680<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>11、用print命令（简写为p）打印出变量sum的值：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>gdb<span class="o">)</span> （直接回车）
+6 <span class="k">for</span> <span class="o">(</span>i <span class="o">=</span> low; i &lt;<span class="o">=</span> high; i++<span class="o">)</span>
+<span class="o">(</span>gdb<span class="o">)</span> p sum
+<span class="nv">$1</span> <span class="o">=</span> 3
+</code></pre>
+</div>
+
+<p>12、finish命令让程序一直运行到从当前函数返回为止：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> finish
+Run till <span class="nb">exit </span>from <span class="c">#0 add_range (low=1, high=10) at main.c:6</span>
+0x080483c1 <span class="k">in </span>main <span class="o">()</span> at main.c:14
+14 result[0] <span class="o">=</span> add_range<span class="o">(</span>1, 10<span class="o">)</span>;
+Value returned is <span class="nv">$2</span> <span class="o">=</span> 55
+</code></pre>
+</div>
+
+<h4 id="二--断点">二  断点</h4>
+<p>例子源码</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">input</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span> <span class="n">input</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">sum</span> <span class="o">=</span> <span class="n">sum</span><span class="o">*</span><span class="mi">10</span> <span class="o">+</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">;</span>
+       <span class="n">printf</span><span class="p">(</span><span class="s">"input=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">sum</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>1、display命令使得每次停下来的时候都显示当前sum的值，然后继续往下走。
+     undisplay命令可以取消跟踪显示，变量sum的编号是1，可以用undisplay 1命令取消它的跟踪显示</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> display sum
+1: sum <span class="o">=</span> -1208103488
+<span class="o">(</span>gdb<span class="o">)</span> n
+9 scanf<span class="o">(</span><span class="s2">"%s"</span>, input<span class="o">)</span>;
+1: sum <span class="o">=</span> 0
+<span class="o">(</span>gdb<span class="o">)</span> 
+123
+10 <span class="k">for</span> <span class="o">(</span>i <span class="o">=</span> 0; input[i] !<span class="o">=</span> <span class="s1">'\0'</span>; i++<span class="o">)</span>
+1: sum <span class="o">=</span> 0
+</code></pre>
+</div>
+
+<p>2、break命令的参数也可以是函数名，表示在某个函数开头设断点。现在用continue命令（简写为c）连续运行而非单步运行，程序到达断点会自动停下来，这样就可以停在下一次循环的开头。</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> l
+5 int sum <span class="o">=</span> 0, i;
+6 char input[5];
+7 
+8 <span class="k">while</span> <span class="o">(</span>1<span class="o">)</span> <span class="o">{</span>
+9 scanf<span class="o">(</span><span class="s2">"%s"</span>, input<span class="o">)</span>;
+10 <span class="k">for</span> <span class="o">(</span>i <span class="o">=</span> 0; input[i] !<span class="o">=</span> <span class="s1">'\0'</span>; i++<span class="o">)</span>
+11 sum <span class="o">=</span> sum<span class="k">*</span>10 + input[i] - <span class="s1">'0'</span>;
+12 <span class="nb">printf</span><span class="o">(</span><span class="s2">"input=%d</span><span class="se">\n</span><span class="s2">"</span>, sum<span class="o">)</span>;
+13 <span class="o">}</span>
+14 <span class="k">return </span>0;
+<span class="o">(</span>gdb<span class="o">)</span> b 9
+Breakpoint 2 at 0x80483bc: file main.c, line 9.
+<span class="o">(</span>gdb<span class="o">)</span> c
+Continuing.
+<span class="nv">input</span><span class="o">=</span>123
+Breakpoint 2, main <span class="o">()</span> at main.c:9
+9 scanf<span class="o">(</span><span class="s2">"%s"</span>, input<span class="o">)</span>;
+1: sum <span class="o">=</span> 123
+</code></pre>
+</div>
+
+<p>3、用info命令可以查看已经设置的断点：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>Breakpoint 3 at 0x8048411: file main.c, line 12.
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints
+Num Type Disp Enb Address What
+2 breakpoint keep y 0x080483c3 <span class="k">in </span>main at main.c:9
+breakpoint already hit 1 <span class="nb">time
+</span>3 breakpoint keep y 0x08048411 <span class="k">in </span>main at main.c:12
+</code></pre>
+</div>
+
+<p>4、每个断点都有一个编号，可以用编号指定删除某个断点：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> delete breakpoints 2
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints 
+Num Type Disp Enb Address What
+3 breakpoint keep y 0x08048411 <span class="k">in </span>main at main.c:12
+</code></pre>
+</div>
+
+<p>5、有时候一个断点暂时不用可以禁用掉而不必删除，这样以后想用的时候可以直接启用，而不必重新
+从代码里找应该在哪一行设断点：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> disable breakpoints 3
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints 
+Num Type Disp Enb Address What
+3 breakpoint keep n 0x08048411 <span class="k">in </span>main at main.c:12
+<span class="o">(</span>gdb<span class="o">)</span> <span class="nb">enable </span>3
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints 
+Num Type Disp Enb Address What
+3 breakpoint keep y 0x08048411 <span class="k">in </span>main at main.c:12
+<span class="o">(</span>gdb<span class="o">)</span> delete breakpoints 
+Delete all breakpoints? <span class="o">(</span>y or n<span class="o">)</span> y
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints
+No breakpoints or watchpoints.
+</code></pre>
+</div>
+
+<p>6、gdb的断点功能非常灵活，还可以设置断点在满足某个条件时才激活，例如我们仍然在循环开头设置断点，但是仅当sum不等于0时才中断，然后用run命令（简写为r）重新从程序开头连续运行：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">break </span>9 <span class="k">if </span>sum !<span class="o">=</span> 0
+Breakpoint 5 at 0x80483c3: file main.c, line 9.
+<span class="o">(</span>gdb<span class="o">)</span> i breakpoints 
+Num Type Disp Enb Address What
+5 breakpoint keep y 0x080483c3 <span class="k">in </span>main at main.c:9
+stop only <span class="k">if </span>sum !<span class="o">=</span> 0
+<span class="o">(</span>gdb<span class="o">)</span> r
+The program being debugged has been started already.
+Start it from the beginning? <span class="o">(</span>y or n<span class="o">)</span> y
+Starting program: /home/akaedu/main 
+123
+<span class="nv">input</span><span class="o">=</span>123
+Breakpoint 5, main <span class="o">()</span> at main.c:9
+9 
+</code></pre>
+</div>
+
+<h3 id="三-观察点">三 观察点</h3>
+
+<p>1、x命令打印指定存储单元的内容。7b是打印格式，b表示每个字节一组，7表示打印7组。</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> x/7b input
+0xbfb8f0a7: 0x31 0x32 0x33 0x34 0x35 
+0x00 0x00
+</code></pre>
+</div>
+
+<p>2 观察点</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> watch input[5]
+Hardware watchpoint 2: input[5]
+<span class="o">(</span>gdb<span class="o">)</span> i watchpoints 
+Num Type Disp Enb Address What
+2 hw watchpoint keep y input[5]
+</code></pre>
+</div>
+
+<p>四 段错误</p>
+
+<p>如果程序运行时出现段错误，用gdb可以很容易定位到究竟是哪一行引发的段错误，例如这个小程
+序：</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">man</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="n">man</span><span class="p">);</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>
+
+<p>调试过程如下：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gdb main
+...
+<span class="o">(</span>gdb<span class="o">)</span> r
+Starting program: /home/akaedu/main 
+123
+Program received signal SIGSEGV, Segmentation fault.
+0xb7e1404b <span class="k">in </span>_IO_vfscanf <span class="o">()</span> from /lib/tls/i686/cmov/libc.so.6
+<span class="o">(</span>gdb<span class="o">)</span> bt
+<span class="c">#0 0xb7e1404b in _IO_vfscanf () from /lib/tls/i686/cmov/libc.so.6</span>
+<span class="c">#1 0xb7e1dd2b in scanf () from /lib/tls/i686/cmov/libc.so.6</span>
+<span class="c">#2 0x0804839f in main () at main.c:6</span>
+</code></pre>
+</div>
+
+<h3 id="五设置变量">五设置变量</h3>
+
+<p>有时候，在调试程序时，我们不单单只是查看运行时的变量，我们还可以直接设置程序中的变量，以模拟一些很难在测试中出现的情况，比较一些出错，或是switch的分支语句。使用set命令可以修改程序中的变量。</p>
+
+<p>另外，你知道gdb中也可以有变量吗？就像shell一样，gdb中的变量以$开头，比如你想打印一个数组中的个个元素，你可以这样：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">set</span> <span class="nv">$i</span> <span class="o">=</span> 0
+<span class="o">(</span>gdb<span class="o">)</span> p a[<span class="nv">$i</span>++]
+</code></pre>
+</div>
+
+<p>当然，这里只是给一个示例，表示程序的变量和gdb的变量是可以交互的。</p>
+
+<h3 id="六-调试宏">六 调试宏</h3>
+
+<p>在GDB下，我们无法print宏定义，因为宏是预编译的.所以要在GCC编译程序的时候，加上-ggdb3参数 就可以了。
+另外，你可以使用下述的GDB的宏调试命令 来查看相关的宏。
+info macro – 你可以查看这个宏在哪些文件里被引用了，以及宏定义是什么样的。
+macro – 你可以查看宏展开的样子。</p>
+
+<h3 id="七-命令行参数">七 命令行参数</h3>
+
+<p>有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：</p>
+
+<ul>
+  <li>gdb命令行的 –args 参数</li>
+  <li>gdb环境中 set args命令。</li>
+</ul>
+
+<h3 id="八-调试程序的子进程">八 调试程序的子进程</h3>
+
+<p>用的是follow-fork-mode这个参数。方法是：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nb">set </span>follow-fork-mode <span class="o">[</span>parent|child]
+
+</code></pre>
+</div>
+
+<p>parent: fork之后继续调试父进程，子进程不受影响。
+child: fork之后调试子进程，父进程不受影响。
+因此如果需要调试子进程，在启动gdb后：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">set </span>follow-fork-mode child
+<span class="nb">set </span>detach-on-fork <span class="o">[</span>on|off]
+</code></pre>
+</div>
+
+<p>on: 断开调试follow-fork-mode指定的进程。
+off: gdb将控制父进程和子进程。follow-fork-mode指定的进程将被调试，另一个进程置于暂停（suspended）状态。</p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/tcp-base/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/linux-corefile/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/xyecho/hustcat.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/xyecho/hustcat.github.io/edit/gh-pages/_posts/2014-10-20-linux-gdb.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/xyecho/hustcat.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a href="http://hustcat.cnblogs.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>
