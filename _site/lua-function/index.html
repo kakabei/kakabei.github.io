@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>lua 函数</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>lua 函数</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2017-03-15">2017-03-15</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#Lua" title="Lua">Lua</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#lua" title="lua">lua</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>lua的函数有必要记录可能也就是 可变参数, 后面的命名参数和多个返回值和python基本一样。</p>
+
+<h3 id="可变参数">可变参数</h3>
+
+<p>Lua 函数可以接受可变数目的参数，和 C 语言类似在函数参数列表中使用三点（…）
+表示函数有可变的参数。Lua 将函数的参数放在一个叫 arg 的表中，除了参数以外，arg
+表中还有一个域 n 表示参数的个数。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">g</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="k">end</span>
+
+<span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">nil</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">;</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">}</span>
+
+</code></pre>
+</div>
+<p>Lua 的函数还一些特性和C不一样的是：它和其他值（数值、字符串）一样，函数可以被存放在变
+量中，也可以存放在表中，可以作为函数的参数，还可以作为函数的返回值。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">print</span> <span class="o">=</span> <span class="nb">math.sin</span> <span class="c1">-- `print' now refers to the sine function</span>
+<span class="n">a</span><span class="p">.</span><span class="n">p</span><span class="p">(</span><span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="c1">--&gt; 0.841470</span>
+</code></pre>
+</div>
+
+<p>如函数被嵌套的函数里，它可以访问他外部函数中的变量。这一特性强大编程能力。</p>
+
+<p>另一个特征是：匿名函数。</p>
+
+<p>用表达式创建函数：</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">foo</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="k">end</span>
+</code></pre>
+</div>
+
+<h3 id="闭包">闭包</h3>
+
+<p>当一个函数内部嵌套另一个函数定义时，内部的函数体可以访问外部的函数的局部变量，这种特征我们称作词法定界。虽然这看起来很清楚，事实并非如此，词法定界加上第一类函数在编程语言里是一个功能强大的概念，很少语言提供这种支持。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">newCounter</span><span class="p">()</span>
+	<span class="kd">local</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="k">return</span> <span class="k">function</span><span class="p">()</span> <span class="c1">-- anonymous function</span>
+		<span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+		<span class="k">return</span> <span class="n">i</span>
+	<span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">c1</span> <span class="o">=</span> <span class="n">newCounter</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 2</span>
+
+</code></pre>
+</div>
+<p>i不是全局变量也不是局部变量，我们称作外部的局部变量（external local variable）或者 upvalue。</p>
+
+<p>匿名函数使用 upvalue i 保存他的计数，当我们调用匿名函数的时候 i 已经超出了作用范围，因为创建 i 的函数 newCounter 已经返回了。然而 Lua 用闭包的思想正确处理了这种情况。简单的说闭包是一个函数加上它可以正确访问的 upvalues。如果我们再次调
+用 newCounter，将创建一个新的局部变量 i，因此我们得到了一个作用在新的变量 i 上的
+新闭包。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">c2</span> <span class="o">=</span> <span class="n">newCounter</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c2</span><span class="p">())</span> <span class="c1">--&gt; 1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 3</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c2</span><span class="p">())</span> <span class="c1">--&gt; 2</span>
+
+</code></pre>
+</div>
+<p>技术上来讲，闭包指值而不是指函数，函数仅仅是闭包的一个原型声明；尽管如此，
+在不会导致混淆的情况下我们继续使用术语函数代指闭包。</p>
+
+<p>闭包在上下文环境中提供很有用的功能，如高级函数（sort）的参数；作为函数嵌套的函数（newCounter）。这一机制使得我们可以在 Lua 的函数世界里组合出奇幻的编程技术。闭包也可用在回调函数中。</p>
+
+<h3 id="全局函数和局部函数">全局函数和局部函数</h3>
+
+<p>局部函数就是在函数前加一个 local。</p>
+
+<p>局部函数的两种方式：</p>
+
+<ol>
+  <li>方式一</li>
+</ol>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="k">end</span>
+<span class="kd">local</span> <span class="n">g</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">f</span><span class="p">()</span> <span class="c1">-- external local `f' is visible here</span>
+<span class="o">...</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<ol>
+  <li>方式二</li>
+</ol>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="kd">local</span> <span class="k">function</span> <span class="nf">f</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>有一点需要注意的是在声明递归局部函数的方式。
+要提前定义local。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<span class="kd">local</span> <span class="n">fact</span>
+<span class="n">fact</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">then</span>
+		<span class="k">return</span> <span class="mi">1</span>
+	<span class="k">else</span>
+		<span class="k">return</span> <span class="n">n</span><span class="o">*</span><span class="n">fact</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<h3 id="尾调用proper-tail-calls">尾调用（Proper Tail Calls）</h3>
+
+<p>尾调用是一种类似在函数结尾的 goto 调用，当函数最后一个动作是调用另外一个函
+数时，我们称这种调用尾调用。例如：</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>g 的调用是尾调用。</p>
+
+<p>例子中 f 调用 g 后不会再做任何事情，这种情况下当被调用函数 g 结束时程序不需
+要返回到调用者 f；所以尾调用之后程序不需要在栈中保留关于调用者的任何信息。</p>
+
+<p>如下三种不是尾调函数.</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<span class="n">r</span> <span class="n">eturn</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1">-- must do the addition</span>
+<span class="k">return</span> <span class="n">x</span> <span class="ow">or</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">-- must adjust to 1 result</span>
+<span class="k">return</span> <span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="c1">-- must adjust to 1 result</span>
+</code></pre>
+</div>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/model-log/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/lua-error/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2017-03-15-lua-function.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

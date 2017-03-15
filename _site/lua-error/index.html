@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>lua 异常与错误</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>lua 异常与错误</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2017-03-16">2017-03-16</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#Lua" title="Lua">Lua</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#lua" title="lua">lua</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<h3 id="assert">assert</h3>
+
+<p>Lua 提供了专门的内置函数 assert 来完成错误的检测的功能。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">print</span> <span class="s2">"enter a number:"</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nb">assert</span><span class="p">(</span><span class="nb">io.read</span><span class="p">(</span><span class="s2">"*number"</span><span class="p">),</span> <span class="s2">"invalid input"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>assert 首先检查第一个参数是否返回错误，如果不返回错误 assert 简单的返回，否则assert 以第二个参数抛出错误信息。第二个参数是可选的。</p>
+
+<p>当函数遇到异常有两个基本的动作：返回错误代码或者抛出错误。这两种方式选择
+哪一种没有固定的规则，但有一般的原则：容易避免的异常应该抛出错误否则返回错误
+代码。</p>
+
+<h3 id="异常和错误处理">异常和错误处理</h3>
+
+<p>在 Lua 中需要处理错误，需要使用 pcall 函数封装你的代码。
+用法如下：</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span> <span class="k">then</span>
+	<span class="c1">-- no errors while running `foo'</span>
+<span class="o">...</span>
+<span class="k">else</span>
+<span class="c1">-- `foo' raised an error: take appropriate actions</span>
+<span class="o">...</span>
+<span class="k">end</span>
+
+</code></pre>
+</div>
+<p>foo 为检测的函数。</p>
+
+<p>用做匿名函数则是：</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span> <span class="o">...</span> <span class="k">end</span><span class="p">)</span> <span class="k">then</span> <span class="o">...</span>
+<span class="k">else</span> <span class="o">...</span>
+
+</code></pre>
+</div>
+<p>pcall 在保护模式下调用他的第一个参数并运行，因此可以捕获所有的异常和错误。
+如果没有异常和错误，pcall 返回 true 和调用返回的任何值；否则返回 nil 加错误信息。</p>
+
+<h4 id="错误信息和回跟踪tracebacks">错误信息和回跟踪（Tracebacks）</h4>
+
+<p>通常在错误发生时，希望落得更多的调试信息，而不只是发生错误的位置。但pcall返回时，它已经销毁了调用桟的部分内容。Lua提供了xpcall函数，xpcall接收第二个参数——一个错误处理函数，当错误发生时，Lua会在调用桟展看（unwind）前调用错误处理函数，于是就可以在这个函数中使用debug库来获取关于错误的额外信息了。</p>
+
+<p>debug库提供了两个通用的错误处理函数:</p>
+<ul>
+  <li>debug.debug：提供一个Lua提示符，让用户来价差错误的原因</li>
+  <li>debug.traceback：根据调用桟来构建一个扩展的错误消息。</li>
+</ul>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">xpcall</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">error</span><span class="p">(</span><span class="s1">'error..'</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span> <span class="nb">print</span><span class="p">(</span><span class="nb">debug.traceback</span><span class="p">())</span> <span class="k">end</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/lua-function/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a   class="pageNavInvalid"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2017-03-15-lua-error.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

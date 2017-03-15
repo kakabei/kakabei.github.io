@@ -217,4 +217,8 @@ Libevent 本身不是多线程安全的
 libevent 库的其他组件提供其他功能，包括缓冲的事件系统（用于缓冲发送到客户端/从客户端接收的数据）以及 HTTP、DNS 和 RPC 系统的核心实现。
 
 可以对比一下 libev 
+
+---
+
+参考：[**libevent源码深度剖析.pdf**](http://pan.baidu.com/s/1hssU5KC)
 	
