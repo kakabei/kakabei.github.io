@@ -7,8 +7,211 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2017-03-15T18:00:55+08:00</lastBuildDate>
+    <lastBuildDate>2017-03-15T22:36:15+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>lua metatables 元表</title>
+      <link href="http://localhost:4000/lua-metatables/"/>
+      <pubDate>2017-03-16T05:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/lua-metatables</guid>
+      <content:encoded><![CDATA[<blockquote>
+  <p>Metatables 允许我们改变 table 的行为，例如，使用 Metatables 我们可以定义 Lua 如
+何计算两个 table 的相加操作 a+b。</p>
+</blockquote>
+
+<p>这种方式很类似于C++中对运算符的重载。</p>
+
+<p>Lua 中的每一个表都可以有它自己的 Metatable。一般情况下 Lua默认创建一个不带 metatable 的新表。</p>
+
+<p>用getmetatable(table) 可以获取这个表的Metatable。</p>
+
+<p>用setmetatable(table, metatable) 对一个表设置Metatable。</p>
+
+<p>metatable 算术运算符域名 有__add(加)、__mul(乘)、__sub(减)、__div(除)、__unm(负)、__pow(幂)，我们也可以定义__concat 定义连接行为。</p>
+
+<p>metatable 关系运算符 ：__eq（等于），__lt（小于） ，和__le（小于等于）。</p>
+
+<p>Lua 选择 metamethod 的原则：如果第一个参数存在带有__add 域的 metatable，Lua
+使用它作为 metamethod，和第二个参数无关；
+否则第二个参数存在带有__add 域的 metatable， Lua 使用它作为 metamethod 否则报
+错。</p>
+
+<p>如果想保护你的集合使其使用者既看不到也不能修改 metatables。可以
+对 metatable 设置了__metatable 的值， getmetatable 将返回这个域的值，而调用 setmetatable
+将会出错：</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">Set</span><span class="p">.</span><span class="n">mt</span><span class="p">.</span><span class="n">__metatable</span> <span class="o">=</span> <span class="s2">"not your business"</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">Set</span><span class="p">.</span><span class="n">new</span><span class="p">{}</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">getmetatable</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span> <span class="c1">--&gt; not your business</span>
+<span class="nb">setmetatable</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="p">{})</span>
+<span class="n">stdin</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">change</span> <span class="n">protected</span> <span class="n">metatable</span>
+</code></pre>
+</div>
+
+<p>table访问的元方法： 字段: __index __newindex</p>
+
+<p>__index:  查询：访问表中不存的字段  rawget(t, i)</p>
+
+<p>__newindex： 更新：向表中不存在索引赋值  rawswt(t, k, v)</p>
+
+<p>有默认值的表:</p>
+
+<p>在一个普通的表中任何域的默认值都是 nil。很容易通过 metatables 来改变默认值：</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">setDefault</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+	<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span><span class="n">__index</span> <span class="o">=</span> <span class="k">function</span> <span class="p">()</span> <span class="k">return</span> <span class="n">d</span> <span class="k">end</span><span class="p">}</span>
+	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">tab</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tab</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tab</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="c1">--&gt; 10 nil</span>
+
+<span class="n">setDefault</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tab</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tab</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="c1">--&gt; 10 0</span>
+</code></pre>
+</div>
+
+<p>监控表:</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">-- create private index</span>
+<span class="kd">local</span> <span class="n">index</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1">-- create metatable</span>
+<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="n">__index</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">"*access to element "</span> <span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+		<span class="k">return</span> <span class="n">t</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="c1">-- access the original table</span>
+	<span class="k">end</span>
+
+	<span class="n">__newindex</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">"*update of element "</span> <span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">..</span> <span class="s2">" to "</span><span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+		<span class="n">t</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span> <span class="c1">-- update original table</span>
+	<span class="k">end</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">track</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+	<span class="kd">local</span> <span class="n">proxy</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">proxy</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+
+	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">proxy</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>只读表:</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<span class="k">function</span> <span class="nf">readOnly</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span>
+	<span class="kd">local</span> <span class="n">proxy</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span> <span class="c1">-- create metatable</span>
+	<span class="n">__index</span> <span class="o">=</span> <span class="n">t</span><span class="p">,</span>
+	<span class="n">__newindex</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+		<span class="nb">error</span><span class="p">(</span><span class="s2">"attempt to update a read-only table"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="k">end</span>
+	<span class="p">}</span>
+	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">proxy</span>
+<span class="k">end</span>
+
+<span class="n">days</span> <span class="o">=</span> <span class="n">readOnly</span><span class="p">{</span><span class="s2">"Sunday"</span><span class="p">,</span> <span class="s2">"Monday"</span><span class="p">,</span> <span class="s2">"Tuesday"</span><span class="p">,</span> <span class="s2">"Wednesday"</span><span class="p">,</span>
+<span class="s2">"Thursday"</span><span class="p">,</span> <span class="s2">"Friday"</span><span class="p">,</span> <span class="s2">"Saturday"</span><span class="p">}</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">days</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1">--&gt; Sunday</span>
+<span class="n">days</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Noday"</span>
+<span class="c1">-- stdin:1: attempt to update a read-only table</span>
+
+</code></pre>
+</div>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>lua 协程</title>
+      <link href="http://localhost:4000/lua-coroutine/"/>
+      <pubDate>2017-03-16T05:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/lua-coroutine</guid>
+      <content:encoded><![CDATA[<blockquote>
+  <p>协同程序（coroutine）与多线程情况下的线程比较类似：有自己的堆栈，自己的局
+部变量，有自己的指令指针，但是和其他协同程序共享全局变量等很多信息。线程和协
+同程序的主要不同在于：在多处理器情况下，从概念上来讲多线程程序同时运行多个线
+程；而协同程序是通过协作来完成，在任一指定时刻只有一个协同程序在运行，并且这
+个正在运行的协同程序只有在明确的被要求挂起的时候才会被挂起。</p>
+</blockquote>
+
+<p>宏观上可能看成是比线程更小的执行单位。但本质上，它是线程管理下的单位。这就是上面所说的在任一指定时刻只有一个协同程序在运行。是一种多任务方式。</p>
+
+<h3 id="协同的基础">协同的基础</h3>
+
+<p>lua 提供对应一些协程的函数。如 create() status() resume() 等等。</p>
+
+<p>创建一个协程create()</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"hello world!"</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">co</span><span class="p">)</span> 
+</code></pre>
+</div>
+
+<p>查看状态，可用status</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">print</span><span class="p">(</span><span class="nb">coroutine.status</span><span class="p">(</span><span class="n">co</span><span class="p">))</span> <span class="c1">--&gt; suspended</span>
+</code></pre>
+</div>
+
+<p>协同有三个状态：挂起态、运行态、停止态。</p>
+
+<p>让一个协程从挂起状变为运行态</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>让一个协程挂起，可用yield()</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span> <span class="k">do</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">"co"</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+	<span class="nb">coroutine.yield</span><span class="p">()</span>
+	<span class="k">end</span>
+<span class="k">end</span><span class="p">)</span>
+</code></pre>
+</div>
+<p>在程序使用resume后，协程被激活。</p>
+
+<p>看 resume-yield 可以相互交换数据。</p>
+
+<p>1 非对称的情况：</p>
+
+<p>resume 把参数传入协程里。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"co"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+<span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">--&gt; co 1 2 3</span>
+</code></pre>
+</div>
+
+<p>2 对称的情况：</p>
+
+<p>yield 会把值返还给resume。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+<span class="nb">coroutine.yield</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="c1">--&gt; true 30 10</span>
+</code></pre>
+</div>
+]]></content:encoded>
+    </item>
     
     <item>
       <title>lua 异常与错误</title>
@@ -1033,184 +1236,6 @@ TCP服务必须能够重传超时间内未收到确认的TCP报文段。为此�
 
 <p>拥塞控制
 TCP拥塞控制的四个部分：慢启动、拥塞避免、快速重传、快速恢复、快速恢复。</p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>unix 文件和目录</title>
-      <link href="http://localhost:4000/linux-dir/"/>
-      <pubDate>2014-10-15T06:48:32+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/linux-dir</guid>
-      <content:encoded><![CDATA[<ol>
-  <li>设置用户ID和设置ID</li>
-</ol>
-
-<p>(1)实际用户ID、实际组ID：  标识我们究竟是谁。这两个字段在登录时取自口令文件中的登录项。通常在一个登录会话间这些值并不改变，但是超级用户进程有方法改变它们。</p>
-
-<p>(2)有效用户ID、有效组ID： 决定了我们的文件访问权限。</p>
-
-<p>(3)保存的设置组ID、保存的设置组ID:在执行一个程序时包含了有效用户ID和有效组ID的副本。</p>
-
-<p>通常，有效用户ID等于实际用户ID，有效级ID等于实际组ID。
-当执行一个程序文件时，进程的有效用户ID通常就是实际用户ID，有效组ID通常是实际组ID。但是可以在文件模式字（st_mode）中设置一个特殊标志，其含义是“当执行此文件时将进程的有效用户ID设置为文件所有者的用户ID（st_uid）”。</p>
-
-<p>与此相类似，在文件模式字中可以调协另一位，它使用将此文件的进程的有效组ID设置为文件的组所有者ID（st_gid）。在文件模式籽中的这两位被称为设置用户ID（set-user-ID）位和设置组ID（set-group-ID）位。</p>
-
-<ol>
-  <li>access 函数</li>
-</ol>
-
-<p>access 函数是按实际用户ID和实际组IDeas进行访问权限测试的。</p>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#inlude &lt;unistd.h&gt;
-</span><span class="kt">int</span> <span class="n">access</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<ul>
-  <li>R_OK  测试读权限</li>
-  <li>W_OK  测试写权限</li>
-  <li>X_OK  测试执行权限</li>
-  <li>F_OK  测试文件是否存在</li>
-</ul>
-
-<ol>
-  <li>umask函数</li>
-</ol>
-
-<p>umask函数为进程设置文件模式创建屏蔽字，并返回以前的值。</p>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include&lt;sys/stat.h&gt;
-</span><span class="n">mode_t</span> <span class="n">umask</span><span class="p">(</span><span class="n">mode_t</span> <span class="n">cmask</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<ol>
-  <li>chmod和fchmod函数</li>
-</ol>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/stat.h&gt;
-</span><span class="kt">int</span> <span class="n">chmod</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span> <span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
-<span class="kt">int</span> <span class="n">fchmod</span><span class="p">(</span><span class="kt">int</span> <span class="n">filedes</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<p>chmod 函数在指定的文件上进行操作，而fchmod函数则对已打开的文件进行操作。</p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>unix标准IO库</title>
-      <link href="http://localhost:4000/linux-io-stream/"/>
-      <pubDate>2014-10-14T04:08:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/linux-io-stream</guid>
-      <content:encoded><![CDATA[<h3 id="一-流和file对象">一 流和FILE对象</h3>
-<p>(1)当用标准 I/O库打开或创建一个文件时，我们已使一个流与一个文件相结合。</p>
-
-<p>(2)当打开一个流时，标准 I/O函数fopen返回一个指向FILE对象的指针。该对象通常是一个结构，它包含了I/O 库为管理该流所需要的所有信息：用于实际 I/O的文件描述符，指向流缓存的指针，缓存的长度，当前在缓存中的字符数，出错标志等等。</p>
-
-<p>(3)对于ASCII字符集， 一个字符用一个字节表示。对于国际字符集，一个字符可用多个字节表示。标准I/O文件流可用于单字节或多字节的。当一个流最初被创建时，它并没有定向。如若在未定向的流上使用一个多字节I/O函数，则将该流的定向设置 宽定向的。若在未定向的流上使用一个单节I/O函数，则将该流的定向设置为字节定向的。只有两个函数可以改变的定向。freopen函数清除一个流的定向。fwide函数设置流的定向。</p>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
-#include &lt;wchar.h&gt;
-</span><span class="kt">int</span> <span class="n">fwide</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
-<span class="c1">// 返回值：若流是宽定向的则返回正值，若流是字节定向的则返回负值，或者流是未定向的则返回0
-</span></code></pre>
-</div>
-
-<p>根据mode参数的不同值，fwide函数执行不同的工作：</p>
-
-<p>a)如若mode参数值为负，fwide将试图使指定的流是字节定向的。</p>
-
-<p>b)如若mode参数值为正，fwide将试图使指定的流是宽定向的。</p>
-
-<p>c)如若mode参数值为0，fwide将不试图设置流的定向，但返回标识流定向的值。</p>
-
-<p>d)注意，fwide并不改变忆定向流的定向。还应注意的是，fwide无出错返回。在调用fwide前先清除error，从fwide返回时检查errorno的值。</p>
-
-<h3 id="二-标准输入标准输出和标准出错">二 标准输入、标准输出和标准出错</h3>
-
-<p>对一个进程预定义了三个流，它们自动地可为进程使用：标准输入、标准输出和标准出错。
-我们可以用文件描述符 STDIN_FILENO,STDOUT_FILENO和STDERR_FILENO分别表示它们。
-这三个标准I/O流通过预定义文件指针 stdin,stdout和stderr加以引用。这三个文件指针同样定义在头文件<stdio.h>中。</stdio.h></p>
-
-<h3 id="三-缓存">三 缓存</h3>
-
-<p>1 标准I/O提供缓存的目的是尽可能减少使用 read和write调用的数量。</p>
-
-<p>2 标准I/O提供了三种类型的缓存：</p>
-
-<h4 id="全缓存">全缓存。</h4>
-
-<p>在这种情况下，当填满标准I/O缓存后才进行实际I/O操作。对于驻在磁盘上的文件通常是由标准IO库实施全缓存的。
-在一个流上执行第一次 I/O操作时，相关标准I/O函数通常调用malloc获得需使用的缓存。术语刷新（flush）说明标准 I/O缓存的写操作。
-缓存可由标准 I/O例程自动地刷新（例如当填满一个缓存时），或者可以调用函数fflush刷新一个流。值得引起注意的是在UNIX环境中，刷新有两种意思。在标准 I/O库方面，刷新意味着将缓存中的内容写到磁盘上（该缓存可以只是局部填写的） 。在终端驱动程序方面（例如在第 11章中所述的 tcflush函数），刷新表示丢弃已存在缓存中的数据。</p>
-
-<h4 id="行缓存">行缓存</h4>
-
-<p>在这种情况下，当在输入和输出中遇到新行符时，标准I/O库执行IO操作。这允许我们一次输出一个字符（用标准 I/O fputc函数），但只有在写了一行之后才进行实际 I/O操作。
-当流涉及一个终端时（例如标准输入和标准输出），典型地使用行缓存。对于行缓存有两个限制。
-第一个是：因为标准IO库用来收集每一行的缓存的长度是固定的，所以只要填满了缓存，那么即使还没有写一个新行符，也进行 I/O操作。
-第二个是：任何时候只要通过标准输入输出库要求从 ( a ) 一个不带缓存的流，或者 ( b ) 一个行缓存的流（它预先要求从内核得到数据）得到输入数据，那么就会造成刷新所有行缓存输出流。在 ( b )中带了一个在括号中的说明的理由是，所需的数据可能已在该缓存中，它并不要求内核在需要该数据时才进行该操作。很明显，从不带缓存的一个流中进行输入（ ( a )项）要求当时从内核得到数据。</p>
-
-<h4 id="不带缓存">不带缓存</h4>
-
-<p>标准 I/O库不对字符进行缓存。如果用标准 I/O函数写若干字符到不带缓存的流中，则相当于用write系统调用函数将这些字符写至相关联的打开文件上。标准出错流stderr通常是不带缓存的，这就使得出错信息可以尽快显示出来，而不管它们是否含有一个新行字符。</p>
-
-<p>3 标准出错是不带缓冲的，打开 到终端设备的流是行缓冲的，其他所有流则是全缓冲的。</p>
-
-<p>4 对于流的缓冲可能通来两个函数更改缓冲类型：</p>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
-</span><span class="kt">void</span> <span class="n">setbuf</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">);</span>
-<span class="kt">int</span> <span class="n">setvbut</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">);</span>
-<span class="c1">//返回值：若成功则返回0，若出错则返回非0值
-</span></code></pre>
-</div>
-
-<p>这些函数一定要在流已被打开后调用。
-强制刷新一个流。</p>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h &gt;
-</span><span class="kt">int</span> <span class="nf">fflush</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="n">f</span> <span class="n">p</span><span class="p">)</span> <span class="p">;</span>
-<span class="c1">//返回：若成功则为0，若出错则为EOF
-</span></code></pre>
-</div>
-
-<p>此函数使该流所有未写的数据都被传递至内核。作为一种特殊情形，如若 fp是NULL，则此函数刷新所有输出流。</p>
-
-<h4 id="四打开流">四、打开流</h4>
-
-<p>下列三个函数可用于打开一个标准 I/O流。</p>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
-</span><span class="kt">FILE</span> <span class="o">*</span><span class="nf">fopen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">)</span> <span class="p">;</span>
-<span class="kt">FILE</span> <span class="o">*</span><span class="n">freopen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">,</span> <span class="kt">FILE</span> <span class="o">*</span> <span class="n">fp</span><span class="p">);</span>
-<span class="kt">FILE</span> <span class="o">*</span><span class="nf">fdopen</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">)</span> <span class="p">;</span>
-<span class="c1">// 三个函数的返回：若成功则为文件指针，若出错则为 NULL
-</span></code></pre>
-</div>
-
-<p>这三个函数的区别是：</p>
-
-<p>(1) fopen 打开路径名由pathname 指示的一个文件。</p>
-
-<p>(2) freopen在一个特定的流上 (由f p指示)打开一个指定的文件（其路径名由pathname  指示），如若该流已经打开，则先关闭该流。此函数一般用于将一个指定的文件打开为一个预定义的流：标准输入、标准输出或标准出错。</p>
-
-<p>(3) fdopen 取一个现存的文件描述符（我们可能从open,dup,dup2,fcntl或pipe函数得到此文件描述符）并使一个标准的I/O流与该描述符相结合。此函数常用于由创建管道和网络通信通道函数获得的插述符。因为这些特殊类型的文件不能用标准 I/O fopen 函数打开，首先必须先调用设备专用函数以获得一个文件描述符，然后用 fdopen使一个标准I/O流与该描述符相结合。
-type参数指定对该I/O 流的读、写方式，ANSI C规定type参数可以有15种不同的值</p>
-
-<p><img src="/assets/linux/linux-io-stream-1.png" alt="" /></p>
-
-<p>当以读和 写类型打开一文件时，（type中+符号）， 具胡下列限制：</p>
-
-<p>(1) 如果中间没有fflush、fseek、fsetpos或rewind，则在输出的后面不能直接跟随。</p>
-
-<p>(2) 如果中间没有fseek、fsetpos或rewind，或者一个输入操作没有到达文件尾端，则在输入操作之后不能直接跟随输出。</p>
 
 ]]></content:encoded>
     </item>

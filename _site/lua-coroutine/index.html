@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>lua 协程</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>lua 协程</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2017-03-16">2017-03-16</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#Lua" title="Lua">Lua</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#lua" title="lua">lua</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<blockquote>
+  <p>协同程序（coroutine）与多线程情况下的线程比较类似：有自己的堆栈，自己的局
+部变量，有自己的指令指针，但是和其他协同程序共享全局变量等很多信息。线程和协
+同程序的主要不同在于：在多处理器情况下，从概念上来讲多线程程序同时运行多个线
+程；而协同程序是通过协作来完成，在任一指定时刻只有一个协同程序在运行，并且这
+个正在运行的协同程序只有在明确的被要求挂起的时候才会被挂起。</p>
+</blockquote>
+
+<p>宏观上可能看成是比线程更小的执行单位。但本质上，它是线程管理下的单位。这就是上面所说的在任一指定时刻只有一个协同程序在运行。是一种多任务方式。</p>
+
+<h3 id="协同的基础">协同的基础</h3>
+
+<p>lua 提供对应一些协程的函数。如 create() status() resume() 等等。</p>
+
+<p>创建一个协程create()</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"hello world!"</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">co</span><span class="p">)</span> 
+</code></pre>
+</div>
+
+<p>查看状态，可用status</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">print</span><span class="p">(</span><span class="nb">coroutine.status</span><span class="p">(</span><span class="n">co</span><span class="p">))</span> <span class="c1">--&gt; suspended</span>
+</code></pre>
+</div>
+
+<p>协同有三个状态：挂起态、运行态、停止态。</p>
+
+<p>让一个协程从挂起状变为运行态</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>让一个协程挂起，可用yield()</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span> <span class="k">do</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">"co"</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+	<span class="nb">coroutine.yield</span><span class="p">()</span>
+	<span class="k">end</span>
+<span class="k">end</span><span class="p">)</span>
+</code></pre>
+</div>
+<p>在程序使用resume后，协程被激活。</p>
+
+<p>看 resume-yield 可以相互交换数据。</p>
+
+<p>1 非对称的情况：</p>
+
+<p>resume 把参数传入协程里。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"co"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+<span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">--&gt; co 1 2 3</span>
+</code></pre>
+</div>
+
+<p>2 对称的情况：</p>
+
+<p>yield 会把值返还给resume。</p>
+
+<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+<span class="nb">coroutine.yield</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="c1">--&gt; true 30 10</span>
+</code></pre>
+</div>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/lua-error/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/lua-metatables/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2017-03-15-lua-coroutine.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>
