@@ -238,11 +238,11 @@ rename-command CONFIG <span class="s2">""</span>                                
   目前尚未修复这个问题，这是因为即使我们在另一个新的线程中去执行fsync()，也会阻塞住同步写调用。</p>
 
 <p>6 为了缓解这个问题，我们可以使用下面的配置项，这样的话，当BGSAVE或BGWRITEAOF运行时，fsync()在主进程中的调用会被阻止。
-    这意味着当另一路进程正在对AOF文件进行重构时，redis的持久化功能就失效了，就好像我们设置了“appendsync none”一样。如果你的redis有时延问题，那么请将下面的选项设置为yes。否则请保持no，因为这是保证数据完整性的最安全的选择. 
-    <code class="highlighter-rouge">sh  
-           no-appendfsync-on-rewrite no   
-   </code>
-7 只读的从redis并不适合直接暴露给不可信的客户端。为了尽量降低风险，可以使用rename-command指令来将一些可能有破坏力的命令重命名，避免外部直接调用。比如：</p>
+    这意味着当另一路进程正在对AOF文件进行重构时，redis的持久化功能就失效了，就好像我们设置了“appendsync none”一样。如果你的redis有时延问题，那么请将下面的选项设置为yes。否则请保持no，因为这是保证数据完整性的最安全的选择.</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>no-appendfsync-on-rewrite no   
+</code></pre>
+</div>
+<p>7 只读的从redis并不适合直接暴露给不可信的客户端。为了尽量降低风险，可以使用rename-command指令来将一些可能有破坏力的命令重命名，避免外部直接调用。比如：</p>
 <div class="language-sh highlighter-rouge"><pre class="highlight"><code> rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
 </code></pre>
 </div>
