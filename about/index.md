@@ -11,7 +11,8 @@ comments: no
 
 程序员，爱看书，偶尔装逼 ...
 
-关注 Linux Redis、Game、libevent、skynet nginx ...
+关注 Linux Redis、Game、libevent、skynet、 nginx ...
+会一点： c\c++、python、go、lua、
 
 ----
 
