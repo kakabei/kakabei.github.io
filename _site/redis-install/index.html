@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>linux corefile 设置</title>
+    <title>redis安装部署</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>linux corefile 设置</h1>
+        <h1>redis安装部署</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,14 +28,14 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2014-10-16">2014-10-16</time>
+  <time datetime="2015-02-03">2015-02-03</time>
 </span>
 
  | 
 <span class="categories">
   分类
   
-  <a href="/categories/#Linux" title="Linux">Linux</a>&nbsp;
+  <a href="/categories/#redis" title="redis">redis</a>&nbsp;
   
 </span>
 
@@ -44,76 +44,74 @@
 <span class="tags">
   标签
   
-  <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
+  <a href="/tags/#db" title="db">db</a>&nbsp;
+  
+  <a href="/tags/#redis" title="redis">redis</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<p>程序运行的过程中,可能会因为一些隐藏的bug导致崩溃,为了在出问题时，及时记录所在环境的情况，所以要设置core文件的产生。其实其本质就是把进程的内存保存到文件中去。</p>
+<p>Redis的安装相对来的不难，以下主要是centos系统做为环境。</p>
 
-<h4 id="1core文件的生成开关和大小限制">1.core文件的生成开关和大小限制</h4>
+<ol>
+  <li>下载地址</li>
+</ol>
 
-<p>1）使用ulimit -c命令可查看core文件的生成开关。若结果为0，则表示关闭了此功能，不会生成core文件。
-2）使用ulimit -c filesize命令，可以限制core文件的大小（filesize的单位为kbyte）。</p>
+<p>这是redis的官网<a href="http://redis.io/">http://redis.io/</a>。</p>
 
-<p>3）若ulimit -c unlimited，则表示core文件的大小不受限制。如果生成的信息超过此大小，将会被裁剪，最终生成一个不完整的core文件。在调试此core文件的时候，gdb会提示错误。</p>
+<p>这是下载页面<a href="http://redis.io/download">http://redis.io/download</a>。</p>
 
-<h4 id="2core文件的名称和生成路径">2.core文件的名称和生成路径</h4>
+<p>百度云地址:<a href="http://pan.baidu.com/s/1slsCr97">http://pan.baidu.com/s/1slsCr97</a></p>
 
-<p>若系统生成的core文件不带其他任何扩展名称，则全部命名为core。新的core文件生成将覆盖原来的core文件。</p>
+<ol>
+  <li>安装</li>
+</ol>
 
-<p>1）/proc/sys/kernel/core_uses_pid可以控制core文件的文件名中是否添加pid作为扩展。文件内容为1，表示添加pid作为扩展名，生成的core文件格式为core.xxxx；为0则表示生成的core文件同一命名为core。
-可通过以下命令修改此文件：
-echo “1” &gt; /proc/sys/kernel/core_uses_pid</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>tar xzf  redis-2.8.13.tar.gz
+<span class="gp">$ </span><span class="nb">cd </span>redis-2.8.13
+<span class="gp">$ </span>make
+<span class="gp">$ </span>make install
+<span class="gp">$ </span>cp redis.conf /etc/
+</code></pre>
+</div>
+<ol>
+  <li>文件说明</li>
+</ol>
 
-<p>2）proc/sys/kernel/core_pattern可以控制core文件保存位置和文件名格式。
-可通过以下命令修改此文件：
-echo “/corefile/core-%e-%p-%t” &gt; core_pattern，可以将core文件统一生成到/corefile目录下，产生的文件名为core-命令名-pid-时间戳
-以下是参数列表:</p>
+<p>make install命令执行完成后，会在/usr/local/bin目录下生成本个可执行文件，分别是redis-server、redis-cli、redis-benchmark、redis-check-aof 、redis-check-dump，它们的作用如下：</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>%p - insert pid into filename 添加pid
-%u - insert current uid into filename 添加当前uid
-%g - insert current gid into filename 添加当前gid
-%s - insert signal that caused the coredump into the filename 添加导致产生core的信号
-%t - insert UNIX <span class="nb">time </span>that the coredump occurred into filename 添加core文件生成时的unix时间
-%h - insert hostname where the coredump happened into filename 添加主机名
-%e - insert coredumping executable name into filename 添加命令名
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>redis-server：Redis服务器的daemon启动程序
+redis-cli：Redis命令行操作工具。也可以用telnet根据其纯文本协议来操作
+redis-benchmark：Redis性能测试工具，测试Redis在当前系统下的读写性能
+redis-check-aof：数据修复
+redis-check-dump：检查导出工具
 </code></pre>
 </div>
 
-<h4 id="3core文件的查看">3.core文件的查看</h4>
+<ol>
+  <li>启动redis</li>
+</ol>
 
-<p>core文件需要使用gdb来查看。</p>
-
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>gdb ./a.out
-core-file core.xxxx
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code> /usr/local/bin/redis-server /etc/redis.conf
 </code></pre>
 </div>
 
-<p>使用bt命令即可看到程序出错的地方。
-以下两种命令方式具有相同的效果，但是在有些环境下不生效，所以推荐使用上面的命令。
-1）gdb -core=core.xxxx</p>
+<p>5．检查是否启动成功</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>file ./a.out
-bt
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ps -ef | grep redis
 </code></pre>
 </div>
 
-<p>2）gdb -c core.xxxx</p>
-
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>file ./a.out
-bt
-</code></pre>
-</div>
+<p>在线测试： <a href="http://try.redis.io/">http://try.redis.io/</a></p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/linux-gdb/" class="pageNav"  >上一篇</a>
+	<a  href="/linux-corefile/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/redis-install/" class="pageNav"  >下一篇</a>
+	<a  href="/redis-version/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -178,7 +176,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2014-10-20-linux-corefile.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2015-02-03-redis-install.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
