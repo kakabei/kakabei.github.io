@@ -2,8 +2,8 @@
 layout: post
 title: 后台编码规
 date: 2014-12-11 21:12:15
-categories: 系统编程
-tags: 语言编程
+categories: 编程语言
+tags: 系统编程
 excerpt: c/c++ 语言编程行为规范，对自己而言，对他人无效。
 ---
 
