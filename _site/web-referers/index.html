@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>lua 学习初步记录</title>
+    <title>防盗链技术</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>lua 学习初步记录</h1>
+        <h1>防盗链技术</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,14 +28,14 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2017-03-15">2017-03-15</time>
+  <time datetime="2017-03-10">2017-03-10</time>
 </span>
 
  | 
 <span class="categories">
   分类
   
-  <a href="/categories/#编程语言" title="编程语言">编程语言</a>&nbsp;
+  <a href="/categories/#安全" title="安全">安全</a>&nbsp;
   
 </span>
 
@@ -44,49 +44,63 @@
 <span class="tags">
   标签
   
-  <a href="/tags/#lua" title="lua">lua</a>&nbsp;
+  <a href="/tags/#network" title="network">network</a>&nbsp;
+  
+  <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<p>1 Lua 是动态类型语言，变量不要类型定义。 Lua 中有 8 个基本类型分别为： nil、 boolean、number、string、userdata、function、thread 和 table。函数 type 可以测试给定变量或者值
-的类型。</p>
+<p>在《增长黑客》这个本书上，看到一个例子。作者用curl 在网上抓取了一个网站上用户的头像。这个网站对于图片的静态链接没有做防盗链。
+以前有过这种开发。也疑惑过这种问题。
+今天就了解一下什么是防盗链吧。</p>
 
-<p>2 Lua 中特殊的类型，他只有一个值：nil；一个全局变量没有被赋值以前默认值为 nil；
-给全局变量负 nil 可以删除该变量。</p>
+<p>防盗链的定义：
+此内容不在自己服务器上，而通过技术手段，绕过别人放广告有利益的最终页，直接在自己的有广告有利益的页面上向最终用户提供此内容。 常常是一些名不见经传的 小网站来盗取一些有实力的大网站的地址（比如一些音乐、图片、软件的下载地址）然后放置在自己的网站中，通过这种方法盗取大网站的空间和流量。</p>
 
-<p>3 Booleans 两个取值 false 和 true。但要注意 Lua 中所有的值都可以作为条件。在控制结构的条
-件中除了 false 和 nil 为假，其他值都为真。所以 Lua 认为 0 和空串都是真。</p>
+<p>通俗的讲：就是你提供给自己的网站的静态链接。别人一样可能无条件用。图片，音频，文件，别人可以下载得到。</p>
 
-<p>4 Lua 中字符串是不可以修改的， 你可以创建一个新的变量存放你要的字符串。 还可以使用[[…]]表示字符串。</p>
+<p>这个技术的本质就在于http上。表头字体有一个叫referer的。这个字段的作用是：当浏览器访问web服务器时，一般会带上referer，告诉服务器我是从哪个页面链接过来的。所以，我们可用检测这个链接是不是我们自己的服务器上的，如果不是，那可能就是别人来盗链接的了，就应该阻止掉。</p>
 
-<p>5 Lua 会自动在 string 和 numbers 之间自动进行类型转换，当一个字符串使用算术操作符时，string 就会被转成数字。
-尽管字符串和数字可以自动转换，但两者是不同的，像 10 == “10”这样的比较永远
-都是错的。</p>
+<h4 id="nginx防盗链的配置">nginx防盗链的配置</h4>
+<p>1、nginx针对文件类型的防盗链配置方法：</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>　　location ~<span class="k">*</span> <span class="se">\.</span><span class="o">(</span>gif|jpg|png|swf|flv|bmp<span class="o">)</span><span class="nv">$ </span><span class="o">{</span>
+　　valid_referers none blocked <span class="k">*</span>.php100.com php100.com;
+　　if <span class="o">(</span><span class="nv">$invalid_referer</span><span class="o">)</span> <span class="o">{</span>
+　　     <span class="c">#rewrite ^/ http://www.php100.com/403.html;</span>
+　　     <span class="k">return </span>403;
+　　     <span class="o">}</span>     
+　　<span class="o">}</span>
+</code></pre>
+</div>
 
-<p>6 <code class="highlighter-rouge">..</code>在 Lua 中是字符串连接符，当在一个数字后面写..时，必须加上空格以防止被解释错。</p>
+<p>这种方法是在server或者location段中加入：valid_referers none blocked，其中none表示空的来路，也就是直接访问，比如直接在浏览器打开一个文件，blocked表示被防火墙标记过的来路，*.php100.com表示所有子域名。</p>
 
-<p>7 函数是第一类值（和其他变量相同），意味着函数可以存储在变量中，可以作为函数的参数，也可以作为函数的返回值。</p>
+<p>2、nginx针对文件目录的防盗链配置方法：</p>
 
-<p>8 Lua 比较数字按传统的数字大小进行，比较字符串按字母的顺序进行，但是字母顺序依赖于本地环境。</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>　　location /img/ <span class="o">{</span>
+　　     root /data/img/;
+　　     valid_referers none blocked <span class="k">*</span>.php100.com php100.com;
 
-<p>9 Lua list的下标是从1开始的。</p>
+　　     <span class="k">if</span> <span class="o">(</span><span class="nv">$invalid_referer</span><span class="o">)</span> <span class="o">{</span>
+　　          rewrite ^/ http://www.php100.com/error.gif;
+　　          <span class="c">#return 403;</span>
+　　     <span class="o">}</span>     
+　　<span class="o">}</span>
+</code></pre>
+</div>
 
-<p>10 使用 local 创建一个局部变量，与全局变量不同，局部变量只在被声明的那个代码块内有效。代码块：指一个控制结构内，一个函数体，或者一个 chunk（变量被声明的那个文件或者文本串）</p>
-
-<p>11 当函数只有一个参数并且这个参数是字符串或者表构造的时候，()是可选的。</p>
-
-<p>12 Lua有闭包的用法。</p>
+<p>如果不是用nginx，就要自己去解析表头然后做出判断。</p>
 
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/web-referers/" class="pageNav"  >上一篇</a>
+	<a  href="/valgrind-code-analysis/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/lua-function/" class="pageNav"  >下一篇</a>
+	<a  href="/lua-first-learn/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -151,7 +165,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2017-03-14-lua-first-learn.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2017-03-09-web-referers.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
