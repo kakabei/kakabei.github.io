@@ -2,7 +2,7 @@
 layout: post
 title: lua 函数
 date: 2017-03-15 11:16:53
-categories: Lua
+categories: 编程语言
 tags: lua  
 excerpt: lua function
 ---

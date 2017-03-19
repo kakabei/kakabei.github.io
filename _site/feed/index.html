@@ -5,17 +5,17 @@
   >
   <channel>
     <title>xyecho</title>
-    <link href="http://blog.xyecho.com/feed/" rel="self" />
-    <link href="http://blog.xyecho.com" />
-    <lastBuildDate>2017-03-20T00:22:25+08:00</lastBuildDate>
+    <link href="http://localhost:4000/feed/" rel="self" />
+    <link href="http://localhost:4000" />
+    <lastBuildDate>2017-03-20T00:26:19+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
       <title>lua metatables 元表</title>
-      <link href="http://blog.xyecho.com/lua-metatables/"/>
+      <link href="http://localhost:4000/lua-metatables/"/>
       <pubDate>2017-03-16T05:12:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/lua-metatables</guid>
+      <guid>http://localhost:4000/lua-metatables</guid>
       <content:encoded><![CDATA[<blockquote>
   <p>Metatables 允许我们改变 table 的行为，例如，使用 Metatables 我们可以定义 Lua 如
 何计算两个 table 的相加操作 a+b。</p>
@@ -133,10 +133,10 @@
     
     <item>
       <title>lua 协程</title>
-      <link href="http://blog.xyecho.com/lua-coroutine/"/>
+      <link href="http://localhost:4000/lua-coroutine/"/>
       <pubDate>2017-03-16T05:12:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/lua-coroutine</guid>
+      <guid>http://localhost:4000/lua-coroutine</guid>
       <content:encoded><![CDATA[<blockquote>
   <p>协同程序（coroutine）与多线程情况下的线程比较类似：有自己的堆栈，自己的局
 部变量，有自己的指令指针，但是和其他协同程序共享全局变量等很多信息。线程和协
@@ -215,10 +215,10 @@
     
     <item>
       <title>lua 异常与错误</title>
-      <link href="http://blog.xyecho.com/lua-error/"/>
+      <link href="http://localhost:4000/lua-error/"/>
       <pubDate>2017-03-16T01:31:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/lua-error</guid>
+      <guid>http://localhost:4000/lua-error</guid>
       <content:encoded><![CDATA[<h3 id="assert">assert</h3>
 
 <p>Lua 提供了专门的内置函数 assert 来完成错误的检测的功能。</p>
@@ -281,10 +281,10 @@
     
     <item>
       <title>lua 函数</title>
-      <link href="http://blog.xyecho.com/lua-function/"/>
+      <link href="http://localhost:4000/lua-function/"/>
       <pubDate>2017-03-15T19:16:53+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/lua-function</guid>
+      <guid>http://localhost:4000/lua-function</guid>
       <content:encoded><![CDATA[<p>lua的函数有必要记录可能也就是 可变参数, 后面的命名参数和多个返回值和python基本一样。</p>
 
 <h3 id="可变参数">可变参数</h3>
@@ -430,10 +430,10 @@
     
     <item>
       <title>lua 学习初步记录</title>
-      <link href="http://blog.xyecho.com/lua-first-learn/"/>
+      <link href="http://localhost:4000/lua-first-learn/"/>
       <pubDate>2017-03-15T04:27:03+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/lua-first-learn</guid>
+      <guid>http://localhost:4000/lua-first-learn</guid>
       <content:encoded><![CDATA[<p>1 Lua 是动态类型语言，变量不要类型定义。 Lua 中有 8 个基本类型分别为： nil、 boolean、number、string、userdata、function、thread 和 table。函数 type 可以测试给定变量或者值
 的类型。</p>
 
@@ -468,10 +468,10 @@
     
     <item>
       <title>用valgrind做一次性能分析</title>
-      <link href="http://blog.xyecho.com/valgrind-code-analysis/"/>
+      <link href="http://localhost:4000/valgrind-code-analysis/"/>
       <pubDate>2017-02-09T05:12:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/valgrind-code-analysis</guid>
+      <guid>http://localhost:4000/valgrind-code-analysis</guid>
       <content:encoded><![CDATA[<p>有一次用valgrind对代码的热点进行分析。发现有一个函数的被调用百分比比较高。</p>
 
 <p>关键的函数是CGameBuffMgr::process()</p>
@@ -565,10 +565,10 @@ begin() 为了获得第一个元素，就在hashtable表中遍历，hashtale就�
     
     <item>
       <title>日志模块</title>
-      <link href="http://blog.xyecho.com/model-log/"/>
+      <link href="http://localhost:4000/model-log/"/>
       <pubDate>2016-12-15T17:23:53+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/model-log</guid>
+      <guid>http://localhost:4000/model-log</guid>
       <content:encoded><![CDATA[<p>系统的开发，日志模块的是必不可少的。特别对于业务逻辑层的来说，有日志输出，很方便跟踪逻辑大概情况。但是对于底层的核心模块来说，日志输出反而成了累赘。日志的输出同样占有I/O。再者，对于底层的逻辑，一般都是比较复杂，核心。暴露出来也没必要。业务逻辑层同样没有必要去了解它。所以，一般的做法是：底层出错，返回错误编码。由上一层记录就OK了。</p>
 
 <p>日志模块一般可以分为 print/note、 debug、 warn、error。人个觉得这四个层次就够了。当然，也可多增加几个，例如，trac。我曾经用于特别的调试，只是一些非必现的问题调试，把日志输出到这层，方便查找。</p>
@@ -595,10 +595,10 @@ begin() 为了获得第一个元素，就在hashtable表中遍历，hashtale就�
     
     <item>
       <title>余华-活着</title>
-      <link href="http://blog.xyecho.com/alive/"/>
+      <link href="http://localhost:4000/alive/"/>
       <pubDate>2016-10-15T17:23:53+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/alive</guid>
+      <guid>http://localhost:4000/alive</guid>
       <content:encoded><![CDATA[<p>这本书是从微博上看网友介绍的，还是朋友介绍的，我也不记得了。在kindle上看有已经购买。应该是一次买了后，忘记了看了。这两天上下班在地铁上，就把它给看了。</p>
 
 <p>书里的主人公叫福贵。一个旧社会里的有钱人的少爷。年少时就一个败家子。按他妈的说法是上梁不正下梁歪。因为他老子年轻也也是败家子，败了家里的一百多亩田地。后来开窍了，好好的在经营自己的田地。他就边上厕所也会跑到自家的田地，可是就是肥水不流外人田的吧。老子还是蛮希望福贵能光大门楣的。结果还是一败家子。把他没败完的另一百多亩也败完了。</p>
@@ -624,10 +624,10 @@ begin() 为了获得第一个元素，就在hashtable表中遍历，hashtale就�
     
     <item>
       <title>libevent 初步分析</title>
-      <link href="http://blog.xyecho.com/libevent-base/"/>
+      <link href="http://localhost:4000/libevent-base/"/>
       <pubDate>2016-07-16T01:32:03+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/libevent-base</guid>
+      <guid>http://localhost:4000/libevent-base</guid>
       <content:encoded><![CDATA[<h3 id="一-reactor模式">一 reactor模式</h3>
 
 <p>整个libevent本身就是一个reactor。reactor翻译成反应堆，是一种事件驱动机制。libevent，底层所运用的就是例epoll这样的一些模型。</p>
@@ -848,10 +848,10 @@ libevent 库的其他组件提供其他功能，包括缓冲的事件系统（�
     
     <item>
       <title>redis 配置说明</title>
-      <link href="http://blog.xyecho.com/redis-config/"/>
+      <link href="http://localhost:4000/redis-config/"/>
       <pubDate>2015-02-04T23:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://blog.xyecho.com/redis-config</guid>
+      <guid>http://localhost:4000/redis-config</guid>
       <content:encoded><![CDATA[<h3 id="redis-支持写的指令">Redis 支持写的指令</h3>
 <p>Redis大概的命令如下：</p>
 

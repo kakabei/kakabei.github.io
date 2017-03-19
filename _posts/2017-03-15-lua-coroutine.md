@@ -2,7 +2,7 @@
 layout: post
 title: lua 协程
 date: 2017-03-15 21:12:15
-categories: Lua
+categories: 编程语言
 tags: lua  
 excerpt: lua coroutine 一种多任务的方式。
 ---
