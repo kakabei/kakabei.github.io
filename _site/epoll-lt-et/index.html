@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>unix 文件和目录</title>
+    <title>epoll的 两种模式</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>unix 文件和目录</h1>
+        <h1>epoll的 两种模式</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -44,76 +44,35 @@
 <span class="tags">
   标签
   
-  <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
+  <a href="/tags/#network" title="network">network</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<ol>
-  <li>设置用户ID和设置ID</li>
-</ol>
+<p>epoll有两种模块， 水平触发（LT）（缺省方式） 和 边缘触发（ET） 。</p>
 
-<p>(1)实际用户ID、实际组ID：  标识我们究竟是谁。这两个字段在登录时取自口令文件中的登录项。通常在一个登录会话间这些值并不改变，但是超级用户进程有方法改变它们。</p>
+<h4 id="lt触发">LT触发：</h4>
 
-<p>(2)有效用户ID、有效组ID： 决定了我们的文件访问权限。</p>
+<p>读事件触发，当读的fd的缓冲区有数据时，就会被触发，而且在缓冲区的数据一次没被读完还会被触发。</p>
 
-<p>(3)保存的设置组ID、保存的设置组ID:在执行一个程序时包含了有效用户ID和有效组ID的副本。</p>
+<p>写事件触发，当写的fd缓冲区可写时，就会被触发，只有可写就会被触发着。</p>
 
-<p>通常，有效用户ID等于实际用户ID，有效级ID等于实际组ID。
-当执行一个程序文件时，进程的有效用户ID通常就是实际用户ID，有效组ID通常是实际组ID。但是可以在文件模式字（st_mode）中设置一个特殊标志，其含义是“当执行此文件时将进程的有效用户ID设置为文件所有者的用户ID（st_uid）”。</p>
+<p>（效率不高的原因是因为，内核态和用户态切换的次数比较多）</p>
 
-<p>与此相类似，在文件模式字中可以调协另一位，它使用将此文件的进程的有效组ID设置为文件的组所有者ID（st_gid）。在文件模式籽中的这两位被称为设置用户ID（set-user-ID）位和设置组ID（set-group-ID）位。</p>
+<h4 id="et触发">ET触发：</h4>
 
-<ol>
-  <li>access 函数</li>
-</ol>
+<p>读事件触发，当读的fd的缓冲区有数据时，就会被触发，只触发一次，所以程序最好一些读完缓冲区里的数据。</p>
 
-<p>access 函数是按实际用户ID和实际组IDeas进行访问权限测试的。</p>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#inlude &lt;unistd.h&gt;
-</span><span class="kt">int</span> <span class="n">access</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<ul>
-  <li>R_OK  测试读权限</li>
-  <li>W_OK  测试写权限</li>
-  <li>X_OK  测试执行权限</li>
-  <li>F_OK  测试文件是否存在</li>
-</ul>
-
-<ol>
-  <li>umask函数</li>
-</ol>
-
-<p>umask函数为进程设置文件模式创建屏蔽字，并返回以前的值。</p>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include&lt;sys/stat.h&gt;
-</span><span class="n">mode_t</span> <span class="n">umask</span><span class="p">(</span><span class="n">mode_t</span> <span class="n">cmask</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<ol>
-  <li>chmod和fchmod函数</li>
-</ol>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/stat.h&gt;
-</span><span class="kt">int</span> <span class="n">chmod</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span> <span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
-<span class="kt">int</span> <span class="n">fchmod</span><span class="p">(</span><span class="kt">int</span> <span class="n">filedes</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<p>chmod 函数在指定的文件上进行操作，而fchmod函数则对已打开的文件进行操作。</p>
-
+<p>写事件触发，当写的fd的缓冲区为代时，就会被触发，只触发一次，所以程序最好要把完整的数据写到fd缓冲区中。</p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/linux-io-stream/" class="pageNav"  >上一篇</a>
+	<a  href="/linux-dir/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/epoll-lt-et/" class="pageNav"  >下一篇</a>
+	<a  href="/tcp-base/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -178,7 +137,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2014-10-14-linux-dir.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2014-09-03-epoll-lt-et.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
