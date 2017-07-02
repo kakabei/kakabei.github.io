@@ -160,7 +160,7 @@ int event_priority_set(struct event *ev, int pri)
 struct event_base * event_init()
 ```
 
-也是 初始化一个 event_base。不同的是 先创建了一个struct event_config。 这个东西是干什么用的还清楚。
+也是 初始化一个 event_base。不同的是 先创建了一个struct event_config。 这个东西是干什么用的还不清楚。
 
 ```c
 struct event_base * event_base_new()
