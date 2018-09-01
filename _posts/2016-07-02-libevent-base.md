@@ -166,7 +166,7 @@ struct event_base * event_init()
 struct event_base * event_base_new()
 ```
 
-内部主要调用了 event_add_internal()
+内部主要调用了 event_base_new_with_config。()
 
 ```c
 int event_add(struct event *ev, const struct timeval *timeout);
@@ -177,14 +177,22 @@ int event_add(struct event *ev, const struct timeval *timeout);
 ```c
 int event_del(struct event *ev);
 ```
+函数将删除事件 ev，对于 I/O 事件，从 I/O 的 demultiplexer 上将事件注销；对于 Signal
+事件，将从 Signal 事件链表中删除；对于定时事件，将从堆上删除。
 
 ```c
 int event_base_loop(struct event_base *base, int loops);
 
 void event_active(struct event *event, int res, short events);
-	
+
 void event_process_active(struct event_base *base);
 ```
+
+event_base_loop： 等待事件，分发事件。
+
+event_active：就绪事件。
+
+event_process_active：　处理就绪事件。
 
 ### 五  事件主循环
 
