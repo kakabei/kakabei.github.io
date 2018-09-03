@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>stl vector 笔记</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>stl vector 笔记</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2017-04-02">2017-04-02</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#stl" title="stl">stl</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#stl" title="stl">stl</a>&nbsp;
+  
+  <a href="/tags/#note" title="note">note</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>vector 是线性容器。</p>
+
+<p>它的元素是严格按照线性序列排序，存储在一连续的存储空间中。这也是意味着不仅可以用使用迭代器，还可以使用指针的偏移方式访问。
+vector的优点如下：</p>
+<ul>
+  <li>可以使用下标访问个别的元素。</li>
+  <li>迭代器可以按照不同的方式遍历容器</li>
+  <li>可以在窗口在末尾增加或删除元素。</li>
+</ul>
+
+<p>1、虽然窗口在在自动处理容量 的大小时会消耗更多的内存，但是容器能和数组一样的性能，而且能很好的地调整存储空间大小。</p>
+
+<p>2、和其他标准的顺序容器相比， vector能更有效访问窗口在内的元素和末尾添加和删除元素，而在其他的位置添加和删除元素，vector则不及其他顺序容器。</p>
+
+<p>3、在迭代器和引用 的也不比list支持的好。</p>
+
+<p>4、 容器的大小和窗口在的容量是有区别的，大小是元素的，容量是分配的内存大小。大小vector::size() ，容量是vector::capacity()</p>
+
+<p>5、可用for_echo() 遍历。如： for_echo(ivetor.begin(), ivector.end(), print) //print是回调函数   void print(int n );</p>
+
+<p>6、<algorithm>中的sort函数，对象是vector。</algorithm></p>
+
+<p>7、vector 查找，std::find(vector.begin(), vector.end(), 3)</p>
+
+<p>8、vector 删除，有两种方式 erase()指定位置  或pop_back()最后一个。</p>
+
+<p>9、当进行添加是，可以用insert()或push_bask()，当容量不够时，会触发动态扩容，此时，它的性能会下降，所以，一般要先预估vector的大小，先vector::reserver()。避免出现动态扩容。</p>
+
+<p>10、使用“交换技巧”来修整vector过剩的空间/内存。vector<int>(ivec).swap(ivec)。vector<int>(ivec)建立一个临时 的vector，它是ivec的一个拷贝。vector的拷贝构造函数只分配拷贝的元素所需要的大小。</int></int></p>
+
+<p>11、用swap方法强行释放vector所点内存.。这个地方应该怎么解释？</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tmplate</span><span class="o">&lt;</span> <span class="n">class</span> <span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">clearVector</span><span class="p">(</span> <span class="n">vector</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">v</span> <span class="p">)</span>
+<span class="p">{</span>
+     <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">vtTemp</span><span class="p">;</span>
+     <span class="n">vtTemp</span><span class="p">,</span><span class="n">swap</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="p">;</span> 
+<span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+</code></pre></div></div>
+<p>或  vector<int>().swap(v)
+或 v.swap(vector<int>());
+或 {     std::vector<int> tmp = v; v.swap(tmp); }　　//大括号让tmp退出｛｝时自动析构。</int></int></int></p>
+
+<p>[注]</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 关于vector删除的问题。有一些地方要注意。遍历一个vector找到对应的元素删除的正常做法。
+ for (auto iter = vector.begin(); iter != vector.end(); iter++)
+ {
+      if (*iter == 3 )   vector.ease(iter);
+｝
+1）这个代码有一个严重的错误。当ease(iter)后，iter就成了一个野指针。再对它iter++,就会有问题。
+2）正常 的做法。
+     vector&lt;int&gt;::iterator iter=vec.begin();
+     for (; iter!= vec.end();)
+    {
+           iter = vec,erase(iter); 
+    }
+   else
+   { 
+        ++iter;
+   }
+</code></pre></div></div>
+
+<p>对于容器的删除都要小心。</p>
+
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/stl-string/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a   class="pageNavInvalid"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2017-03-25-stl-vector.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>
