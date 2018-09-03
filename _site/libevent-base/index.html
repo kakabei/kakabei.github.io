@@ -148,10 +148,9 @@ _libevent_time.h：一些用于时间操作的结构体定义、函数和宏定�
 
 <p>主要的结构体：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">event_base</span> <span class="c1">// event最主要的结构，
-</span><span class="k">struct</span> <span class="n">eventop</span>    <span class="c1">// 定义backend结构， 通过它定义各个模型，
-</span></code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">event_base</span> <span class="c1">// event最主要的结构，</span>
+<span class="k">struct</span> <span class="n">eventop</span>    <span class="c1">// 定义backend结构， 通过它定义各个模型，</span>
+</code></pre></div></div>
 
 <ul>
   <li>ev_events： event关注的事件类型，它可以是以下3种类型：</li>
@@ -181,22 +180,19 @@ ev_active_next libevent将所有的激活事件放入到链表active list中，�
 
 <p>设置事件 如：I/O事件、 时间事件、信号事件:</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">event_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">short</span> <span class="n">events</span><span class="p">,</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">event_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">short</span> <span class="n">events</span><span class="p">,</span>
 		<span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">short</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">),</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>设置 event ev 将要注册到的 event_base；</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_base_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_base_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">)</span>
+</code></pre></div></div>
 
 <p>设置event ev的优先级:</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_priority_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pri</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_priority_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pri</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h3 id="四-事件处理框架">四 事件处理框架</h3>
 
@@ -204,35 +200,30 @@ ev_active_next libevent将所有的激活事件放入到链表active list中，�
 
 <p>初始化一个 event_base。 本质上是调用了 event_base_new_with_config。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span> <span class="n">event_init</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span> <span class="n">event_init</span><span class="p">()</span>
+</code></pre></div></div>
 
 <p>也是 初始化一个 event_base。不同的是 先创建了一个struct event_config。 这个东西是干什么用的还不清楚。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span> <span class="n">event_base_new</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span> <span class="n">event_base_new</span><span class="p">()</span>
+</code></pre></div></div>
 
 <p>内部主要调用了 event_add_internal()</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_add</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_add</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>内部主要调用了 event_del_internal()</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_del</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_del</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">);</span>
+</code></pre></div></div>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_base_loop</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="kt">int</span> <span class="n">loops</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_base_loop</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="kt">int</span> <span class="n">loops</span><span class="p">);</span>
 
 <span class="kt">void</span> <span class="n">event_active</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">event</span><span class="p">,</span> <span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="kt">short</span> <span class="n">events</span><span class="p">);</span>
 	
 <span class="kt">void</span> <span class="n">event_process_active</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">);</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="五--事件主循环">五  事件主循环</h3>
 
@@ -340,7 +331,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2016-07-02-libevent-base.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

@@ -5,24 +5,24 @@
   >
   <channel>
     <title>xyecho</title>
-    <link href="http://localhost:4000/feed/" rel="self" />
-    <link href="http://localhost:4000" />
-    <lastBuildDate>2017-07-02T11:57:40+08:00</lastBuildDate>
+    <link href="http://blog.xyecho.com/feed/" rel="self" />
+    <link href="http://blog.xyecho.com" />
+    <lastBuildDate>2018-09-03T18:22:49+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
       <title>多个git帐号的提交</title>
-      <link href="http://localhost:4000/github-mult-account/"/>
+      <link href="http://blog.xyecho.com/github-mult-account/"/>
       <pubDate>2017-03-21T00:12:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/github-mult-account</guid>
+      <guid>http://blog.xyecho.com/github-mult-account</guid>
       <content:encoded><![CDATA[<p>由于我同时使用了github和云码。所以必须同时配置两个git帐号。</p>
 
 <p>我的所在的环境是windows. （想必linux下也是如此）</p>
 
 <p>先cd 到C:\Users\xxxx.ssh下。</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ssh-keygen -t rsa -C <span class="s2">"youremail@xx.com"</span>  
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ssh-keygen <span class="nt">-t</span> rsa <span class="nt">-C</span> <span class="s2">"youremail@xx.com"</span>  
 
 Generating public/private rsa key pair.
 Enter file <span class="k">in </span>which to save the key <span class="o">(</span>/c/Users/xxxx/.ssh/id_rsa<span class="o">)</span>: ym
@@ -31,15 +31,14 @@ Enter same passphrase again:
 Your identification has been saved <span class="k">in </span>ym.
 Your public key has been saved <span class="k">in </span>ym.pub.
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>要在Enter file in which to save the key (/c/Users/xxxx/.ssh/id_rsa)后输入你的文件名。</p>
 
 <p>在C:\Users\xxxx.ssh下：(xxxx为用户名)</p>
 
 <p>创建一个config文件，（注意没有后缀）</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>Host github.com  
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host github.com  
     HostName github.com  
     PreferredAuthentications publickey  
     IdentityFile ~/.ssh/id_rsa  
@@ -49,17 +48,550 @@ Host git.oschina.net
     PreferredAuthentications publickey  
     IdentityFile ~/.ssh/ym 
 
-</code></pre>
-</div>
+</code></pre></div></div>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>linux signal 说明</title>
+      <link href="http://blog.xyecho.com/linux-signal_explanation/"/>
+      <pubDate>2017-03-16T05:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://blog.xyecho.com/linux-signal_explanation</guid>
+      <content:encoded><![CDATA[<p>Linux信号说明列表</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@VM_116_132_centos ~]# <span class="nb">kill</span> <span class="nt">-l</span>
+ 1<span class="o">)</span> SIGHUP       2<span class="o">)</span> SIGINT       3<span class="o">)</span> SIGQUIT      4<span class="o">)</span> SIGILL       5<span class="o">)</span> SIGTRAP
+ 6<span class="o">)</span> SIGABRT      7<span class="o">)</span> SIGBUS       8<span class="o">)</span> SIGFPE       9<span class="o">)</span> SIGKILL     10<span class="o">)</span> SIGUSR1
+11<span class="o">)</span> SIGSEGV     12<span class="o">)</span> SIGUSR2     13<span class="o">)</span> SIGPIPE     14<span class="o">)</span> SIGALRM     15<span class="o">)</span> SIGTERM
+16<span class="o">)</span> SIGSTKFLT   17<span class="o">)</span> SIGCHLD     18<span class="o">)</span> SIGCONT     19<span class="o">)</span> SIGSTOP     20<span class="o">)</span> SIGTSTP
+21<span class="o">)</span> SIGTTIN     22<span class="o">)</span> SIGTTOU     23<span class="o">)</span> SIGURG      24<span class="o">)</span> SIGXCPU     25<span class="o">)</span> SIGXFSZ
+26<span class="o">)</span> SIGVTALRM   27<span class="o">)</span> SIGPROF     28<span class="o">)</span> SIGWINCH    29<span class="o">)</span> SIGIO       30<span class="o">)</span> SIGPWR
+31<span class="o">)</span> SIGSYS      34<span class="o">)</span> SIGRTMIN    35<span class="o">)</span> SIGRTMIN+1  36<span class="o">)</span> SIGRTMIN+2  37<span class="o">)</span> SIGRTMIN+3
+38<span class="o">)</span> SIGRTMIN+4  39<span class="o">)</span> SIGRTMIN+5  40<span class="o">)</span> SIGRTMIN+6  41<span class="o">)</span> SIGRTMIN+7  42<span class="o">)</span> SIGRTMIN+8
+43<span class="o">)</span> SIGRTMIN+9  44<span class="o">)</span> SIGRTMIN+10 45<span class="o">)</span> SIGRTMIN+11 46<span class="o">)</span> SIGRTMIN+12 47<span class="o">)</span> SIGRTMIN+13
+48<span class="o">)</span> SIGRTMIN+14 49<span class="o">)</span> SIGRTMIN+15 50<span class="o">)</span> SIGRTMAX-14 51<span class="o">)</span> SIGRTMAX-13 52<span class="o">)</span> SIGRTMAX-12
+53<span class="o">)</span> SIGRTMAX-11 54<span class="o">)</span> SIGRTMAX-10 55<span class="o">)</span> SIGRTMAX-9  56<span class="o">)</span> SIGRTMAX-8  57<span class="o">)</span> SIGRTMAX-7
+58<span class="o">)</span> SIGRTMAX-6  59<span class="o">)</span> SIGRTMAX-5  60<span class="o">)</span> SIGRTMAX-4  61<span class="o">)</span> SIGRTMAX-3  62<span class="o">)</span> SIGRTMAX-2
+63<span class="o">)</span> SIGRTMAX-1  64<span class="o">)</span> SIGRTMAX
+
+</code></pre></div></div>
+
+<p>列表中，编号为1 ~ 31的信号为传统UNIX支持的信号，是不可靠信号(非实时的)，编号为32 ~ 63的信号是后来扩充的，称做可靠信号(实时信号)。不可靠信号和可靠信号的区别在于前者不支持排队，可能会造成信号丢失，而后者不会。</p>
+
+<p>下面我们对编号小于SIGRTMIN的信号进行讨论。</p>
+
+<p>1.SIGHUP</p>
+
+<p>本信号在用户终端连接(正常或非正常)结束时发出, 通常是在终端的控制进程结束时, 通知同一session内的各个作业, 这时它们与控制终端不再关联。
+登录Linux时，系统会分配给登录用户一个终端(Session)。在这个终端运行的所有程序，包括前台进程组和后台进程组，一般都属于这个 Session。当用户退出Linux登录时，前台进程组和后台有对终端输出的进程将会收到SIGHUP信号。这个信号的默认操作为终止进程，因此前台进 程组和后台有终端输出的进程就会中止。不过可以捕获这个信号，比如wget能捕获SIGHUP信号，并忽略它，这样就算退出了Linux登录，wget也 能继续下载。
+此外，对于与终端脱离关系的守护进程，这个信号用于通知它重新读取配置文件。</p>
+
+<p>2.SIGINT</p>
+
+<p>程序终止(interrupt)信号, 在用户键入INTR字符(通常是Ctrl-C)时发出，用于通知前台进程组终止进程。</p>
+
+<p>3.SIGQUIT</p>
+
+<p>和SIGINT类似, 但由QUIT字符(通常是Ctrl-/)来控制. 进程在因收到SIGQUIT退出时会产生core文件, 在这个意义上类似于一个程序错误信号。</p>
+
+<p>4.SIGILL</p>
+
+<p>执行了非法指令. 通常是因为可执行文件本身出现错误, 或者试图执行数据段. 堆栈溢出时也有可能产生这个信号。</p>
+
+<p>5.SIGTRAP</p>
+
+<p>由断点指令或其它trap指令产生. 由debugger使用。</p>
+
+<ol>
+  <li>SIGABRT</li>
+</ol>
+
+<p>调用abort函数生成的信号。</p>
+
+<ol>
+  <li>SIGBUS</li>
+</ol>
+
+<p>非法地址, 包括内存地址对齐(alignment)出错。比如访问一个四个字长的整数, 但其地址不是4的倍数。它与SIGSEGV的区别在于后者是由于对合法存储地址的非法访问触发的(如访问不属于自己存储空间或只读存储空间)。</p>
+
+<ol>
+  <li>SIGFPE</li>
+</ol>
+
+<p>在发生致命的算术运算错误时发出. 不仅包括浮点运算错误, 还包括溢出及除数为0等其它所有的算术的错误。</p>
+
+<ol>
+  <li>SIGKILL</li>
+</ol>
+
+<p>用来立即结束程序的运行. 本信号不能被阻塞、处理和忽略。如果管理员发现某个进程终止不了，可尝试发送这个信号。</p>
+
+<p>10.SIGUSR1</p>
+
+<p>留给用户使用</p>
+
+<p>11.SIGSEGV</p>
+
+<p>试图访问未分配给自己的内存, 或试图往没有写权限的内存地址写数据.</p>
+
+<p>12.SIGUSR2</p>
+
+<p>留给用户使用</p>
+
+<p>13.SIGPIPE</p>
+
+<p>管道破裂。这个信号通常在进程间通信产生，比如采用FIFO(管道)通信的两个进程，读管道没打开或者意外终止就往管道写，写进程会收到SIGPIPE信号。此外用Socket通信的两个进程，写进程在写Socket的时候，读进程已经终止。</p>
+
+<p>14.SIGALRM</p>
+
+<p>时钟定时信号, 计算的是实际的时间或时钟时间. alarm函数使用该信号.</p>
+
+<p>15.SIGTERM</p>
+
+<p>程序结束(terminate)信号, 与SIGKILL不同的是该信号可以被阻塞和处理。通常用来要求程序自己正常退出，shell命令kill缺省产生这个信号。如果进程终止不了，我们才会尝试SIGKILL。</p>
+
+<p>17.SIGCHLD</p>
+
+<p>子进程结束时, 父进程会收到这个信号。
+如果父进程没有处理这个信号，也没有等待(wait)子进程，子进程虽然终止，但是还会在内核进程表中占有表项，这时的子进程称为僵尸进程。这种情 况我们应该避免(父进程或者忽略SIGCHILD信号，或者捕捉它，或者wait它派生的子进程，或者父进程先终止，这时子进程的终止自动由init进程来接管)。</p>
+
+<p>18.SIGCONT</p>
+
+<p>让一个停止(stopped)的进程继续执行. 本信号不能被阻塞. 可以用一个handler来让程序在由stopped状态变为继续执行时完成特定的工作. 例如, 重新显示提示符…</p>
+
+<p>19.SIGSTOP</p>
+
+<p>停止(stopped)进程的执行. 注意它和terminate以及interrupt的区别:该进程还未结束, 只是暂停执行. 本信号不能被阻塞, 处理或忽略.</p>
+
+<p>20.SIGTSTP</p>
+
+<p>停止进程的运行, 但该信号可以被处理和忽略. 用户键入SUSP字符时(通常是Ctrl-Z)发出这个信号</p>
+
+<p>21.SIGTTIN</p>
+
+<p>当后台作业要从用户终端读数据时, 该作业中的所有进程会收到SIGTTIN信号. 缺省时这些进程会停止执行.</p>
+
+<p>22.SIGTTOU</p>
+
+<p>类似于SIGTTIN, 但在写终端(或修改终端模式)时收到.</p>
+
+<p>23.SIGURG</p>
+
+<p>有”紧急”数据或out-of-band数据到达socket时产生.</p>
+
+<p>24.SIGXCPU</p>
+
+<p>超过CPU时间资源限制. 这个限制可以由getrlimit/setrlimit来读取/改变。</p>
+
+<p>25.SIGXFSZ</p>
+
+<p>当进程企图扩大文件以至于超过文件大小资源限制。</p>
+
+<p>26.SIGVTALRM</p>
+
+<p>虚拟时钟信号. 类似于SIGALRM, 但是计算的是该进程占用的CPU时间.</p>
+
+<p>27.SIGPROF</p>
+
+<p>类似于SIGALRM/SIGVTALRM, 但包括该进程用的CPU时间以及系统调用的时间.</p>
+
+<p>28.SIGWINCH</p>
+
+<p>窗口大小改变时发出.</p>
+
+<p>29.SIGIO</p>
+
+<p>文件描述符准备就绪, 可以开始进行输入/输出操作.</p>
+
+<p>30.SIGPWR</p>
+
+<p>Power failure</p>
+
+<p>31.SIGSYS</p>
+
+<p>非法的系统调用。</p>
+
+<p>在以上列出的信号中，程序不可捕获、阻塞或忽略的信号有：SIGKILL,SIGSTOP</p>
+
+<p>不能恢复至默认动作的信号有：SIGILL,SIGTRAP</p>
+
+<p>默认会导致进程流产的信号有：SIGABRT,SIGBUS,SIGFPE,SIGILL,SIGIOT,SIGQUIT,SIGSEGV,SIGTRAP,SIGXCPU,SIGXFSZ</p>
+
+<p>默认会导致进程退出的信号有：SIGALRM,SIGHUP,SIGINT,SIGKILL,SIGPIPE,SIGPOLL,SIGPROF,SIGSYS,SIGTERM,SIGUSR1,SIGUSR2,SIGVTALRM</p>
+
+<p>默认会导致进程停止的信号有：SIGSTOP,SIGTSTP,SIGTTIN,SIGTTOU</p>
+
+<p>默认进程忽略的信号有：SIGCHLD,SIGPWR,SIGURG,SIGWINCH</p>
+
+<p>此外，SIGIO在SVR4是退出，在4.3BSD中是忽略；SIGCONT在进程挂起时是继续，否则是忽略，不能被阻塞。</p>
+
+<h4 id="引用">引用</h4>
+<ul>
+  <li><a href="https://blog.csdn.net/sadlike/article/details/52297612">Linux信号说明列表</a></li>
+</ul>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>linux signal and threads</title>
+      <link href="http://blog.xyecho.com/linux-signal/"/>
+      <pubDate>2017-03-16T05:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://blog.xyecho.com/linux-signal</guid>
+      <content:encoded><![CDATA[<h4 id="信号与进程">信号与进程：</h4>
+
+<p>信号是向进程异步发送的软件通知，通知进程有事件发生。事件可为硬件异常(如除0)、软件条件(如闹钟超时)、控制终端发出的信号或调用kill()/raise()函数产生的用户逻辑信号。</p>
+
+<p>1.当信号产生时，内核通常在进程表中设置一个某种形式的标志，即向进程递送一个信号。在信号产生(generation)和递送(delivery)之间(可能相当长)的时间间隔内，该信号处于未决(pending)状态。已经生成但未递送的信号称为挂起(suspending)的信号。[这里涉及了两个状态， 一个<strong>未决</strong>， 一个<strong>挂起</strong>]</p>
+
+<p>2.进程可选择阻塞(block)某个信号，此时若对该信号的动作是系统默认动作或捕捉该信号，则为该进程将此信号保持为未决状态，直到该进程(a)对此信号解除阻塞，或者(b)将对此信号的动作更改为忽略。</p>
+
+<p>3.内核为每个进程维护一个未决(未处理的)信号队列，信号产生时无论是否被阻塞，首先放入未决队列里。当时间片调度到当前进程时，内核检查未决队列中是否存在信号。
+若有信号且未被阻塞，则执行相应的操作并从队列中删除该信号；否则仍保留该信号。 因此，进程在信号递送给它之前仍可改变对该信号的动作。进程调用sigpending()函数判定哪些信号设置为阻塞并处于未决状态。 <strong>[产生信号后还没投递就会被放在未决信号队列中]</strong></p>
+
+<p>4.若在进程解除对某信号的阻塞之前，该信号发生多次，则未决队列仅保留相同不可靠信号中的一个，而可靠信号(实时扩展)会保留并递送多次，称为按顺序排队。<strong>[这个把信号分为可靠可靠的两种，那么哪一些是可靠的，那一些是不可靠呢？]</strong></p>
+
+<p>5.每个进程都有一个信号屏蔽字(signal mask)，规定当前要阻塞递送到该进程的信号集。对于每个可能的信号，该屏蔽字中都有一位与之对应。对于某种信号，若其对应位已设置，则该信号当前被阻塞。<strong>[在一个进程中对一个信号的阻塞就是通过设置这个进程的屏蔽字来完成的]</strong></p>
+
+<h4 id="信号与线程">信号与线程</h4>
+
+<p>内核也为每个线程维护未决信号队列。当调用sigpending()时，返回<strong>整个进程未决信号队列与调用线程未决信号队列的并集</strong>。进程内创建线程时，新线程将继承进程(主线程)的信号屏蔽字，但新线程的未决信号集被清空(以防同一信号被多个线程处理)。<strong>[新线程的未决信号集,其实就是新的未决信号队列]</strong></p>
+
+<p>线程的信号屏蔽字是私有的(定义当前线程要求阻塞的信号集)，即线程可独立地屏蔽某些信号。这样，应用程序可控制哪些线程响应哪些信号。</p>
+
+<p>信号处理函数由进程内所有线程共享。这意味着尽管单个线程可阻止某些信号，但当线程修改某信号相关的处理行为后，所有线程都共享该处理行为的改变。这样，若某线程选择忽略某信号，而其他线程可恢复信号的默认处理行为或为信号设置新的处理函数，从而撤销原先的忽略行为。即对某个信号处理函数，以最后一次注册的处理函数为准，从而保证同一信号被任意线程处理时行为相同。此外，若某信号的默认动作是停止或终止，则不管该信号发往哪个线程，整个进程都会停止或终止。</p>
+
+<p>若信号与硬件故障(如SIGBUS/SIGFPE/SIGILL/SIGSEGV)或定时器超时相关，该信号会发往引起该事件的线程。其它信号除非显式指定目标线程，否则通常发往主线程(哪怕信号处理函数由其他线程注册)，仅当主线程屏蔽该信号时才发往某个具有处理能力的线程。</p>
+
+<h4 id="接口">接口</h4>
+
+<h5 id="一--pthread_sigmask">一  pthread_sigmask</h5>
+
+<p>线程可调用pthread_sigmask()设置本线程的信号屏蔽字，以屏蔽该线程对某些信号的响应处理。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;signal.h&gt;
+</span><span class="kt">int</span> <span class="n">pthread_sigmask</span><span class="p">(</span><span class="kt">int</span> <span class="n">how</span><span class="p">,</span> <span class="k">const</span> <span class="n">sigset_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">set</span><span class="p">,</span> <span class="n">sigset_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">oset</span><span class="p">);</span>
+</code></pre></div></div>
+<p>该函数检查和(或)更改本线程的信号屏蔽字。若参数oset为非空指针，则该指针返回调用前本线程的信号屏蔽字。若参数set为非空指针，则参数how指示如何修改当前信号屏蔽字；否则不改变本线程信号屏蔽字，并忽略how值。该函数执行成功时返回0，否则返回错误编号(errno)。</p>
+
+<p>下列给出参数how可选用的值。其中，SIG_ BLOCK为“或”操作，而SIG_SETMASK为赋值操作。</p>
+
+<ul>
+  <li>SIG_BLOCK 将set中包含的信号加入本线程的当前信号屏蔽字</li>
+  <li>SIG_UNBLOCK 从本线程的当前信号屏蔽字中移除set中包含的信号(哪怕该信号并未被阻塞)</li>
+  <li>SIG_SETMASK 将set指向的信号集设置为本线程的信号屏蔽字</li>
+</ul>
+
+<p>主线程调用pthread_sigmask()设置信号屏蔽字后，其创建的新线程将继承主线程的信号屏蔽字。然而，新线程对信号屏蔽字的更改不会影响创建者和其他线程。</p>
+
+<p>注意，pthread_sigmask()与sigprocmask()函数功能类似。两者的区别在于，pthread_sigmask()是线程库函数，用于多线程进程，且失败时返回errno；而sigprocmask()针对单线程的进程，其行为在多线程的进程中没有定义，且失败时设置errno并返回-1。</p>
+
+<h6 id="二--sigwait">二  sigwait</h6>
+
+<p>线程可通过调用sigwait()函数等待一个或多个信号发生。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;signal.h&gt;
+</span><span class="kt">int</span> <span class="n">sigwait</span><span class="p">(</span><span class="k">const</span> <span class="n">sigset_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">sigset</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">signop</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>参数sigset指定线程等待的信号集，signop指向的整数表明接收到的信号值。</p>
+
+<p>该函数将调用线程挂起，直到信号集中的任何一个信号被递送。该函数接收递送的信号后，将其从未决队列中移除(以防返回时信号被signal/sigaction安装的处理函数捕获)，然后唤醒线程并返回。</p>
+
+<p>该函数执行成功时返回0，并将接收到的信号值存入signop所指向的内存空间；失败时返回错误编号(errno)。失败原因通常为EINVAL(指定信号无效或不支持)，但并不返回EINTR错误。</p>
+
+<p>给定线程的未决信号集是整个进程未决信号集与该线程未决信号集的并集。若等待信号集中某个信号在sigwait()调用时处于未决状态，则该函数将无阻塞地返回。若同时有多个等待中的信号处于未决状态，则对这些信号的选择规则和顺序未定义。在返回之前，sigwait()将从进程中原子性地移除所选定的未决信号。</p>
+
+<p>若已阻塞等待信号集中的信号，则sigwait()会自动解除信号集的阻塞状态，直到有新的信号被递送。在返回之前，sigwait()将恢复线程的信号屏蔽字。因此，sigwait()并不改变信号的阻塞状态。可见，sigwait()的这种<strong>“解阻-等待-阻塞”</strong>特性，与条件变量非常相似。<strong>[为什么？后面例子说明的第9点有说到]</strong></p>
+
+<p>为避免错误发生，调用sigwait()前必须阻塞那些它正在等待的信号。在单线程环境中，调用程序首先调用<code class="highlighter-rouge">sigprocmask()</code>阻塞等待信号集中的信号，以防这些信号在连续的sigwait()调用之间进入未决状态，从而触发默认动作或信号处理函数。在多线程程序中，所有线程(包括调用线程)都必须阻塞等待信号集中的信号，否则信号可能被递送到调用线程之外的其他线程。建议在创建线程前调用pthread_sigmask()阻塞这些信号(新线程继承信号屏蔽字)，然后绝不显式解除阻塞(sigwait会自动解除信号集的阻塞状态)。</p>
+
+<p>若多个线程调用sigwait()等待同一信号，只有一个(但不确定哪个)线程可从sigwait()中返回。若信号被捕获(通过sigaction安装信号处理函数)，且线程正在sigwait()调用中等待同一信号，则由系统实现来决定以何种方式递送信号。<strong>操作系统实现可让sigwait返回(通常优先级较高)</strong>，也可激活信号处理程序，但不可能出现两者皆可的情况。</p>
+
+<p>注意，sigwait()与sigwaitinfo()函数功能类似。两者的区别在于，sigwait()成功时返回0并传回信号值，且失败时返回errno；而sigwaitinfo()成功时返回信号值并传回siginfo_t结构(信息更多)，且失败时设置errno并返回-1。此外， 当产生等待信号集以外的信号时，该信号的处理函数可中断sigwaitinfo()，此时errno被设置为EINTR。对SIGKILL (杀死进程)和 SIGSTOP(暂停进程)信号的等待将被系统忽略。</p>
+
+<p>使用sigwait()可简化多线程环境中的信号处理，允许在指定线程中以同步方式等待并处理异步产生的信号。为了防止信号中断线程，可将信号加到每个线程的信号屏蔽字中，然后安排专用线程作信号处理。该专用线程可进行任何函数调用，而不必考虑函数的可重入性和异步信号安全性，因为这些函数调用来自正常的线程环境，能够知道在何处被中断并继续执行。这样，信号到来时就不会打断其他线程的工作。</p>
+
+<h4 id="信号处理模型">信号处理模型</h4>
+
+<p>这种采用专用线程同步处理信号的模型如下图所示：</p>
+
+<p><img src="/assets/linux/linux_signal.jpeg" alt="" /></p>
+
+<p>其设计步骤如下：</p>
+<ol>
+  <li>主线程设置信号屏蔽字，阻塞希望同步处理的信号；</li>
+  <li>主线程创建一个信号处理线程，该线程将希望同步处理的信号集作为 sigwait()的参数；</li>
+  <li>主线程创建若干工作线程。</li>
+</ol>
+
+<p>主线程的信号屏蔽字会被其创建的新线程继承，故工作线程将不会收到信号。</p>
+
+<p>注意，因程序逻辑需要而产生的信号(如SIGUSR1/ SIGUSR2和实时信号)，被处理后程序继续正常运行，可考虑使用sigwait同步模型规避信号处理函数执行上下文不确定性带来的潜在风险。而对于硬件致命错误等导致程序运行终止的信号(如SIGSEGV)，必须按照传统的异步方式使用 signal()或sigaction()注册信号处理函数进行非阻塞处理，以提高响应的实时性。在应用程序中，可根据所处理信号的不同而同时使用这两种信号处理模型。</p>
+
+<p>因为sigwait()以阻塞方式同步处理信号，为避免信号处理滞后或非实时信号丢失的情况，处理每个信号的代码应尽量简洁快速，避免调用会产生阻塞的库函数。</p>
+
+<h4 id="例子">例子</h4>
+
+<p>首先定义两个信号处理函数：</p>
+
+<p>编译链接(加-pthread选项)后,  g++ -pthread signal.cpp -o signal</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;string.h&gt;
+</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">SigHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">dwSigNo</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"++Thread %x Received Signal %2d(%s)!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+          <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">pthread_self</span><span class="p">(),</span> <span class="n">dwSigNo</span><span class="p">,</span> <span class="n">strsignal</span><span class="p">(</span><span class="n">dwSigNo</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">sighandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">dwSigNo</span><span class="p">)</span>
+<span class="p">{</span>   <span class="c1">//非异步信号安全，仅为示例</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"--Thread %x Received Signal %2d(%s)!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+            <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">pthread_self</span><span class="p">(),</span> <span class="n">dwSigNo</span><span class="p">,</span> <span class="n">strsignal</span><span class="p">(</span><span class="n">dwSigNo</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+ <span class="p">{</span>
+    <span class="n">sigset_t</span> <span class="n">tBlockSigs</span><span class="p">;</span>
+    <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">);</span>
+    <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="n">SIGINT</span><span class="p">);</span>
+    <span class="n">sigprocmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="n">signal</span><span class="p">(</span><span class="n">SIGQUIT</span><span class="p">,</span> <span class="n">sighandler</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">dwRet</span><span class="p">;</span>
+ <span class="cp">#ifdef USE_SIGWAIT
+</span>    <span class="kt">int</span> <span class="n">dwSigNo</span><span class="p">;</span>
+    <span class="n">dwRet</span> <span class="o">=</span> <span class="n">sigwait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dwSigNo</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"sigwait returns %d(%s), signo = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">dwRet</span><span class="p">,</span>  <span class="n">dwSigNo</span><span class="p">);</span>
+<span class="cp">#else
+</span>    <span class="n">siginfo_t</span> <span class="n">tSigInfo</span><span class="p">;</span>
+    <span class="n">dwRet</span> <span class="o">=</span> <span class="n">sigwaitinfo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tSigInfo</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"sigwaitinfo returns %d(%s), signo = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">dwRet</span><span class="p">,</span>  <span class="n">tSigInfo</span><span class="p">.</span><span class="n">si_signo</span><span class="p">);</span>
+<span class="cp">#endif
+</span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+</code></pre></div></div>
+<p>执行结果如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// define USE_SIGWAIT
+<span class="o">[</span>root@VM_116_132_centos ~]# ./signal
+^<span class="se">\-</span><span class="nt">-Thread</span> 447c5740 Received Signal  3<span class="o">(</span>Quit<span class="o">)!</span>   // Ctrl + <span class="se">\</span>
+^<span class="se">\-</span><span class="nt">-Thread</span> 447c5740 Received Signal  3<span class="o">(</span>Quit<span class="o">)!</span>   // Ctrl + <span class="se">\</span>
+^CSegmentation fault                            // Ctrl + C
+<span class="o">[</span>root@VM_116_132_centos ~]#
+
+// no define USE_SIGWAIT
+^<span class="se">\-</span><span class="nt">-Thread</span> 3aa51740 Received Signal  3<span class="o">(</span>Quit<span class="o">)!</span> // Ctrl + <span class="se">\ </span>直接退出了
+sigwaitinfo returns <span class="nt">-1</span><span class="o">((</span>null<span class="o">))</span>, signo <span class="o">=</span> <span class="nt">-1</span>
+
+</code></pre></div></div>
+
+<p>对比可见，sigwaitinfo()可被等待信号集以外的信号中断，而sigwait()不会被中断。<strong>[为什么?]</strong></p>
+
+<p>测试多线程中，sigwait()和sigwaitinfo()函数对信号的同步等待</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+</span><span class="k">extern</span> <span class="kt">int</span> <span class="n">errno</span><span class="p">;</span>
+
+<span class="c1">//#define USE_SIGWAIT</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">SigHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">dwSigNo</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"++Thread %x Received Signal %2d(%s)!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+          <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">pthread_self</span><span class="p">(),</span> <span class="n">dwSigNo</span><span class="p">,</span> <span class="n">strsignal</span><span class="p">(</span><span class="n">dwSigNo</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">sighandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">dwSigNo</span><span class="p">)</span>
+<span class="p">{</span>   <span class="c1">//非异步信号安全，仅为示例</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"--Thread %x Received Signal %2d(%s)!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+            <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">pthread_self</span><span class="p">(),</span> <span class="n">dwSigNo</span><span class="p">,</span> <span class="n">strsignal</span><span class="p">(</span><span class="n">dwSigNo</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="o">*</span><span class="nf">SigMgrThread</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">pvArg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">pthread_detach</span><span class="p">(</span><span class="n">pthread_self</span><span class="p">());</span>
+
+    <span class="c1">//捕获SIGQUIT信号，以免程序收到该信号后退出</span>
+    <span class="n">signal</span><span class="p">(</span><span class="n">SIGQUIT</span><span class="p">,</span> <span class="n">sighandler</span><span class="p">);</span>
+ 
+    <span class="c1">//使用创建线程时的pvArg传递信号屏蔽字</span>
+    <span class="kt">int</span> <span class="n">dwRet</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+<span class="cp">#ifdef USE_SIGWAIT
+</span>        <span class="kt">int</span> <span class="n">dwSigNo</span><span class="p">;</span>
+        <span class="n">dwRet</span> <span class="o">=</span> <span class="n">sigwait</span><span class="p">((</span><span class="n">sigset_t</span><span class="o">*</span><span class="p">)</span><span class="n">pvArg</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dwSigNo</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">dwRet</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">SigHandler</span><span class="p">(</span><span class="n">dwSigNo</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"sigwait() failed, errno: %d(%s)!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">dwRet</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">dwRet</span><span class="p">));</span>
+<span class="cp">#else
+</span>        <span class="n">siginfo_t</span> <span class="n">tSigInfo</span><span class="p">;</span>
+        <span class="n">dwRet</span> <span class="o">=</span> <span class="n">sigwaitinfo</span><span class="p">((</span><span class="n">sigset_t</span><span class="o">*</span><span class="p">)</span><span class="n">pvArg</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tSigInfo</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">dwRet</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">//dwRet与tSigInfo.si_signo值相同</span>
+            <span class="n">SigHandler</span><span class="p">(</span><span class="n">tSigInfo</span><span class="p">.</span><span class="n">si_signo</span><span class="p">);</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">)</span> <span class="c1">//被其他信号中断</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">"sigwaitinfo() was interrupted by a signal handler!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+            <span class="k">else</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">"sigwaitinfo() failed, errno: %d(%s)!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">errno</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="cp">#endif
+</span><span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">ThreadKill</span><span class="p">(</span><span class="n">pthread_t</span> <span class="n">tThrdId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dwSigNo</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">dwRet</span> <span class="o">=</span> <span class="n">pthread_kill</span><span class="p">(</span><span class="n">tThrdId</span><span class="p">,</span> <span class="n">dwSigNo</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">dwRet</span> <span class="o">==</span> <span class="n">ESRCH</span><span class="p">)</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Thread %x is non-existent(Never Created or Already Quit)!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+            <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">tThrdId</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">dwRet</span> <span class="o">==</span> <span class="n">EINVAL</span><span class="p">)</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Signal %d is invalid!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">dwSigNo</span><span class="p">);</span>
+    <span class="k">else</span>
+       <span class="n">printf</span><span class="p">(</span><span class="s">"Thread %x is alive!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">tThrdId</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">dwRet</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="o">*</span><span class="nf">WorkerThread</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">pvArg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">pthread_t</span> <span class="n">tThrdId</span> <span class="o">=</span> <span class="n">pthread_self</span><span class="p">();</span>
+    <span class="n">pthread_detach</span><span class="p">(</span><span class="n">tThrdId</span><span class="p">);</span>
+  
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Thread %x starts to work!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">tThrdId</span><span class="p">);</span>
+    <span class="c1">//working...</span>
+    <span class="kt">int</span> <span class="n">dwVal</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dwVal</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">/// </span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Main thread %x is running!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">pthread_self</span><span class="p">());</span>
+
+    <span class="c1">//屏蔽SIGUSR1等信号，新创建的线程将继承该屏蔽字</span>
+    <span class="n">sigset_t</span> <span class="n">tBlockSigs</span><span class="p">;</span>
+    <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">);</span>
+    <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="n">SIGRTMIN</span><span class="p">);</span>
+    <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="n">SIGRTMIN</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="n">SIGRTMAX</span><span class="p">);</span>
+    <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="n">SIGUSR1</span><span class="p">);</span>
+    <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="n">SIGUSR2</span><span class="p">);</span>
+    <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="n">SIGINT</span><span class="p">);</span>
+  
+    <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="n">SIGSEGV</span><span class="p">);</span> <span class="c1">//试图阻塞SIGSEGV信号</span>
+  
+    <span class="c1">//设置线程信号屏蔽字</span>
+    <span class="n">pthread_sigmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  
+    <span class="n">signal</span><span class="p">(</span><span class="n">SIGINT</span><span class="p">,</span> <span class="n">sighandler</span><span class="p">);</span> <span class="c1">//试图捕捉SIGINT信号</span>
+  
+    <span class="c1">//创建一个管理线程，该线程负责信号的同步处理</span>
+    <span class="n">pthread_t</span> <span class="n">tMgrThrdId</span><span class="p">;</span>
+    <span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tMgrThrdId</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">SigMgrThread</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Create a signal manager thread %x!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">tMgrThrdId</span><span class="p">);</span>
+    
+    <span class="c1">//创建另一个管理线程，该线程试图与tMgrThrdId对应的管理线程竞争信号</span>
+    <span class="n">pthread_t</span> <span class="n">tMgrThrdId2</span><span class="p">;</span>
+    <span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tMgrThrdId2</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">SigMgrThread</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tBlockSigs</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Create another signal manager thread %x!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">tMgrThrdId2</span><span class="p">);</span>
+  
+    <span class="c1">//创建一个工作线程，该线程继承主线程(创建者)的信号屏蔽字</span>
+    <span class="n">pthread_t</span> <span class="n">WkrThrdId</span><span class="p">;</span>
+    <span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">WkrThrdId</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">WorkerThread</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Create a worker thread %x!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">WkrThrdId</span><span class="p">);</span>
+  
+    <span class="n">pid_t</span> <span class="n">tPid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span>
+    
+    <span class="c1">//向进程自身发送信号，这些信号将由tMgrThrdId线程统一处理</span>
+    <span class="c1">//信号发送时若tMgrThrdId尚未启动，则这些信号将一直阻塞</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Send signals...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGRTMAX</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGRTMAX</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGRTMIN</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGRTMIN</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGRTMIN</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGRTMIN</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGUSR2</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGUSR2</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGUSR1</span><span class="p">);</span>
+    <span class="n">kill</span><span class="p">(</span><span class="n">tPid</span><span class="p">,</span> <span class="n">SIGUSR1</span><span class="p">);</span>
+  
+    <span class="kt">int</span> <span class="n">dwRet</span> <span class="o">=</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d seconds left to sleep!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">dwRet</span><span class="p">);</span>
+  
+    <span class="n">ThreadKill</span><span class="p">(</span><span class="n">WkrThrdId</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">//不建议向已经分离的线程发送信号</span>
+ 
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span> <span class="o">*</span><span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="c1">//触发段错误(SIGSEGV)</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="p">}</span>
+</code></pre></div></div>
+
+<p>以下按行解释和分析上述执行结果：</p>
+
+<p>1.相同的非实时信号(编号小于SIGRTMIN)不会在信号队列中排队，只被递送一次；相同的实时信号(编号范围为SIGRTMIN~SIGRTMAX)则会在信号队列中排队，并按照顺序全部递送。若信号队列中有多个非实时和实时信号排队，则先递送编号较小的信号，如SIGUSR1(10)先于SIGUSR2(12)，SIGRTMIN(34)先于SIGRTMAX(64)。但实际上，仅规定多个未决的实时信号中，优先递送编号最小者。而实时信号和非实时信号之间，或多个非实时信号之间，递送顺序未定义。</p>
+
+<p>2.sigwait()函数是线程安全(thread-safe)的。但当tMgrThrdId和tMgrThrdId2同时等待信号时，只有先创建的tMgrThrdId(SigMgrThread)线程等到信号。因此，不要使用多个线程等待同一信号。</p>
+
+<p>3.调用pthread_create()返回后，新创建的线程可能还未启动；反之，该函数返回前新创建线程可能已经启动。</p>
+
+<p>4.SIGQUIT信号被主线程捕获，因此不会中断SigMgrThread中的sigwaitinfo()调用。虽然SIGQUIT安装(signal语句)在SigMgrThread内，由于主线程共享该处理行为，SIGQUIT信号仍将被主线程捕获。</p>
+
+<p>5.sleep()函数使调用进程被挂起。当调用进程捕获某个信号时，sleep()提前返回，其返回值为未睡够时间(所要求的时间减去实际休眠时间)。注意，sigwait()等到的信号并不会导致sleep()提前返回。<strong>因此，示例中发送SIGQUIT信号可使sleep()提前返回，而SIGINT信号不行。</strong></p>
+
+<p>6.在线程中尽量避免使用sleep()或usleep()，而应使用nanosleep()。前者可能基于SIGALARM信号实现(易受干扰)，后者则非常安全。此外，usleep()在POSIX 2008中被废弃。</p>
+
+<p>7.WorkerThread线程启动后调用pthread_detach()进入分离状态，主线程将无法得知其何时终止。示例中WorkerThread线程一直运行，故可通过ThreadKill()检查其是否存在。但需注意，这种方法并不安全。</p>
+
+<p>8.已注册信号处理捕获SIGINT信号，同时又调用sigwait()等待该信号。最终后者等到该信号，可见sigwait()优先级更高。</p>
+
+<p>9.sigwait()调用从未决队列中删除该信号，但并不改变信号屏蔽字。当sigwait()函数返回时，它所等待的信号仍旧被阻塞。因此，再次发送SIGINT信号时，仍被sigwait()函数等到。</p>
+
+<p>10.通过pthread_sigmask()阻塞SIGSEGV信号后，sigwait()并未等到该信号。系统输出”Segmentation fault”错误后，程序直接退出。因此，不要试图阻塞或等待SIGSEGV等硬件致命错误。若按照传统异步方式使用 signal()/sigaction()注册信号处理函数进行处理，则需要跳过引发异常的指令(longjmp)或直接退出进程(exit)。注意，SIGSEGV信号发送至引起该事件的线程中。例如，若在主线程内解除对该信号的阻塞并安装处理函数sighandler()，则当SigMgrThread线程内发生段错误时，执行结果将显示该线程捕获SIGSEGV信号。</p>
+
+<h4 id="例子总结">例子总结</h4>
+
+<p>Linux 线程编程中，需谨记两点：1)信号处理由进程中所有线程共享；2)一个信号只能被一个线程处理。具体编程实践中，需注意以下事项：</p>
+<ul>
+  <li>不要在线程信号屏蔽字中阻塞、等待和捕获不可忽略的信号(不起作用)，如SIGKILL和SIGSTOP。</li>
+  <li>不要在线程中阻塞或等待SIGFPE/SIGILL/SIGSEGV/SIGBUS等硬件致命错误，而应捕获它们。</li>
+  <li>在创建线程前阻塞这些信号(新线程继承信号屏蔽字)，然后仅在sigwait()中隐式地解除信号集的阻塞。</li>
+  <li>不要在多个线程中调用sigwait()等待同一信号，应设置一个调用该函数的专用线程。</li>
+  <li>闹钟定时器是进程资源，且进程内所有线程共享相同的SIGALARM信号处理，故它们不可能互不干扰地使用闹钟定时器。</li>
+  <li>当一个线程试图唤醒另一线程时，应使用条件变量，而不是信号。</li>
+</ul>
+
+<h4 id="引用">引用</h4>
+<ul>
+  <li><a href="https://www.cnblogs.com/clover-toeic/p/4126594.html">Linux线程编程之信号处理</a></li>
+</ul>
+
 ]]></content:encoded>
     </item>
     
     <item>
       <title>lua metatables 元表</title>
-      <link href="http://localhost:4000/lua-metatables/"/>
+      <link href="http://blog.xyecho.com/lua-metatables/"/>
       <pubDate>2017-03-16T05:12:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/lua-metatables</guid>
+      <guid>http://blog.xyecho.com/lua-metatables</guid>
       <content:encoded><![CDATA[<blockquote>
   <p>Metatables 允许我们改变 table 的行为，例如，使用 Metatables 我们可以定义 Lua 如
 何计算两个 table 的相加操作 a+b。</p>
@@ -86,13 +618,12 @@ Host git.oschina.net
 对 metatable 设置了__metatable 的值， getmetatable 将返回这个域的值，而调用 setmetatable
 将会出错：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">Set</span><span class="p">.</span><span class="n">mt</span><span class="p">.</span><span class="n">__metatable</span> <span class="o">=</span> <span class="s2">"not your business"</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set</span><span class="p">.</span><span class="n">mt</span><span class="p">.</span><span class="n">__metatable</span> <span class="o">=</span> <span class="s2">"not your business"</span>
 <span class="n">s1</span> <span class="o">=</span> <span class="n">Set</span><span class="p">.</span><span class="n">new</span><span class="p">{}</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">getmetatable</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span> <span class="c1">--&gt; not your business</span>
 <span class="nb">setmetatable</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="p">{})</span>
 <span class="n">stdin</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">change</span> <span class="n">protected</span> <span class="n">metatable</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>table访问的元方法： 字段: __index __newindex</p>
 
@@ -104,7 +635,7 @@ Host git.oschina.net
 
 <p>在一个普通的表中任何域的默认值都是 nil。很容易通过 metatables 来改变默认值：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">setDefault</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">setDefault</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 	<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span><span class="n">__index</span> <span class="o">=</span> <span class="k">function</span> <span class="p">()</span> <span class="k">return</span> <span class="n">d</span> <span class="k">end</span><span class="p">}</span>
 	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
 <span class="k">end</span>
@@ -114,12 +645,11 @@ Host git.oschina.net
 
 <span class="n">setDefault</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tab</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tab</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="c1">--&gt; 10 0</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>监控表:</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="c1">-- create private index</span>
 <span class="kd">local</span> <span class="n">index</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -144,12 +674,11 @@ Host git.oschina.net
 	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">proxy</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>只读表:</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">function</span> <span class="nf">readOnly</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span>
 	<span class="kd">local</span> <span class="n">proxy</span> <span class="o">=</span> <span class="p">{}</span>
 	<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span> <span class="c1">-- create metatable</span>
@@ -170,17 +699,16 @@ Host git.oschina.net
 <span class="n">days</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Noday"</span>
 <span class="c1">-- stdin:1: attempt to update a read-only table</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 ]]></content:encoded>
     </item>
     
     <item>
       <title>lua 协程</title>
-      <link href="http://localhost:4000/lua-coroutine/"/>
+      <link href="http://blog.xyecho.com/lua-coroutine/"/>
       <pubDate>2017-03-16T05:12:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/lua-coroutine</guid>
+      <guid>http://blog.xyecho.com/lua-coroutine</guid>
       <content:encoded><![CDATA[<blockquote>
   <p>协同程序（coroutine）与多线程情况下的线程比较类似：有自己的堆栈，自己的局
 部变量，有自己的指令指针，但是和其他协同程序共享全局变量等很多信息。线程和协
@@ -197,38 +725,34 @@ Host git.oschina.net
 
 <p>创建一个协程create()</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"hello world!"</span><span class="p">)</span>
 <span class="k">end</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">co</span><span class="p">)</span> 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>查看状态，可用status</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">print</span><span class="p">(</span><span class="nb">coroutine.status</span><span class="p">(</span><span class="n">co</span><span class="p">))</span> <span class="c1">--&gt; suspended</span>
-</code></pre>
-</div>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">print</span><span class="p">(</span><span class="nb">coroutine.status</span><span class="p">(</span><span class="n">co</span><span class="p">))</span> <span class="c1">--&gt; suspended</span>
+</code></pre></div></div>
 
 <p>协同有三个状态：挂起态、运行态、停止态。</p>
 
 <p>让一个协程从挂起状变为运行态</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">)</span>
+</code></pre></div></div>
 
 <p>让一个协程挂起，可用yield()</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span>
 <span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span> <span class="k">do</span>
 	<span class="nb">print</span><span class="p">(</span><span class="s2">"co"</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 	<span class="nb">coroutine.yield</span><span class="p">()</span>
 	<span class="k">end</span>
 <span class="k">end</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>在程序使用resume后，协程被激活。</p>
 
 <p>看 resume-yield 可以相互交换数据。</p>
@@ -237,40 +761,37 @@ Host git.oschina.net
 
 <p>resume 把参数传入协程里。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"co"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
 <span class="k">end</span><span class="p">)</span>
 <span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">--&gt; co 1 2 3</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>2 对称的情况：</p>
 
 <p>yield 会把值返还给resume。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">co</span> <span class="o">=</span> <span class="nb">coroutine.create</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
 <span class="nb">coroutine.yield</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>
 <span class="k">end</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="c1">--&gt; true 30 10</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 ]]></content:encoded>
     </item>
     
     <item>
       <title>lua 异常与错误</title>
-      <link href="http://localhost:4000/lua-error/"/>
+      <link href="http://blog.xyecho.com/lua-error/"/>
       <pubDate>2017-03-16T01:31:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/lua-error</guid>
+      <guid>http://blog.xyecho.com/lua-error</guid>
       <content:encoded><![CDATA[<h3 id="assert">assert</h3>
 
 <p>Lua 提供了专门的内置函数 assert 来完成错误的检测的功能。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">print</span> <span class="s2">"enter a number:"</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">print</span> <span class="s2">"enter a number:"</span>
 <span class="n">n</span> <span class="o">=</span> <span class="nb">assert</span><span class="p">(</span><span class="nb">io.read</span><span class="p">(</span><span class="s2">"*number"</span><span class="p">),</span> <span class="s2">"invalid input"</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>assert 首先检查第一个参数是否返回错误，如果不返回错误 assert 简单的返回，否则assert 以第二个参数抛出错误信息。第二个参数是可选的。</p>
 
@@ -283,7 +804,7 @@ Host git.oschina.net
 <p>在 Lua 中需要处理错误，需要使用 pcall 函数封装你的代码。
 用法如下：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span> <span class="k">then</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span> <span class="k">then</span>
 	<span class="c1">-- no errors while running `foo'</span>
 <span class="o">...</span>
 <span class="k">else</span>
@@ -291,18 +812,16 @@ Host git.oschina.net
 <span class="o">...</span>
 <span class="k">end</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>foo 为检测的函数。</p>
 
 <p>用做匿名函数则是：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span> <span class="o">...</span> <span class="k">end</span><span class="p">)</span> <span class="k">then</span> <span class="o">...</span>
 <span class="k">else</span> <span class="o">...</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>pcall 在保护模式下调用他的第一个参数并运行，因此可以捕获所有的异常和错误。
 如果没有异常和错误，pcall 返回 true 和调用返回的任何值；否则返回 nil 加错误信息。</p>
 
@@ -316,19 +835,18 @@ Host git.oschina.net
   <li>debug.traceback：根据调用桟来构建一个扩展的错误消息。</li>
 </ul>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">xpcall</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">error</span><span class="p">(</span><span class="s1">'error..'</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span> <span class="nb">print</span><span class="p">(</span><span class="nb">debug.traceback</span><span class="p">())</span> <span class="k">end</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">xpcall</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">error</span><span class="p">(</span><span class="s1">'error..'</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span> <span class="nb">print</span><span class="p">(</span><span class="nb">debug.traceback</span><span class="p">())</span> <span class="k">end</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
+</code></pre></div></div>
 
 ]]></content:encoded>
     </item>
     
     <item>
       <title>lua 函数</title>
-      <link href="http://localhost:4000/lua-function/"/>
+      <link href="http://blog.xyecho.com/lua-function/"/>
       <pubDate>2017-03-15T19:16:53+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/lua-function</guid>
+      <guid>http://blog.xyecho.com/lua-function</guid>
       <content:encoded><![CDATA[<p>lua的函数有必要记录可能也就是 可变参数, 后面的命名参数和多个返回值和python基本一样。</p>
 
 <h3 id="可变参数">可变参数</h3>
@@ -337,21 +855,19 @@ Host git.oschina.net
 表示函数有可变的参数。Lua 将函数的参数放在一个叫 arg 的表中，除了参数以外，arg
 表中还有一个域 n 表示参数的个数。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">g</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="k">end</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">g</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="k">end</span>
 
 <span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">nil</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
 <span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
 <span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">;</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">}</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Lua 的函数还一些特性和C不一样的是：它和其他值（数值、字符串）一样，函数可以被存放在变
 量中，也可以存放在表中，可以作为函数的参数，还可以作为函数的返回值。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">print</span> <span class="o">=</span> <span class="nb">math.sin</span> <span class="c1">-- `print' now refers to the sine function</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">print</span> <span class="o">=</span> <span class="nb">math.sin</span> <span class="c1">-- `print' now refers to the sine function</span>
 <span class="n">a</span><span class="p">.</span><span class="n">p</span><span class="p">(</span><span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="c1">--&gt; 0.841470</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>如函数被嵌套的函数里，它可以访问他外部函数中的变量。这一特性强大编程能力。</p>
 
@@ -359,15 +875,14 @@ Host git.oschina.net
 
 <p>用表达式创建函数：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">foo</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="k">end</span>
-</code></pre>
-</div>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">foo</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="k">end</span>
+</code></pre></div></div>
 
 <h3 id="闭包">闭包</h3>
 
 <p>当一个函数内部嵌套另一个函数定义时，内部的函数体可以访问外部的函数的局部变量，这种特征我们称作词法定界。虽然这看起来很清楚，事实并非如此，词法定界加上第一类函数在编程语言里是一个功能强大的概念，很少语言提供这种支持。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">newCounter</span><span class="p">()</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">newCounter</span><span class="p">()</span>
 	<span class="kd">local</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
 	<span class="k">return</span> <span class="k">function</span><span class="p">()</span> <span class="c1">-- anonymous function</span>
 		<span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
@@ -379,21 +894,19 @@ Host git.oschina.net
 <span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 1</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 2</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>i不是全局变量也不是局部变量，我们称作外部的局部变量（external local variable）或者 upvalue。</p>
 
 <p>匿名函数使用 upvalue i 保存他的计数，当我们调用匿名函数的时候 i 已经超出了作用范围，因为创建 i 的函数 newCounter 已经返回了。然而 Lua 用闭包的思想正确处理了这种情况。简单的说闭包是一个函数加上它可以正确访问的 upvalues。如果我们再次调
 用 newCounter，将创建一个新的局部变量 i，因此我们得到了一个作用在新的变量 i 上的
 新闭包。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">c2</span> <span class="o">=</span> <span class="n">newCounter</span><span class="p">()</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c2</span> <span class="o">=</span> <span class="n">newCounter</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">c2</span><span class="p">())</span> <span class="c1">--&gt; 1</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 3</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">c2</span><span class="p">())</span> <span class="c1">--&gt; 2</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>技术上来讲，闭包指值而不是指函数，函数仅仅是闭包的一个原型声明；尽管如此，
 在不会导致混淆的情况下我们继续使用术语函数代指闭包。</p>
 
@@ -409,7 +922,7 @@ Host git.oschina.net
   <li>方式一</li>
 </ol>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="o">...</span>
 <span class="k">end</span>
 <span class="kd">local</span> <span class="n">g</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
@@ -417,23 +930,21 @@ Host git.oschina.net
 <span class="n">f</span><span class="p">()</span> <span class="c1">-- external local `f' is visible here</span>
 <span class="o">...</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ol>
   <li>方式二</li>
 </ol>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="kd">local</span> <span class="k">function</span> <span class="nf">f</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">local</span> <span class="k">function</span> <span class="nf">f</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="o">...</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>有一点需要注意的是在声明递归局部函数的方式。
 要提前定义local。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="kd">local</span> <span class="n">fact</span>
 <span class="n">fact</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">then</span>
@@ -442,19 +953,17 @@ Host git.oschina.net
 		<span class="k">return</span> <span class="n">n</span><span class="o">*</span><span class="n">fact</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 	<span class="k">end</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="尾调用proper-tail-calls">尾调用（Proper Tail Calls）</h3>
 
 <p>尾调用是一种类似在函数结尾的 goto 调用，当函数最后一个动作是调用另外一个函
 数时，我们称这种调用尾调用。例如：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>g 的调用是尾调用。</p>
 
@@ -463,21 +972,20 @@ Host git.oschina.net
 
 <p>如下三种不是尾调函数.</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="n">r</span> <span class="n">eturn</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1">-- must do the addition</span>
 <span class="k">return</span> <span class="n">x</span> <span class="ow">or</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">-- must adjust to 1 result</span>
 <span class="k">return</span> <span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="c1">-- must adjust to 1 result</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 ]]></content:encoded>
     </item>
     
     <item>
       <title>lua 学习初步记录</title>
-      <link href="http://localhost:4000/lua-first-learn/"/>
+      <link href="http://blog.xyecho.com/lua-first-learn/"/>
       <pubDate>2017-03-15T04:27:03+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/lua-first-learn</guid>
+      <guid>http://blog.xyecho.com/lua-first-learn</guid>
       <content:encoded><![CDATA[<p>1 Lua 是动态类型语言，变量不要类型定义。 Lua 中有 8 个基本类型分别为： nil、 boolean、number、string、userdata、function、thread 和 table。函数 type 可以测试给定变量或者值
 的类型。</p>
 
@@ -512,10 +1020,10 @@ Host git.oschina.net
     
     <item>
       <title>防盗链技术</title>
-      <link href="http://localhost:4000/web-referers/"/>
+      <link href="http://blog.xyecho.com/web-referers/"/>
       <pubDate>2017-03-10T05:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/web-referers</guid>
+      <guid>http://blog.xyecho.com/web-referers</guid>
       <content:encoded><![CDATA[<p>在《增长黑客》这个本书上，看到一个例子。作者用curl 在网上抓取了一个网站上用户的头像。这个网站对于图片的静态链接没有做防盗链。
 以前有过这种开发。也疑惑过这种问题。
 今天就了解一下什么是防盗链吧。</p>
@@ -529,31 +1037,29 @@ Host git.oschina.net
 
 <h4 id="nginx防盗链的配置">nginx防盗链的配置</h4>
 <p>1、nginx针对文件类型的防盗链配置方法：</p>
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>　　location ~<span class="k">*</span> <span class="se">\.</span><span class="o">(</span>gif|jpg|png|swf|flv|bmp<span class="o">)</span><span class="nv">$ </span><span class="o">{</span>
-　　valid_referers none blocked <span class="k">*</span>.php100.com php100.com;
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>　　location ~<span class="k">*</span> <span class="se">\.</span><span class="o">(</span>gif|jpg|png|swf|flv|bmp<span class="o">)</span><span class="nv">$ </span><span class="o">{</span>
+　　valid_referers none blocked <span class="k">*</span>.php100.com php100.com<span class="p">;</span>
 　　if <span class="o">(</span><span class="nv">$invalid_referer</span><span class="o">)</span> <span class="o">{</span>
 　　     <span class="c">#rewrite ^/ http://www.php100.com/403.html;</span>
-　　     <span class="k">return </span>403;
+　　     <span class="k">return </span>403<span class="p">;</span>
 　　     <span class="o">}</span>     
 　　<span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>这种方法是在server或者location段中加入：valid_referers none blocked，其中none表示空的来路，也就是直接访问，比如直接在浏览器打开一个文件，blocked表示被防火墙标记过的来路，*.php100.com表示所有子域名。</p>
 
 <p>2、nginx针对文件目录的防盗链配置方法：</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>　　location /img/ <span class="o">{</span>
-　　     root /data/img/;
-　　     valid_referers none blocked <span class="k">*</span>.php100.com php100.com;
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>　　location /img/ <span class="o">{</span>
+　　     root /data/img/<span class="p">;</span>
+　　     valid_referers none blocked <span class="k">*</span>.php100.com php100.com<span class="p">;</span>
 
 　　     <span class="k">if</span> <span class="o">(</span><span class="nv">$invalid_referer</span><span class="o">)</span> <span class="o">{</span>
-　　          rewrite ^/ http://www.php100.com/error.gif;
+　　          rewrite ^/ http://www.php100.com/error.gif<span class="p">;</span>
 　　          <span class="c">#return 403;</span>
 　　     <span class="o">}</span>     
 　　<span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>如果不是用nginx，就要自己去解析表头然后做出判断。</p>
 
@@ -562,15 +1068,15 @@ Host git.oschina.net
     
     <item>
       <title>用valgrind做一次性能分析</title>
-      <link href="http://localhost:4000/valgrind-code-analysis/"/>
+      <link href="http://blog.xyecho.com/valgrind-code-analysis/"/>
       <pubDate>2017-02-09T05:12:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/valgrind-code-analysis</guid>
+      <guid>http://blog.xyecho.com/valgrind-code-analysis</guid>
       <content:encoded><![CDATA[<p>有一次用valgrind对代码的热点进行分析。发现有一个函数的被调用百分比比较高。</p>
 
 <p>关键的函数是CGameBuffMgr::process()</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">CGameBuffMgr</span><span class="o">::</span><span class="n">process</span> <span class="p">(</span><span class="n">uint64</span> <span class="n">uTick</span><span class="p">,</span><span class="n">uint64</span> <span class="n">uTime</span><span class="p">,</span><span class="n">uint32</span> <span class="n">uSecond</span><span class="p">)</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">CGameBuffMgr</span><span class="o">::</span><span class="n">process</span> <span class="p">(</span><span class="n">uint64</span> <span class="n">uTick</span><span class="p">,</span><span class="n">uint64</span> <span class="n">uTime</span><span class="p">,</span><span class="n">uint32</span> <span class="n">uSecond</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="k">if</span><span class="p">(</span><span class="n">m_uProcessTick</span> <span class="o">&gt;</span> <span class="n">uTick</span><span class="p">)</span>
 		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
@@ -592,15 +1098,13 @@ Host git.oschina.net
 
 	<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>process是由定时器调起，所以比较多是正常的。</p>
 
 <p>用 valgrind 做代码性能分析。</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>/usr/bin/valgrind --tool<span class="o">=</span>callgrind  --trace-children<span class="o">=</span>yes  /data/game_server/game_server
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/bin/valgrind <span class="nt">--tool</span><span class="o">=</span>callgrind  <span class="nt">--trace-children</span><span class="o">=</span><span class="nb">yes</span>  /data/game_server/game_server
+</code></pre></div></div>
 
 <p>得到：callgrind.out.6578 文件。再用 kcachegrind进行分析。如下：</p>
 
@@ -610,21 +1114,20 @@ Host git.oschina.net
 
 <p>而getHead是这样的：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">_ValType</span><span class="p">,</span> <span class="kt">int</span> <span class="n">COUNT</span><span class="o">&gt;</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">_ValType</span><span class="p">,</span> <span class="kt">int</span> <span class="n">COUNT</span><span class="o">&gt;</span>
 <span class="kr">inline</span> <span class="kt">void</span>	<span class="n">CMemoryPool</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="n">_ValType</span><span class="p">,</span><span class="n">COUNT</span><span class="o">&gt;::</span><span class="n">getHead</span><span class="p">(</span><span class="n">iterator</span><span class="o">&amp;</span> <span class="n">pos</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="k">try</span>
 	<span class="p">{</span>
-		<span class="c1">//CCritLocker lock(m_csLock);
-</span>		<span class="n">pos</span> <span class="o">=</span> <span class="n">m_UseList</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+		<span class="c1">//CCritLocker lock(m_csLock);</span>
+		<span class="n">pos</span> <span class="o">=</span> <span class="n">m_UseList</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
 	<span class="p">}</span>
 	<span class="k">catch</span> <span class="p">(...)</span>
 	<span class="p">{</span>
 	<span class="p">}</span>
 <span class="p">}</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>getHead中只是对 hash_map进行begin操作。
 从图上看hash_map的begin消耗也很大。问题可能出在这个地方。</p>
 
@@ -634,7 +1137,7 @@ Host git.oschina.net
 begin() 为了获得第一个元素，就在hashtable表中遍历，hashtale就是一个vector。
 所以说 一调用begin(), 说是遍历hashtable</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">iterator</span> <span class="n">hashtable</span><span class="o">::</span><span class="n">begin</span><span class="p">()</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iterator</span> <span class="n">hashtable</span><span class="o">::</span><span class="n">begin</span><span class="p">()</span>
 <span class="p">{</span>
 	<span class="k">for</span><span class="p">(</span><span class="n">size_type</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">_M_buckets</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">__n</span><span class="p">)</span>
 		<span class="k">if</span><span class="p">(</span><span class="n">_M_buckets</span><span class="p">[</span><span class="n">__n</span><span class="p">])</span>
@@ -642,8 +1145,7 @@ begin() 为了获得第一个元素，就在hashtable表中遍历，hashtale就�
 	
 	<span class="k">return</span> <span class="n">end</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>找到了就返回，找到就会遍历完整个hashtable表，再返回end()。
 我想这就是为什么hash_map中的 begin() 效率不行的原因吧。</p>
@@ -654,65 +1156,6 @@ begin() 为了获得第一个元素，就在hashtable表中遍历，hashtale就�
 <p><img src="/assets/code-analysis/valgrind-stl-2.png" alt="" /></p>
 
 <p>所以，如果要用到遍历的应尽量避免用hash_map。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>日志模块</title>
-      <link href="http://localhost:4000/model-log/"/>
-      <pubDate>2016-12-15T17:23:53+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/model-log</guid>
-      <content:encoded><![CDATA[<p>系统的开发，日志模块的是必不可少的。特别对于业务逻辑层的来说，有日志输出，很方便跟踪逻辑大概情况。但是对于底层的核心模块来说，日志输出反而成了累赘。日志的输出同样占有I/O。再者，对于底层的逻辑，一般都是比较复杂，核心。暴露出来也没必要。业务逻辑层同样没有必要去了解它。所以，一般的做法是：底层出错，返回错误编码。由上一层记录就OK了。</p>
-
-<p>日志模块一般可以分为 print/note、 debug、 warn、error。人个觉得这四个层次就够了。当然，也可多增加几个，例如，trac。我曾经用于特别的调试，只是一些非必现的问题调试，把日志输出到这层，方便查找。</p>
-
-<p>对于这四层，是分开几个文件，还是在同一个文件中？ 其实这两种方式我都用过。这些年的经验，感觉写到同一个文件中，比较分四个文件要好。理由是很清楚的知道日志输出的前后时间顺序。当然分开成几个日志文件输出，也是有办法按时间查看的，只要用linux的一些工具手段而已。分开成几个文件的好处，就是一看就知道是否有错误输出了。同一个文件，只能在文件中查到才知道。</p>
-
-<p>无论是 apache,还是nignx，日志的输出都是分层，配置不同层次的，只有高于或等于它的才能被输出。当然，我们设计时也可以直接指定层次print、warn、error。</p>
-
-<p>有日志输出，就意味着有日志文件的管理。如文件大小、文件命名、所在目录、如何清理。
-一般，我的做法是日志文件的大小设计成可配置。在相关的配置文件中指定。
-二，日志文件的命名，我是按模块名来命名（即进程名）。或加上日期或日期在体现在目录上。
-三，所在目录，我选择是把所有的日志放到同一个Log目录下，千万别把分别放到不同模块的目录里面。这样做的好处是：我们可以系统中划出一个分区来，专门存放日志，和服务的进程分离开。这样做的理由是：如果日志输出过来，把硬盘空间爆了，不会影响到服务的运行。
-四，对清理， 我没有体现在于日志模块里，而是用计划任务做定时清理。</p>
-
-<p>日志模块应该有可配置性。 一般有：
-路径、文件大小、模块名、输出层次、</p>
-
-<p>日志的输出涉及到I/O。所以对效率是有一定的影响的。 必竞这是定文件的。有一个很不错的设计：就是日志写到队列（用共享内存实现 的）然后由专门的日志进程（logsvr）输出到文件中。这样日志输出就不会有I/O阻塞了，提高一些效率。</p>
-
-<p>下一回，把日志的模块整理好，分析一下。</p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>余华-活着</title>
-      <link href="http://localhost:4000/alive/"/>
-      <pubDate>2016-10-15T17:23:53+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/alive</guid>
-      <content:encoded><![CDATA[<p>这本书是从微博上看网友介绍的，还是朋友介绍的，我也不记得了。在kindle上看有已经购买。应该是一次买了后，忘记了看了。这两天上下班在地铁上，就把它给看了。</p>
-
-<p>书里的主人公叫福贵。一个旧社会里的有钱人的少爷。年少时就一个败家子。按他妈的说法是上梁不正下梁歪。因为他老子年轻也也是败家子，败了家里的一百多亩田地。后来开窍了，好好的在经营自己的田地。他就边上厕所也会跑到自家的田地，可是就是肥水不流外人田的吧。老子还是蛮希望福贵能光大门楣的。结果还是一败家子。把他没败完的另一百多亩也败完了。</p>
-
-<p>最后他爸把所有的田契和房契都让人换成了铜钱，整整三大担。让福贵自己挑去还赌债。福贵把肩膀都磨破了。才知道祖辈挣下这些钱不知要累死多少人。他自己挑都快累死了。这时才知道他老子为什么不要银元要铜钱。
-破产后，他们只能去住茅草屋。没多久福贵的老子在拉屎的时候死了。家里能卖的东西也都卖光了。福贵只能去租田来种，可他是个就个少爷。可怜了他的老妈和老婆。
-话说他老婆也是个好女人。一个城里米行的小姐，也读过书。嫁给一个败家子。最后再怎么受苦也跟定他了。 在福贵去城里为他妈找大夫时，他被国民党抓了壮丁。一去就是五年，幸好没有死，被共产党俘虏后放了。到家时，他妈死了，大女儿在生病时聋哑啊。小儿子也不认识他了。</p>
-
-<p>然后，解放了，新中国成立了， 三反三反，大跃进，砸锅炼钢，文化大革命。开始了生产大队的大食堂的生活，最后没粮食了，食堂解散了，大伙都没有吃的。只能挖树根，然后说着要相信政府，相信党。可队长每一次都是空手而回的。大伙开始去乞讨，福贵的老婆说要去城里看望老父，其实就是去乞讨。却真的在街上碰到了父亲。（真想知道他们当时的场景）老父给她从自己的牙缝里省下的来小米。她高兴的回到家，福贵去不敢开社，因为知道一开灶全村都知道了。福贵要确认村里没有人才敢开灶。这让我想我爸说过一件。有一次，我开玩笑的对他说，如果中国经济真的不行了。我们是不是家里存点什么东西啊。他说：没什么用， 全村都没有，就我们家有，也是存不了的。想到爸之前的意思，他是不是以前就经历过这样的事。</p>
-
-<p>儿子在医院给他输血时，被抽空死了。聋哑女儿好不容易嫁了个好人歪头。却在难产也死了。老婆却一直在生病，在女儿死后三个月也死了。儿子女子都死了，她没什么好操心的了。她死后也有福贵料理后事。而福贵的后事也有他的外孙。所以她死得安心。接下来的，是他的女婿歪头也在工地出意外死了，留下了外孙和他相依为命。可最后，边他的外孙也在吃豆撑死了。在福贵年迈时，他所有的亲人都死了。</p>
-
-<p>他在床边放十块钱，全村的人都知道，那是给替他收尸的人的。他存了几年的钱，想为他外孙买头牛。却在看到别人宰杀一头老牛时，心生怜悯。买了一头老牛。村里人都是这牛活不过四五年，可他却不在意，他觉得自己的自己应该活不了那么久。</p>
-
-<p>写得比较朴素简单，文字很简单。但福贵的命却是很悲剧的。不过，过他福贵自己讲出来的人生却没有悲剧的感觉。可能这就是《活着》想表达的东西吧。</p>
-
-<p>最后想说的，那真个操蛋的年代 。</p>
-
-<p>– 深圳 北站</p>
-
 ]]></content:encoded>
     </item>
     

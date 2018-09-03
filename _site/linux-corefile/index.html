@@ -72,40 +72,36 @@ echo “1” &gt; /proc/sys/kernel/core_uses_pid</p>
 echo “/corefile/core-%e-%p-%t” &gt; core_pattern，可以将core文件统一生成到/corefile目录下，产生的文件名为core-命令名-pid-时间戳
 以下是参数列表:</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>%p - insert pid into filename 添加pid
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>%p - insert pid into filename 添加pid
 %u - insert current uid into filename 添加当前uid
 %g - insert current gid into filename 添加当前gid
 %s - insert signal that caused the coredump into the filename 添加导致产生core的信号
 %t - insert UNIX <span class="nb">time </span>that the coredump occurred into filename 添加core文件生成时的unix时间
-%h - insert hostname where the coredump happened into filename 添加主机名
+%h - insert <span class="nb">hostname </span>where the coredump happened into filename 添加主机名
 %e - insert coredumping executable name into filename 添加命令名
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h4 id="3core文件的查看">3.core文件的查看</h4>
 
 <p>core文件需要使用gdb来查看。</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>gdb ./a.out
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gdb ./a.out
 core-file core.xxxx
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>使用bt命令即可看到程序出错的地方。
 以下两种命令方式具有相同的效果，但是在有些环境下不生效，所以推荐使用上面的命令。
 1）gdb -core=core.xxxx</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>file ./a.out
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file ./a.out
 bt
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>2）gdb -c core.xxxx</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>file ./a.out
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file ./a.out
 bt
-</code></pre>
-</div>
+</code></pre></div></div>
 
 </section>
 <section align="right">
@@ -179,7 +175,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2014-10-20-linux-corefile.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

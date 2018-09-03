@@ -76,13 +76,12 @@
 对 metatable 设置了__metatable 的值， getmetatable 将返回这个域的值，而调用 setmetatable
 将会出错：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">Set</span><span class="p">.</span><span class="n">mt</span><span class="p">.</span><span class="n">__metatable</span> <span class="o">=</span> <span class="s2">"not your business"</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set</span><span class="p">.</span><span class="n">mt</span><span class="p">.</span><span class="n">__metatable</span> <span class="o">=</span> <span class="s2">"not your business"</span>
 <span class="n">s1</span> <span class="o">=</span> <span class="n">Set</span><span class="p">.</span><span class="n">new</span><span class="p">{}</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">getmetatable</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span> <span class="c1">--&gt; not your business</span>
 <span class="nb">setmetatable</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="p">{})</span>
 <span class="n">stdin</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">change</span> <span class="n">protected</span> <span class="n">metatable</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>table访问的元方法： 字段: __index __newindex</p>
 
@@ -94,7 +93,7 @@
 
 <p>在一个普通的表中任何域的默认值都是 nil。很容易通过 metatables 来改变默认值：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">setDefault</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">setDefault</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 	<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span><span class="n">__index</span> <span class="o">=</span> <span class="k">function</span> <span class="p">()</span> <span class="k">return</span> <span class="n">d</span> <span class="k">end</span><span class="p">}</span>
 	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
 <span class="k">end</span>
@@ -104,12 +103,11 @@
 
 <span class="n">setDefault</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tab</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tab</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="c1">--&gt; 10 0</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>监控表:</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="c1">-- create private index</span>
 <span class="kd">local</span> <span class="n">index</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -134,12 +132,11 @@
 	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">proxy</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>只读表:</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">function</span> <span class="nf">readOnly</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span>
 	<span class="kd">local</span> <span class="n">proxy</span> <span class="o">=</span> <span class="p">{}</span>
 	<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span> <span class="c1">-- create metatable</span>
@@ -160,8 +157,7 @@
 <span class="n">days</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Noday"</span>
 <span class="c1">-- stdin:1: attempt to update a read-only table</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 </section>
 <section align="right">
@@ -169,7 +165,7 @@
 <span>
 	<a  href="/lua-coroutine/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/github-mult-account/" class="pageNav"  >下一篇</a>
+	<a  href="/linux-signal/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -235,7 +231,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2017-03-15-lua-metatables.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

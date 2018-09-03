@@ -70,36 +70,33 @@ V(sv)：如果有其他进程因等待sv而被挂起，就让它恢复运行，�
 
 <p>内核为每个信号量集合设置了一个semid_ds结构</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">semid_ds</span> <span class="p">{</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">semid_ds</span> <span class="p">{</span>
     <span class="k">struct</span> <span class="n">ipc_permsem_perm</span> <span class="p">;</span>
-    <span class="n">structsem</span><span class="o">*</span>    <span class="n">sem_base</span> <span class="p">;</span> <span class="c1">//信号数组指针
-</span>    <span class="n">ushort</span>        <span class="n">sem_nsem</span> <span class="p">;</span> <span class="c1">//此集中信号个数
-</span>    <span class="kt">time_t</span>        <span class="n">sem_otime</span> <span class="p">;</span> <span class="c1">//最后一次semop时间
-</span>    <span class="kt">time_t</span>        <span class="n">sem_ctime</span> <span class="p">;</span> <span class="c1">//最后一次创建时间
-</span><span class="p">}</span> <span class="p">;</span>
-</code></pre>
-</div>
+    <span class="n">structsem</span><span class="o">*</span>    <span class="n">sem_base</span> <span class="p">;</span> <span class="c1">//信号数组指针</span>
+    <span class="n">ushort</span>        <span class="n">sem_nsem</span> <span class="p">;</span> <span class="c1">//此集中信号个数</span>
+    <span class="kt">time_t</span>        <span class="n">sem_otime</span> <span class="p">;</span> <span class="c1">//最后一次semop时间</span>
+    <span class="kt">time_t</span>        <span class="n">sem_ctime</span> <span class="p">;</span> <span class="c1">//最后一次创建时间</span>
+<span class="p">}</span> <span class="p">;</span>
+</code></pre></div></div>
 
 <p>每个信号量由一个无名结构表示，它至少包含下列成员： （这个是什么意思？？）</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span>  <span class="p">{</span>
-    <span class="n">ushort_t</span>  <span class="n">semval</span> <span class="p">;</span>  <span class="c1">//信号量的值
-</span>    <span class="kt">short</span>     <span class="n">sempid</span> <span class="p">;</span>  <span class="c1">//最后一个调用semop的进程ID
-</span>    <span class="n">ushort</span>    <span class="n">semncnt</span> <span class="p">;</span> <span class="c1">//等待该信号量值大于当前值的进程数（一有进程释放资源 就被唤醒）
-</span>    <span class="n">ushort</span>    <span class="n">semzcnt</span> <span class="p">;</span> <span class="c1">//等待该信号量值等于0的进程数
-</span><span class="p">}</span> <span class="p">;</span> 
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span>  <span class="p">{</span>
+    <span class="n">ushort_t</span>  <span class="n">semval</span> <span class="p">;</span>  <span class="c1">//信号量的值</span>
+    <span class="kt">short</span>     <span class="n">sempid</span> <span class="p">;</span>  <span class="c1">//最后一个调用semop的进程ID</span>
+    <span class="n">ushort</span>    <span class="n">semncnt</span> <span class="p">;</span> <span class="c1">//等待该信号量值大于当前值的进程数（一有进程释放资源 就被唤醒）</span>
+    <span class="n">ushort</span>    <span class="n">semzcnt</span> <span class="p">;</span> <span class="c1">//等待该信号量值等于0的进程数</span>
+<span class="p">}</span> <span class="p">;</span> 
+</code></pre></div></div>
 
 <h3 id="四-信号量的使用">四 信号量的使用</h3>
 
 <p>1、创建信号量
 semget函数创建一个信号量集或访问一个已存在的信号量集。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/sem.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/sem.h&gt;
 </span><span class="kt">int</span>  <span class="nf">semget</span> <span class="p">(</span><span class="n">key_t</span> <span class="n">key</span><span class="p">,</span>  <span class="kt">int</span> <span class="n">nsem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">oflag</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>返回值是一个称为信号量标识符的整数，semop和semctl函数将使用它。
 参数nsem指定集合中的信号量数。（若用于访问一个已存在的集合，那就可以把该参数指定为0）
@@ -108,22 +105,20 @@ semget函数创建一个信号量集或访问一个已存在的信号量集。</
 <p>2、打开信号量
 使用semget打开一个信号量集后，对其中一个或多个信号量的操作就使用semop(op–operate)函数来执行。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/sem.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/sem.h&gt;
 </span><span class="kt">int</span>  <span class="nf">semop</span> <span class="p">(</span><span class="kt">int</span> <span class="n">semid</span><span class="p">,</span>  <span class="k">struct</span> <span class="n">sembuf</span> <span class="o">*</span> <span class="n">opsptr</span><span class="p">,</span>  <span class="kt">size_t</span> <span class="n">nops</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>参数opsptr是一个指针，它指向一个信号量操作数组，信号量操作由sembuf结构表示：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">sembuf</span><span class="p">{</span>  
-    <span class="kt">short</span> <span class="n">sem_num</span><span class="p">;</span>   <span class="c1">// 除非使用一组信号量，否则它为0  
-</span>    <span class="kt">short</span> <span class="n">sem_op</span><span class="p">;</span>    <span class="c1">// 信号量在一次操作中需要改变的数据，通常是两个数，
-</span>                     <span class="c1">// 一个是-1，即P（等待）操作，一个是+1，即V（发送信号）操作  
-</span>    <span class="kt">short</span> <span class="n">sem_flg</span><span class="p">;</span>   <span class="c1">// 通常为SEM_UNDO,使操作系统跟踪信号，并在进程没有释放该信号量而终止时，
-</span>                     <span class="c1">// 操作系统释放信号量  
-</span><span class="p">};</span>  
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">sembuf</span><span class="p">{</span>  
+    <span class="kt">short</span> <span class="n">sem_num</span><span class="p">;</span>   <span class="c1">// 除非使用一组信号量，否则它为0  </span>
+    <span class="kt">short</span> <span class="n">sem_op</span><span class="p">;</span>    <span class="c1">// 信号量在一次操作中需要改变的数据，通常是两个数，</span>
+                     <span class="c1">// 一个是-1，即P（等待）操作，一个是+1，即V（发送信号）操作  </span>
+    <span class="kt">short</span> <span class="n">sem_flg</span><span class="p">;</span>   <span class="c1">// 通常为SEM_UNDO,使操作系统跟踪信号，并在进程没有释放该信号量而终止时，</span>
+                     <span class="c1">// 操作系统释放信号量  </span>
+<span class="p">};</span>  
+</code></pre></div></div>
 
 <ul>
   <li>参数nops规定opsptr数组中元素个数。
@@ -139,10 +134,9 @@ sem_op值：
 <p>3、信号量是操作
 semctl函数对一个信号量执行各种控制操作。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/sem.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/sem.h&gt;
 </span><span class="kt">int</span>  <span class="nf">semctl</span> <span class="p">(</span><span class="kt">int</span> <span class="n">semid</span><span class="p">,</span>  <span class="kt">int</span> <span class="n">semnum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="cm">/*可选参数*/</span> <span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>第四个参数是可选的，取决于第三个参数cmd。
 参数semnum指定信号集中的哪个信号（操作对象）
@@ -165,7 +159,7 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
 
 <h3 id="六-例子">六 例子</h3>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
 #include &lt;sys/types.h&gt;
 #include &lt;sys/stat.h&gt;
 #include &lt;fcntl.h&gt;
@@ -265,8 +259,8 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
     <span class="cm">/* 对信号量做减1操作，即等待P（sv）*/</span>
     <span class="k">struct</span> <span class="n">sembuf</span> <span class="n">sem_b</span><span class="p">;</span>
     <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_op</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="c1">//P()
-</span>    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="n">SEM_UNDO</span><span class="p">;</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_op</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="c1">//P()</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="n">SEM_UNDO</span><span class="p">;</span>
     <span class="k">if</span><span class="p">(</span><span class="n">semop</span><span class="p">(</span><span class="n">sem_id</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sem_b</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"semaphore_p failed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
@@ -280,8 +274,8 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
     <span class="cm">/* 这是一个释放操作，它使信号量变为可用，即发送信号V（sv）*/</span>
     <span class="k">struct</span> <span class="n">sembuf</span> <span class="n">sem_b</span><span class="p">;</span>
     <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_op</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="c1">//V()
-</span>    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="n">SEM_UNDO</span><span class="p">;</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_op</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="c1">//V()</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="n">SEM_UNDO</span><span class="p">;</span>
     <span class="k">if</span><span class="p">(</span><span class="n">semop</span><span class="p">(</span><span class="n">sem_id</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sem_b</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"semaphore_v failed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
@@ -289,12 +283,11 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
     <span class="p">}</span>
     <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="七-信号量集合的例子">七 信号量集合的例子</h3>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include&lt;stdio.h&gt;  
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include&lt;stdio.h&gt;  
 #include&lt;sys/types.h&gt;  
 #include&lt;sys/ipc.h&gt;  
 #include&lt;sys/sem.h&gt;  
@@ -342,8 +335,8 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
             <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>     
         <span class="p">}</span>  
   
-        <span class="n">semid</span> <span class="o">=</span> <span class="n">semget</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">MAX_SEMAPHORE</span><span class="p">,</span><span class="n">IPC_CREAT</span><span class="o">|</span><span class="mo">0666</span><span class="p">);</span>  <span class="c1">//创建信号量集合
-</span>        <span class="k">if</span><span class="p">(</span><span class="n">semid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="n">semid</span> <span class="o">=</span> <span class="n">semget</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">MAX_SEMAPHORE</span><span class="p">,</span><span class="n">IPC_CREAT</span><span class="o">|</span><span class="mo">0666</span><span class="p">);</span>  <span class="c1">//创建信号量集合</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">semid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
         <span class="p">{</span>  
             <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"Error in semget:%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>   
             <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>     
@@ -360,8 +353,8 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
             <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>  
         <span class="p">}</span>  
         <span class="n">printf</span><span class="p">(</span><span class="s">"parent is asking for resource...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
-        <span class="n">ret</span> <span class="o">=</span> <span class="n">semop</span><span class="p">(</span><span class="n">semid</span> <span class="p">,</span> <span class="n">sb</span> <span class="p">,</span><span class="mi">10</span><span class="p">);</span> <span class="c1">//p() 
-</span>        <span class="k">if</span><span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>  
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">semop</span><span class="p">(</span><span class="n">semid</span> <span class="p">,</span> <span class="n">sb</span> <span class="p">,</span><span class="mi">10</span><span class="p">);</span> <span class="c1">//p() </span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>  
         <span class="p">{</span>  
             <span class="n">printf</span><span class="p">(</span><span class="s">"parent got the resource!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
         <span class="p">}</span>         
@@ -410,8 +403,8 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
             <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_op</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="p">;</span>  
             <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>  
         <span class="p">}</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="n">semop</span><span class="p">(</span><span class="n">semid</span> <span class="p">,</span> <span class="n">sb</span> <span class="p">,</span> <span class="mi">10</span><span class="p">);</span><span class="c1">//信号量0被阻塞
-</span>        <span class="k">if</span><span class="p">(</span> <span class="n">ret</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span>  
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">semop</span><span class="p">(</span><span class="n">semid</span> <span class="p">,</span> <span class="n">sb</span> <span class="p">,</span> <span class="mi">10</span><span class="p">);</span><span class="c1">//信号量0被阻塞</span>
+        <span class="k">if</span><span class="p">(</span> <span class="n">ret</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span>  
         <span class="p">{</span>  
             <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"子进程申请semaphore失败：%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>  
             <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>         
@@ -443,8 +436,7 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
     <span class="p">}</span>  
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
 <span class="p">}</span>  
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>信号量的意图在于进程间同步，互斥锁和条件变量的意图则在于线程间同步。但是信号量也可用于线程间，互斥锁和条件变量也可用于进程间。我们应该使用适合具体应用的那组原语。</p>
 
@@ -521,7 +513,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2014-10-11-linux-process-semaphore.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

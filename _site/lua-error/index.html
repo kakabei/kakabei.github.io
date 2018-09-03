@@ -54,10 +54,9 @@
 
 <p>Lua 提供了专门的内置函数 assert 来完成错误的检测的功能。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">print</span> <span class="s2">"enter a number:"</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">print</span> <span class="s2">"enter a number:"</span>
 <span class="n">n</span> <span class="o">=</span> <span class="nb">assert</span><span class="p">(</span><span class="nb">io.read</span><span class="p">(</span><span class="s2">"*number"</span><span class="p">),</span> <span class="s2">"invalid input"</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>assert 首先检查第一个参数是否返回错误，如果不返回错误 assert 简单的返回，否则assert 以第二个参数抛出错误信息。第二个参数是可选的。</p>
 
@@ -70,7 +69,7 @@
 <p>在 Lua 中需要处理错误，需要使用 pcall 函数封装你的代码。
 用法如下：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span> <span class="k">then</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span> <span class="k">then</span>
 	<span class="c1">-- no errors while running `foo'</span>
 <span class="o">...</span>
 <span class="k">else</span>
@@ -78,18 +77,16 @@
 <span class="o">...</span>
 <span class="k">end</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>foo 为检测的函数。</p>
 
 <p>用做匿名函数则是：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span> <span class="o">...</span> <span class="k">end</span><span class="p">)</span> <span class="k">then</span> <span class="o">...</span>
 <span class="k">else</span> <span class="o">...</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>pcall 在保护模式下调用他的第一个参数并运行，因此可以捕获所有的异常和错误。
 如果没有异常和错误，pcall 返回 true 和调用返回的任何值；否则返回 nil 加错误信息。</p>
 
@@ -103,9 +100,8 @@
   <li>debug.traceback：根据调用桟来构建一个扩展的错误消息。</li>
 </ul>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">xpcall</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">error</span><span class="p">(</span><span class="s1">'error..'</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span> <span class="nb">print</span><span class="p">(</span><span class="nb">debug.traceback</span><span class="p">())</span> <span class="k">end</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">xpcall</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">error</span><span class="p">(</span><span class="s1">'error..'</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span> <span class="nb">print</span><span class="p">(</span><span class="nb">debug.traceback</span><span class="p">())</span> <span class="k">end</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
+</code></pre></div></div>
 
 
 </section>
@@ -180,7 +176,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2017-03-15-lua-error.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

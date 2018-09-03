@@ -68,40 +68,36 @@
   <li>安装</li>
 </ol>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>tar xzf  redis-2.8.13.tar.gz
-<span class="gp">$ </span><span class="nb">cd </span>redis-2.8.13
-<span class="gp">$ </span>make
-<span class="gp">$ </span>make install
-<span class="gp">$ </span>cp redis.conf /etc/
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">tar </span>xzf  redis-2.8.13.tar.gz
+<span class="nv">$ </span><span class="nb">cd </span>redis-2.8.13
+<span class="nv">$ </span>make
+<span class="nv">$ </span>make <span class="nb">install</span>
+<span class="nv">$ </span><span class="nb">cp </span>redis.conf /etc/
+</code></pre></div></div>
 <ol>
   <li>文件说明</li>
 </ol>
 
 <p>make install命令执行完成后，会在/usr/local/bin目录下生成本个可执行文件，分别是redis-server、redis-cli、redis-benchmark、redis-check-aof 、redis-check-dump，它们的作用如下：</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>redis-server：Redis服务器的daemon启动程序
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>redis-server：Redis服务器的daemon启动程序
 redis-cli：Redis命令行操作工具。也可以用telnet根据其纯文本协议来操作
 redis-benchmark：Redis性能测试工具，测试Redis在当前系统下的读写性能
 redis-check-aof：数据修复
 redis-check-dump：检查导出工具
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ol>
   <li>启动redis</li>
 </ol>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code> /usr/local/bin/redis-server /etc/redis.conf
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> /usr/local/bin/redis-server /etc/redis.conf
+</code></pre></div></div>
 
 <p>5．检查是否启动成功</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ps -ef | grep redis
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ps <span class="nt">-ef</span> | <span class="nb">grep </span>redis
+</code></pre></div></div>
 
 <p>在线测试： <a href="http://try.redis.io/">http://try.redis.io/</a></p>
 
@@ -177,7 +173,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2015-02-03-redis-install.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

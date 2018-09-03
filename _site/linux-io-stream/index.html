@@ -57,12 +57,11 @@
 
 <p>(3)对于ASCII字符集， 一个字符用一个字节表示。对于国际字符集，一个字符可用多个字节表示。标准I/O文件流可用于单字节或多字节的。当一个流最初被创建时，它并没有定向。如若在未定向的流上使用一个多字节I/O函数，则将该流的定向设置 宽定向的。若在未定向的流上使用一个单节I/O函数，则将该流的定向设置为字节定向的。只有两个函数可以改变的定向。freopen函数清除一个流的定向。fwide函数设置流的定向。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
 #include &lt;wchar.h&gt;
 </span><span class="kt">int</span> <span class="n">fwide</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
-<span class="c1">// 返回值：若流是宽定向的则返回正值，若流是字节定向的则返回负值，或者流是未定向的则返回0
-</span></code></pre>
-</div>
+<span class="c1">// 返回值：若流是宽定向的则返回正值，若流是字节定向的则返回负值，或者流是未定向的则返回0</span>
+</code></pre></div></div>
 
 <p>根据mode参数的不同值，fwide函数执行不同的工作：</p>
 
@@ -107,21 +106,19 @@
 
 <p>4 对于流的缓冲可能通来两个函数更改缓冲类型：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
 </span><span class="kt">void</span> <span class="n">setbuf</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">);</span>
 <span class="kt">int</span> <span class="n">setvbut</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">);</span>
-<span class="c1">//返回值：若成功则返回0，若出错则返回非0值
-</span></code></pre>
-</div>
+<span class="c1">//返回值：若成功则返回0，若出错则返回非0值</span>
+</code></pre></div></div>
 
 <p>这些函数一定要在流已被打开后调用。
 强制刷新一个流。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h &gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h &gt;
 </span><span class="kt">int</span> <span class="nf">fflush</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="n">f</span> <span class="n">p</span><span class="p">)</span> <span class="p">;</span>
-<span class="c1">//返回：若成功则为0，若出错则为EOF
-</span></code></pre>
-</div>
+<span class="c1">//返回：若成功则为0，若出错则为EOF</span>
+</code></pre></div></div>
 
 <p>此函数使该流所有未写的数据都被传递至内核。作为一种特殊情形，如若 fp是NULL，则此函数刷新所有输出流。</p>
 
@@ -129,13 +126,12 @@
 
 <p>下列三个函数可用于打开一个标准 I/O流。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
 </span><span class="kt">FILE</span> <span class="o">*</span><span class="nf">fopen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">)</span> <span class="p">;</span>
 <span class="kt">FILE</span> <span class="o">*</span><span class="n">freopen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">,</span> <span class="kt">FILE</span> <span class="o">*</span> <span class="n">fp</span><span class="p">);</span>
 <span class="kt">FILE</span> <span class="o">*</span><span class="nf">fdopen</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">)</span> <span class="p">;</span>
-<span class="c1">// 三个函数的返回：若成功则为文件指针，若出错则为 NULL
-</span></code></pre>
-</div>
+<span class="c1">// 三个函数的返回：若成功则为文件指针，若出错则为 NULL</span>
+</code></pre></div></div>
 
 <p>这三个函数的区别是：</p>
 
@@ -227,7 +223,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2014-10-14-linux-io-stream.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

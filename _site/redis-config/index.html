@@ -71,7 +71,7 @@ getset mset msetnx exec sort</p>
   <li>redis配置中对单位的大小写不敏感，1GB、1Gb和1gB都是相同的。由此也说明，redis只支持bytes，不支持bit单位。</li>
   <li>redis支持“主配置文件中引入外部配置文件  include /path/to/other.conf</li>
   <li>redis 开头的单位转换：（从配置文件中copy出来）
-    <div class="language-sh highlighter-rouge"><pre class="highlight"><code> <span class="c"># 1k =&gt; 1000 bytes</span>
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c"># 1k =&gt; 1000 bytes</span>
  <span class="c"># 1kb =&gt; 1024 bytes</span>
  <span class="c"># 1m =&gt; 1000000 bytes</span>
  <span class="c"># 1mb =&gt; 1024*1024 bytes</span>
@@ -79,11 +79,10 @@ getset mset msetnx exec sort</p>
  <span class="c"># 1gb =&gt; 1024*1024*1024 bytes</span>
  <span class="c">#</span>
  <span class="c"># units are case insensitive so 1GB 1Gb 1gB are all the same.</span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>redis配置文件被分成了几大块区域:
-    <div class="language-sh highlighter-rouge"><pre class="highlight"><code> 1<span class="o">)</span>通用（general）
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1<span class="o">)</span>通用（general）
  2<span class="o">)</span>快照（snapshotting）
  3<span class="o">)</span>复制（replication）
  4<span class="o">)</span>安全（security）
@@ -92,8 +91,7 @@ getset mset msetnx exec sort</p>
  7<span class="o">)</span>LUA脚本（lua scripting<span class="o">)</span>
  8<span class="o">)</span>慢日志（slow log<span class="o">)</span>
  9<span class="o">)</span>事件通知（event notification）
-</code></pre>
-    </div>
+</code></pre></div>    </div>
     <h3 id="通用">通用</h3>
   </li>
 </ol>
@@ -134,14 +132,13 @@ getset mset msetnx exec sort</p>
 如果你想禁用RDB持久化的策略，只要不设置任何save指令就可以，或者给save传入一个空字符串参数也可以达到相同效果　</changes></seconds></p>
 
 <p>如：</p>
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code> // --------------------------------------------------------
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> // <span class="nt">--------------------------------------------------------</span>
  <span class="c">#save 900 1     // 表示每15分钟且至少有1个key改变，就触发一次持久化</span>
  <span class="c">#save 300 10    // 表示每5分钟且至少有10个key改变，就触发一次持久化</span>
  <span class="c">#save 60  10000 // 表示每60秒至少有10000个key改变，就触发一次持久化</span>
  <span class="c">#save ""        // 禁用</span>
-// --------------------------------------------------------
-</code></pre>
-</div>
+// <span class="nt">--------------------------------------------------------</span>
+</code></pre></div></div>
 
 <p>2 stop-writes-on-bgsave-error ： 如果开启了RDB快照功能，那么在redis持久化数据到磁盘时如果出现失败，默认情况下，redis会停止接受所有的写请求</p>
 
@@ -171,9 +168,8 @@ getset mset msetnx exec sort</p>
 
 <p>自从redis2.6版本之后，默认从redis为只读。</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>  <span class="c"># slave-read-only yes </span>
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c"># slave-read-only yes </span>
+</code></pre></div></div>
 
 <h3 id="安全">安全</h3>
 
@@ -181,10 +177,9 @@ getset mset msetnx exec sort</p>
 2  rename-command  ： redis允许我们对redis指令进行更名，比如将一些比较危险的命令改个名字，避免被误执行。
  比如可以把CONFIG命令改成一个很复杂的名字，这样可以避免外部的调用，同时还可以满足内部调用的需要：</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c89 //  命令重命名
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c89 //  命令重命名
 rename-command CONFIG <span class="s2">""</span>                                       //  禁用
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="限制">限制</h3>
 
@@ -239,18 +234,15 @@ rename-command CONFIG <span class="s2">""</span>                                
 
 <p>6 为了缓解这个问题，我们可以使用下面的配置项，这样的话，当BGSAVE或BGWRITEAOF运行时，fsync()在主进程中的调用会被阻止。
     这意味着当另一路进程正在对AOF文件进行重构时，redis的持久化功能就失效了，就好像我们设置了“appendsync none”一样。如果你的redis有时延问题，那么请将下面的选项设置为yes。否则请保持no，因为这是保证数据完整性的最安全的选择.</p>
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>no-appendfsync-on-rewrite no   
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>no-appendfsync-on-rewrite no   
+</code></pre></div></div>
 <p>7 只读的从redis并不适合直接暴露给不可信的客户端。为了尽量降低风险，可以使用rename-command指令来将一些可能有破坏力的命令重命名，避免外部直接调用。比如：</p>
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code> rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
+</code></pre></div></div>
 
 <p>8 repl-ping-slave-period : 从redis会周期性的向主redis发出PING包。你可以通过repl_ping_slave_period指令来控制其周期。默认是10秒。</p>
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code> <span class="c"># repl-ping-slave-period 10</span>
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c"># repl-ping-slave-period 10</span>
+</code></pre></div></div>
 
 <p>9  repl-timeout  :  主从之间超时的时限， #repl-timeout 60</p>
 
@@ -265,40 +257,35 @@ rename-command CONFIG <span class="s2">""</span>                                
 <p>10 repl-disable-tcp-nodelay :  控制在主从同步时是否禁用TCP_NODELAY。如果开启TCP_NODELAY，那么主redis会使用更少的TCP包和更少的带宽来向从redis传输数据。但是这可能会增加一些同步的延迟，大概会达到40毫秒左右。
  如果你关闭了TCP_NODELAY，那么数据同步的延迟时间会降低，但是会消耗更多的带宽。</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>    <span class="c"># repl-disable-tcp-nodelay no</span>
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c"># repl-disable-tcp-nodelay no</span>
+</code></pre></div></div>
 
 <p>11  repl-backlog-size :  设置同步队列长度。队列长度（backlog)是主redis中的一个缓冲区，在与从redis断开连接期间，
   主redis会用这个缓冲区来缓存应该发给从redis的数据。这样的话，当从redis重新连接上之后，就不必重新全量同步数据，只需要同步这部分增量数据即可.</p>
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="c"># repl-backlog-size 1mb</span>
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># repl-backlog-size 1mb</span>
+</code></pre></div></div>
 
 <p>12 repl-backlog-ttl :  如果主redis等了一段时间之后，还是无法连接到从redis，那么缓冲队列中的数据将被清理掉。 我们可以设置主redis要等待的时间长度。如果设置为0，则表示永远不清理。默认是1个小时。</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>  <span class="c"># repl-backlog-ttl 3600  </span>
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c"># repl-backlog-ttl 3600  </span>
+</code></pre></div></div>
 
 <p>13 slave-priority  : 我们可以给众多的从redis设置优先级，在主redis持续工作不正常的情况，优先级高的从redis将会升级为主redis。
      而编号越小，优先级越高。比如一个主redis有三个从redis，优先级编号分别为10、100、25，那么编号为10的从redis将会被首先选中升级为主redis。 当优先级被设置为0时，这个从redis将永远也不会被选中。默认的优先级为100。</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code> <span class="c"># slave-priority 100    </span>
-</code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c"># slave-priority 100    </span>
+</code></pre></div></div>
 
 <p>14  假如主redis发现有超过M个从redis的连接延时大于N秒，那么主redis就停止接受外来的写请求。
  这是因为从redis一般会每秒钟都向主redis发出PING，而主redis会记录每一个从redis最近一次发来PING的时间点，
  所以主redis能够了解每一个从redis的运行情况。</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="c"># min-slaves-to-write 3</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># min-slaves-to-write 3</span>
 <span class="c"># min-slaves-max-lag 10</span>
 
 <span class="c"># 上面这个例子表示，假如有大于等于3个从redis的连接延迟大于10秒，那么主redis就不再接受外部的写请求。</span>
 <span class="c"># 上述两个配置中有一个被置为0，则这个特性将被关闭。默认情况下min-slaves-to-write为0，而min-slaves-max-lag为10。</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 
 </section>
@@ -373,7 +360,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2015-02-03-redis-config.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

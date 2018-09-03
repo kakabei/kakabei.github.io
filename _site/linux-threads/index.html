@@ -55,9 +55,8 @@
 <p>包含#include<pthread.h>
 创建线程的函数说明：</pthread.h></p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">pthread_create</span><span class="p">(</span><span class="n">pthread_t</span> <span class="o">*</span><span class="kr">thread</span><span class="p">,</span> <span class="n">pthread_addr_t</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span><span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">start_routine</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="p">),</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">pthread_create</span><span class="p">(</span><span class="n">pthread_t</span> <span class="o">*</span><span class="kr">thread</span><span class="p">,</span> <span class="n">pthread_addr_t</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span><span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">start_routine</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="p">),</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">);</span>
+</code></pre></div></div>
 <p>thread     	　：用于返回创建的线程的ID。
 arr           : 用于指定的被创建的线程的属性，上面的函数中使用NULL，表示使用默认的属性。
 start_routine   : 这是一个函数指针，指向线程被创建后要调用的函数。
@@ -67,18 +66,16 @@ arg　　　　　 : 用于给线程传递参数，在本例中没有传递参�
 pthread_join使一个线程等待另一个线程结束。代码中如果没有pthread_join主线程会很快结束从而使整个进程结束，从而使创建的线程没有机会开始执行就结束了。加入pthread_join后，主线程会一直等待直到等待的线程结束自己才结束，使创建的线程有机会执行。
 函数定义：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">pthread_join</span><span class="p">(</span><span class="n">pthread_t</span> <span class="kr">thread</span><span class="p">,</span> <span class="kt">void</span> <span class="o">**</span><span class="n">retval</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">pthread_join</span><span class="p">(</span><span class="n">pthread_t</span> <span class="kr">thread</span><span class="p">,</span> <span class="kt">void</span> <span class="o">**</span><span class="n">retval</span><span class="p">);</span>
+</code></pre></div></div>
 <p>thread: 线程标识符，即线程ID，标识唯一线程。
 retval: 用户定义的指针，用来存储被等待线程的返回值。
 返回值 ： 0代表成功。 失败，返回的则是错误号。</p>
 
 <p>pthread_exit退出线程，线程的主动行为；由于一个进程中的多个线程是共享数据段的，因此通常在线程退出之后，退出线程所占用的资源并不会随着线程的终止而得到释放，但是可以用pthread_join()函数来同步并释放资源。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span>  <span class="n">pthread_exit</span><span class="err">（</span><span class="kt">void</span>  <span class="o">*</span><span class="n">retval</span><span class="err">）</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span>  <span class="n">pthread_exit</span><span class="err">（</span><span class="kt">void</span>  <span class="o">*</span><span class="n">retval</span><span class="err">）</span>
+</code></pre></div></div>
 
 <p>retval：pthread_exit()调用线程的返回值，也可由函数pthread_join来获取.</p>
 
@@ -87,7 +84,7 @@ retval: 用户定义的指针，用来存储被等待线程的返回值。
 
 <p>例子：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include  &lt;stdio.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include  &lt;stdio.h&gt;
 #include  &lt;pthread.h&gt;
 #include  &lt;ctype.h&gt;
 </span> 
@@ -135,8 +132,7 @@ retval: 用户定义的指针，用来存储被等待线程的返回值。
     <span class="err">｝</span>
     <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>当pthread_mutex_lock()返回时，该互斥锁已被锁定。线程调用该函数让互斥锁上锁，如果该互斥锁已被另一个线程锁定和拥有，则调用该线程将阻塞，直到该互斥锁变为可用为止。 对于Solaris线程。</li>
@@ -163,28 +159,24 @@ retval: 用户定义的指针，用来存储被等待线程的返回值。
 <p>同步就是线程等待某个事件的发生。只有当等待的事件发生线程才继续执行，否则线程挂起并放弃处理器。当多个线程协作时，相互作用的任务必须在一定的条件下同步。
 Linux下的C语言编程有多种线程同步机制，最典型的是条件变量(condition variable)。pthread_cond_init用来创建一个条件变量，其函数原型为：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">pthread_cond_init</span> <span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">,</span> <span class="k">const</span> <span class="n">pthread_condattr_t</span> <span class="o">*</span><span class="n">attr</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pthread_cond_init</span> <span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">,</span> <span class="k">const</span> <span class="n">pthread_condattr_t</span> <span class="o">*</span><span class="n">attr</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>pthread_cond_wait和pthread_cond_timedwait用来等待条件变量被设置，值得注意的是这两个等待调用需要一个已经上锁的互斥体mutex，这是为了防止在真正进入等待状态之前别的线程有可能设置该条件变量而产生竞争。
 pthread_cond_wait的函数原型为：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">pthread_cond_wait</span> <span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">,</span> <span class="n">pthread_mutex_t</span> <span class="o">*</span><span class="n">mutex</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pthread_cond_wait</span> <span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">,</span> <span class="n">pthread_mutex_t</span> <span class="o">*</span><span class="n">mutex</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>pthread_cond_broadcast用于设置条件变量，即使得事件发生，这样等待该事件的线程将不再阻塞。原型：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">pthread_cond_broadcast</span> <span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pthread_cond_broadcast</span> <span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">)</span> <span class="p">;</span>
+</code></pre></div></div>
 
 <p>pthread_cond_signal则用于解除某一个等待线程的阻塞状态。原型：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">pthread_cond_signal</span> <span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pthread_cond_signal</span> <span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">)</span> <span class="p">;</span>
+</code></pre></div></div>
 
 <p>pthread_cond_destroy 则用于释放一个条件变量的资源。</p>
 
@@ -192,34 +184,31 @@ pthread_cond_wait的函数原型为：</p>
 
 <p>在头文件semaphore.h 中定义的信号量则完成了互斥体和条件变量的封装，按照多线程程序设计中访问控制机制，控制对资源的同步访问，提供程序设计人员更方便的调用接口。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">sem_init</span><span class="p">(</span><span class="n">sem_t</span> <span class="o">*</span><span class="n">sem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pshared</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sem_init</span><span class="p">(</span><span class="n">sem_t</span> <span class="o">*</span><span class="n">sem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pshared</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>这个函数初始化一个信号量sem 的值为val，参数pshared 是共享属性控制，表明是否在进程间共享。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">sem_wait</span><span class="p">(</span><span class="n">sem_t</span> <span class="o">*</span><span class="n">sem</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sem_wait</span><span class="p">(</span><span class="n">sem_t</span> <span class="o">*</span><span class="n">sem</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>调用该函数时，若sem为无状态，调用线程阻塞，等待信号量sem值增加(post )成为有信号状态；若sem为有状态，调用线程顺序执行，但信号量的值减一。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">sem_post</span><span class="p">(</span><span class="n">sem_t</span> <span class="o">*</span><span class="n">sem</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sem_post</span><span class="p">(</span><span class="n">sem_t</span> <span class="o">*</span><span class="n">sem</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>调用该函数，信号量sem的值增加，可以从无信号状态变为有信号状态。</p>
 
 <h3 id="四-例子">四 例子</h3>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
 #include &lt;pthread.h&gt;
 #define BUFFER_SIZE 16 // 缓冲区数量
 </span>
 <span class="k">struct</span> <span class="n">prodcons</span>
 <span class="p">{</span>
-    <span class="c1">// 缓冲区相关数据结构
-</span>    <span class="kt">int</span> <span class="n">buffer</span><span class="p">[</span><span class="n">BUFFER_SIZE</span><span class="p">];</span> <span class="cm">/* 实际数据存放的数组 */</span>
+    <span class="c1">// 缓冲区相关数据结构</span>
+    <span class="kt">int</span> <span class="n">buffer</span><span class="p">[</span><span class="n">BUFFER_SIZE</span><span class="p">];</span> <span class="cm">/* 实际数据存放的数组 */</span>
     <span class="n">pthread_mutex_t</span> <span class="n">lock</span><span class="p">;</span> <span class="cm">/* 互斥体lock 用于对缓冲区的互斥操作 */</span>
     <span class="kt">int</span> <span class="n">readpos</span><span class="p">,</span> <span class="n">writepos</span><span class="p">;</span> <span class="cm">/* 读写指针*/</span>
     <span class="n">pthread_cond_t</span> <span class="n">notempty</span><span class="p">;</span> <span class="cm">/* 缓冲区非空的条件变量 */</span>
@@ -316,8 +305,7 @@ pthread_cond_wait的函数原型为：</p>
     <span class="n">pthread_join</span><span class="p">(</span><span class="n">th_b</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">retval</span><span class="p">);</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="五-使用线程的好处">五 使用线程的好处</h3>
 
@@ -330,15 +318,14 @@ pthread_cond_wait的函数原型为：</p>
 <h3 id="六-linux-gcc编译问题">六 linux gcc编译问题</h3>
 <p>在用gcc编译和线程相关的程序时，报了如下的错误：</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>root@192 process]# gcc pthread.c -o pthread
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@192 process]# gcc pthread.c <span class="nt">-o</span> pthread
 /tmp/ccJKG8rq.o: In <span class="k">function</span> <span class="sb">`</span>main<span class="s1">':
 pthread.c:(.text+0x29c): undefined reference to `pthread_create'</span>
 pthread.c:<span class="o">(</span>.text+0x2b7<span class="o">)</span>: undefined reference to <span class="sb">`</span>pthread_create<span class="s1">'
 pthread.c:(.text+0x2ca): undefined reference to `pthread_join'</span>
 pthread.c:<span class="o">(</span>.text+0x2dd<span class="o">)</span>: undefined reference to <span class="sb">`</span>pthread_join<span class="s1">'
 collect2: ld returned 1 exit status
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 <p>解决方案： 程序要引用线程相关的库。所以编译时加上-lpthread。即：gcc pthread.c -o pthread -lpthread</p>
 
 </section>
@@ -413,7 +400,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2014-10-12-linux-threads.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

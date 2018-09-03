@@ -68,12 +68,11 @@
 
 <p>open函数打开或创建一个文件</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
 #include &lt;sys/stat.h&gt;
 #include &lt;fcntl.h&gt;
 </span><span class="kt">int</span> <span class="nf">open</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">oflag</span><span class="p">,...</span><span class="cm">/*, mode_t  mode */</span> <span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>返回：若成功为文件描述符，若出错为- 1</p>
 
@@ -103,20 +102,18 @@
 
 <p>用creat函数创建一个新文件</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
 #include &lt;sys/stat.h&gt;
 #include &lt;fcntl.h&gt;
 </span><span class="kt">int</span> <span class="nf">creat</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="n">mode_t</span>  <span class="n">mode</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>返回：若成功为只写打开的文件描述符，若出错为- 1</p>
 
 <p>这个函数等于：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">open</span> <span class="p">(</span><span class="n">pathname</span><span class="p">,</span> <span class="n">O_WRONLY</span> <span class="err">｜</span><span class="n">O_CREAT</span><span class="err">｜</span><span class="n">O_TRUNC</span><span class="p">,</span>  <span class="n">mode</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">open</span> <span class="p">(</span><span class="n">pathname</span><span class="p">,</span> <span class="n">O_WRONLY</span> <span class="err">｜</span><span class="n">O_CREAT</span><span class="err">｜</span><span class="n">O_TRUNC</span><span class="p">,</span>  <span class="n">mode</span><span class="p">)</span> <span class="p">;</span>
+</code></pre></div></div>
 
 <p>不知道这个函数现在存在的意义是什么？</p>
 
@@ -124,10 +121,9 @@
 
 <p>close函数关闭一个打开文件</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
 </span><span class="kt">int</span> <span class="n">close</span> <span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">)</span><span class="err">；</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>返回：若成功为 0，若出错为- 1
 关闭一个文件时也释放该进程加在该文件上的所有记录锁。
@@ -137,11 +133,10 @@
 
 <p>每个打开文件都有一个与其相关联的“当前文件位移量“。它是一个非负整数，用以度量从文件开始处计算的字节数。按系统默认，当打开一个文件时，除非指定 O_APPEND选择项，否则该位移量被设置为0。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
 #include &lt;unistd.h&gt;
 </span><span class="kt">off_t</span> <span class="nf">lseek</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="kt">off_t</span>  <span class="n">offset</span><span class="p">,</span> <span class="kt">int</span> <span class="n">whence</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>返回：若成功为新的文件位移，若出错为 	-1
 对参数offset  的解释与参数whence的值有关。</p>
@@ -154,10 +149,9 @@
 <p>若lseek成功执行，则返回新的文件位移量。
 判断文件是否可能设置偏移量的方法：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">off_t</span> <span class="n">currpos</span><span class="p">;</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">off_t</span> <span class="n">currpos</span><span class="p">;</span>
 <span class="n">currpos</span> <span class="o">=</span> <span class="n">lseek</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SEEK_CUR</span><span class="p">);</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>这种方法也可用来确定所涉及的文件是否可以设置位移量。如果文件描述符引用的是一个管道或FIFO，则lseek返回-1，并将errno设置为EPIPE。
 文件位移量可以大于文件的当前长度，在这种情况下，对该文件的下一次写将延长该文件，并在文件中构成一个空调，这一点是允许的。位于文件中但没有写过的字节都被读为 0。</p>
@@ -166,10 +160,9 @@
 
 <p>用read 函数从打开文件中读数据。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
 </span><span class="kt">ssize_t</span> <span class="nf">read</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buff</span><span class="p">,</span> <span class="kt">size_t</span>  <span class="n">nbytes</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>返回：读到的字节数，若已到文件尾为 0，若出错为- 1
 如read成功，则返回读到的字节数。如已到达文件的尾端，则返回 0。
@@ -186,10 +179,9 @@
 
 <p>用write函数向打开文件写数据。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
 </span><span class="kt">ssize_t</span> <span class="nf">write</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buff</span><span class="p">,</span> <span class="kt">size_t</span>  <span class="n">nbytes</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>返回：若成功为已写的字节数，若出错为- 1
 其返回值通常与参数 nbytes的值不同，否则表示出错。 write出错的一个常见原因是：磁盘已写满，或者超过了对一个给定进程的文件长度限制 。
@@ -230,11 +222,10 @@
 
 <p>这两个函数都可用来复制一个现存的文件描述符。</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
 </span><span class="kt">int</span> <span class="nf">dup</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">)</span> <span class="p">;</span>
 <span class="kt">int</span> <span class="n">dup2</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="kt">int</span> <span class="n">filedes2</span><span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>两函数的返回：若成功为新的文件描述符，若出错为- 1
 (1)由dup返回的新文件描述符一定是当前可用文件描述符中的最小数值。
@@ -244,27 +235,23 @@
 (5)复制一个描述符的另一种方法是使用 fcntl 函数，下一节将对该函数进行说明。实际上：
 调用：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">dup</span> <span class="p">(</span> <span class="n">filedes</span> <span class="p">)</span> <span class="p">;</span> 
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dup</span> <span class="p">(</span> <span class="n">filedes</span> <span class="p">)</span> <span class="p">;</span> 
+</code></pre></div></div>
 
 <p>等效于：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">fcntl</span> <span class="p">(</span><span class="n">filedes</span><span class="p">,</span> <span class="n">F_DUPFD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fcntl</span> <span class="p">(</span><span class="n">filedes</span><span class="p">,</span> <span class="n">F_DUPFD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>而调用：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">dup2</span><span class="p">(</span><span class="n">filedes</span><span class="p">,</span> <span class="n">filedes2</span><span class="p">)</span> <span class="err">；</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dup2</span><span class="p">(</span><span class="n">filedes</span><span class="p">,</span> <span class="n">filedes2</span><span class="p">)</span> <span class="err">；</span>
+</code></pre></div></div>
 
 <p>等效于：</p>
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">close</span> <span class="p">(</span> <span class="n">filedes2</span> <span class="p">)</span> <span class="p">;</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">close</span> <span class="p">(</span> <span class="n">filedes2</span> <span class="p">)</span> <span class="p">;</span>
 <span class="n">fcntl</span><span class="p">(</span><span class="n">filedes</span><span class="p">,</span> <span class="n">F_DUPFD</span><span class="p">,</span> <span class="n">filedes2</span><span class="p">);</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>在最后一种情况下，dup2并不完全等同于close加上fcntl。它们之间的区别是：
 (1)dup2 是一个原子操作，而 close及fcntl则包括两个函数调用。有可能在 close和fcntl之间插入执行信号捕获函数，它可能修改文件描述符。 
@@ -274,12 +261,11 @@
 
 <p>fcntl函数可以改变已经打开文件的性质</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;fcntl.h&gt;
 </span><span class="kt">int</span> <span class="nf">fcntl</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,...</span><span class="o">/*</span> <span class="kt">int</span>  <span class="n">arg</span> <span class="o">*</span> <span class="o">/</span> <span class="p">)</span> <span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>返回：若成功则依赖于 cmd(见下)，若出错为- 1
 (1)第三个参数总是一个整数，与上面所示函数原型中的注释部分相对应。但记录锁时，第三个参数则是指向一个结构的指针。
@@ -303,7 +289,7 @@
   <li>F_SETOWN  设置接收SIGIO和SIGURG信号的进程ID或进程组ID。正的arg指定一个进程D，负的arg表示等于arg绝对值的一个进程组ID。</li>
 </ul>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">set_fl</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">)</span> <span class="cm">/*flags are file status flag */</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">set_fl</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">)</span> <span class="cm">/*flags are file status flag */</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">((</span><span class="n">val</span> <span class="o">=</span> <span class="n">fcnt</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_GETFL</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
@@ -316,22 +302,19 @@
         <span class="n">printf</span> <span class="p">(</span><span class="s">"fcntl F_SETFL error"</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>10、/dev/fd</p>
 
 <p>(1)比较新的系统都提供名为/dev/fd 的目录，其目录项是名为 0 、1、2 等的文件。打开文件/dev/fd/n等效于复制描述符 n (假定描述符n是打开的)在函数中调用：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">"/dev/fd/0"</span><span class="p">,</span> <span class="n">mode</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">"/dev/fd/0"</span><span class="p">,</span> <span class="n">mode</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>大多数系统忽略所指定的mode，而另外一些则要求mode是所涉及的文件 ( 在这里则是标准输入)原先打开时所使用的mode的子集。因为上面的打开等效于：</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">fd</span> <span class="o">=</span> <span class="n">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-</code></pre>
-</div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fd</span> <span class="o">=</span> <span class="n">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>描述符0和fd共享同一文件表项 。</p>
 
@@ -410,7 +393,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2014-10-14-linux-io-file.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

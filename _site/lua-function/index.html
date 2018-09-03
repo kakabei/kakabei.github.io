@@ -58,21 +58,19 @@
 表示函数有可变的参数。Lua 将函数的参数放在一个叫 arg 的表中，除了参数以外，arg
 表中还有一个域 n 表示参数的个数。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">g</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="k">end</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">g</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="k">end</span>
 
 <span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">nil</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
 <span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
 <span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">;</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">}</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Lua 的函数还一些特性和C不一样的是：它和其他值（数值、字符串）一样，函数可以被存放在变
 量中，也可以存放在表中，可以作为函数的参数，还可以作为函数的返回值。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="nb">print</span> <span class="o">=</span> <span class="nb">math.sin</span> <span class="c1">-- `print' now refers to the sine function</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">print</span> <span class="o">=</span> <span class="nb">math.sin</span> <span class="c1">-- `print' now refers to the sine function</span>
 <span class="n">a</span><span class="p">.</span><span class="n">p</span><span class="p">(</span><span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="c1">--&gt; 0.841470</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>如函数被嵌套的函数里，它可以访问他外部函数中的变量。这一特性强大编程能力。</p>
 
@@ -80,15 +78,14 @@
 
 <p>用表达式创建函数：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">foo</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="k">end</span>
-</code></pre>
-</div>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">foo</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="k">end</span>
+</code></pre></div></div>
 
 <h3 id="闭包">闭包</h3>
 
 <p>当一个函数内部嵌套另一个函数定义时，内部的函数体可以访问外部的函数的局部变量，这种特征我们称作词法定界。虽然这看起来很清楚，事实并非如此，词法定界加上第一类函数在编程语言里是一个功能强大的概念，很少语言提供这种支持。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">newCounter</span><span class="p">()</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">newCounter</span><span class="p">()</span>
 	<span class="kd">local</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
 	<span class="k">return</span> <span class="k">function</span><span class="p">()</span> <span class="c1">-- anonymous function</span>
 		<span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
@@ -100,21 +97,19 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 1</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 2</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>i不是全局变量也不是局部变量，我们称作外部的局部变量（external local variable）或者 upvalue。</p>
 
 <p>匿名函数使用 upvalue i 保存他的计数，当我们调用匿名函数的时候 i 已经超出了作用范围，因为创建 i 的函数 newCounter 已经返回了。然而 Lua 用闭包的思想正确处理了这种情况。简单的说闭包是一个函数加上它可以正确访问的 upvalues。如果我们再次调
 用 newCounter，将创建一个新的局部变量 i，因此我们得到了一个作用在新的变量 i 上的
 新闭包。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="n">c2</span> <span class="o">=</span> <span class="n">newCounter</span><span class="p">()</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c2</span> <span class="o">=</span> <span class="n">newCounter</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">c2</span><span class="p">())</span> <span class="c1">--&gt; 1</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 3</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">c2</span><span class="p">())</span> <span class="c1">--&gt; 2</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>技术上来讲，闭包指值而不是指函数，函数仅仅是闭包的一个原型声明；尽管如此，
 在不会导致混淆的情况下我们继续使用术语函数代指闭包。</p>
 
@@ -130,7 +125,7 @@
   <li>方式一</li>
 </ol>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="o">...</span>
 <span class="k">end</span>
 <span class="kd">local</span> <span class="n">g</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
@@ -138,23 +133,21 @@
 <span class="n">f</span><span class="p">()</span> <span class="c1">-- external local `f' is visible here</span>
 <span class="o">...</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ol>
   <li>方式二</li>
 </ol>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="kd">local</span> <span class="k">function</span> <span class="nf">f</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">local</span> <span class="k">function</span> <span class="nf">f</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="o">...</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>有一点需要注意的是在声明递归局部函数的方式。
 要提前定义local。</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="kd">local</span> <span class="n">fact</span>
 <span class="n">fact</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">then</span>
@@ -163,19 +156,17 @@
 		<span class="k">return</span> <span class="n">n</span><span class="o">*</span><span class="n">fact</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 	<span class="k">end</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="尾调用proper-tail-calls">尾调用（Proper Tail Calls）</h3>
 
 <p>尾调用是一种类似在函数结尾的 goto 调用，当函数最后一个动作是调用另外一个函
 数时，我们称这种调用尾调用。例如：</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="k">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>g 的调用是尾调用。</p>
 
@@ -184,12 +175,11 @@
 
 <p>如下三种不是尾调函数.</p>
 
-<div class="language-lua highlighter-rouge"><pre class="highlight"><code>
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="n">r</span> <span class="n">eturn</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1">-- must do the addition</span>
 <span class="k">return</span> <span class="n">x</span> <span class="ow">or</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">-- must adjust to 1 result</span>
 <span class="k">return</span> <span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="c1">-- must adjust to 1 result</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 </section>
 <section align="right">
@@ -263,7 +253,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2017-03-15-lua-function.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

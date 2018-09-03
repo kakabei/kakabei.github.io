@@ -82,7 +82,7 @@ Redis的哈希值是字符串字段和字符串值之间的映射，因此它们
 
 <h3 id="redis-文件说明">Redis 文件说明</h3>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>find . -type f -executable
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>find <span class="nb">.</span> <span class="nt">-type</span> f <span class="nt">-executable</span>
 ./redis-benchmark      // 用于进行redis性能测试的工具
 
 ./redis-check-dump     // 用于修复出问题的dump.rdb文件
@@ -90,26 +90,22 @@ Redis的哈希值是字符串字段和字符串值之间的映射，因此它们
 ./redis-server         // redis的服务端
 ./redis-check-aof      // 用于修复出问题的AOF文件
 ./redis-sentinel       // 用于集群管理
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="redis-管理">Redis 管理</h3>
 
 <ol>
   <li>服务启动：
-    <div class="language-sh highlighter-rouge"><pre class="highlight"><code> ./redis-server ../redis.conf  端口默认为6379
-</code></pre>
-    </div>
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ./redis-server ../redis.conf  端口默认为6379
+</code></pre></div>    </div>
   </li>
   <li>使用客户端：
-    <div class="language-sh highlighter-rouge"><pre class="highlight"><code> ./redis-cli
-</code></pre>
-    </div>
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ./redis-cli
+</code></pre></div>    </div>
   </li>
   <li>通过客户端来关闭redis服务端
-    <div class="language-sh highlighter-rouge"><pre class="highlight"><code> 127.0.0.1:6379&gt; shutdown 
-</code></pre>
-    </div>
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 127.0.0.1:6379&gt; shutdown 
+</code></pre></div>    </div>
   </li>
   <li>一些注意:
     <ul>
@@ -200,7 +196,7 @@ Redis的哈希值是字符串字段和字符串值之间的映射，因此它们
 
 <p>例子：</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>    redis&gt; MULTI         //标记事务开始 
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    redis&gt; MULTI         //标记事务开始 
     OK
     redis&gt; INCR user_id //多条命令按顺序入队
     QUEUED
@@ -215,8 +211,7 @@ Redis的哈希值是字符串字段和字符串值之间的映射，因此它们
     2<span class="o">)</span> <span class="o">(</span>integer<span class="o">)</span> 2
     3<span class="o">)</span> <span class="o">(</span>integer<span class="o">)</span> 3
     4<span class="o">)</span> PONG
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ol>
   <li>QUEUED的字样，这表示我们在用MULTI组装事务时，每一个命令都会进入到内存队列中缓存起来，如果出现QUEUED则表示我们这个命令成功插入了缓存队列，在将来执行EXEC时，这些被QUEUED的命令都会被组装成一个事务来执行.</li>
@@ -305,7 +300,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2015-02-04-redis-base-operating.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

@@ -65,31 +65,29 @@
 
 <h4 id="nginx防盗链的配置">nginx防盗链的配置</h4>
 <p>1、nginx针对文件类型的防盗链配置方法：</p>
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>　　location ~<span class="k">*</span> <span class="se">\.</span><span class="o">(</span>gif|jpg|png|swf|flv|bmp<span class="o">)</span><span class="nv">$ </span><span class="o">{</span>
-　　valid_referers none blocked <span class="k">*</span>.php100.com php100.com;
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>　　location ~<span class="k">*</span> <span class="se">\.</span><span class="o">(</span>gif|jpg|png|swf|flv|bmp<span class="o">)</span><span class="nv">$ </span><span class="o">{</span>
+　　valid_referers none blocked <span class="k">*</span>.php100.com php100.com<span class="p">;</span>
 　　if <span class="o">(</span><span class="nv">$invalid_referer</span><span class="o">)</span> <span class="o">{</span>
 　　     <span class="c">#rewrite ^/ http://www.php100.com/403.html;</span>
-　　     <span class="k">return </span>403;
+　　     <span class="k">return </span>403<span class="p">;</span>
 　　     <span class="o">}</span>     
 　　<span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>这种方法是在server或者location段中加入：valid_referers none blocked，其中none表示空的来路，也就是直接访问，比如直接在浏览器打开一个文件，blocked表示被防火墙标记过的来路，*.php100.com表示所有子域名。</p>
 
 <p>2、nginx针对文件目录的防盗链配置方法：</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>　　location /img/ <span class="o">{</span>
-　　     root /data/img/;
-　　     valid_referers none blocked <span class="k">*</span>.php100.com php100.com;
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>　　location /img/ <span class="o">{</span>
+　　     root /data/img/<span class="p">;</span>
+　　     valid_referers none blocked <span class="k">*</span>.php100.com php100.com<span class="p">;</span>
 
 　　     <span class="k">if</span> <span class="o">(</span><span class="nv">$invalid_referer</span><span class="o">)</span> <span class="o">{</span>
-　　          rewrite ^/ http://www.php100.com/error.gif;
+　　          rewrite ^/ http://www.php100.com/error.gif<span class="p">;</span>
 　　          <span class="c">#return 403;</span>
 　　     <span class="o">}</span>     
 　　<span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>如果不是用nginx，就要自己去解析表头然后做出判断。</p>
 
@@ -166,7 +164,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/2017-03-09-web-referers.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2017 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 
