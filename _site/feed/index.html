@@ -7,8 +7,218 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-03T22:26:48+08:00</lastBuildDate>
+    <lastBuildDate>2018-09-04T11:45:31+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>stl set 笔记</title>
+      <link href="http://localhost:4000/stl-set/"/>
+      <pubDate>2017-04-02T06:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/stl-set</guid>
+      <content:encoded><![CDATA[<p>1.map和set都封闭了二叉树。所以set中的元素是有惟一性的。</p>
+
+<p>2.set multiset map multimap内部采用的都是红黑树。</p>
+
+<p>3.在set中查找 是使用地二分查找。logn。 效率很高。</p>
+
+<p>4.set元素中排序的。</p>
+
+<p>5.set对象的创建方式有5种。</p>
+
+<ul>
+  <li>创建空的set对象，元素类型为int set<int> sl;</int></li>
+  <li>创建空的set对象，元素类型cahr <em>, 比较函数对象（即排序准则）为自定义 set&lt;const char</em> ， strLess&gt; s2(strLess);</li>
+  <li>利用set对象S1,拷贝生成set对象S2；set<int>s2(s1);</int></li>
+  <li>用迭代区间[&amp;first, &amp;laist)rn所指的元素，创建一个set对象。</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">int</span>  <span class="n">iArray</span><span class="p">[]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">19</span> <span class="p">);</span>
+    <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s4</span><span class="p">(</span><span class="n">iArray</span><span class="p">,</span> <span class="n">iArray</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>用迭代区间[&amp;first, &amp;laist)rn所指的元素，及比较函数对象strLess, 创建一个set对象。</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">szArray</span><span class="p">[]</span> <span class="o">=</span> <span class="p">(</span><span class="s">"hello"</span><span class="p">,</span> <span class="s">"dog"</span><span class="p">,</span> <span class="s">"bird"</span><span class="p">)</span> <span class="p">;</span>
+   <span class="n">set</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="n">strLess</span><span class="o">&gt;</span> <span class="n">s5</span><span class="p">(</span><span class="n">szArray</span><span class="p">,</span> <span class="n">szArray</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="n">strLess</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>6.元素插入的3种方式。</p>
+
+<ul>
+  <li>插入value，返回pair 配对对象，可能根据，secod判断是否插入成功。（value不能与set容器内元素重复）</li>
+  <li>在pos位置之前插入value，返回新元素的位置，但不一琮能插入成功。</li>
+  <li>将换代区间[&amp;first, &amp;last) 内所有元素，插入到set容器。</li>
+</ul>
+
+<p>7.元素删除的4种方式。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">size_type</span> <span class="n">erase</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>      <span class="c1">// 移除set容器内元素值为value的所有元素。返回移除的元素个数。</span>
+<span class="kt">void</span> <span class="n">erase</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pos</span><span class="p">)</span>            <span class="c1">// 移除pos位置上的元素，无返回值。</span>
+<span class="kt">void</span> <span class="n">earse</span><span class="p">(</span><span class="o">&amp;</span><span class="n">first</span><span class="p">,</span> <span class="o">&amp;</span> <span class="n">last</span><span class="p">)</span>  <span class="c1">// 移除迭代区间[&amp;first, &amp;last)内的元素，无返回值。</span>
+<span class="kt">void</span> <span class="n">clear</span><span class="p">()</span>                <span class="c1">// 移除set容器内所有元素。</span>
+</code></pre></div></div>
+
+<p>8.元素查找的2种方式</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">count</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1">// 返回set对象内元素值为value的元素个数。</span>
+<span class="n">iterator</span> <span class="n">find</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1">// 返回value所在位置，找不到value将返回end()。</span>
+</code></pre></div></div>
+
+<p>9.其他set中的常用方法。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">begin</span><span class="p">()</span>    <span class="c1">// 返回set容器的第一个元素</span>
+<span class="n">end</span><span class="p">()</span>      <span class="c1">// 返回set窗口的最后一个元素</span>
+<span class="n">clear</span><span class="p">()</span>    <span class="c1">// 删除set容器中的所有元素</span>
+<span class="n">empty</span><span class="p">()</span>    <span class="c1">// 判断set是否空空 </span>
+<span class="n">max_size</span><span class="p">()</span> <span class="c1">// 返回set容器可能包含的元素最大个数</span>
+<span class="n">size</span><span class="p">()</span>     <span class="c1">// 返回当前set容器中的元素个数</span>
+<span class="n">rbegin</span><span class="p">()</span>   <span class="c1">// 返回set窗口的最后一个元素</span>
+<span class="n">rend</span><span class="p">()</span>     <span class="c1">// 返回set容器的第一个元素</span>
+</code></pre></div></div>
+
+<h5 id="注">[注]</h5>
+
+<p>1.auto pos = setOder,find(tmp); 得到 *pos 是 const 类型，不能改变。 要用<code class="highlighter-rouge">const_cast</code>做强制转换。</p>
+
+<p>工作中遇到过的代码（手游排行模块）</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>    <span class="n">_stTopListOrder</span> <span class="n">tmp</span><span class="p">;</span>
+	<span class="n">tmp</span><span class="p">.</span><span class="n">getSortType</span><span class="p">()</span> <span class="o">=</span> <span class="n">stSortType</span><span class="p">;</span>
+	<span class="k">auto</span> <span class="n">_pos</span> <span class="o">=</span> <span class="n">m_setTopListOrder</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span> <span class="n">_pos</span> <span class="o">==</span> <span class="n">m_setTopListOrder</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>  <span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">tmp</span><span class="p">.</span><span class="n">uOrder</span> <span class="o">=</span> <span class="n">uOrder</span><span class="p">;</span>
+		<span class="n">tmp</span><span class="p">.</span><span class="n">uOldOrder</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="n">m_setTopListOrder</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">else</span>
+	<span class="p">{</span>
+		<span class="k">const</span> <span class="n">_stTopListOrder</span><span class="o">&amp;</span> <span class="n">stOrder</span> <span class="o">=</span> <span class="o">*</span><span class="n">_pos</span><span class="p">;</span>
+		<span class="k">const_cast</span><span class="o">&lt;</span><span class="n">_stTopListOrder</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="n">stOrder</span><span class="p">).</span><span class="n">uOldOrder</span> <span class="o">=</span> <span class="n">stOrder</span><span class="p">.</span><span class="n">uOrder</span><span class="p">;</span>
+		<span class="k">const_cast</span><span class="o">&lt;</span><span class="n">_stTopListOrder</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="n">stOrder</span><span class="p">).</span><span class="n">uOrder</span> <span class="o">=</span> <span class="n">uOrder</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>2.如果set要循环删除 最好是先把迭代器拿出来后，再++</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">m_setDevelopSkill</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+	<span class="k">while</span> <span class="p">(</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">m_setDevelopSkill</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">auto</span> <span class="n">_pos</span> <span class="o">=</span> <span class="n">it</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 先拿出迭代器 </span>
+
+		<span class="n">_stFactionSkill</span><span class="o">*</span> <span class="n">pSkill</span> <span class="o">=</span> <span class="n">skill</span><span class="p">(</span><span class="o">*</span><span class="n">_pos</span><span class="p">);</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pSkill</span> <span class="o">||</span> <span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">eState</span><span class="o">!=</span><span class="n">FactionSkillState_Develop_ing</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">m_setDevelopSkill</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">_pos</span><span class="p">);</span>
+			<span class="k">continue</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="n">uint32</span> <span class="n">uPastTime</span>		<span class="o">=</span> <span class="n">uCurTime</span> <span class="o">-</span> <span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLastTime</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span> <span class="n">uPastTime</span> <span class="o">&gt;=</span> <span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLeftTime</span> <span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">eState</span>				<span class="o">=</span> <span class="n">FactionSkillState_Normal</span><span class="p">;</span>
+			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLeftTime</span>	<span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLastTime</span>	<span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="o">++</span><span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uLevel</span><span class="p">;</span>
+			<span class="n">m_setDevelopSkill</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">_pos</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">else</span>
+		<span class="p">{</span>
+			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLeftTime</span>	<span class="o">-=</span> <span class="n">uPastTime</span><span class="p">;</span>
+			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLastTime</span>	<span class="o">=</span> <span class="n">uCurTime</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>stl map 笔记</title>
+      <link href="http://localhost:4000/stl-map/"/>
+      <pubDate>2017-04-02T06:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/stl-map</guid>
+      <content:encoded><![CDATA[<p>1.map 内部自建一个红黑树（一种非严格意义上的平衡二叉树）。
+2.map会自动按key值排序（从小到大）。所以，map的key类型一定要支持&lt;操作符, 但这个是可以自定义的。
+3.查找的复杂度基本是Log(n)。</p>
+
+<h4 id="一-map-的插入">一 map 的插入</h4>
+
+<p>有三种 插入方式。</p>
+<ul>
+  <li>用insert函数插入pair数据。mapStudent.insert(pair&lt;int, string&gt;(1, “student_one”));</li>
+  <li>用insert函数插入value_type数据。mapStudent.insert(map&lt;int, string&gt;::value_type (2, “student_two”));</li>
+  <li>用数组的方式插入数据。mapStudent[3] = “student_three”;</li>
+</ul>
+
+<h5 id="注">[注]</h5>
+<p>当用第一种和第二种方式插入时，如果已经存在，会返回错误。</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pair</span><span class="o">&lt;</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="n">string</span><span class="o">&gt;::</span><span class="n">iterator</span><span class="p">,</span> <span class="n">bool</span><span class="o">&gt;</span> <span class="n">insert_pair</span> <span class="o">=</span> <span class="n">mapStudent</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"student_one"</span><span class="p">));</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">insert_pair</span><span class="p">,</span><span class="n">second</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span>  <span class="c1">// 失败</span>
+</code></pre></div></div>
+
+<p>当用第三种方式插入时，如果已经存在，则直接覆盖掉。</p>
+
+<h4 id="二-map的查找">二 map的查找</h4>
+
+<p>查找有两种方式</p>
+<ul>
+  <li>用count判定关键字是否出现。由于map的key不可能出现重复，所以，要么返回1 要么返回0。一个缺点是，无法找到位置。</li>
+  <li>用find函数定位数据出现的位置。返回一个迭代器。没有找到时返回一个等于end()的迭代器。</li>
+</ul>
+
+<h4 id="三-map的删除">三 map的删除</h4>
+
+<p>用erase访求可以删除 map中的元素。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">map</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>   <span class="c1">// 删除k元素，返回size_type是表示删除的个数。</span>
+<span class="n">map</span><span class="p">,</span><span class="n">erase</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>    <span class="c1">// 删除迭代器p所指的元素。p必须是真实存在的元素，不能等于end()。</span>
+<span class="n">map</span><span class="p">,</span><span class="n">erase</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>  <span class="c1">// 删除一段范围的元素， 范围由迭代器对b和e标记。这种方式应该比较少见吧。</span>
+</code></pre></div></div>
+<h5 id="注-1">[注]</h5>
+<p>map在遍历删除时，有一个地方要注意的。</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(;</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">mapStudent</span><span class="p">,</span><span class="n">end</span><span class="p">();)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">second</span> <span class="o">==</span> <span class="s">"student_one"</span><span class="p">)</span>
+    <span class="p">{</span> 
+        <span class="n">mapStudent</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">iter</span><span class="o">++</span><span class="p">);</span>  
+    <span class="p">}</span>
+   <span class="k">else</span>
+   <span class="p">{</span>
+        <span class="o">++</span><span class="n">iter</span><span class="p">;</span>
+   <span class="p">}</span>  
+<span class="p">}</span>
+</code></pre></div></div>
+<p>mapStudent,erase(iter++); 中的iter++，不是erase(iter)， 然后iter++。因为iter指针被erase之后就失效了，不能再iter++; 也不能erase(++iter)这样就不是删iter原来指向的元素了。</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>stl binary stree 笔记</title>
+      <link href="http://localhost:4000/stl-binary_tree/"/>
+      <pubDate>2017-04-02T06:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/stl-binary_tree</guid>
+      <content:encoded><![CDATA[<p>二叉查找树，也称有序二叉树，或已排二叉，是指一棵空树或者具有下列性质的二叉树。</p>
+
+<ul>
+  <li>若任意节点的左子树不空，则左子树上的所有结点的值均小于它的根结点的值。</li>
+  <li>若任意节占的左子树不空，则右子树上的所有结点的值均大于它的根结点的值 。</li>
+  <li>任意节点的左右子树也分别为二叉树，</li>
+  <li>没有键值相等的节点。</li>
+</ul>
+
+<p>二叉树的查找操作的执行时间为O(lg n)。 但二叉树是可能会退化为只有N节点为的线性链后，则这些操作的最坏情况是O(n)。</p>
+]]></content:encoded>
+    </item>
     
     <item>
       <title>stl vector 笔记</title>
@@ -898,245 +1108,6 @@ sigwaitinfo returns <span class="nt">-1</span><span class="o">((</span>null<span
 <span class="k">end</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">coroutine.resume</span><span class="p">(</span><span class="n">co</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="c1">--&gt; true 30 10</span>
 </code></pre></div></div>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>lua 异常与错误</title>
-      <link href="http://localhost:4000/lua-error/"/>
-      <pubDate>2017-03-16T01:31:15+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/lua-error</guid>
-      <content:encoded><![CDATA[<h3 id="assert">assert</h3>
-
-<p>Lua 提供了专门的内置函数 assert 来完成错误的检测的功能。</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">print</span> <span class="s2">"enter a number:"</span>
-<span class="n">n</span> <span class="o">=</span> <span class="nb">assert</span><span class="p">(</span><span class="nb">io.read</span><span class="p">(</span><span class="s2">"*number"</span><span class="p">),</span> <span class="s2">"invalid input"</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>assert 首先检查第一个参数是否返回错误，如果不返回错误 assert 简单的返回，否则assert 以第二个参数抛出错误信息。第二个参数是可选的。</p>
-
-<p>当函数遇到异常有两个基本的动作：返回错误代码或者抛出错误。这两种方式选择
-哪一种没有固定的规则，但有一般的原则：容易避免的异常应该抛出错误否则返回错误
-代码。</p>
-
-<h3 id="异常和错误处理">异常和错误处理</h3>
-
-<p>在 Lua 中需要处理错误，需要使用 pcall 函数封装你的代码。
-用法如下：</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span> <span class="k">then</span>
-	<span class="c1">-- no errors while running `foo'</span>
-<span class="o">...</span>
-<span class="k">else</span>
-<span class="c1">-- `foo' raised an error: take appropriate actions</span>
-<span class="o">...</span>
-<span class="k">end</span>
-
-</code></pre></div></div>
-<p>foo 为检测的函数。</p>
-
-<p>用做匿名函数则是：</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span> <span class="o">...</span> <span class="k">end</span><span class="p">)</span> <span class="k">then</span> <span class="o">...</span>
-<span class="k">else</span> <span class="o">...</span>
-
-</code></pre></div></div>
-<p>pcall 在保护模式下调用他的第一个参数并运行，因此可以捕获所有的异常和错误。
-如果没有异常和错误，pcall 返回 true 和调用返回的任何值；否则返回 nil 加错误信息。</p>
-
-<h4 id="错误信息和回跟踪tracebacks">错误信息和回跟踪（Tracebacks）</h4>
-
-<p>通常在错误发生时，希望落得更多的调试信息，而不只是发生错误的位置。但pcall返回时，它已经销毁了调用桟的部分内容。Lua提供了xpcall函数，xpcall接收第二个参数——一个错误处理函数，当错误发生时，Lua会在调用桟展看（unwind）前调用错误处理函数，于是就可以在这个函数中使用debug库来获取关于错误的额外信息了。</p>
-
-<p>debug库提供了两个通用的错误处理函数:</p>
-<ul>
-  <li>debug.debug：提供一个Lua提示符，让用户来价差错误的原因</li>
-  <li>debug.traceback：根据调用桟来构建一个扩展的错误消息。</li>
-</ul>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">xpcall</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">error</span><span class="p">(</span><span class="s1">'error..'</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span> <span class="nb">print</span><span class="p">(</span><span class="nb">debug.traceback</span><span class="p">())</span> <span class="k">end</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
-</code></pre></div></div>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>lua 函数</title>
-      <link href="http://localhost:4000/lua-function/"/>
-      <pubDate>2017-03-15T19:16:53+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/lua-function</guid>
-      <content:encoded><![CDATA[<p>lua的函数有必要记录可能也就是 可变参数, 后面的命名参数和多个返回值和python基本一样。</p>
-
-<h3 id="可变参数">可变参数</h3>
-
-<p>Lua 函数可以接受可变数目的参数，和 C 语言类似在函数参数列表中使用三点（…）
-表示函数有可变的参数。Lua 将函数的参数放在一个叫 arg 的表中，除了参数以外，arg
-表中还有一个域 n 表示参数的个数。</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">g</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="k">end</span>
-
-<span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">nil</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
-<span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
-<span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">;</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">}</span>
-
-</code></pre></div></div>
-<p>Lua 的函数还一些特性和C不一样的是：它和其他值（数值、字符串）一样，函数可以被存放在变
-量中，也可以存放在表中，可以作为函数的参数，还可以作为函数的返回值。</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">print</span> <span class="o">=</span> <span class="nb">math.sin</span> <span class="c1">-- `print' now refers to the sine function</span>
-<span class="n">a</span><span class="p">.</span><span class="n">p</span><span class="p">(</span><span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="c1">--&gt; 0.841470</span>
-</code></pre></div></div>
-
-<p>如函数被嵌套的函数里，它可以访问他外部函数中的变量。这一特性强大编程能力。</p>
-
-<p>另一个特征是：匿名函数。</p>
-
-<p>用表达式创建函数：</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">foo</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="k">end</span>
-</code></pre></div></div>
-
-<h3 id="闭包">闭包</h3>
-
-<p>当一个函数内部嵌套另一个函数定义时，内部的函数体可以访问外部的函数的局部变量，这种特征我们称作词法定界。虽然这看起来很清楚，事实并非如此，词法定界加上第一类函数在编程语言里是一个功能强大的概念，很少语言提供这种支持。</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">newCounter</span><span class="p">()</span>
-	<span class="kd">local</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-	<span class="k">return</span> <span class="k">function</span><span class="p">()</span> <span class="c1">-- anonymous function</span>
-		<span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
-		<span class="k">return</span> <span class="n">i</span>
-	<span class="k">end</span>
-<span class="k">end</span>
-
-<span class="n">c1</span> <span class="o">=</span> <span class="n">newCounter</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 1</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 2</span>
-
-</code></pre></div></div>
-<p>i不是全局变量也不是局部变量，我们称作外部的局部变量（external local variable）或者 upvalue。</p>
-
-<p>匿名函数使用 upvalue i 保存他的计数，当我们调用匿名函数的时候 i 已经超出了作用范围，因为创建 i 的函数 newCounter 已经返回了。然而 Lua 用闭包的思想正确处理了这种情况。简单的说闭包是一个函数加上它可以正确访问的 upvalues。如果我们再次调
-用 newCounter，将创建一个新的局部变量 i，因此我们得到了一个作用在新的变量 i 上的
-新闭包。</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c2</span> <span class="o">=</span> <span class="n">newCounter</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">c2</span><span class="p">())</span> <span class="c1">--&gt; 1</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">c1</span><span class="p">())</span> <span class="c1">--&gt; 3</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">c2</span><span class="p">())</span> <span class="c1">--&gt; 2</span>
-
-</code></pre></div></div>
-<p>技术上来讲，闭包指值而不是指函数，函数仅仅是闭包的一个原型声明；尽管如此，
-在不会导致混淆的情况下我们继续使用术语函数代指闭包。</p>
-
-<p>闭包在上下文环境中提供很有用的功能，如高级函数（sort）的参数；作为函数嵌套的函数（newCounter）。这一机制使得我们可以在 Lua 的函数世界里组合出奇幻的编程技术。闭包也可用在回调函数中。</p>
-
-<h3 id="全局函数和局部函数">全局函数和局部函数</h3>
-
-<p>局部函数就是在函数前加一个 local。</p>
-
-<p>局部函数的两种方式：</p>
-
-<ol>
-  <li>方式一</li>
-</ol>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="o">...</span>
-<span class="k">end</span>
-<span class="kd">local</span> <span class="n">g</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="o">...</span>
-<span class="n">f</span><span class="p">()</span> <span class="c1">-- external local `f' is visible here</span>
-<span class="o">...</span>
-<span class="k">end</span>
-</code></pre></div></div>
-
-<ol>
-  <li>方式二</li>
-</ol>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">local</span> <span class="k">function</span> <span class="nf">f</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="o">...</span>
-<span class="k">end</span>
-</code></pre></div></div>
-
-<p>有一点需要注意的是在声明递归局部函数的方式。
-要提前定义local。</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kd">local</span> <span class="n">fact</span>
-<span class="n">fact</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
-	<span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">then</span>
-		<span class="k">return</span> <span class="mi">1</span>
-	<span class="k">else</span>
-		<span class="k">return</span> <span class="n">n</span><span class="o">*</span><span class="n">fact</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-	<span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div></div>
-
-<h3 id="尾调用proper-tail-calls">尾调用（Proper Tail Calls）</h3>
-
-<p>尾调用是一种类似在函数结尾的 goto 调用，当函数最后一个动作是调用另外一个函
-数时，我们称这种调用尾调用。例如：</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-	<span class="k">return</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="k">end</span>
-</code></pre></div></div>
-
-<p>g 的调用是尾调用。</p>
-
-<p>例子中 f 调用 g 后不会再做任何事情，这种情况下当被调用函数 g 结束时程序不需
-要返回到调用者 f；所以尾调用之后程序不需要在栈中保留关于调用者的任何信息。</p>
-
-<p>如下三种不是尾调函数.</p>
-
-<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="n">r</span> <span class="n">eturn</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1">-- must do the addition</span>
-<span class="k">return</span> <span class="n">x</span> <span class="ow">or</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">-- must adjust to 1 result</span>
-<span class="k">return</span> <span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="c1">-- must adjust to 1 result</span>
-</code></pre></div></div>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>lua 学习初步记录</title>
-      <link href="http://localhost:4000/lua-first-learn/"/>
-      <pubDate>2017-03-15T04:27:03+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/lua-first-learn</guid>
-      <content:encoded><![CDATA[<p>1 Lua 是动态类型语言，变量不要类型定义。 Lua 中有 8 个基本类型分别为： nil、 boolean、number、string、userdata、function、thread 和 table。函数 type 可以测试给定变量或者值
-的类型。</p>
-
-<p>2 Lua 中特殊的类型，他只有一个值：nil；一个全局变量没有被赋值以前默认值为 nil；
-给全局变量负 nil 可以删除该变量。</p>
-
-<p>3 Booleans 两个取值 false 和 true。但要注意 Lua 中所有的值都可以作为条件。在控制结构的条
-件中除了 false 和 nil 为假，其他值都为真。所以 Lua 认为 0 和空串都是真。</p>
-
-<p>4 Lua 中字符串是不可以修改的， 你可以创建一个新的变量存放你要的字符串。 还可以使用[[…]]表示字符串。</p>
-
-<p>5 Lua 会自动在 string 和 numbers 之间自动进行类型转换，当一个字符串使用算术操作符时，string 就会被转成数字。
-尽管字符串和数字可以自动转换，但两者是不同的，像 10 == “10”这样的比较永远
-都是错的。</p>
-
-<p>6 <code class="highlighter-rouge">..</code>在 Lua 中是字符串连接符，当在一个数字后面写..时，必须加上空格以防止被解释错。</p>
-
-<p>7 函数是第一类值（和其他变量相同），意味着函数可以存储在变量中，可以作为函数的参数，也可以作为函数的返回值。</p>
-
-<p>8 Lua 比较数字按传统的数字大小进行，比较字符串按字母的顺序进行，但是字母顺序依赖于本地环境。</p>
-
-<p>9 Lua list的下标是从1开始的。</p>
-
-<p>10 使用 local 创建一个局部变量，与全局变量不同，局部变量只在被声明的那个代码块内有效。代码块：指一个控制结构内，一个函数体，或者一个 chunk（变量被声明的那个文件或者文本串）</p>
-
-<p>11 当函数只有一个参数并且这个参数是字符串或者表构造的时候，()是可选的。</p>
-
-<p>12 Lua有闭包的用法。</p>
-
 ]]></content:encoded>
     </item>
     

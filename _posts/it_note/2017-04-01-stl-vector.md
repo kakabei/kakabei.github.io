@@ -4,7 +4,7 @@ title: stl vector 笔记
 date: 2017-04-01 21:12:15
 categories: stl
 tags: stl note 
-excerpt: stl vector 笔记科备忘
+excerpt: stl vector 笔记备忘
 ---
 
 vector 是线性容器。
@@ -53,7 +53,7 @@ v.push_back(1);
 
 
 [注]
- 
+
      关于vector删除的问题。有一些地方要注意。遍历一个vector找到对应的元素删除的正常做法。
      for (auto iter = vector.begin(); iter != vector.end(); iter++)
      {
