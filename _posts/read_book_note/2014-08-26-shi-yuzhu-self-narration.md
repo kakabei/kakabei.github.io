@@ -2,7 +2,7 @@
 layout: post
 title: 史玉柱-史玉柱自述
 date: 2014-08-26 19:13
-categories: reading notes
+categories: read-notes
 tags: 读书
 excerpt: 史玉柱-史玉柱自述
 ---
