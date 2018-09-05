@@ -3,7 +3,7 @@ layout: post
 title: muduo笔记 第一章 线程安全的对象生命期管理
 date: 2018-01-03 20:08:12
 categories: Linux muduo
-tags: 系统编程 muduo tcp network
+tags: 系统编程 muduo tcp network thread
 excerpt: 线程安全应该注意的一些事项
 ---
 
@@ -17,7 +17,6 @@ C++要求程序员自己管理对象的生命期，这在多线程环境下显�
 在调用某个对象的成员函数之前，如何得知这个对象还活着？它的析构函数会不会碰巧执行到一半？ 
 
 解决这些race condition是C++多线程编程面临的基本问题。本文试图以shared_ptr一劳永逸地解决这些问题，减轻C++多线程编程的精神负担。
-
 
 ##### 1.1.1　线程安全的定义 
 

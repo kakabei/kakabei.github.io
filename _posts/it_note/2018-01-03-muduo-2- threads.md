@@ -3,7 +3,7 @@ layout: post
 title: muduo笔记 第二章 线程同步精要
 date: 2018-01-03 20:08:12
 categories: Linux muduo
-tags: 系统编程 muduo tcp network
+tags: 系统编程 muduo tcp network thread
 excerpt: 线程同步的要点
 ---
 
