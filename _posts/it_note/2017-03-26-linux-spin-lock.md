@@ -1,7 +1,7 @@
 ---
 layout: post
 title: linux spin lock
-date: 2018-01-14 20:08:12
+date: 2017-03-26 20:08:12
 categories: Linux
 tags: 系统编程
 excerpt: linux　自旋锁 简记
