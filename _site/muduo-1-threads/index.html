@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>muduo笔记 第一章 线程安全的对象生命期管理</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>muduo笔记 第一章 线程安全的对象生命期管理</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2018-01-04">2018-01-04</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#Linux" title="Linux">Linux</a>&nbsp;
+  
+  <a href="/categories/#muduo" title="muduo">muduo</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
+  
+  <a href="/tags/#muduo" title="muduo">muduo</a>&nbsp;
+  
+  <a href="/tags/#tcp" title="tcp">tcp</a>&nbsp;
+  
+  <a href="/tags/#network" title="network">network</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<h4 id="11当析构函数遇到多线程">1.1　当析构函数遇到多线程</h4>
+
+<p>C++要求程序员自己管理对象的生命期，这在多线程环境下显得尤为困难。当一个对象能被多个线程同时看到时，那么对象的销毁时机就会变得模糊不清，可能出现多种竞态条件（race condition）：
+在即将析构一个对象时，从何而知此刻是否有别的线程正在执行该对象的成员函数？</p>
+
+<p>如何保证在执行成员函数期间，对象不会在另一个线程被析构？</p>
+
+<p>在调用某个对象的成员函数之前，如何得知这个对象还活着？它的析构函数会不会碰巧执行到一半？</p>
+
+<p>解决这些race condition是C++多线程编程面临的基本问题。本文试图以shared_ptr一劳永逸地解决这些问题，减轻C++多线程编程的精神负担。</p>
+
+<h5 id="111线程安全的定义">1.1.1　线程安全的定义</h5>
+
+<p>依据[JCP]，一个线程安全的class应当满足以下三个条件：</p>
+
+<ul>
+  <li>多个线程同时访问时，其表现出正确的行为。</li>
+  <li>无论操作系统如何调度这些线程，无论这些线程的执行顺序如何交织（interleaving）。</li>
+  <li>调用端代码无须额外的同步或其他协调动作。</li>
+</ul>
+
+<p>依据这个定义，C++标准库里的大多数class都不是线程安全的，包括std:: string、std::vector、std::map等，因为这些class通常需要在外部加锁才能供多个线程同时访问。</p>
+
+<h4 id="12对象的创建很简单">1.2　对象的创建很简单</h4>
+
+<p>对象构造要做到线程安全，唯一的要求是在构造期间不要泄露this指针，即</p>
+
+<ul>
+  <li>不要在构造函数中注册任何回调；</li>
+  <li>也不要在构造函数中把this传给跨线程的对象；</li>
+  <li>即便在构造函数的最后一行也不行。</li>
+</ul>
+
+<p>之所以这样规定，是因为在构造函数执行期间对象还没有完成初始化，如果this被泄露（escape）给了其他对象（其自身创建的子对象除外），那么别的线程有可能访问这个半成品对象，这会造成难以预料的后果。</p>
+
+<h4 id="13销毁太难">1.3　销毁太难</h4>
+
+<p>成员函数用来保护临界区的互斥器本身必须是有效的。而析构函数破坏了这一假设，它会把mutex成员变量销毁掉。</p>
+
+<h4 id="14线程安全的observer有多难">1.4　线程安全的Observer有多难</h4>
+
+<p>那么似乎一个简单的解决办法是：只创建不销毁。程序使用一个对象池来暂存用过的对象，下次申请新对象时，如果对象池里有存货，就重复利用现有的对象，否则就新建一个。对象用完了，不是直接释放掉，而是放回池子里。这个办法当然有其自身的很多缺点，但至少能避免访问失效对象的情况发生。（这一种就是很常用的对象池）</p>
+
+<p><strong>这种山寨办法的问题有：</strong></p>
+
+<ul>
+  <li>对象池的线程安全，如何安全地、完整地把对象放回池子里，防止出现“部分放回”的竞态？（线程A认为对象x已经放回了，线程B认为对象x还活着。）</li>
+  <li>全局共享数据引发的lock contention，这个集中化的对象池会不会把多线程并发的操作串行化？</li>
+  <li>如果共享对象的类型不止一种，那么是重复实现对象池还是使用类模板？ ·会不会造成内存泄漏与分片？因为对象池占用的内存只增不减，而且多个对象池不能共享内存（想想为何）。</li>
+</ul>
+
+<h4 id="16神器shared_ptrweak_ptr">1.6　神器shared_ptr/weak_ptr</h4>
+
+<p><code class="highlighter-rouge">shared_ptr</code>控制对象的生命期。shared_ptr是强引用（想象成用铁丝绑住堆上的对象），只要有一个指向x对象的shared_ptr存在，该x对象就不会析构。当指向对象x的最后一个shared_ptr析构或reset()的时候，x保证会被销毁。</p>
+
+<p><code class="highlighter-rouge">weak_ptr</code>不控制对象的生命期，但是它知道对象是否还活着（想象成用棉线轻轻拴住堆上的对象）。如果对象还活着，那么它可以提升（promote）为有效的shared_ptr；如果对象已经死了，提升会失败，返回一个空的shared_ptr。“提升／lock()”行为是线程安全的。</p>
+
+<p>shared_ptr/weak_ptr的“计数”在主流平台上是原子操作，没有用锁，性能不俗。</p>
+
+<p>shared_ptr/weak_ptr的线程安全级别与std::string和STL容器一样，后面还会讲。</p>
+
+<h4 id="17插曲系统地避免各种指针错误">1.7　插曲：系统地避免各种指针错误</h4>
+
+<p>C++里可能出现的内存问题大致有这么几个方面：</p>
+
+<ul>
+  <li>缓冲区溢出（buffer overrun）。</li>
+  <li>空悬指针／野指针。</li>
+  <li>重复释放（double delete）。</li>
+  <li>内存泄漏（memory leak）。</li>
+  <li>不配对的new[]/delete。</li>
+  <li>内存碎片（memory fragmentation）。</li>
+</ul>
+
+<p>正确使用智能指针能很轻易地解决前面5个问题，解决第6个问题需要别的思路，</p>
+
+<ul>
+  <li>缓冲区溢出：用std::vector<char>/std::string或自己编写Buffer class来管理缓冲区，自动记住用缓冲区的长度，并通过成员函数而不是裸指针来修改缓冲区。</char></li>
+  <li>空悬指针／野指针：用shared_ptr/weak_ptr，这正是本章的主题。</li>
+  <li>重复释放：用scoped_ptr，只在对象析构的时候释放一次。</li>
+  <li>内存泄漏：用scoped_ptr，对象析构的时候自动释放内存。</li>
+  <li>不配对的new[]/delete：把new[]统统替换为std::vector/scoped_array。</li>
+</ul>
+
+<h4 id="19再论shared_ptr的线程安全">1.9　再论shared_ptr的线程安全</h4>
+
+<p>虽然我们借shared_ptr来实现线程安全的对象释放，但是shared_ptr本身不是100％线程安全的。它的引用计数本身是安全且无锁的，但对象的读写则不是，因为shared_ptr有两个数据成员，读写操作不能原子化。</p>
+
+<p>根据文档 11 ，shared_ptr的线程安全级别和内建类型、标准库容器、std::string一样，即： ·一个shared_ptr对象实体可被多个线程同时读取；</p>
+
+<ul>
+  <li>两个shared_ptr对象实体可以被两个线程同时写入，”析构”算写操作；</li>
+  <li>如果要从多个线程读写同一个shared_ptr对象，那么需要加锁。</li>
+</ul>
+
+<p>请注意，以上是shared_ptr对象本身的线程安全级别，不是它管理的对象的线程安全级别。</p>
+
+<p>要在多个线程中同时访问同一个shared_ptr，正确的做法是用mutex保护。</p>
+
+<h3 id="110shared_ptr技术与陷阱">1.10　shared_ptr技术与陷阱</h3>
+
+<ol>
+  <li>一个出错的可能是boost::bind，因为boost::bind会把实参拷贝一份，如果参数是个shared_ptr，那么对象的生命期就不会短于boost::function对象：</li>
+  <li>函数参数 因为要修改引用计数（而且拷贝的时候通常要加锁），shared_ptr的拷贝开销比拷贝原始指针要高，但是需要拷贝的时候并不多。多数情况下它可以以const reference方式传递，一个线程只需要在最外层函数有一个实体对象，之后都可以用const reference来使用这个shared_ptr。</li>
+</ol>
+
+<p>遵照这个规则，基本上不会遇到反复拷贝shared_ptr导致的性能问题。另外由于pFoo是栈上对象，不可能被别的线程看到，那么读取始终是线程安全的。</p>
+
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/stl-set/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/muduo-2-threads/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-01-03-muduo-1- threads.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

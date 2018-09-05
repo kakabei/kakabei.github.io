@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>linux spin lock</title>
+    <title>muduo笔记 第二章 线程同步精要</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>linux spin lock</h1>
+        <h1>muduo笔记 第二章 线程同步精要</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,7 +28,7 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2018-01-15">2018-01-15</time>
+  <time datetime="2018-01-04">2018-01-04</time>
 </span>
 
  | 
@@ -36,6 +36,8 @@
   分类
   
   <a href="/categories/#Linux" title="Linux">Linux</a>&nbsp;
+  
+  <a href="/categories/#muduo" title="muduo">muduo</a>&nbsp;
   
 </span>
 
@@ -46,42 +48,70 @@
   
   <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
   
+  <a href="/tags/#muduo" title="muduo">muduo</a>&nbsp;
+  
+  <a href="/tags/#tcp" title="tcp">tcp</a>&nbsp;
+  
+  <a href="/tags/#network" title="network">network</a>&nbsp;
+  
 </span>
 
 </section>
 <section class="post">
-<p>自旋锁它是为了实现保护共享资源而提出一种锁机制。其实，自旋锁与互斥锁比较类似，它们都是为了解决对某项资源的互斥使用。</p>
+<h4 id="二-不要用读写锁和信号量">二 不要用读写锁和信号量</h4>
 
-<p>无论是互斥锁，还是自旋锁，在任何时刻，最多只能有一个保持者，也就说，在任何时刻最多只能有一个执行单元获得锁。</p>
+<p>理由是什么？</p>
 
-<p>但是两者在调度机制上略有不同。对于互斥锁，如果资源已经被占用，资源申请者只能进入睡眠状态。但是自旋锁不会引起调用者睡眠，如果自旋锁已经被别的执行单元保持，调用者就一直循环在那里看是否该自旋锁的保持者已经释放了锁，”自旋”一词就是因此而得名。</p>
+<h5 id="读写锁">读写锁</h5>
 
-<h4 id="自旋锁一般原理">自旋锁一般原理</h4>
-<p>跟互斥锁一样，一个执行单元要想访问被自旋锁保护的共享资源，必须先得到锁，在访问完共享资源后，必须释放锁。如果在获取自旋锁时，没有任何执行单元保持该锁，那么将立即得到锁；如果在获取自旋锁时锁已经有保持者，那么获取锁操作将自旋在那里，直到该自旋锁的保持者释放了锁。</p>
+<p>1.在后期的维护阶段，程序员可能在读的状态(read lock)写入共享数据。</p>
 
-<p>由此我们可以看出，自旋锁是一种比较低级的保护数据结构或代码片段的原始方式，这种锁可能存在两个问题：死锁和过多占用cpu资源。</p>
+<p>2.从性能方面，读写锁并没有比mutex高效多少。如果临界区很小，锁竞争不是很激烈。mutex可能会更好。</p>
 
-<h4 id="自旋锁适用情况">自旋锁适用情况</h4>
+<p>3.通常read lock是可重入。writer lock是不可重入。但是为了防止writer饥饿，writer lock通常会阻塞后来的reader lock，因此reader lock在重入的时候可能死锁。</p>
 
-<p>自旋锁比较适用于锁使用者保持锁时间比较短的情况。正是由于自旋锁使用者一般保持锁时间非常短，因此选择自旋而不是睡眠是非常必要的，自旋锁的效率远高于互斥锁。</p>
+<h5 id="信号量">信号量</h5>
 
-<p>信号量和读写信号量适合于保持时间较长的情况，它们会导致调用者睡眠，因此只能在进程上下文使用，而自旋锁适合于保持时间非常短的情况，它可以在任何上下文使用。</p>
+<p>1.条件变量配合互斥器可以完全替代信号量。</p>
 
-<p>如果被保护的共享资源只在进程上下文访问，使用信号量保护该共享资源非常合适，如果对共享资源的访问时间非常短，自旋锁也可以。</p>
+<p>2.信号量的另一个问题在于它有自己的计数值，而通常我们自己的数据结构也有长度值，这就造成了同样的信息存了两份，需要时刻保持一致，这增加了程序员的负担和出错的可能。</p>
 
-<p>但是如果被保护的共享资源需要在中断上下文访问（包括底半部即中断处理句柄和顶半部即软中断），就必须使用自旋锁。</p>
+<p>3.信号量允许多个线程同时进入临界区。</p>
 
-<p>自旋锁保持期间是抢占失效的，而信号量和读写信号量保持期间是可以被抢占的。</p>
+<h4 id="三线程安全的singleton实现">三　线程安全的Singleton实现</h4>
 
-<p>自旋锁只有在内核可抢占或SMP（多处理器）的情况下才真正需要，在单CPU且不可抢占的内核下，自旋锁的所有操作都是空操作。另外格外注意一点：自旋锁不能递归使用。</p>
+<p>一开始一度认为double checked locking是王道。但后来有人指出由于乱序执行的影响，DCL是靠不住的。</p>
+
+<p>在实践中运用pthread_once就可以了。c++11 中用std::call_once （pthread_once单例模式）</p>
+
+<h4 id="四sleep3不是同步原语">四　sleep(3)不是同步原语</h4>
+<p>sleep()/usleep()/nanosleep()只能出现在测试代码中，比如写单元测试的时候 ；或者用于有意延长临界区，加速复现死锁的情况。</p>
+
+<p>sleep不具备memory barrier（内存屏障）语义，它不能保证内存的可见性。</p>
+
+<p>在程序的正常执行中，如果需要等待一段已知的时间，应该往event loop里注册一个timer，然后在timer的回调函数里接着干活，因为线程是个珍贵的共享资源，不能轻易浪费（阻塞也是浪费）。如果等待某个事件发生，那么应该采用条件变量或IO事件回调，不能用sleep来轮询。</p>
+
+<p>如果多线程的安全性和效率要靠代码主动调用sleep来保证，这显然是设计出了问题。等待某个事件发生，正确的做法是用select()等价物或Condition，抑或（更理想地）高层同步工具；在用户态做轮询（polling）是低效的。</p>
+
+<h4 id="五总结">五　总结</h4>
+
+<p>线程同步的原则</p>
+
+<ul>
+  <li>尽量用高层同步设施（线程池、队列、倒计时）</li>
+  <li>使用普通互斥器和条件变量完成剩余的同步任务，</li>
+  <li>采用RAII惯用手法（idiom）和Scoped Locking。</li>
+</ul>
+
+<p>用好这几样东西，基本上就能应付多线程服务端开发的各种场合。或许有人会觉得性能没有发挥到极致。我认为，应该先把程序写正确（并尽量保持清晰和简单），然后再考虑性能优化，如果确实还有必要优化的话。这在多线程下仍然成立。让一个正确的程序变快，远比”让一个快的程序变正确”容易得多。</p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/muduo-3-threads/" class="pageNav"  >上一篇</a>
+	<a  href="/muduo-1-threads/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a   class="pageNavInvalid"  >下一篇</a>
+	<a  href="/muduo-3-threads/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -146,7 +176,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-01-14-linux-spin_lock.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-01-03-muduo-2- threads.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
