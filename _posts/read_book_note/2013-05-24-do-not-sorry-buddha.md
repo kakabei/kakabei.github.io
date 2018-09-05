@@ -2,7 +2,7 @@
 layout: post
 title: 仓央嘉措-不负如来不负卿
 date: 2011-11-04 9:23:53
-categories: 随笔记
+categories: reading notes
 tags: 读书
 excerpt: 仓央嘉措-不负如来不负卿
 ---

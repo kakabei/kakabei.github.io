@@ -2,7 +2,7 @@
 layout: post
 title: 吴晓波-大败局
 date: 2011-11-27 19:13
-categories: 随笔记
+categories: reading notes
 tags: 读书
 excerpt: 吴晓波-大败局
 ---
