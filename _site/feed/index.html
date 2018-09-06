@@ -7,15 +7,207 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-06T09:51:02+08:00</lastBuildDate>
+    <lastBuildDate>2018-09-06T17:54:59+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>muduo笔记 第六章 性能评测</title>
+      <link href="http://localhost:4000/muduo-5-performance-test/"/>
+      <pubDate>2018-01-05T04:08:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/muduo-5-performance-test</guid>
+      <content:encoded><![CDATA[<h4 id="65-性能评测">6.5 性能评测</h4>
+
+<p>性能对比原则：采用对方的性能测试方案，用muduo实现功能相同或类似的程序，然后放到相同的软硬件环境中对比。</p>
+
+<p>注意这里的测试只是简单地比较了平均值；其实在严肃的性能对比中至少还应该考虑分布和百分位数（percentile）的值。限于篇幅，此处从略。</p>
+
+<p>简单地说， ping pong协议是客户端和服务器都实现echo协议。</p>
+
+<p>当TCP连接建立时， 客户端向服务器发送一些数据， 服务器会echo回这些数据， 然后客户端再echo回服务器。这些数据就会像乒乓球一样在客户端和服务器之间来回传送， 直到有一方断开连接为止。 这是用来测试吞吐量的常用办法。</p>
+
+<h5 id="注">[注]</h5>
+
+<p>1.书中这里做了 asio libevent2和 muduo的对比。对于asio我没有接触过，那我就只关注  libevent2和muduo就可以了。</p>
+
+<p>2.做对比测试时，要注明测试环境： 硬件： CPU 几核主频多少。内存多少。软件： 操作系统，版本 内核版本。(主要测框架的性能，固定这一些定量。才能做对比)</p>
+
+<h5 id="测试方法-分了单线程测试和多线程测试-多线程测试要注意测试的cpu核数">测试方法： 分了单线程测试，和多线程测试。 多线程测试要注意测试的cpu核数。</h5>
+
+<p>现在的CPU很快，即便是单线程单TCP连接也能把千兆以太网的带宽跑满。如果用两台机器，所有的吞吐量测试结果都将是110MiB/s，失去了对比的意义。（用Python也能跑出同样的吞吐量，或许可以对比哪个库占的CPU少。）</p>
+
+<p>可能是由于路由器或交换机的影响，对带宽有所限制。</p>
+
+<p>这是测试代码 ：<a href="https://gist.github.com/chenshuo/564985">https://gist.github.com/chenshuo/564985</a></p>
+
+<p>单纯程测试结果是 muduo 比 libevent2快70%</p>
+
+<p>跟踪libevent2的源代码发现，它每次最多从socket读取4096字节的数据（证据在buffer.c的evbuffer_ read()函数），怪不得吞吐量比muduo小很多。</p>
+
+<p>因为在这一测试中，muduo每次读取16384字节，系统调用的性价比较高。</p>
+
+<p>但是把缓冲区都测试成为4K，结果，muduo还是比libevent2快18%以上。</p>
+
+<h5 id="注-1">[注]</h5>
+
+<p>1.这里指的 单线程，缓冲区大小一样。结果还是比libevent2快18%以上。那么问题在什么地方呢？</p>
+
+<p>2.libevent2的多线程方式并不是很好用，可能是因为这个原因，他没有做libeven2的多线程方面测试。</p>
+
+<p>有人会说，libevent2并不是为高吞吐量的应用场景而设计的，这样的比较不公平，胜之不武。</p>
+
+<h5 id="注-2">[注]</h5>
+<p>1.那是它是专用为什么目的设计的呢？</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>muduo笔记 第六章 常见的并发网络服务器程序设计方案</title>
+      <link href="http://localhost:4000/muduo-5-high-concurrency-scheme/"/>
+      <pubDate>2018-01-05T04:08:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/muduo-5-high-concurrency-scheme</guid>
+      <content:encoded><![CDATA[<h4 id="常见的并发网络服务器程序设计方案">常见的并发网络服务器程序设计方案：</h4>
+
+<p><img src="/assets/muduo/high-concurrency-scheme1.png" alt="" /></p>
+
+<h4 id="方案0">方案0</h4>
+
+<p>一次只能服务一个链接。现在的网络服务器基本不会这么做，所以这种方案基本是废的。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/python</span>
+
+<span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">):</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">client_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">sent</span> <span class="o">=</span> <span class="n">client_socket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>    <span class="c"># sendall?</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">"disconnect"</span><span class="p">,</span> <span class="n">client_address</span>
+            <span class="n">client_socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">break</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">listen_address</span> <span class="o">=</span> <span class="p">(</span><span class="s">"0.0.0.0"</span><span class="p">,</span> <span class="mi">2007</span><span class="p">)</span>
+    <span class="n">server_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+    <span class="n">server_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">listen_address</span><span class="p">)</span>
+    <span class="n">server_socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">)</span> <span class="o">=</span> <span class="n">server_socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">"got connection from"</span><span class="p">,</span> <span class="n">client_address</span>
+        <span class="n">handle</span><span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="方案1">方案1</h4>
+
+<p>这个方案就是一个进程服务一个客户端，　称之为child-per-client或fork()-per-client，另外也俗称process-per-connection。</p>
+
+<p>这种方案适合并发连接数不大的情况。至今仍有一些网络服务程序用这种方式实现，比如PostgreSQL和Perforce的服务端。</p>
+
+<p>这种方案适合”计算响应的工作量远大于fork()的开销”这种情况，比如数据库服务器。这种方案适合长连接，但不太适合短连接，因为fork()开销大于求解Sudoku的用时。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/python</span>
+<span class="kn">from</span> <span class="nn">SocketServer</span> <span class="kn">import</span> <span class="n">BaseRequestHandler</span><span class="p">,</span> <span class="n">TCPServer</span>
+<span class="kn">from</span> <span class="nn">SocketServer</span> <span class="kn">import</span> <span class="n">ForkingTCPServer</span><span class="p">,</span> <span class="n">ThreadingTCPServer</span>
+
+<span class="k">class</span> <span class="nc">EchoHandler</span><span class="p">(</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">"got connection from"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_address</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">sent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>    <span class="c"># sendall?</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">"disconnect"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_address</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">break</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">listen_address</span> <span class="o">=</span> <span class="p">(</span><span class="s">"0.0.0.0"</span><span class="p">,</span> <span class="mi">2007</span><span class="p">)</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">ForkingTCPServer</span><span class="p">(</span><span class="n">listen_address</span><span class="p">,</span> <span class="n">EchoHandler</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h4 id="方案2">方案2</h4>
+
+<p>一个线程对应一个连接。一个客户端链接上来，就会开一个线程为它服务。</p>
+
+<p>Java网络服务多采用这种方案。它的初始化开销比方案1要小很多，但与求解Sudoku的用时差不多，仍然不适合短连接服务。</p>
+
+<p>这种方案的伸缩性受到线程数的限制，一两百个还行，几千个的话对操作系统的scheduler恐怕是个不小的负担。</p>
+
+<h4 id="方案3-方案4">方案3 方案4</h4>
+
+<p>方案3是对方案1的优化。</p>
+
+<p>方案4是对方案2的优化。</p>
+
+<p>这两种方案是apache httpd长期使用的方案。</p>
+
+<h4 id="方案5">方案5</h4>
+
+<p>基本的单线程Reactor方案。 是IO复用，非阻塞的了。用注册回调可以实现网络和业务的分离。
+\
+这种方案的优点是由网络库搞定数据收发，程序只关心业务逻辑；缺点在前面已经谈了：适合IO密集的应用，不太适合CPU密集的应用，因为较难发挥多核的威力。</p>
+
+<p>另外，与方案2相比，方案5处理网络消息的延迟可能要略大一些，因为方案2直接一次read(2)系统调用就能拿到请求数据，而方案5要先poll(2)再read(2)，多了一次系统调用。</p>
+
+<h4 id="方案6">方案6</h4>
+
+<p>是一个过渡方案。</p>
+
+<p>收到请求之后，不在Reactor线程计算，而是创建一个新线程去计算，以充分利用多核CPU。这是非常初级的多线程应用，因为它为每个请求（而不是每个连接）创建了一个新线程。</p>
+
+<p>这个开销可以用线程池来避免。</p>
+
+<h4 id="方案7">方案7</h4>
+
+<p>为每个连接创建一个计算线程，每个连接上的请求固定发给同一个线程去算，先到先得。这也是一个过渡方案，因为并发连接数受限于线程数目，这个方案或许还不如直接使用阻塞IO的thread-per-connection方案2。</p>
+
+<h5 id="方案8">方案8</h5>
+
+<p>为了弥补方案6中为每个请求创建线程的缺陷，我们使用固定大小线程池，程序结构如图6-12所示。全部的IO工作都在一个Reactor线程完成，而计算任务交给thread pool。如果计算任务彼此独立，而且IO的压力不大，那么这种方案是非常适用的。</p>
+
+<p><img src="/assets/muduo/high-concurrency-scheme2.png" alt="" /></p>
+
+<h5 id="方案9">方案9</h5>
+
+<p>这是muduo内置的多线程方案，也是Netty内置的多线程方案。这种方案的特点是one loop per thread，有一个main Reactor负责accept(2)连接，然后把连接挂在某个sub Reactor中（muduo采用round-robin的方式来选择sub Reactor），这样该连接的所有操作都在那个sub Reactor所处的线程中完成。多个连接可能被分派到多个线程中，以充分利用CPU。</p>
+
+<h5 id="方案10-">方案10 　</h5>
+
+<p>这是Nginx的内置方案。如果连接之间无交互，这种方案也是很好的选择。工作进程之间相互独立，可以热升级。</p>
+
+<h5 id="方案11-">方案11 　</h5>
+
+<p>把方案8和方案9混合，既使用多个Reactor来处理IO，又使用线程池来处理计算。这种方案适合既有突发IO（利用多线程处理多个连接上的IO），又有突发计算的应用（利用线程池把一个连接上的计算任务分配给多个线程去做），见图6-14。</p>
+
+<p><img src="/assets/muduo/high-concurrency-scheme3.png" alt="" /></p>
+
+<p>一个程序到底是使用一个event loop还是使用多个event loops呢？</p>
+
+<p>ZeroMQ的手册给出的建议是 ，按照每千兆比特每秒的吞吐量配一个event loop的比例来设置event loop的数目，即muduo::TcpServer::setThreadNum()的参数。</p>
+
+<p>依据这条经验规则，在编写运行于千兆以太网上的网络程序时，用一个event loop就足以应付网络IO。</p>
+
+<p>如果程序本身没有多少计算量，而主要瓶颈在网络带宽，那么可以按这条规则来办，只用一个event loop。</p>
+
+<p>另一方面，如果程序的IO带宽较小，计算量较大，而且对延迟不敏感，那么可以把计算放到thread pool中，也可以只用一个event loop。</p>
+
+<p>ZeroMQ的手册给出的建议 : <a href="http://zeromq.org/area:faq#toc3">http://zeromq.org/area:faq#toc3</a></p>
+
+]]></content:encoded>
+    </item>
     
     <item>
       <title>muduo笔记 第五章 高效的多线程日志</title>
       <link href="http://localhost:4000/muduo-5-threads-log/"/>
       <pubDate>2018-01-04T04:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-5- threads-log</guid>
+      <guid>http://localhost:4000/muduo-5-threads-log</guid>
       <content:encoded><![CDATA[<p><strong>“日志（logging）”有两个意思:</strong></p>
 
 <p>1.诊断日志（diagnostic log） 　 即log4j、logback、slf4j、glog、g2log、log4cxx、log4cpp、log4cplus、Pantheios、ezlogger等常用日志库提供的日志功能。</p>
@@ -75,7 +267,7 @@
       <link href="http://localhost:4000/muduo-4-threads/"/>
       <pubDate>2018-01-04T04:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-4- threads</guid>
+      <guid>http://localhost:4000/muduo-4-threads</guid>
       <content:encoded><![CDATA[<p>学习多线程编程面临的最大的思维方式的转变有两点：</p>
 
 <ul>
@@ -207,7 +399,7 @@
       <link href="http://localhost:4000/muduo-3-threads/"/>
       <pubDate>2018-01-04T03:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-3- threads</guid>
+      <guid>http://localhost:4000/muduo-3-threads</guid>
       <content:encoded><![CDATA[<p>“网络应用程序” 的基本功能可以简单归纳为”收到数据，算一算，再发出去”。</p>
 
 <h4 id="单线程服务器的常用编程模型">单线程服务器的常用编程模型</h4>
@@ -322,7 +514,7 @@
       <link href="http://localhost:4000/muduo-2-threads/"/>
       <pubDate>2018-01-04T02:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-2- threads</guid>
+      <guid>http://localhost:4000/muduo-2-threads</guid>
       <content:encoded><![CDATA[<h4 id="二-不要用读写锁和信号量">二 不要用读写锁和信号量</h4>
 
 <p>理由是什么？</p>
@@ -696,128 +888,6 @@
 </ul>
 
 <p>二叉树的查找操作的执行时间为O(lg n)。 但二叉树是可能会退化为只有N节点为的线性链后，则这些操作的最坏情况是O(n)。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>stl vector 笔记</title>
-      <link href="http://localhost:4000/stl-vector/"/>
-      <pubDate>2017-04-02T05:12:15+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/stl-vector</guid>
-      <content:encoded><![CDATA[<p>vector 是线性容器。</p>
-
-<p>它的元素是严格按照线性序列排序，存储在一连续的存储空间中。这也是意味着不仅可以用使用迭代器，还可以使用指针的偏移方式访问。
-vector的优点如下：</p>
-<ul>
-  <li>可以使用下标访问个别的元素。</li>
-  <li>迭代器可以按照不同的方式遍历容器</li>
-  <li>可以在窗口在末尾增加或删除元素。</li>
-</ul>
-
-<p>1、虽然窗口在在自动处理容量 的大小时会消耗更多的内存，但是容器能和数组一样的性能，而且能很好的地调整存储空间大小。</p>
-
-<p>2、和其他标准的顺序容器相比， vector能更有效访问窗口在内的元素和末尾添加和删除元素，而在其他的位置添加和删除元素，vector则不及其他顺序容器。</p>
-
-<p>3、在迭代器和引用 的也不比list支持的好。</p>
-
-<p>4、 容器的大小和窗口在的容量是有区别的，大小是元素的，容量是分配的内存大小。大小vector::size() ，容量是vector::capacity()</p>
-
-<p>5、可用for_echo() 遍历。如： for_echo(ivetor.begin(), ivector.end(), print) //print是回调函数   void print(int n );</p>
-
-<p>6、<algorithm>中的sort函数，对象是vector。</algorithm></p>
-
-<p>7、vector 查找，std::find(vector.begin(), vector.end(), 3)</p>
-
-<p>8、vector 删除，有两种方式 erase()指定位置  或pop_back()最后一个。</p>
-
-<p>9、当进行添加是，可以用insert()或push_bask()，当容量不够时，会触发动态扩容，此时，它的性能会下降，所以，一般要先预估vector的大小，先vector::reserver()。避免出现动态扩容。</p>
-
-<p>10、使用“交换技巧”来修整vector过剩的空间/内存。vector<int>(ivec).swap(ivec)。vector<int>(ivec)建立一个临时 的vector，它是ivec的一个拷贝。vector的拷贝构造函数只分配拷贝的元素所需要的大小。</int></int></p>
-
-<p>11、用swap方法强行释放vector所点内存.。这个地方应该怎么解释？</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tmplate</span><span class="o">&lt;</span> <span class="n">class</span> <span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">clearVector</span><span class="p">(</span> <span class="n">vector</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">v</span> <span class="p">)</span>
-<span class="p">{</span>
-     <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">vtTemp</span><span class="p">;</span>
-     <span class="n">vtTemp</span><span class="p">,</span><span class="n">swap</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="p">;</span> 
-<span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-
-</code></pre></div></div>
-<p>或  vector<int>().swap(v)
-或 v.swap(vector<int>());
-或 {     std::vector<int> tmp = v; v.swap(tmp); }　　//大括号让tmp退出｛｝时自动析构。</int></int></int></p>
-
-<p>[注]</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 关于vector删除的问题。有一些地方要注意。遍历一个vector找到对应的元素删除的正常做法。
- for (auto iter = vector.begin(); iter != vector.end(); iter++)
- {
-      if (*iter == 3 )   vector.ease(iter);
-｝
-1）这个代码有一个严重的错误。当ease(iter)后，iter就成了一个野指针。再对它iter++,就会有问题。
-2）正常 的做法。
-     vector&lt;int&gt;::iterator iter=vec.begin();
-     for (; iter!= vec.end();)
-    {
-           iter = vec,erase(iter); 
-    }
-   else
-   { 
-        ++iter;
-   }
-</code></pre></div></div>
-
-<p>对于容器的删除都要小心。</p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>stl string 笔记</title>
-      <link href="http://localhost:4000/stl-string/"/>
-      <pubDate>2017-04-01T22:12:15+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/stl-string</guid>
-      <content:encoded><![CDATA[<p>1.string.h和cstring都不是string类的头文件，这两个头文件 主要地定义C语言铅笔字符趾操作的一些方法 ，譬如strlen()、strcpy()等。string.h是C语言的头文件格式，而cstring是C++风格的头文件，但是和<string.h>是一样的，它的目的是为了和C语言兼容。</string.h></p>
-
-<p>2.string的一道面试题。很编写一个类string的7个函数。（后补）</p>
-
-<p>3.C++字符串和C字符串的转换</p>
-
-<p>C++提供了的由C++字符 串转换成对应的C字符串的方法是使用data()、c_str()和copy()来实现。</p>
-
-<p>其中，data()以字符数据 的形式返回 字符串内容，但并不添加 ‘\0’；c_str()返回一以’\0’结尾的字符数组；而copy()则把字符 串的内容复制或写入既有的c_string或字符数组内，需要注意是，c++字符串并以不’\0’结尾。</p>
-
-<p>c_str()语句可以生成一个 const char *  指针，江脂向空字符 的数组。这个数组的数据 是临时的， 当有一个改变这数据的成员函数被调用后，其中的数据就会失效。因此要么现用现转换，要么把它的数据复制到用户自己可以管理 的内在中后再转换。</p>
-
-<p>4.string和int的类型转换</p>
-
-<p>（1） int转string的方法。</p>
-
-<p>可以用snprintf()。</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">snprintf</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">format</span><span class="p">,</span> <span class="p">...)</span>
-</code></pre></div></div>
-<p>（2）string 转int的方法</p>
-
-<p>可以用 strtol， strtoll，strtoul，或strtoull函数。</p>
-
-<p>5.string 其他常用成员函数</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">capacity</span><span class="p">()</span> <span class="k">const</span> <span class="p">;</span>             <span class="c1">// 返回当前容量（即string 中不必增加内在即可存的元素个数）</span>
-<span class="kt">int</span> <span class="n">max_size</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>               <span class="c1">// 返回string对象中可存放的最大字符串的长度</span>
-<span class="kt">int</span> <span class="n">size</span><span class="p">()</span> <span class="k">const</span> <span class="p">;</span>                 <span class="c1">// 返回当前字符串的大小 </span>
-<span class="kt">int</span> <span class="n">length</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>                <span class="c1">// 返回当前字符串的长度</span>
-<span class="kt">int</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>                 <span class="c1">// 当前字符串是否为空</span>
-<span class="kt">void</span> <span class="nf">resize</span><span class="p">(</span><span class="kt">int</span> <span class="n">len</span><span class="p">,</span> <span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="p">;</span>      <span class="c1">// 把字符串当前大小为为len，并用字符c填充不足的部分。</span>
-</code></pre></div></div>
-
-<p>6、 string的size()和length()的结果是一样的。</p>
-
-<p>length是因为沿用C语言的习惯而保留下来的，string类最初只有length，引入STL之后，为了兼容又加入了size，它是作为STL容器的属性存在的，便于符合STL的接口规则，以便用于STL的算法。string类的size()/length()方法返回的是字节数，不管是否有汉字。</p>
-
 ]]></content:encoded>
     </item>
     
