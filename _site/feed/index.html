@@ -7,15 +7,287 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-06T17:54:59+08:00</lastBuildDate>
+    <lastBuildDate>2018-09-07T15:54:11+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
+      <title>muduo笔记 第七章 时间轮</title>
+      <link href="http://localhost:4000/muduo-7-muduo-timing-wheel/"/>
+      <pubDate>2018-01-05T04:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/muduo-7-muduo-timing-wheel</guid>
+      <content:encoded><![CDATA[<p>用timing wheel 踢掉空闲连接。</p>
+
+<h4 id="如果一个连接连续几秒内没有收到数据就把它断开为此有两种简单粗暴的做法">如果一个连接连续几秒内没有收到数据，就把它断开，为此有两种简单、粗暴的做法：</h4>
+
+<p>1.每个连接保存”最后收到数据的时间lastReceiveTime”， 然后用一个定时器，每秒遍历一遍所有连接， 断开那些(now - connection. lastReceiveTime) &gt; 8s 的connection。 这种做法全局只有一个repeated timer， 不过每次timeout 都要检查全部连接，如果连接数目比较大（几千上万） 这一步可能会比较费时。 ·</p>
+
+<p>2.每个连接设置一个one-shot timer， 超时定为8s， 在超时的时候就断开本连接。当然，每次收到数据要去更新timer。 这种做法需要很多个one-shot timer， 会频繁地更新timers。如果连接数目比较大， 可能对EventLoop 的 TimerQueue 造成 压力。</p>
+
+<p>连接超时不需要精确定时，只要大致8秒超时断开就行，多一秒、少一秒关系不大。</p>
+
+<p>处理连接超时可用一个简单的数据结构：8个桶组成的循环队列。</p>
+
+<p>第1个桶放1秒之后将要超时的连接，第2个桶放2秒之后将要超时的连接。每个连接一收到数据就把自己放到第8个桶，然后在每秒的timer里把第一个桶里的连接断开，把这个空桶挪到队尾。</p>
+
+<p>这样大致可以做到8秒没有数据就超时断开连接。</p>
+
+<h4 id="时间轮的原理">时间轮的原理</h4>
+
+<p>简单的时间轮的基本结构是一个循环队列，还有一个指向队尾的指针（tail）。这个指针每秒移动一格，就像钟表上的时针。</p>
+
+<p>以下是某一时刻timing wheel 的状态（ 见图7-42的左图）， 格子里的数字是倒计时（ 与通常的 timing wheel 相反）， 表示这个格子（ 桶子） 中连接的 剩余寿命。1秒以后（见图 7-42的右图）， tail 指针移动一格， 原来四点钟方向的格子被清空，其中的连接已被断开。</p>
+
+<p><img src="/assets/muduo/7-time-wheel1.png" alt="" /></p>
+
+<p>连接超时时被踢掉的过程
+假设在某个时刻，conn1到达， 把它放到当前格子中，它的剩余寿命是7秒（见图7-43的左图）。 此后conn1 上没有收到数据。 1秒之后（见图7-43的右图），tail指向下一个格子， conn 1的剩余寿命是6秒。</p>
+
+<p><img src="/assets/muduo/7-time-wheel2.png" alt="" /></p>
+
+<p>又 过了几 秒， tail指向conn1之前的那个格子， conn1即将被断开（见图7-44的左图）。下一秒（见图7-44的右图），tail重新指向conn1原来所在的格子，清空其中的数据，断开conn1连接。
+<img src="/assets/muduo/7-time-wheel3.png" alt="" /></p>
+
+<h4 id="连接刷新">连接刷新</h4>
+
+<p>如果在断开conn1之前收到数据，就把它移到当前的格子里。conn1的剩余寿命是3秒（见图7-45的左图），此时 conn 1收到数据，它的寿命恢复为7秒（见图 7-45 的右图）。</p>
+
+<p><img src="/assets/muduo/7-time-wheel4.png" alt="" /></p>
+
+<p>时间继续前进，conn1寿命递减，不过它已经比第一种情况长寿了（见图7-46）。</p>
+
+<p><img src="/assets/muduo/7-time-wheel5.png" alt="" /></p>
+
+<h4 id="多个连接">多个连接</h4>
+
+<p>timingwheel中的每个格子是个hashset，可以容纳不止一个连接。比如一开始，conn1到达。随后，conn2到达（见图7-47），这时候tail还没有移动，两个连接位于同一个格子中，具有相同的剩余寿命。（在图7-47中画成链表，代码中是哈希表。）</p>
+
+<hr />
+
+<p>代码的实现体现在主要在三个地方。</p>
+
+<p>1）新的连接上来时。</p>
+
+<p><img src="/assets/muduo/7-time-wheel6.png" alt="" /></p>
+
+<p>entry 为 shared_ptr类型。连接时会把entery插入到循环队列中的set当中。</p>
+
+<p>2）当有数的数据过来时。</p>
+
+<p><img src="/assets/muduo/7-time-wheel7.png" alt="" /></p>
+
+<p>也会把这个连接的entry加入到循环队列中的set当中。</p>
+
+<p>3）定时器
+每一秒钟会从循环队列中拿掉一个Set。entry的shared_ptr计数就会减1。</p>
+
+<p><img src="/assets/muduo/7-time-wheel8.png" alt="" /></p>
+
+<p>当entry的shared_ptr被减到0时，entry就会被释放。就会断开连接。</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>muduo笔记 第七章 定时器</title>
+      <link href="http://localhost:4000/muduo-7-muduo-timer/"/>
+      <pubDate>2018-01-05T04:20:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/muduo-7-muduo-timer</guid>
+      <content:encoded><![CDATA[<p>在一般的服务端程序设计 中， 与时间有关的常见任务有：</p>
+
+<p>1、获取当前时间， 计算时间间隔。</p>
+
+<p>2、时区转换与日期计算； 把纽约当地时间转换为上海当地时间； 2011-02-05 之后第100天是几月几号星期几；等等。</p>
+
+<p>3、 定时操作， 比如在预定的时间执行任务， 或者在一段延时之后执行任务。</p>
+
+<p>计时，只使用gettimeofday(2)来获取当前时间</p>
+
+<p>定时，只使用timerfd_*系统函数来处理定时任务</p>
+
+<p>1、 time(2) 的精度太低了， ftime(3)被废弃。 clock_gettime(2)精度最高，但是系统调用的开销比gettimeofday大。</p>
+
+<p>2、gettimeofday 不是系统调用，而是在用户态实现的。 没有上下文切换和陷入内核的开销。</p>
+
+<p>3、timerfd_create(2)把时间变成了一个文件描述符，该“文件”在定时器超时的那一该变得可读，这样就能很方便的融入select(2)/poll(2)框架中，用统一的方式 来处理IO事件和超时事件，这也正是Reactor模式的长处。</p>
+
+<p>4、传统的Reactor利用select(2)/poll(2)/epoll(4)的timeout来实现定时功能，但poll(2)和epoll_wait(2)的定时精度只有毫秒，远低于timerfd_ settime(2)的定时精度。</p>
+
+<h4 id="muoduo-的定时器接口有三个都在eventloop中">muoduo 的定时器接口有三个。都在EventLoop中。</h4>
+<p>1.runAt 在 指定的时间调用TimerCallback；</p>
+
+<p>2.runAfter 等一段时间调用TimerCallback；</p>
+
+<p>3.runEvery 以固定的间隔反复调用TimerCallback；</p>
+
+<p>cancel 取消timer。 回调函数在EventLoop 对象所属的线程发生，与onMessage()、 onConnection() 等网络事件函数在同一个线程。</p>
+
+<h3 id="注">[注]</h3>
+<p>1、现在所在游戏项目中所用的时间函数是clock_gettime 然后再转成毫秒。</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>muduo笔记 第七章 限制服务器的最大并发连接数</title>
+      <link href="http://localhost:4000/muduo-7-muduo-max-connection/"/>
+      <pubDate>2018-01-05T04:19:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/muduo-7-muduo-max-connection</guid>
+      <content:encoded><![CDATA[<p>一方面， 我们不希望服务程序超载。</p>
+
+<p>另一方面，更因为filedescriptor是 稀缺资源， 如果出现 filedescriptor耗尽，很棘手，跟”malloc() 失败/new抛出std::bad_alloc”差不多同样棘。</p>
+
+<p>当accept(2) 返回EMFILE该如何应对？</p>
+
+<p>这意味着本进程的文件描述符已经达到上限， 无法为新连接创建socket文件描述符。</p>
+
+<p>但是，既然没有socket文件描述符来表示这个连接，我们就无法close(2) 它。</p>
+
+<p>程序继续运行，回到L11再一次调用epoll_ wait。这时候epoll_wait会立刻返回，因为新连接还等待处理，listening fd还是可读的。这样程序 立刻就陷入了busy loop， CPU占用率接近100%。</p>
+
+<p>这既影响同一event loop上的连接， 也影响同一机器上的其他服务。</p>
+
+<h4 id="解决方法">解决方法</h4>
+
+<p>准备一个空闲的文件描述符。 遇到这种情况，先关闭这个空闲文件， 获得一个文件描述符的名额；</p>
+
+<p>再accept(2) 拿到新socket连接的描述符；随后立刻close(2) 它，这样就优雅地断开了客户端连接；</p>
+
+<p>最后重新打开一个空闲文件， 把”坑”占住，以备再次出现这种情况时使用。</p>
+
+<p>其实有另外一种比较简单的办法：</p>
+
+<p>file descriptor是hard limit，我们可以自己设一个 稍低 一点 的 soft limit，</p>
+
+<p>如果超过soft limit 就主动关闭新连接， 这样就可避免触及”file descriptor 耗尽” 这种边界条件。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">==</span> <span class="n">EMFILE</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">idleFd_</span><span class="p">);</span>
+      <span class="n">idleFd_</span> <span class="o">=</span> <span class="o">::</span><span class="n">accept</span><span class="p">(</span><span class="n">acceptSocket_</span><span class="p">.</span><span class="n">fd</span><span class="p">(),</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+      <span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">idleFd_</span><span class="p">);</span>
+      <span class="n">idleFd_</span> <span class="o">=</span> <span class="o">::</span><span class="n">open</span><span class="p">(</span><span class="s">"/dev/null"</span><span class="p">,</span> <span class="n">O_RDONLY</span> <span class="o">|</span> <span class="n">O_CLOEXEC</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="注">[注]</h4>
+<p>1、可能我们在实践当中，中不太可能改动每个服务器的，特别当服务器越来越多时，根本不靠谱。所以在框架中解决这个问题是比较好的选择。</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>muduo笔记 第七章 muduo编程示例</title>
+      <link href="http://localhost:4000/muduo-7-muduo-example/"/>
+      <pubDate>2018-01-05T04:18:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/muduo-7-muduo-example</guid>
+      <content:encoded><![CDATA[<h4 id="为什么tcpconnectionshutdown没有直接关闭tcp连接">为什么TcpConnection::shutdown()没有直接关闭TCP连接</h4>
+
+<p>muduo TcpConnection没有提供close()，而只提供shutdown()，这么做是为了收发数据的完整性。</p>
+
+<p>也就是说muduo把”主动关闭连接”这件事情分成两步来做，如果要主动关闭连接，它会先关本地”写”端，等对方关闭之后，再关本地”读”端。</p>
+
+<p>就是要把buff的数据全部发完之后才会关闭它。</p>
+
+<h4 id="tcp分包">TCP分包</h4>
+<p>在TCP这种字节流协议上做应用层分包是网络编程的基本需求。</p>
+
+<p>分包指的是在发生一个消息（message）或一帧（frame）数据时，通过一定的处理，让接收方能从字节流中识别并截取（还原）出一个个消息。</p>
+
+<p>“粘包问题”是个伪问题。</p>
+
+<h4 id="muduo-buff类的设计与使用">muduo buff类的设计与使用</h4>
+
+<p>event loop是non-blocking网络编程的核心，在现实生活中，non-blocking几乎总是和IO multiplexing一起使用，</p>
+
+<p>原因有两点：</p>
+
+<p>1.没有人真的会用轮询（busy-pooling）来检查某个non-blocking IO操作是否完成，这样太浪费CPU cycles。</p>
+
+<p>2.IO multiplexing一般不能和blocking IO用在一起，因为blocking IO中<code class="highlighter-rouge">read()/write()/accept()/connect()</code>都有可能阻塞当前线程，这样线程就没办法处理其他socket上的IO事件了。</p>
+
+<h4 id="为什么non-blocking网络编程中应用层buffer是必需的">为什么non-blocking网络编程中应用层buffer是必需的</h4>
+
+<p>non-blocking IO的核心思想是避免阻塞在read()或write()或其他IO系统调用上，这样可以最大限度地复用thread-of-control，让一个线程能服务于多个socket连接。</p>
+
+<p>IO线程只能阻塞在IO multiplexing函数上，如select/poll/epoll_wait。这样一来，应用层的缓冲是必需的，每个TCP socket都要有stateful的input buffer和output buffer。</p>
+
+<h4 id="muduo-buffer的设计要点">muduo Buffer的设计要点：</h4>
+
+<p>1.对外表现为一块连续的内存(char* p, int len)，以方便客户代码的编写。</p>
+
+<p>2.其size()可以自动增长，以适应不同大小的消息。它不是一个fixed size array（例如char buf[8192]）。</p>
+
+<p>3.内部以<code class="highlighter-rouge">std::vector&lt;char&gt;</code>来保存数据，并提供相应的访问函数。 Buffer其实像是一个queue，从末尾写入数据，从头部读出数据。 谁会用Buffer？谁写谁读？根据前文分析，TcpConnection会有两个Buffer成员，input buffer与output buffer。</p>
+
+<p>4.input buffer，TcpConnection会从socket读取数据，然后写入input buffer（其实这一步是用<code class="highlighter-rouge">Buffer::readFd()</code>完成的）；客户代码从input buffer读取数据。 output buffer，客户代码会把数据写入output buffer（其实这一步是用<code class="highlighter-rouge">TcpConnection::send()</code>完成的）；TcpConnection从output buffer读取数据并写入socket。</p>
+
+<p>5.其实，input和output是针对客户代码而言的，客户代码从input读，往output写。TcpConnection的读写正好相反。</p>
+
+<h4 id="protobuf从消息名创建消息然后分发给不同的处理函数">protobuf从消息名创建消息，然后分发给不同的处理函数。</h4>
+
+<h4 id="限制并发连接数">限制并发连接数</h4>
+
+<p>一方面，我们不希望服务程序超载；另一方面，更因为filedescriptor是稀缺资源，如果出现filedescriptor耗尽，很棘手，跟“malloc()失败/new抛出std::bad_alloc”差不多同样棘手。</p>
+
+<p>在服务端中如果在accetp中出现fd耗尽，那么就可能无法及时通知客户关闭。</p>
+
+<p>所以，可以准备一个空闲的文件描述符。遇到这种情况，先关闭这个空闲文件，获得一个文件描述符的名额；再accept(2)拿到新socket连接的描述符；随后立刻close(2)它，这样就优雅地断开了客户端连接；最后重新打开一个空闲文件，把“坑”占住，以备再次出现这种情况时使用。</p>
+
+<p>另一种方式，要在onConnection时统计活着的链接数。如果超过最大就shutdown。</p>
+
+<h4 id="定时器">定时器</h4>
+
+<p>在一般的服务端程序设计中，与时间有关的常见任务有：</p>
+
+<p>1．获取当前时间，计算时间间隔。</p>
+
+<p>2．时区转换与日期计算；把纽约当地时间转换为上海当地时间；2011-02-05之后第100天是几月几号星期几；等等。</p>
+
+<p>3．定时操作，比如在预定的时间执行任务，或者在一段延时之后执行任务。</p>
+
+<h4 id="linux时间函数">linux时间函数</h4>
+
+<p>Linux的计时函数，用于获得当前时间：</p>
+
+<ul>
+  <li>time(2) / time_t（秒）</li>
+  <li>ftime(3) / struct timeb（毫秒）</li>
+  <li>gettimeofday(2) / struct timeval（微秒）</li>
+  <li>clock_gettime(2) / struct timespec（纳秒）</li>
+</ul>
+
+<p>还有gmtime / localtime / timegm / mktime / strftime / struct tm等与当前时间无关的时间格式转换函数。 
+定时函数，用于让程序等待一段时间或安排计划任务：</p>
+
+<ul>
+  <li>sleep(3)</li>
+  <li>alarm(2)</li>
+  <li>usleep(3)</li>
+  <li>nanosleep(2)</li>
+  <li>clock_nanosleep(2)</li>
+  <li>getitimer(2) / setitimer(2)</li>
+  <li>timer_create(2) / timer_settime(2) / timer_gettime(2) / timer_delete(2) ·timerfd_create(2) / timerfd_gettime(2) / timerfd_settime(2)</li>
+</ul>
+
+<h4 id="我的取舍如下">我的取舍如下：</h4>
+<ul>
+  <li>（计时）只使用gettimeofday(2)来获取当前时间。</li>
+  <li>（定时）只使用timerfd_*系列函数来处理定时任务。</li>
+</ul>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>muduo笔记 第六章 性能评测</title>
-      <link href="http://localhost:4000/muduo-5-performance-test/"/>
+      <link href="http://localhost:4000/muduo-6-performance-test/"/>
       <pubDate>2018-01-05T04:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-5-performance-test</guid>
+      <guid>http://localhost:4000/muduo-6-performance-test</guid>
       <content:encoded><![CDATA[<h4 id="65-性能评测">6.5 性能评测</h4>
 
 <p>性能对比原则：采用对方的性能测试方案，用muduo实现功能相同或类似的程序，然后放到相同的软硬件环境中对比。</p>
@@ -63,10 +335,10 @@
     
     <item>
       <title>muduo笔记 第六章 常见的并发网络服务器程序设计方案</title>
-      <link href="http://localhost:4000/muduo-5-high-concurrency-scheme/"/>
+      <link href="http://localhost:4000/muduo-6-high-concurrency-scheme/"/>
       <pubDate>2018-01-05T04:08:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-5-high-concurrency-scheme</guid>
+      <guid>http://localhost:4000/muduo-6-high-concurrency-scheme</guid>
       <content:encoded><![CDATA[<h4 id="常见的并发网络服务器程序设计方案">常见的并发网络服务器程序设计方案：</h4>
 
 <p><img src="/assets/muduo/high-concurrency-scheme1.png" alt="" /></p>
@@ -561,333 +833,6 @@
 </ul>
 
 <p>用好这几样东西，基本上就能应付多线程服务端开发的各种场合。或许有人会觉得性能没有发挥到极致。我认为，应该先把程序写正确（并尽量保持清晰和简单），然后再考虑性能优化，如果确实还有必要优化的话。这在多线程下仍然成立。让一个正确的程序变快，远比”让一个快的程序变正确”容易得多。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记 第一章 线程安全的对象生命期管理</title>
-      <link href="http://localhost:4000/muduo-1-threads/"/>
-      <pubDate>2018-01-04T00:08:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-1- threads</guid>
-      <content:encoded><![CDATA[<h4 id="11当析构函数遇到多线程">1.1　当析构函数遇到多线程</h4>
-
-<p>C++要求程序员自己管理对象的生命期，这在多线程环境下显得尤为困难。当一个对象能被多个线程同时看到时，那么对象的销毁时机就会变得模糊不清，可能出现多种竞态条件（race condition）：
-在即将析构一个对象时，从何而知此刻是否有别的线程正在执行该对象的成员函数？</p>
-
-<p>如何保证在执行成员函数期间，对象不会在另一个线程被析构？</p>
-
-<p>在调用某个对象的成员函数之前，如何得知这个对象还活着？它的析构函数会不会碰巧执行到一半？</p>
-
-<p>解决这些race condition是C++多线程编程面临的基本问题。本文试图以shared_ptr一劳永逸地解决这些问题，减轻C++多线程编程的精神负担。</p>
-
-<h5 id="111线程安全的定义">1.1.1　线程安全的定义</h5>
-
-<p>依据[JCP]，一个线程安全的class应当满足以下三个条件：</p>
-
-<ul>
-  <li>多个线程同时访问时，其表现出正确的行为。</li>
-  <li>无论操作系统如何调度这些线程，无论这些线程的执行顺序如何交织（interleaving）。</li>
-  <li>调用端代码无须额外的同步或其他协调动作。</li>
-</ul>
-
-<p>依据这个定义，C++标准库里的大多数class都不是线程安全的，包括std:: string、std::vector、std::map等，因为这些class通常需要在外部加锁才能供多个线程同时访问。</p>
-
-<h4 id="12对象的创建很简单">1.2　对象的创建很简单</h4>
-
-<p>对象构造要做到线程安全，唯一的要求是在构造期间不要泄露this指针，即</p>
-
-<ul>
-  <li>不要在构造函数中注册任何回调；</li>
-  <li>也不要在构造函数中把this传给跨线程的对象；</li>
-  <li>即便在构造函数的最后一行也不行。</li>
-</ul>
-
-<p>之所以这样规定，是因为在构造函数执行期间对象还没有完成初始化，如果this被泄露（escape）给了其他对象（其自身创建的子对象除外），那么别的线程有可能访问这个半成品对象，这会造成难以预料的后果。</p>
-
-<h4 id="13销毁太难">1.3　销毁太难</h4>
-
-<p>成员函数用来保护临界区的互斥器本身必须是有效的。而析构函数破坏了这一假设，它会把mutex成员变量销毁掉。</p>
-
-<h4 id="14线程安全的observer有多难">1.4　线程安全的Observer有多难</h4>
-
-<p>那么似乎一个简单的解决办法是：只创建不销毁。程序使用一个对象池来暂存用过的对象，下次申请新对象时，如果对象池里有存货，就重复利用现有的对象，否则就新建一个。对象用完了，不是直接释放掉，而是放回池子里。这个办法当然有其自身的很多缺点，但至少能避免访问失效对象的情况发生。（这一种就是很常用的对象池）</p>
-
-<p><strong>这种山寨办法的问题有：</strong></p>
-
-<ul>
-  <li>对象池的线程安全，如何安全地、完整地把对象放回池子里，防止出现“部分放回”的竞态？（线程A认为对象x已经放回了，线程B认为对象x还活着。）</li>
-  <li>全局共享数据引发的lock contention，这个集中化的对象池会不会把多线程并发的操作串行化？</li>
-  <li>如果共享对象的类型不止一种，那么是重复实现对象池还是使用类模板？ ·会不会造成内存泄漏与分片？因为对象池占用的内存只增不减，而且多个对象池不能共享内存（想想为何）。</li>
-</ul>
-
-<h4 id="16神器shared_ptrweak_ptr">1.6　神器shared_ptr/weak_ptr</h4>
-
-<p><code class="highlighter-rouge">shared_ptr</code>控制对象的生命期。shared_ptr是强引用（想象成用铁丝绑住堆上的对象），只要有一个指向x对象的shared_ptr存在，该x对象就不会析构。当指向对象x的最后一个shared_ptr析构或reset()的时候，x保证会被销毁。</p>
-
-<p><code class="highlighter-rouge">weak_ptr</code>不控制对象的生命期，但是它知道对象是否还活着（想象成用棉线轻轻拴住堆上的对象）。如果对象还活着，那么它可以提升（promote）为有效的shared_ptr；如果对象已经死了，提升会失败，返回一个空的shared_ptr。“提升／lock()”行为是线程安全的。</p>
-
-<p>shared_ptr/weak_ptr的“计数”在主流平台上是原子操作，没有用锁，性能不俗。</p>
-
-<p>shared_ptr/weak_ptr的线程安全级别与std::string和STL容器一样，后面还会讲。</p>
-
-<h4 id="17插曲系统地避免各种指针错误">1.7　插曲：系统地避免各种指针错误</h4>
-
-<p>C++里可能出现的内存问题大致有这么几个方面：</p>
-
-<ul>
-  <li>缓冲区溢出（buffer overrun）。</li>
-  <li>空悬指针／野指针。</li>
-  <li>重复释放（double delete）。</li>
-  <li>内存泄漏（memory leak）。</li>
-  <li>不配对的new[]/delete。</li>
-  <li>内存碎片（memory fragmentation）。</li>
-</ul>
-
-<p>正确使用智能指针能很轻易地解决前面5个问题，解决第6个问题需要别的思路，</p>
-
-<ul>
-  <li>缓冲区溢出：用std::vector<char>/std::string或自己编写Buffer class来管理缓冲区，自动记住用缓冲区的长度，并通过成员函数而不是裸指针来修改缓冲区。</char></li>
-  <li>空悬指针／野指针：用shared_ptr/weak_ptr，这正是本章的主题。</li>
-  <li>重复释放：用scoped_ptr，只在对象析构的时候释放一次。</li>
-  <li>内存泄漏：用scoped_ptr，对象析构的时候自动释放内存。</li>
-  <li>不配对的new[]/delete：把new[]统统替换为std::vector/scoped_array。</li>
-</ul>
-
-<h4 id="19再论shared_ptr的线程安全">1.9　再论shared_ptr的线程安全</h4>
-
-<p>虽然我们借shared_ptr来实现线程安全的对象释放，但是shared_ptr本身不是100％线程安全的。它的引用计数本身是安全且无锁的，但对象的读写则不是，因为shared_ptr有两个数据成员，读写操作不能原子化。</p>
-
-<p>根据文档 11 ，shared_ptr的线程安全级别和内建类型、标准库容器、std::string一样，即： ·一个shared_ptr对象实体可被多个线程同时读取；</p>
-
-<ul>
-  <li>两个shared_ptr对象实体可以被两个线程同时写入，”析构”算写操作；</li>
-  <li>如果要从多个线程读写同一个shared_ptr对象，那么需要加锁。</li>
-</ul>
-
-<p>请注意，以上是shared_ptr对象本身的线程安全级别，不是它管理的对象的线程安全级别。</p>
-
-<p>要在多个线程中同时访问同一个shared_ptr，正确的做法是用mutex保护。</p>
-
-<h3 id="110shared_ptr技术与陷阱">1.10　shared_ptr技术与陷阱</h3>
-
-<ol>
-  <li>一个出错的可能是boost::bind，因为boost::bind会把实参拷贝一份，如果参数是个shared_ptr，那么对象的生命期就不会短于boost::function对象：</li>
-  <li>函数参数 因为要修改引用计数（而且拷贝的时候通常要加锁），shared_ptr的拷贝开销比拷贝原始指针要高，但是需要拷贝的时候并不多。多数情况下它可以以const reference方式传递，一个线程只需要在最外层函数有一个实体对象，之后都可以用const reference来使用这个shared_ptr。</li>
-</ol>
-
-<p>遵照这个规则，基本上不会遇到反复拷贝shared_ptr导致的性能问题。另外由于pFoo是栈上对象，不可能被别的线程看到，那么读取始终是线程安全的。</p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>stl set 笔记</title>
-      <link href="http://localhost:4000/stl-set/"/>
-      <pubDate>2017-04-02T06:12:15+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/stl-set</guid>
-      <content:encoded><![CDATA[<p>1.map和set都封闭了二叉树。所以set中的元素是有惟一性的。</p>
-
-<p>2.set multiset map multimap内部采用的都是红黑树。</p>
-
-<p>3.在set中查找 是使用地二分查找。logn。 效率很高。</p>
-
-<p>4.set元素中排序的。</p>
-
-<p>5.set对象的创建方式有5种。</p>
-
-<ul>
-  <li>创建空的set对象，元素类型为int set<int> sl;</int></li>
-  <li>创建空的set对象，元素类型cahr <em>, 比较函数对象（即排序准则）为自定义 set&lt;const char</em> ， strLess&gt; s2(strLess);</li>
-  <li>利用set对象S1,拷贝生成set对象S2；set<int>s2(s1);</int></li>
-  <li>用迭代区间[&amp;first, &amp;laist)rn所指的元素，创建一个set对象。</li>
-</ul>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">int</span>  <span class="n">iArray</span><span class="p">[]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">19</span> <span class="p">);</span>
-    <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s4</span><span class="p">(</span><span class="n">iArray</span><span class="p">,</span> <span class="n">iArray</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
-
-</code></pre></div></div>
-
-<ul>
-  <li>用迭代区间[&amp;first, &amp;laist)rn所指的元素，及比较函数对象strLess, 创建一个set对象。</li>
-</ul>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">szArray</span><span class="p">[]</span> <span class="o">=</span> <span class="p">(</span><span class="s">"hello"</span><span class="p">,</span> <span class="s">"dog"</span><span class="p">,</span> <span class="s">"bird"</span><span class="p">)</span> <span class="p">;</span>
-   <span class="n">set</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="n">strLess</span><span class="o">&gt;</span> <span class="n">s5</span><span class="p">(</span><span class="n">szArray</span><span class="p">,</span> <span class="n">szArray</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="n">strLess</span><span class="p">());</span>
-</code></pre></div></div>
-
-<p>6.元素插入的3种方式。</p>
-
-<ul>
-  <li>插入value，返回pair 配对对象，可能根据，secod判断是否插入成功。（value不能与set容器内元素重复）</li>
-  <li>在pos位置之前插入value，返回新元素的位置，但不一琮能插入成功。</li>
-  <li>将换代区间[&amp;first, &amp;last) 内所有元素，插入到set容器。</li>
-</ul>
-
-<p>7.元素删除的4种方式。</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">size_type</span> <span class="n">erase</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>      <span class="c1">// 移除set容器内元素值为value的所有元素。返回移除的元素个数。</span>
-<span class="kt">void</span> <span class="n">erase</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pos</span><span class="p">)</span>            <span class="c1">// 移除pos位置上的元素，无返回值。</span>
-<span class="kt">void</span> <span class="n">earse</span><span class="p">(</span><span class="o">&amp;</span><span class="n">first</span><span class="p">,</span> <span class="o">&amp;</span> <span class="n">last</span><span class="p">)</span>  <span class="c1">// 移除迭代区间[&amp;first, &amp;last)内的元素，无返回值。</span>
-<span class="kt">void</span> <span class="n">clear</span><span class="p">()</span>                <span class="c1">// 移除set容器内所有元素。</span>
-</code></pre></div></div>
-
-<p>8.元素查找的2种方式</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">count</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1">// 返回set对象内元素值为value的元素个数。</span>
-<span class="n">iterator</span> <span class="n">find</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1">// 返回value所在位置，找不到value将返回end()。</span>
-</code></pre></div></div>
-
-<p>9.其他set中的常用方法。</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">begin</span><span class="p">()</span>    <span class="c1">// 返回set容器的第一个元素</span>
-<span class="n">end</span><span class="p">()</span>      <span class="c1">// 返回set窗口的最后一个元素</span>
-<span class="n">clear</span><span class="p">()</span>    <span class="c1">// 删除set容器中的所有元素</span>
-<span class="n">empty</span><span class="p">()</span>    <span class="c1">// 判断set是否空空 </span>
-<span class="n">max_size</span><span class="p">()</span> <span class="c1">// 返回set容器可能包含的元素最大个数</span>
-<span class="n">size</span><span class="p">()</span>     <span class="c1">// 返回当前set容器中的元素个数</span>
-<span class="n">rbegin</span><span class="p">()</span>   <span class="c1">// 返回set窗口的最后一个元素</span>
-<span class="n">rend</span><span class="p">()</span>     <span class="c1">// 返回set容器的第一个元素</span>
-</code></pre></div></div>
-
-<h5 id="注">[注]</h5>
-
-<p>1.auto pos = setOder,find(tmp); 得到 *pos 是 const 类型，不能改变。 要用<code class="highlighter-rouge">const_cast</code>做强制转换。</p>
-
-<p>工作中遇到过的代码（手游排行模块）</p>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>    <span class="n">_stTopListOrder</span> <span class="n">tmp</span><span class="p">;</span>
-	<span class="n">tmp</span><span class="p">.</span><span class="n">getSortType</span><span class="p">()</span> <span class="o">=</span> <span class="n">stSortType</span><span class="p">;</span>
-	<span class="k">auto</span> <span class="n">_pos</span> <span class="o">=</span> <span class="n">m_setTopListOrder</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-	<span class="k">if</span> <span class="p">(</span> <span class="n">_pos</span> <span class="o">==</span> <span class="n">m_setTopListOrder</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>  <span class="p">)</span>
-	<span class="p">{</span>
-		<span class="n">tmp</span><span class="p">.</span><span class="n">uOrder</span> <span class="o">=</span> <span class="n">uOrder</span><span class="p">;</span>
-		<span class="n">tmp</span><span class="p">.</span><span class="n">uOldOrder</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-		<span class="n">m_setTopListOrder</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-	<span class="p">}</span>
-	<span class="k">else</span>
-	<span class="p">{</span>
-		<span class="k">const</span> <span class="n">_stTopListOrder</span><span class="o">&amp;</span> <span class="n">stOrder</span> <span class="o">=</span> <span class="o">*</span><span class="n">_pos</span><span class="p">;</span>
-		<span class="k">const_cast</span><span class="o">&lt;</span><span class="n">_stTopListOrder</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="n">stOrder</span><span class="p">).</span><span class="n">uOldOrder</span> <span class="o">=</span> <span class="n">stOrder</span><span class="p">.</span><span class="n">uOrder</span><span class="p">;</span>
-		<span class="k">const_cast</span><span class="o">&lt;</span><span class="n">_stTopListOrder</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="n">stOrder</span><span class="p">).</span><span class="n">uOrder</span> <span class="o">=</span> <span class="n">uOrder</span><span class="p">;</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>2.如果set要循环删除 最好是先把迭代器拿出来后，再++</p>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
-    <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">m_setDevelopSkill</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
-	<span class="k">while</span> <span class="p">(</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">m_setDevelopSkill</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="p">)</span>
-	<span class="p">{</span>
-		<span class="k">auto</span> <span class="n">_pos</span> <span class="o">=</span> <span class="n">it</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 先拿出迭代器 </span>
-
-		<span class="n">_stFactionSkill</span><span class="o">*</span> <span class="n">pSkill</span> <span class="o">=</span> <span class="n">skill</span><span class="p">(</span><span class="o">*</span><span class="n">_pos</span><span class="p">);</span>
-		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pSkill</span> <span class="o">||</span> <span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">eState</span><span class="o">!=</span><span class="n">FactionSkillState_Develop_ing</span><span class="p">)</span>
-		<span class="p">{</span>
-			<span class="n">m_setDevelopSkill</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">_pos</span><span class="p">);</span>
-			<span class="k">continue</span><span class="p">;</span>
-		<span class="p">}</span>
-
-		<span class="n">uint32</span> <span class="n">uPastTime</span>		<span class="o">=</span> <span class="n">uCurTime</span> <span class="o">-</span> <span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLastTime</span><span class="p">;</span>
-		<span class="k">if</span> <span class="p">(</span> <span class="n">uPastTime</span> <span class="o">&gt;=</span> <span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLeftTime</span> <span class="p">)</span>
-		<span class="p">{</span>
-			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">eState</span>				<span class="o">=</span> <span class="n">FactionSkillState_Normal</span><span class="p">;</span>
-			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLeftTime</span>	<span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLastTime</span>	<span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-			<span class="o">++</span><span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uLevel</span><span class="p">;</span>
-			<span class="n">m_setDevelopSkill</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">_pos</span><span class="p">);</span>
-		<span class="p">}</span>
-		<span class="k">else</span>
-		<span class="p">{</span>
-			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLeftTime</span>	<span class="o">-=</span> <span class="n">uPastTime</span><span class="p">;</span>
-			<span class="n">pSkill</span><span class="o">-&gt;</span><span class="n">uDevelopLastTime</span>	<span class="o">=</span> <span class="n">uCurTime</span><span class="p">;</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>stl map 笔记</title>
-      <link href="http://localhost:4000/stl-map/"/>
-      <pubDate>2017-04-02T06:12:15+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/stl-map</guid>
-      <content:encoded><![CDATA[<p>1.map 内部自建一个红黑树（一种非严格意义上的平衡二叉树）。
-2.map会自动按key值排序（从小到大）。所以，map的key类型一定要支持&lt;操作符, 但这个是可以自定义的。
-3.查找的复杂度基本是Log(n)。</p>
-
-<h4 id="一-map-的插入">一 map 的插入</h4>
-
-<p>有三种 插入方式。</p>
-<ul>
-  <li>用insert函数插入pair数据。mapStudent.insert(pair&lt;int, string&gt;(1, “student_one”));</li>
-  <li>用insert函数插入value_type数据。mapStudent.insert(map&lt;int, string&gt;::value_type (2, “student_two”));</li>
-  <li>用数组的方式插入数据。mapStudent[3] = “student_three”;</li>
-</ul>
-
-<h5 id="注">[注]</h5>
-<p>当用第一种和第二种方式插入时，如果已经存在，会返回错误。</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pair</span><span class="o">&lt;</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="n">string</span><span class="o">&gt;::</span><span class="n">iterator</span><span class="p">,</span> <span class="n">bool</span><span class="o">&gt;</span> <span class="n">insert_pair</span> <span class="o">=</span> <span class="n">mapStudent</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"student_one"</span><span class="p">));</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">insert_pair</span><span class="p">,</span><span class="n">second</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span>  <span class="c1">// 失败</span>
-</code></pre></div></div>
-
-<p>当用第三种方式插入时，如果已经存在，则直接覆盖掉。</p>
-
-<h4 id="二-map的查找">二 map的查找</h4>
-
-<p>查找有两种方式</p>
-<ul>
-  <li>用count判定关键字是否出现。由于map的key不可能出现重复，所以，要么返回1 要么返回0。一个缺点是，无法找到位置。</li>
-  <li>用find函数定位数据出现的位置。返回一个迭代器。没有找到时返回一个等于end()的迭代器。</li>
-</ul>
-
-<h4 id="三-map的删除">三 map的删除</h4>
-
-<p>用erase访求可以删除 map中的元素。</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">map</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>   <span class="c1">// 删除k元素，返回size_type是表示删除的个数。</span>
-<span class="n">map</span><span class="p">,</span><span class="n">erase</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>    <span class="c1">// 删除迭代器p所指的元素。p必须是真实存在的元素，不能等于end()。</span>
-<span class="n">map</span><span class="p">,</span><span class="n">erase</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>  <span class="c1">// 删除一段范围的元素， 范围由迭代器对b和e标记。这种方式应该比较少见吧。</span>
-</code></pre></div></div>
-<h5 id="注-1">[注]</h5>
-<p>map在遍历删除时，有一个地方要注意的。</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(;</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">mapStudent</span><span class="p">,</span><span class="n">end</span><span class="p">();)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">second</span> <span class="o">==</span> <span class="s">"student_one"</span><span class="p">)</span>
-    <span class="p">{</span> 
-        <span class="n">mapStudent</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">iter</span><span class="o">++</span><span class="p">);</span>  
-    <span class="p">}</span>
-   <span class="k">else</span>
-   <span class="p">{</span>
-        <span class="o">++</span><span class="n">iter</span><span class="p">;</span>
-   <span class="p">}</span>  
-<span class="p">}</span>
-</code></pre></div></div>
-<p>mapStudent,erase(iter++); 中的iter++，不是erase(iter)， 然后iter++。因为iter指针被erase之后就失效了，不能再iter++; 也不能erase(++iter)这样就不是删iter原来指向的元素了。</p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>stl binary stree 笔记</title>
-      <link href="http://localhost:4000/stl-binary_tree/"/>
-      <pubDate>2017-04-02T06:12:15+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/stl-binary_tree</guid>
-      <content:encoded><![CDATA[<p>二叉查找树，也称有序二叉树，或已排二叉，是指一棵空树或者具有下列性质的二叉树。</p>
-
-<ul>
-  <li>若任意节点的左子树不空，则左子树上的所有结点的值均小于它的根结点的值。</li>
-  <li>若任意节占的左子树不空，则右子树上的所有结点的值均大于它的根结点的值 。</li>
-  <li>任意节点的左右子树也分别为二叉树，</li>
-  <li>没有键值相等的节点。</li>
-</ul>
-
-<p>二叉树的查找操作的执行时间为O(lg n)。 但二叉树是可能会退化为只有N节点为的线性链后，则这些操作的最坏情况是O(n)。</p>
 ]]></content:encoded>
     </item>
     

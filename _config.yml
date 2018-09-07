@@ -13,4 +13,4 @@ paginate: 20
 highlighter: rouge
 truncate: true
 about: "xyecho(xyecho)"
-gems: [jekyll-paginate]
+plugins: [jekyll-paginate]
