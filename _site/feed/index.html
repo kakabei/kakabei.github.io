@@ -7,7 +7,7 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-12T00:52:35+08:00</lastBuildDate>
+    <lastBuildDate>2018-09-12T01:11:23+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
@@ -67,6 +67,35 @@
 </span><span class="n">exit</span><span class="x"> </span><span class="n">status</span><span class="x"> </span><span class="m">66</span><span class="x">
 </span></code></pre></div></div>
 <p><strong>13行 出现变量竞争。</strong></p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go build 时的错误分析</title>
+      <link href="http://localhost:4000/go-build-error/"/>
+      <pubDate>2018-01-05T04:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/go-build-error</guid>
+      <content:encoded><![CDATA[<p>go build 程序时，如果出现：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: building out-of-date packages:
+
+runtime/pprof
+
+testing
+
+regexp/syntax
+
+regexp
+
+installing these packages with <span class="s1">'go test -i'</span> will speed future tests.
+</code></pre></div></div>
+
+<p>那么就是说明下面的包已经有修改过了，但是没有重新install</p>
+
+<p>如果有标准的包过期，使用go install -a -v std来进行更新</p>
+
+<p>如果是自定义的包过期，重新调用go install</p>
 ]]></content:encoded>
     </item>
     
@@ -661,138 +690,6 @@
 <p>假如每条日志消息的平均长度是110字节，这意味着1秒要写100万条日志。</p>
 
 <p>关于日志之前写过另一篇。可以看<a href="http://blog.xyecho.com/model-log/">日志模块</a>.</p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记 第四章 c++多线程系统编程精要</title>
-      <link href="http://localhost:4000/muduo-4-threads/"/>
-      <pubDate>2018-01-04T04:08:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-4-threads</guid>
-      <content:encoded><![CDATA[<p>学习多线程编程面临的最大的思维方式的转变有两点：</p>
-
-<ul>
-  <li>当前线程可能随时会被切换出去，或者说被抢占（preempt）了。</li>
-  <li>多线程程序中事件的发生顺序不再有全局统一的先后关系 1 。</li>
-</ul>
-
-<h4 id="基本线程原语的选用">基本线程原语的选用</h4>
-
-<p>POSIX threads的函数有110多个，真正常用的不过十几个。而且在C++程序中通常会有更为易用的wrapper，不会直接调用Pthreads函数。这11个最基本的Pthreads函数是：</p>
-
-<ul>
-  <li>2个：线程的创建和等待结束（join）。封装为muduo::Thread。</li>
-  <li>4个：mutex的创建、销毁、加锁、解锁。封装为muduo::MutexLock。</li>
-  <li>5个：条件变量的创建、销毁、等待、通知、广播。封装为muduo::Condition。</li>
-</ul>
-
-<p>这些封装class都很直截了当，加起来也就一两百行代码，却已经构成了多线程编程的全部必备原语。用这三样东西（thread、mutex、condition）可以完成任何多线程编程任务。</p>
-
-<h4 id="cc系统库的线程安全性">c/c++系统库的线程安全性</h4>
-
-<p>c++11宣言了一个线程库。（std::thread）
-对于标准而言，关键的不是定义线程库，而是规定内存模型（memory model）。特别是规定一个线程对某个共享变量的修改何时能被其他线程看到，这称为内存序（memory ordering）或者内存能见度（memory visibility）。</p>
-
-<p><strong>[这句话有三个名词：内存模型，内存有序，内存能见度。可以查找这方面的资料。]</strong></p>
-
-<p>编写线程安全程序的一个难点在于线程安全是不可组合的（composable），一个函数foo()调用了两个线程安全的函数，而这个foo()函数本身很可能不是线程安全的。即便现在大多数glibc库函数是线程安全的，我们也不能像写单线程程序那样编写代码。</p>
-
-<p>C++的标准库容器和std::string都不是线程安全的，只有std::allocator保证是线程安全的。一方面的原因是为了避免不必要的性能开销，另一方面的原因是单个成员函数的线程安全并不具备可组合性（composable）</p>
-
-<h4 id="linux上的线程标识">Linux上的线程标识</h4>
-
-<p>pthread_t并不适合用作程序中对线程的标识符。 pthread_t不一定是一个数值类型（整数或指针），也有可能是一个结构体</p>
-
-<p>无法打印输出pthread_t，因为不知道其确切类型。也就没法在日志中用它表示当前线程的id。</p>
-
-<p>无法比较pthread_t的大小或计算其hash值，因此无法用作关联容器的key。</p>
-
-<p>无法定义一个非法的pthread_t值，用来表示绝对不可能存在的线程id，因此MutexLock class没有办法有效判断当前线程是否已经持有本锁。</p>
-
-<p>pthread_t值只在进程内有意义，与操作系统的任务调度之间无法建立有效关联。比方说在/proc文件系统中找不到pthread_t对应的task。</p>
-
-<p>在Linux上，我建议使用gettid(2)系统调用的返回值作为线程id，这么做的好处有：</p>
-
-<p>它的类型是pid_t，其值通常是一个小整数 13 ，便于在日志中输出。</p>
-
-<p>在现代Linux中，它直接表示内核的任务调度id，因此在/proc文件系统中可以轻易找到对应项：/proc/tid或/prod/pid/task/tid。</p>
-
-<p>在其他系统工具中也容易定位到具体某一个线程，例如在top(1)中我们可以按线程列出任务，然后找出CPU使用率最高的线程id，再根据程序日志判断到底哪一个线程在耗用CPU。</p>
-
-<p>任何时刻都是全局唯一的，并且由于Linux分配新pid采用递增轮回办法，短时间内启动的多个线程也会具有不同的线程id。</p>
-
-<p>0是非法值，因为操作系统第一个进程init的pid是1。</p>
-
-<h4 id="线程的创建与销毁的守则">线程的创建与销毁的守则</h4>
-
-<p>线程的创建比销毁要容易得多，只需要遵循几条简单的原则：</p>
-
-<ul>
-  <li>程序库不应该在未提前告知的情况下创建自己的“背景线程”。</li>
-  <li>尽量用相同的方式创建线程，例如muduo::Thread。</li>
-  <li>在进入main()函数之前不应该启动线程。 ·程序中线程的创建最好能在初始化阶段全部完成。（C++保证在进入main()之前完成全局对象 ）</li>
-</ul>
-
-<h4 id="线程的销毁有几种方式-">线程的销毁有几种方式 ：</h4>
-
-<ul>
-  <li>自然死亡。从线程主函数返回，线程正常退出。</li>
-  <li>非正常死亡。从线程主函数抛出异常或线程触发segfault信号等非法操作 。</li>
-  <li>自杀。在线程中调用pthread_exit()来立刻退出线程。</li>
-  <li>他杀。其他线程调用pthread_cancel()来强制终止某个线程。</li>
-</ul>
-
-<h4 id="善用__thread关键字">善用__thread关键字</h4>
-
-<p>__thread使用规则27：只能用于修饰POD类型，不能修饰class类型， 因为无法自动调用构造函数和析构函数。__thread可以用于修饰全局变量、函数内的静态变量，但是不能用于修饰函数的局部变量或者class的普通成员变量。另外，__thread变量的初始化只能用编译期常量。</p>
-
-<p>例如：</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">__thread</span> <span class="n">string</span> <span class="n">t_obj1</span><span class="p">(</span><span class="s">"Chen Shou"</span><span class="p">);</span>    <span class="c1">// 错误 不能对象的构造函数</span>
-<span class="kr">__thread</span> <span class="n">string</span> <span class="o">*</span> <span class="n">t_obj2</span><span class="o">=</span> <span class="n">new</span> <span class="n">string</span><span class="p">;</span>   <span class="c1">// 错误 初始化必须用编译期常量</span>
-<span class="kr">__thread</span> <span class="n">string</span> <span class="o">*</span> <span class="n">t_obj3</span><span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>         <span class="c1">// 正常 但是需要手工初始化并销毁对象</span>
-
-</code></pre></div></div>
-<p>__thread变量是每个线程有一份独立实体，各个线程的变量值互不干扰。除了这个主要用途， 它还可以修饰那些”值可能会变，带有全局性，但是又不值得用全局锁保护”的变量。muduo代码中用到了 好几处__thread，简单列举如下：</p>
-
-<ul>
-  <li>muduo/base/Logging.cc 缓存最近一条日志时间的年月日时分秒，如果一秒之内输出多条日志，可避免重复格式化。另外，muduo::strerror_tl把strerror_r(3)做成如同strerror(3)一样好用，而且是线程安全的。</li>
-  <li>muduo/base/ProcessINfo.cc 用线程局部变量来简化<code class="highlighter-rouge">::scandir(3)</code>的使用。</li>
-  <li>muduo/base/Thread.cc 缓存每个线程的id。</li>
-  <li>用于判断当前线程是否只有一个EventLoop对象。</li>
-</ul>
-
-<h4 id="多线程与io">多线程与IO</h4>
-
-<p>为了简单起见，我认为多线程程序应该遵循的原则是：每个文件描述符只由一个线程操作，从而轻松解决消息收发的顺序性问题，也避免了关闭文件描述符的各种race condition。 一个线程可以操作多个文件描述符， 但一个线程不能操作别的线程拥有的文件描述符。 这一点不难做到， muduo网络库已经把这些细节封装了。</p>
-
-<h4 id="raii与fork">RAII与fork()</h4>
-
-<p>通常我们会用RAII手法来管理以上种类的资源(加锁解锁、创建销毁定时器等等).</p>
-
-<p>但是在fork()出来的子进程中不一定正常工作，因为资源在fork()时已经被释放了。比方说用RAII技法封装timer_create()/timer_delete()，在子进程中析构函数调用timer_delete()可能会出错。</p>
-
-<p>因为试图释放一个不存在的资源。或者更糟糕地把其他对象持有的timer给释放了（如果碰巧新建的timer_t与之重复的话）。</p>
-
-<h4 id="多线程与fork">多线程与fork()</h4>
-
-<p>fork()是单线程的产物。当有了多线程之后，fork()就变得有一些不适应了。</p>
-
-<p>fork()一般不能在多线程程序中调用 ，因为Linux的fork()只克隆当前线程的thread of control，不克隆其他线程。</p>
-
-<p>fork()之后，除了当前线程之外，其他线程都消失了。也就是说不能一下子fork()出一个和父进程一样的多线程子进程。</p>
-
-<p>Linux没有forkall()这样的系统调用，forkall()其实也是很难办的（从语意上），因为其他线程可能等在condition。</p>
-
-<p>所以最好不要在多线程当中调用fork(),除非你调用后马上调用exec()。彻底断了子进程和父进程的关系。</p>
-
-<h4 id="多线程与signal">多线程与signal</h4>
-
-<p>在多线程程序中， 使用signal的第一原则是不要使用signal。</p>
-
-<p>关于多线程与signal关系。可以看<a href="http://blog.xyecho.com/linux-signal/">linux signal and threads</a></p>
 
 ]]></content:encoded>
     </item>
