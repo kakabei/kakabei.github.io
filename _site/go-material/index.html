@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>go vet检测代码错误</title>
+    <title>go 资料</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>go vet检测代码错误</h1>
+        <h1>go 资料</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -54,43 +54,20 @@
 
 </section>
 <section class="post">
-<p>这个种方式很不错，当代码量很大时，可以用这种方式去做检测。</p>
+<ul>
+  <li>github Go语言资料收集 <a href="https://github.com/wonderfo/wonderfogo/wiki">https://github.com/wonderfo/wonderfogo/wiki</a></li>
+  <li>这个人的几篇blog可以看 <a href="http://www.cnblogs.com/yjf512/category/385369.html">http://www.cnblogs.com/yjf512/category/385369.html</a></li>
+  <li>这不是一个go项目，他是一个学习go的资料网站，属于著名的awesome系列，里面关于go的资源非常详细。<a href="https://github.com/avelino/awesome-go">https://github.com/avelino/awesome-go</a></li>
+</ul>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x"> </span><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
-
-</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
-
-</span><span class="k">func</span><span class="x"> </span><span class="n">Func</span><span class="p">(</span><span class="n">num</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"call Func</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"num = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">num</span><span class="p">)</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"num = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="m">1</span><span class="p">,</span><span class="x"> </span><span class="m">2</span><span class="p">,</span><span class="x"> </span><span class="m">3</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
-
-</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">Func</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
-
-<p>使用vet工具检测代码：</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go build demo.go
-<span class="nv">$ </span>go tool vet demo.go
-demo.go:7: arg num <span class="k">for </span><span class="nb">printf </span>verb %s of wrong <span class="nb">type</span>: int
-demo.go:8: wrong number of args <span class="k">for </span>format <span class="k">in </span>Printf call: 1 needed but 3 args
- 
-</code></pre></div></div>
-
-<p>通过vet工具，可以检测到go代码中一些可疑的结构，虽然vet不能确保发现的问题都是真正的错误，但是它可以发现一些编译器无法捕获的错误。</p>
-
-<p>例如示例中，这段代码能正常的编译通过，但是通过vet检测出2个问题，第一个问题是打印的格式与参数类型不匹配，第二个问题需要打印的参数和所给参数数量不一致。</p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/go-material/" class="pageNav"  >上一篇</a>
+	<a  href="/go-build-ldflags/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/go-defer-1/" class="pageNav"  >下一篇</a>
+	<a  href="/go-ver/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -155,7 +132,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-03-01-go-ver.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-03-01-go-material.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
