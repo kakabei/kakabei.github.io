@@ -7,13 +7,13 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-12T01:11:23+08:00</lastBuildDate>
+    <lastBuildDate>2018-09-12T01:25:33+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
-      <title>go 笔记  go的竞争检测</title>
+      <title>go的竞争检测</title>
       <link href="http://localhost:4000/go-check-race/"/>
-      <pubDate>2018-01-05T04:21:12+08:00</pubDate>
+      <pubDate>2018-03-02T04:21:12+08:00</pubDate>
       <author>xyecho</author>
       <guid>http://localhost:4000/go-check-race</guid>
       <content:encoded><![CDATA[<p><code class="highlighter-rouge">go run -race</code> 或者 <code class="highlighter-rouge">go build -race</code> 来进行竞争检测。</p>
@@ -67,6 +67,126 @@
 </span><span class="n">exit</span><span class="x"> </span><span class="n">status</span><span class="x"> </span><span class="m">66</span><span class="x">
 </span></code></pre></div></div>
 <p><strong>13行 出现变量竞争。</strong></p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go gdb 编译</title>
+      <link href="http://localhost:4000/go-gdb/"/>
+      <pubDate>2018-03-01T18:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/go-gdb</guid>
+      <content:encoded><![CDATA[<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go build <span class="nt">-gcflags</span> <span class="s2">"-N -l"</span> demo.go
+</code></pre></div></div>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go关于defer的一道面试题</title>
+      <link href="http://localhost:4000/go-defer-1/"/>
+      <pubDate>2018-03-01T18:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/go-defer-1</guid>
+      <content:encoded><![CDATA[<p>请写出输出结果</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">(){</span><span class="x">
+    </span><span class="n">a</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="x">
+    </span><span class="n">b</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">2</span><span class="x">
+    </span><span class="k">defer</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span><span class="x">
+    </span><span class="n">a</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">0</span><span class="x">
+    </span><span class="k">defer</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="k">func</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="x"> </span><span class="kt">int</span><span class="p">){</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span><span class="x">
+    </span><span class="k">return</span><span class="x"> </span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span></code></pre></div></div>
+
+<p>结果是</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 2 3
+0 2 2
+0 2 2
+1 3 4
+</code></pre></div></div>
+
+<h4 id="考察两个知识点">考察两个知识点：</h4>
+
+<p>1.defer是栈调用，后写的先执行</p>
+
+<p>2.defer的函数调用语句会在父函数调用后执行，但是用到的参数会在当时就执行得出</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go vet检测代码错误</title>
+      <link href="http://localhost:4000/go-build-ver/"/>
+      <pubDate>2018-03-01T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/go-build-ver</guid>
+      <content:encoded><![CDATA[<p>这个种方式很不错，当代码量很大时，可以用这种方式去做检测。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x"> </span><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
+
+</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
+
+</span><span class="k">func</span><span class="x"> </span><span class="n">Func</span><span class="p">(</span><span class="n">num</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"call Func</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"num = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">num</span><span class="p">)</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"num = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="m">1</span><span class="p">,</span><span class="x"> </span><span class="m">2</span><span class="p">,</span><span class="x"> </span><span class="m">3</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">Func</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>使用vet工具检测代码：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go build demo.go
+<span class="nv">$ </span>go tool vet demo.go
+demo.go:7: arg num <span class="k">for </span><span class="nb">printf </span>verb %s of wrong <span class="nb">type</span>: int
+demo.go:8: wrong number of args <span class="k">for </span>format <span class="k">in </span>Printf call: 1 needed but 3 args
+ 
+</code></pre></div></div>
+
+<p>通过vet工具，可以检测到go代码中一些可疑的结构，虽然vet不能确保发现的问题都是真正的错误，但是它可以发现一些编译器无法捕获的错误。</p>
+
+<p>例如示例中，这段代码能正常的编译通过，但是通过vet检测出2个问题，第一个问题是打印的格式与参数类型不匹配，第二个问题需要打印的参数和所给参数数量不一致。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go 编译时传递参数</title>
+      <link href="http://localhost:4000/go-build-ldflags/"/>
+      <pubDate>2018-03-01T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/go-build-ldflags</guid>
+      <content:encoded><![CDATA[<p>很有意思，可能运用的场景不多。如果想调试某个模块时，可以在编译直接给他赋值。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
+
+</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
+
+</span><span class="k">var</span><span class="x"> </span><span class="n">BuildDate</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="s">"no build date"</span><span class="x">
+
+</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"build date: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">BuildDate</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>传递参数步骤：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go build demo.go
+<span class="nv">$ </span>./demo
+build <span class="nb">date</span>: no build <span class="nb">date</span>
+<span class="nv">$ DATE</span><span class="o">=</span><span class="sb">`</span><span class="nb">date</span> <span class="s1">'+%Y-%m-%d-%I:%M:%S'</span><span class="sb">`</span>
+<span class="nv">$ </span>go build <span class="nt">-ldflags</span> <span class="s2">"-X main.BuildDate=</span><span class="nv">$DATE</span><span class="s2">"</span> demo.go
+<span class="nv">$ </span>./demo
+build <span class="nb">date</span>: 2018-05-03-03:15:35
+</code></pre></div></div>
+<p>通过-X选项，可以给go程序传递相关参数。例如示例中，借助-X选项，将编译日期BuildDate实时传递到程序中。另外，如版本信息之类也可以通过该方式实现。</p>
 ]]></content:encoded>
     </item>
     
@@ -334,362 +454,6 @@ installing these packages with <span class="s1">'go test -i'</span> will speed f
 
 <h4 id="注">[注]</h4>
 <p>1、可能我们在实践当中，中不太可能改动每个服务器的，特别当服务器越来越多时，根本不靠谱。所以在框架中解决这个问题是比较好的选择。</p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记 第七章 muduo编程示例</title>
-      <link href="http://localhost:4000/muduo-7-muduo-example/"/>
-      <pubDate>2018-01-05T04:18:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-7-muduo-example</guid>
-      <content:encoded><![CDATA[<h4 id="为什么tcpconnectionshutdown没有直接关闭tcp连接">为什么TcpConnection::shutdown()没有直接关闭TCP连接</h4>
-
-<p>muduo TcpConnection没有提供close()，而只提供shutdown()，这么做是为了收发数据的完整性。</p>
-
-<p>也就是说muduo把”主动关闭连接”这件事情分成两步来做，如果要主动关闭连接，它会先关本地”写”端，等对方关闭之后，再关本地”读”端。</p>
-
-<p>就是要把buff的数据全部发完之后才会关闭它。</p>
-
-<h4 id="tcp分包">TCP分包</h4>
-<p>在TCP这种字节流协议上做应用层分包是网络编程的基本需求。</p>
-
-<p>分包指的是在发生一个消息（message）或一帧（frame）数据时，通过一定的处理，让接收方能从字节流中识别并截取（还原）出一个个消息。</p>
-
-<p>“粘包问题”是个伪问题。</p>
-
-<h4 id="muduo-buff类的设计与使用">muduo buff类的设计与使用</h4>
-
-<p>event loop是non-blocking网络编程的核心，在现实生活中，non-blocking几乎总是和IO multiplexing一起使用，</p>
-
-<p>原因有两点：</p>
-
-<p>1.没有人真的会用轮询（busy-pooling）来检查某个non-blocking IO操作是否完成，这样太浪费CPU cycles。</p>
-
-<p>2.IO multiplexing一般不能和blocking IO用在一起，因为blocking IO中<code class="highlighter-rouge">read()/write()/accept()/connect()</code>都有可能阻塞当前线程，这样线程就没办法处理其他socket上的IO事件了。</p>
-
-<h4 id="为什么non-blocking网络编程中应用层buffer是必需的">为什么non-blocking网络编程中应用层buffer是必需的</h4>
-
-<p>non-blocking IO的核心思想是避免阻塞在read()或write()或其他IO系统调用上，这样可以最大限度地复用thread-of-control，让一个线程能服务于多个socket连接。</p>
-
-<p>IO线程只能阻塞在IO multiplexing函数上，如select/poll/epoll_wait。这样一来，应用层的缓冲是必需的，每个TCP socket都要有stateful的input buffer和output buffer。</p>
-
-<h4 id="muduo-buffer的设计要点">muduo Buffer的设计要点：</h4>
-
-<p>1.对外表现为一块连续的内存(char* p, int len)，以方便客户代码的编写。</p>
-
-<p>2.其size()可以自动增长，以适应不同大小的消息。它不是一个fixed size array（例如char buf[8192]）。</p>
-
-<p>3.内部以<code class="highlighter-rouge">std::vector&lt;char&gt;</code>来保存数据，并提供相应的访问函数。 Buffer其实像是一个queue，从末尾写入数据，从头部读出数据。 谁会用Buffer？谁写谁读？根据前文分析，TcpConnection会有两个Buffer成员，input buffer与output buffer。</p>
-
-<p>4.input buffer，TcpConnection会从socket读取数据，然后写入input buffer（其实这一步是用<code class="highlighter-rouge">Buffer::readFd()</code>完成的）；客户代码从input buffer读取数据。 output buffer，客户代码会把数据写入output buffer（其实这一步是用<code class="highlighter-rouge">TcpConnection::send()</code>完成的）；TcpConnection从output buffer读取数据并写入socket。</p>
-
-<p>5.其实，input和output是针对客户代码而言的，客户代码从input读，往output写。TcpConnection的读写正好相反。</p>
-
-<h4 id="protobuf从消息名创建消息然后分发给不同的处理函数">protobuf从消息名创建消息，然后分发给不同的处理函数。</h4>
-
-<h4 id="限制并发连接数">限制并发连接数</h4>
-
-<p>一方面，我们不希望服务程序超载；另一方面，更因为filedescriptor是稀缺资源，如果出现filedescriptor耗尽，很棘手，跟“malloc()失败/new抛出std::bad_alloc”差不多同样棘手。</p>
-
-<p>在服务端中如果在accetp中出现fd耗尽，那么就可能无法及时通知客户关闭。</p>
-
-<p>所以，可以准备一个空闲的文件描述符。遇到这种情况，先关闭这个空闲文件，获得一个文件描述符的名额；再accept(2)拿到新socket连接的描述符；随后立刻close(2)它，这样就优雅地断开了客户端连接；最后重新打开一个空闲文件，把“坑”占住，以备再次出现这种情况时使用。</p>
-
-<p>另一种方式，要在onConnection时统计活着的链接数。如果超过最大就shutdown。</p>
-
-<h4 id="定时器">定时器</h4>
-
-<p>在一般的服务端程序设计中，与时间有关的常见任务有：</p>
-
-<p>1．获取当前时间，计算时间间隔。</p>
-
-<p>2．时区转换与日期计算；把纽约当地时间转换为上海当地时间；2011-02-05之后第100天是几月几号星期几；等等。</p>
-
-<p>3．定时操作，比如在预定的时间执行任务，或者在一段延时之后执行任务。</p>
-
-<h4 id="linux时间函数">linux时间函数</h4>
-
-<p>Linux的计时函数，用于获得当前时间：</p>
-
-<ul>
-  <li>time(2) / time_t（秒）</li>
-  <li>ftime(3) / struct timeb（毫秒）</li>
-  <li>gettimeofday(2) / struct timeval（微秒）</li>
-  <li>clock_gettime(2) / struct timespec（纳秒）</li>
-</ul>
-
-<p>还有gmtime / localtime / timegm / mktime / strftime / struct tm等与当前时间无关的时间格式转换函数。 
-定时函数，用于让程序等待一段时间或安排计划任务：</p>
-
-<ul>
-  <li>sleep(3)</li>
-  <li>alarm(2)</li>
-  <li>usleep(3)</li>
-  <li>nanosleep(2)</li>
-  <li>clock_nanosleep(2)</li>
-  <li>getitimer(2) / setitimer(2)</li>
-  <li>timer_create(2) / timer_settime(2) / timer_gettime(2) / timer_delete(2) ·timerfd_create(2) / timerfd_gettime(2) / timerfd_settime(2)</li>
-</ul>
-
-<h4 id="我的取舍如下">我的取舍如下：</h4>
-<ul>
-  <li>（计时）只使用gettimeofday(2)来获取当前时间。</li>
-  <li>（定时）只使用timerfd_*系列函数来处理定时任务。</li>
-</ul>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记 第六章 性能评测</title>
-      <link href="http://localhost:4000/muduo-6-performance-test/"/>
-      <pubDate>2018-01-05T04:08:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-6-performance-test</guid>
-      <content:encoded><![CDATA[<h4 id="65-性能评测">6.5 性能评测</h4>
-
-<p>性能对比原则：采用对方的性能测试方案，用muduo实现功能相同或类似的程序，然后放到相同的软硬件环境中对比。</p>
-
-<p>注意这里的测试只是简单地比较了平均值；其实在严肃的性能对比中至少还应该考虑分布和百分位数（percentile）的值。限于篇幅，此处从略。</p>
-
-<p>简单地说， ping pong协议是客户端和服务器都实现echo协议。</p>
-
-<p>当TCP连接建立时， 客户端向服务器发送一些数据， 服务器会echo回这些数据， 然后客户端再echo回服务器。这些数据就会像乒乓球一样在客户端和服务器之间来回传送， 直到有一方断开连接为止。 这是用来测试吞吐量的常用办法。</p>
-
-<h5 id="注">[注]</h5>
-
-<p>1.书中这里做了 asio libevent2和 muduo的对比。对于asio我没有接触过，那我就只关注  libevent2和muduo就可以了。</p>
-
-<p>2.做对比测试时，要注明测试环境： 硬件： CPU 几核主频多少。内存多少。软件： 操作系统，版本 内核版本。(主要测框架的性能，固定这一些定量。才能做对比)</p>
-
-<h5 id="测试方法-分了单线程测试和多线程测试-多线程测试要注意测试的cpu核数">测试方法： 分了单线程测试，和多线程测试。 多线程测试要注意测试的cpu核数。</h5>
-
-<p>现在的CPU很快，即便是单线程单TCP连接也能把千兆以太网的带宽跑满。如果用两台机器，所有的吞吐量测试结果都将是110MiB/s，失去了对比的意义。（用Python也能跑出同样的吞吐量，或许可以对比哪个库占的CPU少。）</p>
-
-<p>可能是由于路由器或交换机的影响，对带宽有所限制。</p>
-
-<p>这是测试代码 ：<a href="https://gist.github.com/chenshuo/564985">https://gist.github.com/chenshuo/564985</a></p>
-
-<p>单纯程测试结果是 muduo 比 libevent2快70%</p>
-
-<p>跟踪libevent2的源代码发现，它每次最多从socket读取4096字节的数据（证据在buffer.c的evbuffer_ read()函数），怪不得吞吐量比muduo小很多。</p>
-
-<p>因为在这一测试中，muduo每次读取16384字节，系统调用的性价比较高。</p>
-
-<p>但是把缓冲区都测试成为4K，结果，muduo还是比libevent2快18%以上。</p>
-
-<h5 id="注-1">[注]</h5>
-
-<p>1.这里指的 单线程，缓冲区大小一样。结果还是比libevent2快18%以上。那么问题在什么地方呢？</p>
-
-<p>2.libevent2的多线程方式并不是很好用，可能是因为这个原因，他没有做libeven2的多线程方面测试。</p>
-
-<p>有人会说，libevent2并不是为高吞吐量的应用场景而设计的，这样的比较不公平，胜之不武。</p>
-
-<h5 id="注-2">[注]</h5>
-<p>1.那是它是专用为什么目的设计的呢？</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记 第六章 常见的并发网络服务器程序设计方案</title>
-      <link href="http://localhost:4000/muduo-6-high-concurrency-scheme/"/>
-      <pubDate>2018-01-05T04:08:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-6-high-concurrency-scheme</guid>
-      <content:encoded><![CDATA[<h4 id="常见的并发网络服务器程序设计方案">常见的并发网络服务器程序设计方案：</h4>
-
-<p><img src="/assets/muduo/high-concurrency-scheme1.png" alt="" /></p>
-
-<h4 id="方案0">方案0</h4>
-
-<p>一次只能服务一个链接。现在的网络服务器基本不会这么做，所以这种方案基本是废的。</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/python</span>
-
-<span class="kn">import</span> <span class="nn">socket</span>
-
-<span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">):</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">client_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">sent</span> <span class="o">=</span> <span class="n">client_socket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>    <span class="c"># sendall?</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">"disconnect"</span><span class="p">,</span> <span class="n">client_address</span>
-            <span class="n">client_socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">break</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">listen_address</span> <span class="o">=</span> <span class="p">(</span><span class="s">"0.0.0.0"</span><span class="p">,</span> <span class="mi">2007</span><span class="p">)</span>
-    <span class="n">server_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-    <span class="n">server_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">listen_address</span><span class="p">)</span>
-    <span class="n">server_socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">)</span> <span class="o">=</span> <span class="n">server_socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
-        <span class="k">print</span> <span class="s">"got connection from"</span><span class="p">,</span> <span class="n">client_address</span>
-        <span class="n">handle</span><span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">)</span>
-</code></pre></div></div>
-
-<h4 id="方案1">方案1</h4>
-
-<p>这个方案就是一个进程服务一个客户端，　称之为child-per-client或fork()-per-client，另外也俗称process-per-connection。</p>
-
-<p>这种方案适合并发连接数不大的情况。至今仍有一些网络服务程序用这种方式实现，比如PostgreSQL和Perforce的服务端。</p>
-
-<p>这种方案适合”计算响应的工作量远大于fork()的开销”这种情况，比如数据库服务器。这种方案适合长连接，但不太适合短连接，因为fork()开销大于求解Sudoku的用时。</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/python</span>
-<span class="kn">from</span> <span class="nn">SocketServer</span> <span class="kn">import</span> <span class="n">BaseRequestHandler</span><span class="p">,</span> <span class="n">TCPServer</span>
-<span class="kn">from</span> <span class="nn">SocketServer</span> <span class="kn">import</span> <span class="n">ForkingTCPServer</span><span class="p">,</span> <span class="n">ThreadingTCPServer</span>
-
-<span class="k">class</span> <span class="nc">EchoHandler</span><span class="p">(</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s">"got connection from"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_address</span>
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
-                <span class="n">sent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>    <span class="c"># sendall?</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span> <span class="s">"disconnect"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_address</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-                <span class="k">break</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">listen_address</span> <span class="o">=</span> <span class="p">(</span><span class="s">"0.0.0.0"</span><span class="p">,</span> <span class="mi">2007</span><span class="p">)</span>
-    <span class="n">server</span> <span class="o">=</span> <span class="n">ForkingTCPServer</span><span class="p">(</span><span class="n">listen_address</span><span class="p">,</span> <span class="n">EchoHandler</span><span class="p">)</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
-</code></pre></div></div>
-
-<h4 id="方案2">方案2</h4>
-
-<p>一个线程对应一个连接。一个客户端链接上来，就会开一个线程为它服务。</p>
-
-<p>Java网络服务多采用这种方案。它的初始化开销比方案1要小很多，但与求解Sudoku的用时差不多，仍然不适合短连接服务。</p>
-
-<p>这种方案的伸缩性受到线程数的限制，一两百个还行，几千个的话对操作系统的scheduler恐怕是个不小的负担。</p>
-
-<h4 id="方案3-方案4">方案3 方案4</h4>
-
-<p>方案3是对方案1的优化。</p>
-
-<p>方案4是对方案2的优化。</p>
-
-<p>这两种方案是apache httpd长期使用的方案。</p>
-
-<h4 id="方案5">方案5</h4>
-
-<p>基本的单线程Reactor方案。 是IO复用，非阻塞的了。用注册回调可以实现网络和业务的分离。
-\
-这种方案的优点是由网络库搞定数据收发，程序只关心业务逻辑；缺点在前面已经谈了：适合IO密集的应用，不太适合CPU密集的应用，因为较难发挥多核的威力。</p>
-
-<p>另外，与方案2相比，方案5处理网络消息的延迟可能要略大一些，因为方案2直接一次read(2)系统调用就能拿到请求数据，而方案5要先poll(2)再read(2)，多了一次系统调用。</p>
-
-<h4 id="方案6">方案6</h4>
-
-<p>是一个过渡方案。</p>
-
-<p>收到请求之后，不在Reactor线程计算，而是创建一个新线程去计算，以充分利用多核CPU。这是非常初级的多线程应用，因为它为每个请求（而不是每个连接）创建了一个新线程。</p>
-
-<p>这个开销可以用线程池来避免。</p>
-
-<h4 id="方案7">方案7</h4>
-
-<p>为每个连接创建一个计算线程，每个连接上的请求固定发给同一个线程去算，先到先得。这也是一个过渡方案，因为并发连接数受限于线程数目，这个方案或许还不如直接使用阻塞IO的thread-per-connection方案2。</p>
-
-<h5 id="方案8">方案8</h5>
-
-<p>为了弥补方案6中为每个请求创建线程的缺陷，我们使用固定大小线程池，程序结构如图6-12所示。全部的IO工作都在一个Reactor线程完成，而计算任务交给thread pool。如果计算任务彼此独立，而且IO的压力不大，那么这种方案是非常适用的。</p>
-
-<p><img src="/assets/muduo/high-concurrency-scheme2.png" alt="" /></p>
-
-<h5 id="方案9">方案9</h5>
-
-<p>这是muduo内置的多线程方案，也是Netty内置的多线程方案。这种方案的特点是one loop per thread，有一个main Reactor负责accept(2)连接，然后把连接挂在某个sub Reactor中（muduo采用round-robin的方式来选择sub Reactor），这样该连接的所有操作都在那个sub Reactor所处的线程中完成。多个连接可能被分派到多个线程中，以充分利用CPU。</p>
-
-<h5 id="方案10-">方案10 　</h5>
-
-<p>这是Nginx的内置方案。如果连接之间无交互，这种方案也是很好的选择。工作进程之间相互独立，可以热升级。</p>
-
-<h5 id="方案11-">方案11 　</h5>
-
-<p>把方案8和方案9混合，既使用多个Reactor来处理IO，又使用线程池来处理计算。这种方案适合既有突发IO（利用多线程处理多个连接上的IO），又有突发计算的应用（利用线程池把一个连接上的计算任务分配给多个线程去做），见图6-14。</p>
-
-<p><img src="/assets/muduo/high-concurrency-scheme3.png" alt="" /></p>
-
-<p>一个程序到底是使用一个event loop还是使用多个event loops呢？</p>
-
-<p>ZeroMQ的手册给出的建议是 ，按照每千兆比特每秒的吞吐量配一个event loop的比例来设置event loop的数目，即muduo::TcpServer::setThreadNum()的参数。</p>
-
-<p>依据这条经验规则，在编写运行于千兆以太网上的网络程序时，用一个event loop就足以应付网络IO。</p>
-
-<p>如果程序本身没有多少计算量，而主要瓶颈在网络带宽，那么可以按这条规则来办，只用一个event loop。</p>
-
-<p>另一方面，如果程序的IO带宽较小，计算量较大，而且对延迟不敏感，那么可以把计算放到thread pool中，也可以只用一个event loop。</p>
-
-<p>ZeroMQ的手册给出的建议 : <a href="http://zeromq.org/area:faq#toc3">http://zeromq.org/area:faq#toc3</a></p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记 第五章 高效的多线程日志</title>
-      <link href="http://localhost:4000/muduo-5-threads-log/"/>
-      <pubDate>2018-01-04T04:08:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-5-threads-log</guid>
-      <content:encoded><![CDATA[<p><strong>“日志（logging）”有两个意思:</strong></p>
-
-<p>1.诊断日志（diagnostic log） 　 即log4j、logback、slf4j、glog、g2log、log4cxx、log4cpp、log4cplus、Pantheios、ezlogger等常用日志库提供的日志功能。</p>
-
-<p>2.交易日志（transaction log） 　即数据库的write-ahead log 1 、文件系统的journaling 2 等，用于记录状态变更，通过回放日志可以逐步恢复每一次修改之后的状态。</p>
-
-<p>本章的”日志”是前一个意思，即文本的、供人阅读的日志，通常用于故障诊断和追踪（trace） ，也可用于性能分析。</p>
-
-<p>日志通常是分布式系统中事故调查时的唯一线索，用来追寻蛛丝马迹，查出元凶。</p>
-
-<p>在服务端编程中，日志是必不可少的，在生产环境中应该做到”Log Everything All The Time” 。对于关键进程，日志通常要记录:</p>
-
-<ul>
-  <li>收到的每条内部消息的id（还可以包括关键字段、长度、hash等）；</li>
-  <li>收到的每条外部消息的全文；</li>
-  <li>发出的每条消息的全文，每条消息都有全局唯一的id；</li>
-  <li>关键内部状态的变更，等等。</li>
-</ul>
-
-<h4 id="c日志库的前端大体上有两种api风格">C++日志库的前端大体上有两种API风格：</h4>
-
-<p>C/Java的<code class="highlighter-rouge">printf(fmt, ...)</code>风格，例如 <code class="highlighter-rouge">log_info("Received %d bytes from %s", len, getClientName().c_str());</code></p>
-
-<p>C++的<code class="highlighter-rouge">stream &lt;&lt;</code> 风格，例如 <code class="highlighter-rouge">LOG_INFO &lt;&lt; "Received " &lt;&lt; len &lt;&lt; " bytes from " &lt;&lt; getClientName();</code></p>
-
-<p>muduo日志库是C++ stream风格的另一个好处是当输出的日志级别高于语句的日志级别时，打印日志是个空操作, 运行时开销接近零。
-比方说当日志级别为WARNING时，<code class="highlighter-rouge">LOG_INFO &lt;&lt;</code>是空操作，这个语句根本不会调用<code class="highlighter-rouge">std::string getClientName()</code>函数，减小了开销。而printf风格不易做到这一点。</p>
-
-<p>可以看这篇文章 <a href="http://www.drdobbs.com/cpp/logging-in-c/201804215">Logging In C++</a></p>
-
-<h4 id="性能需求">性能需求</h4>
-
-<p>编写Linux服务端程序的时候，我们需要一个高效的日志库。只有日志库足够高效，程序员才敢在代码中输出足够多的诊断信息，减小运维难度，提升效率。</p>
-
-<p>高效性体现在几方面：</p>
-
-<ul>
-  <li>每秒写几千上万条日志的时候没有明显的性能损失。</li>
-  <li>能应对一个进程产生大量日志数据的场景，例如1GB/min。</li>
-  <li>不阻塞正常的执行流程。</li>
-  <li>在多线程程序中，不造成争用（contention）。</li>
-</ul>
-
-<p>这里列举一些具体的性能指标，考虑往普通7200rpm SATA硬盘写日志文件的情况：</p>
-
-<p>磁盘带宽约是110MB/s，日志库应该能瞬时写满这个带宽（不必持续太久）。</p>
-
-<p>假如每条日志消息的平均长度是110字节，这意味着1秒要写100万条日志。</p>
-
-<p>关于日志之前写过另一篇。可以看<a href="http://blog.xyecho.com/model-log/">日志模块</a>.</p>
 
 ]]></content:encoded>
     </item>

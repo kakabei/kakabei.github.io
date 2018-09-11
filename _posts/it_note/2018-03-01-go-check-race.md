@@ -1,7 +1,7 @@
 ---
 layout: post
-title: go 笔记  go的竞争检测
-date: 2018-01-04 20:21:12
+title:  go的竞争检测
+date: 2018-03-01 20:21:12
 categories: 编程语言 go
 tags:  编程语言 go
 excerpt: go的竞争检测

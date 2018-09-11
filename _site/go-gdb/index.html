@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>go build 时的错误分析</title>
+    <title>go gdb 编译</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>go build 时的错误分析</h1>
+        <h1>go gdb 编译</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,7 +28,7 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2018-01-05">2018-01-05</time>
+  <time datetime="2018-03-01">2018-03-01</time>
 </span>
 
  | 
@@ -54,34 +54,16 @@
 
 </section>
 <section class="post">
-<p>go build 程序时，如果出现：</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: building out-of-date packages:
-
-runtime/pprof
-
-testing
-
-regexp/syntax
-
-regexp
-
-installing these packages with <span class="s1">'go test -i'</span> will speed future tests.
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go build <span class="nt">-gcflags</span> <span class="s2">"-N -l"</span> demo.go
 </code></pre></div></div>
-
-<p>那么就是说明下面的包已经有修改过了，但是没有重新install</p>
-
-<p>如果有标准的包过期，使用go install -a -v std来进行更新</p>
-
-<p>如果是自定义的包过期，重新调用go install</p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/muduo-8-muduo-EventLoop/" class="pageNav"  >上一篇</a>
+	<a  href="/go-defer-1/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/go-build-ldflags/" class="pageNav"  >下一篇</a>
+	<a  href="/go-check-race/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -146,7 +128,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-03-01-go-build-error.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-03-01-go-gdb.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 

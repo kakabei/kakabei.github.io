@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>go build 时的错误分析</title>
+    <title>go 编译时传递参数</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>go build 时的错误分析</h1>
+        <h1>go 编译时传递参数</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,7 +28,7 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2018-01-05">2018-01-05</time>
+  <time datetime="2018-03-01">2018-03-01</time>
 </span>
 
  | 
@@ -54,34 +54,38 @@
 
 </section>
 <section class="post">
-<p>go build 程序时，如果出现：</p>
+<p>很有意思，可能运用的场景不多。如果想调试某个模块时，可以在编译直接给他赋值。</p>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: building out-of-date packages:
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
 
-runtime/pprof
+</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
 
-testing
+</span><span class="k">var</span><span class="x"> </span><span class="n">BuildDate</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="s">"no build date"</span><span class="x">
 
-regexp/syntax
+</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"build date: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">BuildDate</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
 
-regexp
+<p>传递参数步骤：</p>
 
-installing these packages with <span class="s1">'go test -i'</span> will speed future tests.
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go build demo.go
+<span class="nv">$ </span>./demo
+build <span class="nb">date</span>: no build <span class="nb">date</span>
+<span class="nv">$ DATE</span><span class="o">=</span><span class="sb">`</span><span class="nb">date</span> <span class="s1">'+%Y-%m-%d-%I:%M:%S'</span><span class="sb">`</span>
+<span class="nv">$ </span>go build <span class="nt">-ldflags</span> <span class="s2">"-X main.BuildDate=</span><span class="nv">$DATE</span><span class="s2">"</span> demo.go
+<span class="nv">$ </span>./demo
+build <span class="nb">date</span>: 2018-05-03-03:15:35
 </code></pre></div></div>
-
-<p>那么就是说明下面的包已经有修改过了，但是没有重新install</p>
-
-<p>如果有标准的包过期，使用go install -a -v std来进行更新</p>
-
-<p>如果是自定义的包过期，重新调用go install</p>
+<p>通过-X选项，可以给go程序传递相关参数。例如示例中，借助-X选项，将编译日期BuildDate实时传递到程序中。另外，如版本信息之类也可以通过该方式实现。</p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/muduo-8-muduo-EventLoop/" class="pageNav"  >上一篇</a>
+	<a  href="/go-build-error/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/go-build-ldflags/" class="pageNav"  >下一篇</a>
+	<a  href="/go-build-ver/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -146,7 +150,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-03-01-go-build-error.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-03-01-go-build-ldflags.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
