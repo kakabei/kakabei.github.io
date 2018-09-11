@@ -3,7 +3,7 @@ layout: post
 title: linux signal and threads
 date: 2017-03-15 21:12:15
 categories: Linux
-tags: 系统编程 note  
+tags: 系统编程 thread
 excerpt: linux signal 笔记，主要是信号和多线程的一些知识点。
 ---
 
