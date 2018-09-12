@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>lua 学习初步记录</title>
+    <title>c++11 移动语义 浅拷贝 深拷贝</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>lua 学习初步记录</h1>
+        <h1>c++11 移动语义 浅拷贝 深拷贝</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,7 +28,7 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2017-03-15">2017-03-15</time>
+  <time datetime="2017-05-02">2017-05-02</time>
 </span>
 
  | 
@@ -37,7 +37,7 @@
   
   <a href="/categories/#编程语言" title="编程语言">编程语言</a>&nbsp;
   
-  <a href="/categories/#lua" title="lua">lua</a>&nbsp;
+  <a href="/categories/#c++" title="c++">c++</a>&nbsp;
   
 </span>
 
@@ -46,49 +46,61 @@
 <span class="tags">
   标签
   
-  <a href="/tags/#lua" title="lua">lua</a>&nbsp;
+  <a href="/tags/#编程语言" title="编程语言">编程语言</a>&nbsp;
+  
+  <a href="/tags/#c++" title="c++">c++</a>&nbsp;
+  
+  <a href="/tags/#技术阅读笔记" title="技术阅读笔记">技术阅读笔记</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<p>1 Lua 是动态类型语言，变量不要类型定义。 Lua 中有 8 个基本类型分别为： nil、 boolean、number、string、userdata、function、thread 和 table。函数 type 可以测试给定变量或者值
-的类型。</p>
+<p>移动语义 指的就是用move函数解决深拷贝的问题。</p>
 
-<p>2 Lua 中特殊的类型，他只有一个值：nil；一个全局变量没有被赋值以前默认值为 nil；
-给全局变量负 nil 可以删除该变量。</p>
+<p>类中的拷贝构造函数，有深拷贝和浅拷贝之分。</p>
 
-<p>3 Booleans 两个取值 false 和 true。但要注意 Lua 中所有的值都可以作为条件。在控制结构的条
-件中除了 false 和 nil 为假，其他值都为真。所以 Lua 认为 0 和空串都是真。</p>
+<p>当类实例A给另一个实例赋值B时，就会调用拷贝构造函数。</p>
 
-<p>4 Lua 中字符串是不可以修改的， 你可以创建一个新的变量存放你要的字符串。 还可以使用[[…]]表示字符串。</p>
+<p>如果类中有申请到大片内存的问题。</p>
 
-<p>5 Lua 会自动在 string 和 numbers 之间自动进行类型转换，当一个字符串使用算术操作符时，string 就会被转成数字。
-尽管字符串和数字可以自动转换，但两者是不同的，像 10 == “10”这样的比较永远
-都是错的。</p>
+<p>浅拷贝，就只是把指针指向同一个内存， 这样就会有问题，当A析构时，B的指针就悬空了。</p>
 
-<p>6 <code class="highlighter-rouge">..</code>在 Lua 中是字符串连接符，当在一个数字后面写..时，必须加上空格以防止被解释错。</p>
+<p>深拷贝，就是把指针指向的内存拷贝一份，这种方式的问题是，但内存大时，太好效率的。</p>
 
-<p>7 函数是第一类值（和其他变量相同），意味着函数可以存储在变量中，可以作为函数的参数，也可以作为函数的返回值。</p>
+<p>而用移动构造函数时就是，在发生拷贝时，把指针指向同一个内存，再把另一个指针断开。这样就把这个内存给偷起了。</p>
 
-<p>8 Lua 比较数字按传统的数字大小进行，比较字符串按字母的顺序进行，但是字母顺序依赖于本地环境。</p>
+<h4 id="判断左值与右值的方法">判断左值与右值的方法：</h4>
 
-<p>9 Lua list的下标是从1开始的。</p>
+<p>一个最为典型的判别方法就是， 在赋值表达式中， 出现在等号左边的就是“左值”， 而在等号右边的， 则称为“右 值”。</p>
 
-<p>10 使用 local 创建一个局部变量，与全局变量不同，局部变量只在被声明的那个代码块内有效。代码块：指一个控制结构内，一个函数体，或者一个 chunk（变量被声明的那个文件或者文本串）</p>
+<p>不过 C++ 中 还有 一个被 广泛认同的说法，那就是可以取地址的、有名字的就是左 值，反之，不能取地址的、没有名字的就是右值。</p>
 
-<p>11 当函数只有一个参数并且这个参数是字符串或者表构造的时候，()是可选的。</p>
+<h3 id="最后的总结">最后的总结：</h3>
+<hr />
 
-<p>12 Lua有闭包的用法。</p>
+<p>引入右值是为了移动语义，引入移动语义是为了解决大数据的复制问题。</p>
 
+<p>通过构造复制构造函数和移动构造函数来实现复制和移动语义。复制构造使用const &amp;引用，而移动构造函数使用非const &amp;&amp; 引用。</p>
+
+<p>被移动语义的数据交出了所有权，为了不出现析构两次同一数据区，要将交出所有权的数据的指向动态申请内存去的指针赋值位nullptr，即空指针，对空指针执行delete[]是合法的。</p>
+
+<p>强制移动，就是让左值使用移动构造函数，强制让其交出所有权。Utility文件中声明，std::move()函数。</p>
+
+<p>利用匿名的变量，让其交出所有权，避免复制数据，可以提高程序的效率，</p>
+
+<p>因此，如果一个临时变量再也用不着了，可以让其强制移动语义，这样，程序不用再进行大量的数据复制了，尤其是在vector作为返回值的时候。</p>
+
+<hr />
+<p>--《深入理解C++11：C++11新特性解析与应用》</p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/web-referers/" class="pageNav"  >上一篇</a>
+	<a  href="/c++11-using/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/lua-function/" class="pageNav"  >下一篇</a>
+	<a  href="/muduo-1-threads/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -153,7 +165,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2017-03-14-lua-first-learn.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2017-05-01-c++11-move-semantics.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 

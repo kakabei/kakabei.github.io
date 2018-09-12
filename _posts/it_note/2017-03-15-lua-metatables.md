@@ -2,7 +2,7 @@
 layout: post
 title: lua metatables 元表
 date: 2017-03-15 21:12:15
-categories: 编程语言
+categories: 编程语言 lua
 tags: lua  
 excerpt: lua metatables 允许改变 table 的行为。
 ---
