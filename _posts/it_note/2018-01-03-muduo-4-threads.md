@@ -125,7 +125,8 @@ Linux没有forkall()这样的系统调用，forkall()其实也是很难办的（
 关于多线程与signal关系。可以看[linux signal and threads](http://blog.xyecho.com/linux-signal/)
 
 
-
+---
+ \--- 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.
 
 
 

@@ -78,3 +78,6 @@ entry 为 shared_ptr类型。连接时会把entery插入到循环队列中的set
 当entry的shared_ptr被减到0时，entry就会被释放。就会断开连接。
 
 
+---
+
+ \--- 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.

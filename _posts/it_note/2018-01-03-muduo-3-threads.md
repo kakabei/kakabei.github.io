@@ -109,3 +109,5 @@ Erlang actor。这里的"线程"由语言的runtime自行调度，与操作系�
 
 #### Linux 能同时启动多少个线程
 
+---
+ \--- 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.

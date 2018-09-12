@@ -8,7 +8,6 @@ excerpt: muduo网络库设计与实现
 ---
 
 
-
 runInLoop() 线程安全的理解
 
 ![](/assets/muduo/8-muduo-EventLoop.png) 
@@ -80,6 +79,8 @@ TcpServer 很简单，用户只 需要设置好callback，再调用start()。就
 
 
 
+---
+ \--- 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.
 
 
 

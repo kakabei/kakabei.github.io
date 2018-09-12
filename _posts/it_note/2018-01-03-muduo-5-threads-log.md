@@ -57,7 +57,8 @@ muduo日志库是C++ stream风格的另一个好处是当输出的日志级别�
 关于日志之前写过另一篇。可以看[日志模块](http://blog.xyecho.com/model-log/).
 
 
-
+---
+ \--- 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.
 
 
 
