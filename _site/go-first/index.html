@@ -1,246 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?>
-  <rss version="2.0"
-        xmlns:content="http://purl.org/rss/1.0/modules/content/"
-        xmlns:atom="http://www.w3.org/2005/Atom"
-  >
-  <channel>
-    <title>xyecho</title>
-    <link href="http://localhost:4000/feed/" rel="self" />
-    <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-12T10:05:40+08:00</lastBuildDate>
-    <webMaster>1447675994@qq.com</webMaster>
-    
-    <item>
-      <title>go的竞争检测</title>
-      <link href="http://localhost:4000/go-check-race/"/>
-      <pubDate>2018-03-02T04:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-check-race</guid>
-      <content:encoded><![CDATA[<p><code class="highlighter-rouge">go run -race</code> 或者 <code class="highlighter-rouge">go build -race</code> 来进行竞争检测。</p>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>go笔记 初学简记</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>go笔记 初学简记</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2018-03-01">2018-03-01</time>
+</span>
 
-<p>golang语言内部大概的实现就是同时开启多个goroutine执行同一个命令，并且纪录每个变量的状态。</p>
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#编程语言" title="编程语言">编程语言</a>&nbsp;
+  
+  <a href="/categories/#go" title="go">go</a>&nbsp;
+  
+</span>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
 
-</span><span class="k">import</span><span class="p">(</span><span class="x">
-    </span><span class="s">"time"</span><span class="x">
-    </span><span class="s">"fmt"</span><span class="x">
-</span><span class="p">)</span><span class="x">
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#编程语言" title="编程语言">编程语言</a>&nbsp;
+  
+  <a href="/tags/#go" title="go">go</a>&nbsp;
+  
+</span>
 
-</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">a</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="x">
-    </span><span class="k">go</span><span class="x"> </span><span class="k">func</span><span class="p">(){</span><span class="x">
-        </span><span class="n">a</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">2</span><span class="x">
-    </span><span class="p">}()</span><span class="x">
-    </span><span class="n">a</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">3</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"a is "</span><span class="p">,</span><span class="x"> </span><span class="n">a</span><span class="p">)</span><span class="x">
-
-    </span><span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">2</span><span class="x"> </span><span class="o">*</span><span class="x"> </span><span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
-
-</span></code></pre></div></div>
-
-<p>这个程序可以看出变量a出现了竞争。</p>
-
-<p>在windows下执行</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go run: <span class="nt">-race</span> and <span class="nt">-msan</span> are only supported on linux/amd64, freebsd/amd64, darwin
-/amd64 and windows/amd64
-</code></pre></div></div>
-
-<p>在linux下执行</p>
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span><span class="x"> </span><span class="n">is</span><span class="x">  </span><span class="m">3</span><span class="x">
-</span><span class="o">==================</span><span class="x">
-</span><span class="n">WARNING</span><span class="o">:</span><span class="x"> </span><span class="n">DATA</span><span class="x"> </span><span class="n">RACE</span><span class="x">
-</span><span class="n">Write</span><span class="x"> </span><span class="n">at</span><span class="x"> </span><span class="m">0x00c4200140a8</span><span class="x"> </span><span class="n">by</span><span class="x"> </span><span class="n">goroutine</span><span class="x"> </span><span class="m">6</span><span class="o">:</span><span class="x">
-  </span><span class="n">main</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">func1</span><span class="p">()</span><span class="x">
-      </span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="n">race</span><span class="o">.</span><span class="k">go</span><span class="o">:</span><span class="m">11</span><span class="x"> </span><span class="o">+</span><span class="m">0x3b</span><span class="x">
-
-</span><span class="n">Previous</span><span class="x"> </span><span class="n">write</span><span class="x"> </span><span class="n">at</span><span class="x"> </span><span class="m">0x00c4200140a8</span><span class="x"> </span><span class="n">by</span><span class="x"> </span><span class="n">main</span><span class="x"> </span><span class="n">goroutine</span><span class="o">:</span><span class="x">
-  </span><span class="n">main</span><span class="o">.</span><span class="n">main</span><span class="p">()</span><span class="x">
-      </span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="n">race</span><span class="o">.</span><span class="k">go</span><span class="o">:</span><span class="m">13</span><span class="x"> </span><span class="o">+</span><span class="m">0x8e</span><span class="x">
-
-</span><span class="n">Goroutine</span><span class="x"> </span><span class="m">6</span><span class="x"> </span><span class="p">(</span><span class="n">running</span><span class="p">)</span><span class="x"> </span><span class="n">created</span><span class="x"> </span><span class="n">at</span><span class="o">:</span><span class="x">
-  </span><span class="n">main</span><span class="o">.</span><span class="n">main</span><span class="p">()</span><span class="x">
-      </span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="n">race</span><span class="o">.</span><span class="k">go</span><span class="o">:</span><span class="m">10</span><span class="x"> </span><span class="o">+</span><span class="m">0x7d</span><span class="x">
-</span><span class="o">==================</span><span class="x">
-</span><span class="n">Found</span><span class="x"> </span><span class="m">1</span><span class="x"> </span><span class="n">data</span><span class="x"> </span><span class="n">race</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="x">
-</span><span class="n">exit</span><span class="x"> </span><span class="n">status</span><span class="x"> </span><span class="m">66</span><span class="x">
-</span></code></pre></div></div>
-<p><strong>13行 出现变量竞争。</strong></p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go build 时的错误分析</title>
-      <link href="http://localhost:4000/go-build-error/"/>
-      <pubDate>2018-03-01T19:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-build-error</guid>
-      <content:encoded><![CDATA[<p>go build 程序时，如果出现：</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: building out-of-date packages:
-
-runtime/pprof
-
-testing
-
-regexp/syntax
-
-regexp
-
-installing these packages with <span class="s1">'go test -i'</span> will speed future tests.
-</code></pre></div></div>
-
-<p>那么就是说明下面的包已经有修改过了，但是没有重新install</p>
-
-<p>如果有标准的包过期，使用go install -a -v std来进行更新</p>
-
-<p>如果是自定义的包过期，重新调用go install</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go gdb 编译</title>
-      <link href="http://localhost:4000/go-gdb/"/>
-      <pubDate>2018-03-01T18:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-gdb</guid>
-      <content:encoded><![CDATA[<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go build <span class="nt">-gcflags</span> <span class="s2">"-N -l"</span> demo.go
-</code></pre></div></div>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go关于defer的一道面试题</title>
-      <link href="http://localhost:4000/go-defer-1/"/>
-      <pubDate>2018-03-01T18:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-defer-1</guid>
-      <content:encoded><![CDATA[<p>请写出输出结果</p>
-
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">(){</span><span class="x">
-    </span><span class="n">a</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="x">
-    </span><span class="n">b</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">2</span><span class="x">
-    </span><span class="k">defer</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span><span class="x">
-    </span><span class="n">a</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">0</span><span class="x">
-    </span><span class="k">defer</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span><span class="k">func</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="x"> </span><span class="kt">int</span><span class="p">){</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span><span class="x">
-    </span><span class="k">return</span><span class="x"> </span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="x">
-</span><span class="p">}</span><span class="x">
-
-</span></code></pre></div></div>
-
-<p>结果是</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 2 3
-0 2 2
-0 2 2
-1 3 4
-</code></pre></div></div>
-
-<h4 id="考察两个知识点">考察两个知识点：</h4>
-
-<p>1.defer是栈调用，后写的先执行</p>
-
-<p>2.defer的函数调用语句会在父函数调用后执行，但是用到的参数会在当时就执行得出</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go vet检测代码错误</title>
-      <link href="http://localhost:4000/go-ver/"/>
-      <pubDate>2018-03-01T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-ver</guid>
-      <content:encoded><![CDATA[<p>这个种方式很不错，当代码量很大时，可以用这种方式去做检测。</p>
-
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x"> </span><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
-
-</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
-
-</span><span class="k">func</span><span class="x"> </span><span class="n">Func</span><span class="p">(</span><span class="n">num</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"call Func</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"num = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">num</span><span class="p">)</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"num = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="m">1</span><span class="p">,</span><span class="x"> </span><span class="m">2</span><span class="p">,</span><span class="x"> </span><span class="m">3</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
-
-</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">Func</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
-
-<p>使用vet工具检测代码：</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go build demo.go
-<span class="nv">$ </span>go tool vet demo.go
-demo.go:7: arg num <span class="k">for </span><span class="nb">printf </span>verb %s of wrong <span class="nb">type</span>: int
-demo.go:8: wrong number of args <span class="k">for </span>format <span class="k">in </span>Printf call: 1 needed but 3 args
- 
-</code></pre></div></div>
-
-<p>通过vet工具，可以检测到go代码中一些可疑的结构，虽然vet不能确保发现的问题都是真正的错误，但是它可以发现一些编译器无法捕获的错误。</p>
-
-<p>例如示例中，这段代码能正常的编译通过，但是通过vet检测出2个问题，第一个问题是打印的格式与参数类型不匹配，第二个问题需要打印的参数和所给参数数量不一致。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go 资料</title>
-      <link href="http://localhost:4000/go-material/"/>
-      <pubDate>2018-03-01T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-material</guid>
-      <content:encoded><![CDATA[<ul>
-  <li>github Go语言资料收集 <a href="https://github.com/wonderfo/wonderfogo/wiki">https://github.com/wonderfo/wonderfogo/wiki</a></li>
-  <li>这个人的几篇blog可以看 <a href="http://www.cnblogs.com/yjf512/category/385369.html">http://www.cnblogs.com/yjf512/category/385369.html</a></li>
-  <li>这不是一个go项目，他是一个学习go的资料网站，属于著名的awesome系列，里面关于go的资源非常详细。<a href="https://github.com/avelino/awesome-go">https://github.com/avelino/awesome-go</a></li>
-</ul>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go 编译时传递参数</title>
-      <link href="http://localhost:4000/go-build-ldflags/"/>
-      <pubDate>2018-03-01T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-build-ldflags</guid>
-      <content:encoded><![CDATA[<p>很有意思，可能运用的场景不多。如果想调试某个模块时，可以在编译直接给他赋值。</p>
-
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
-
-</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
-
-</span><span class="k">var</span><span class="x"> </span><span class="n">BuildDate</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="s">"no build date"</span><span class="x">
-
-</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"build date: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">BuildDate</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
-
-<p>传递参数步骤：</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go build demo.go
-<span class="nv">$ </span>./demo
-build <span class="nb">date</span>: no build <span class="nb">date</span>
-<span class="nv">$ DATE</span><span class="o">=</span><span class="sb">`</span><span class="nb">date</span> <span class="s1">'+%Y-%m-%d-%I:%M:%S'</span><span class="sb">`</span>
-<span class="nv">$ </span>go build <span class="nt">-ldflags</span> <span class="s2">"-X main.BuildDate=</span><span class="nv">$DATE</span><span class="s2">"</span> demo.go
-<span class="nv">$ </span>./demo
-build <span class="nb">date</span>: 2018-05-03-03:15:35
-</code></pre></div></div>
-<p>通过-X选项，可以给go程序传递相关参数。例如示例中，借助-X选项，将编译日期BuildDate实时传递到程序中。另外，如版本信息之类也可以通过该方式实现。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go笔记 初学简记</title>
-      <link href="http://localhost:4000/go-first/"/>
-      <pubDate>2018-03-01T15:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-first</guid>
-      <content:encoded><![CDATA[<p>这一篇笔记来源于不同的书籍,有《go语言圣经》，还有许式伟的《Go语言编程》。有一些来源于网络。并不是每一本书都全部看完，便尽力做吧。有一些章节并没有很好理解，要吧记下，后面基础越来越好时可以继续看下去。</p>
+</section>
+<section class="post">
+<p>这一篇笔记来源于不同的书籍,有《go语言圣经》，还有许式伟的《Go语言编程》。有一些来源于网络。并不是每一本书都全部看完，便尽力做吧。有一些章节并没有很好理解，要吧记下，后面基础越来越好时可以继续看下去。</p>
 
 <ol>
   <li>go 竟然支持GDB。</li>
@@ -887,157 +701,86 @@ build <span class="nb">date</span>: 2018-05-03-03:15:35
   <li>反射</li>
 </ul>
 
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记  第八章 muduo网络库设计与实现</title>
-      <link href="http://localhost:4000/muduo-8-muduo-EventLoop/"/>
-      <pubDate>2018-01-05T04:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-8-muduo-EventLoop</guid>
-      <content:encoded><![CDATA[<p>runInLoop() 线程安全的理解</p>
 
-<p><img src="/assets/muduo/8-muduo-EventLoop.png" alt="" /></p>
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/muduo-8-muduo-EventLoop/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/go-build-ldflags/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
 
-<p>在线程T1 muduo::EventLoop loop;， 并loop.loop();那么这个事件应该在线程T1上跑。但是线程T2做了一件事，就是loop::runInLoop(cb); 这个时候添加回调时和loop并不是同一个线程。会有问题。</p>
 
-<p>所以,runInLoop()的做法是：先判断是不是同一个线程，是的话就直接被执行，不是的话就加到挂起队列中。</p>
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
 
-<p>// 是否在当线线程，不在就加入队列。 因为可能是其他线程执行这个代码，</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">EventLoop</span><span class="o">::</span><span class="n">runInLoop</span><span class="p">(</span><span class="k">const</span> <span class="n">Functor</span> <span class="o">&amp;</span><span class="n">cb</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">isInLoopThread</span><span class="p">())</span>
-  <span class="p">{</span>
-    <span class="n">cb</span><span class="p">();</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="n">queueInLoop</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
 
-<p>在queueInLoop中会唤醒T1线程。做法是：</p>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-<p>T1和T2线程有一个channel,写入一个字符。触发T1的事件，T1在loop中会执行被挂起的函数队列。</p>
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
 
-<p>addTimer 要做到线程安全，就是把它的回调加入到runInLoop，这样它可以触发它所在的线程去执行。</p>
+</script>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TimerId</span> <span class="n">TimerQueue</span><span class="o">::</span><span class="n">addTimer</span><span class="p">(</span><span class="k">const</span> <span class="n">TimerCallback</span><span class="o">&amp;</span> <span class="n">cb</span><span class="p">,</span>
-                             <span class="n">Timestamp</span> <span class="n">when</span><span class="p">,</span>
-                             <span class="kt">double</span> <span class="n">interval</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">Timer</span><span class="o">*</span> <span class="n">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Timer</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">interval</span><span class="p">);</span>
-  <span class="n">loop_</span><span class="o">-&gt;</span><span class="n">runInLoop</span><span class="p">(</span>
-      <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">TimerQueue</span><span class="o">::</span><span class="n">addTimerInLoop</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">timer</span><span class="p">));</span>
-  <span class="k">return</span> <span class="n">TimerId</span><span class="p">(</span><span class="n">timer</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
+        </article>
+      </div>
 
-<h4 id="84-实现tcp-网络库">8.4 实现TCP 网络库</h4>
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
 
-<p>这一节主要是讲 Acceptor class。</p>
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-<p>Acceptor class是用于封装accept接受新连接的。为什么在单独成为一个模块类呢？</p>
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
 
-<p>1.Acceptor  的成员有socket channel 。其中socket 是用了RAII handle 。</p>
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-03-01-go-first.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
-<p>2.Channel用于观察此socket上的readable事件，并回调Acceptor:: handleRead()，后者会调用accept(2)来接受新连接，并回调用户callback。</p>
 
-<p>3.关于，如果系统的fd耗尽的问题。 在一个开始，就打一个空闲的fd。当系统耗尽时，会先关闭这个空闲的fd。要给新上来的客户端accept。最后，
-断开客户端，把fd交还给空闲的占用。 这么做是为了解决在系统耗尽fd时，不会断开客户端上来的链接。</p>
+         </small></p>
+    </footer>
 
-<h4 id="85-tcpserver--接受新连接">8.5 TcpServer  接受新连接</h4>
-<hr />
-<p>主要是讲TcpServer class。 tcp服务是管理accept获得TcpConnection。
-这是一个新连接的接受的过程：</p>
-
-<p><img src="/assets/muduo/8-muduo-tcpserver-class.png" alt="" /></p>
-
-<p>TcpServer 很简单，用户只 需要设置好callback，再调用start()。就OK了。</p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记 第七章 时间轮</title>
-      <link href="http://localhost:4000/muduo-7-muduo-timing-wheel/"/>
-      <pubDate>2018-01-05T04:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-7-muduo-timing-wheel</guid>
-      <content:encoded><![CDATA[<p>用timing wheel 踢掉空闲连接。</p>
-
-<h4 id="如果一个连接连续几秒内没有收到数据就把它断开为此有两种简单粗暴的做法">如果一个连接连续几秒内没有收到数据，就把它断开，为此有两种简单、粗暴的做法：</h4>
-
-<p>1.每个连接保存”最后收到数据的时间lastReceiveTime”， 然后用一个定时器，每秒遍历一遍所有连接， 断开那些(now - connection. lastReceiveTime) &gt; 8s 的connection。 这种做法全局只有一个repeated timer， 不过每次timeout 都要检查全部连接，如果连接数目比较大（几千上万） 这一步可能会比较费时。 ·</p>
-
-<p>2.每个连接设置一个one-shot timer， 超时定为8s， 在超时的时候就断开本连接。当然，每次收到数据要去更新timer。 这种做法需要很多个one-shot timer， 会频繁地更新timers。如果连接数目比较大， 可能对EventLoop 的 TimerQueue 造成 压力。</p>
-
-<p>连接超时不需要精确定时，只要大致8秒超时断开就行，多一秒、少一秒关系不大。</p>
-
-<p>处理连接超时可用一个简单的数据结构：8个桶组成的循环队列。</p>
-
-<p>第1个桶放1秒之后将要超时的连接，第2个桶放2秒之后将要超时的连接。每个连接一收到数据就把自己放到第8个桶，然后在每秒的timer里把第一个桶里的连接断开，把这个空桶挪到队尾。</p>
-
-<p>这样大致可以做到8秒没有数据就超时断开连接。</p>
-
-<h4 id="时间轮的原理">时间轮的原理</h4>
-
-<p>简单的时间轮的基本结构是一个循环队列，还有一个指向队尾的指针（tail）。这个指针每秒移动一格，就像钟表上的时针。</p>
-
-<p>以下是某一时刻timing wheel 的状态（ 见图7-42的左图）， 格子里的数字是倒计时（ 与通常的 timing wheel 相反）， 表示这个格子（ 桶子） 中连接的 剩余寿命。1秒以后（见图 7-42的右图）， tail 指针移动一格， 原来四点钟方向的格子被清空，其中的连接已被断开。</p>
-
-<p><img src="/assets/muduo/7-time-wheel1.png" alt="" /></p>
-
-<p>连接超时时被踢掉的过程
-假设在某个时刻，conn1到达， 把它放到当前格子中，它的剩余寿命是7秒（见图7-43的左图）。 此后conn1 上没有收到数据。 1秒之后（见图7-43的右图），tail指向下一个格子， conn 1的剩余寿命是6秒。</p>
-
-<p><img src="/assets/muduo/7-time-wheel2.png" alt="" /></p>
-
-<p>又 过了几 秒， tail指向conn1之前的那个格子， conn1即将被断开（见图7-44的左图）。下一秒（见图7-44的右图），tail重新指向conn1原来所在的格子，清空其中的数据，断开conn1连接。
-<img src="/assets/muduo/7-time-wheel3.png" alt="" /></p>
-
-<h4 id="连接刷新">连接刷新</h4>
-
-<p>如果在断开conn1之前收到数据，就把它移到当前的格子里。conn1的剩余寿命是3秒（见图7-45的左图），此时 conn 1收到数据，它的寿命恢复为7秒（见图 7-45 的右图）。</p>
-
-<p><img src="/assets/muduo/7-time-wheel4.png" alt="" /></p>
-
-<p>时间继续前进，conn1寿命递减，不过它已经比第一种情况长寿了（见图7-46）。</p>
-
-<p><img src="/assets/muduo/7-time-wheel5.png" alt="" /></p>
-
-<h4 id="多个连接">多个连接</h4>
-
-<p>timingwheel中的每个格子是个hashset，可以容纳不止一个连接。比如一开始，conn1到达。随后，conn2到达（见图7-47），这时候tail还没有移动，两个连接位于同一个格子中，具有相同的剩余寿命。（在图7-47中画成链表，代码中是哈希表。）</p>
-
-<hr />
-
-<p>代码的实现体现在主要在三个地方。</p>
-
-<p>1）新的连接上来时。</p>
-
-<p><img src="/assets/muduo/7-time-wheel6.png" alt="" /></p>
-
-<p>entry 为 shared_ptr类型。连接时会把entery插入到循环队列中的set当中。</p>
-
-<p>2）当有数的数据过来时。</p>
-
-<p><img src="/assets/muduo/7-time-wheel7.png" alt="" /></p>
-
-<p>也会把这个连接的entry加入到循环队列中的set当中。</p>
-
-<p>3）定时器
-每一秒钟会从循环队列中拿掉一个Set。entry的shared_ptr计数就会减1。</p>
-
-<p><img src="/assets/muduo/7-time-wheel8.png" alt="" /></p>
-
-<p>当entry的shared_ptr被减到0时，entry就会被释放。就会断开连接。</p>
-
-]]></content:encoded>
-    </item>
-    
-  </channel>
-</rss>
+    </div>
+  </body>
+</html>
