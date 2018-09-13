@@ -7,8 +7,33 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-12T14:27:49+08:00</lastBuildDate>
+    <lastBuildDate>2018-09-13T21:11:35+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>devlog-2018-09</title>
+      <link href="http://localhost:4000/devlog201809/"/>
+      <pubDate>2018-09-13T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/devlog201809</guid>
+      <content:encoded><![CDATA[<h3 id="2018-09-13">2018-09-13</h3>
+<hr />
+<p>1.muduo 中的 epoll 能否支持超时回调呢？其实就是问epoll 能否支持超时回调？<a href="https://github.com/chenshuo/muduo/issues/337">muduo能否支持epoll超时回调？？？</a></p>
+
+<p>2.epoll 超时的话就应该是在 outtime时间里没有等到事件就返回了。这时返回值应该0。这么理解有问题吗？</p>
+
+<p>3.今天重新看muduo的一些源码，加强对muduo的一些解理。还是有一些收获的。对于EventLoop Poller Channel 有了一些加强。
+  也慢慢的开始注意了一些细节的事物了。如：一些 <code class="highlighter-rouge">(void) t</code> 的运用。只是想让这个变量被使用。从而不会变量未被使用的错误。</p>
+
+<p>在知乎上有一个关于这个讨论， 陈硕回答下的下评论，有意思。<a href="https://www.zhihu.com/question/24311085">muduo库的很多返回值为空的函数的最后一行都有类似 (void) n的一句， 为什么要这样做？</a></p>
+
+<p>4.后面写代码时要多用assert。 把gcc的编译严格等级设置为任何警告当成错误，而有的变量实际上是在debug版本中assert时有用的，release时这个变量就没用了， 此时编译器就会提醒有个变量没用的警告。</p>
+
+<p>5.rvo优化  <a href="https://www.zhihu.com/question/27000013">什么时候应当依靠返回值优化（RVO）？</a></p>
+<h3 id="2018-09-14">2018-09-14</h3>
+<hr />
+]]></content:encoded>
+    </item>
     
     <item>
       <title>go的竞争检测</title>
@@ -961,87 +986,6 @@ build <span class="nb">date</span>: 2018-05-03-03:15:35
 <hr />
 <p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
 
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记 第七章 时间轮</title>
-      <link href="http://localhost:4000/muduo-7-muduo-timing-wheel/"/>
-      <pubDate>2018-01-05T04:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-7-muduo-timing-wheel</guid>
-      <content:encoded><![CDATA[<p>用timing wheel 踢掉空闲连接。</p>
-
-<h4 id="如果一个连接连续几秒内没有收到数据就把它断开为此有两种简单粗暴的做法">如果一个连接连续几秒内没有收到数据，就把它断开，为此有两种简单、粗暴的做法：</h4>
-
-<p>1.每个连接保存”最后收到数据的时间lastReceiveTime”， 然后用一个定时器，每秒遍历一遍所有连接， 断开那些(now - connection. lastReceiveTime) &gt; 8s 的connection。 这种做法全局只有一个repeated timer， 不过每次timeout 都要检查全部连接，如果连接数目比较大（几千上万） 这一步可能会比较费时。 ·</p>
-
-<p>2.每个连接设置一个one-shot timer， 超时定为8s， 在超时的时候就断开本连接。当然，每次收到数据要去更新timer。 这种做法需要很多个one-shot timer， 会频繁地更新timers。如果连接数目比较大， 可能对EventLoop 的 TimerQueue 造成 压力。</p>
-
-<p>连接超时不需要精确定时，只要大致8秒超时断开就行，多一秒、少一秒关系不大。</p>
-
-<p>处理连接超时可用一个简单的数据结构：8个桶组成的循环队列。</p>
-
-<p>第1个桶放1秒之后将要超时的连接，第2个桶放2秒之后将要超时的连接。每个连接一收到数据就把自己放到第8个桶，然后在每秒的timer里把第一个桶里的连接断开，把这个空桶挪到队尾。</p>
-
-<p>这样大致可以做到8秒没有数据就超时断开连接。</p>
-
-<h4 id="时间轮的原理">时间轮的原理</h4>
-
-<p>简单的时间轮的基本结构是一个循环队列，还有一个指向队尾的指针（tail）。这个指针每秒移动一格，就像钟表上的时针。</p>
-
-<p>以下是某一时刻timing wheel 的状态（ 见图7-42的左图）， 格子里的数字是倒计时（ 与通常的 timing wheel 相反）， 表示这个格子（ 桶子） 中连接的 剩余寿命。1秒以后（见图 7-42的右图）， tail 指针移动一格， 原来四点钟方向的格子被清空，其中的连接已被断开。</p>
-
-<p><img src="/assets/muduo/7-time-wheel1.png" alt="" /></p>
-
-<p>连接超时时被踢掉的过程
-假设在某个时刻，conn1到达， 把它放到当前格子中，它的剩余寿命是7秒（见图7-43的左图）。 此后conn1 上没有收到数据。 1秒之后（见图7-43的右图），tail指向下一个格子， conn 1的剩余寿命是6秒。</p>
-
-<p><img src="/assets/muduo/7-time-wheel2.png" alt="" /></p>
-
-<p>又 过了几 秒， tail指向conn1之前的那个格子， conn1即将被断开（见图7-44的左图）。下一秒（见图7-44的右图），tail重新指向conn1原来所在的格子，清空其中的数据，断开conn1连接。
-<img src="/assets/muduo/7-time-wheel3.png" alt="" /></p>
-
-<h4 id="连接刷新">连接刷新</h4>
-
-<p>如果在断开conn1之前收到数据，就把它移到当前的格子里。conn1的剩余寿命是3秒（见图7-45的左图），此时 conn 1收到数据，它的寿命恢复为7秒（见图 7-45 的右图）。</p>
-
-<p><img src="/assets/muduo/7-time-wheel4.png" alt="" /></p>
-
-<p>时间继续前进，conn1寿命递减，不过它已经比第一种情况长寿了（见图7-46）。</p>
-
-<p><img src="/assets/muduo/7-time-wheel5.png" alt="" /></p>
-
-<h4 id="多个连接">多个连接</h4>
-
-<p>timingwheel中的每个格子是个hashset，可以容纳不止一个连接。比如一开始，conn1到达。随后，conn2到达（见图7-47），这时候tail还没有移动，两个连接位于同一个格子中，具有相同的剩余寿命。（在图7-47中画成链表，代码中是哈希表。）</p>
-
-<hr />
-
-<p>代码的实现体现在主要在三个地方。</p>
-
-<p>1）新的连接上来时。</p>
-
-<p><img src="/assets/muduo/7-time-wheel6.png" alt="" /></p>
-
-<p>entry 为 shared_ptr类型。连接时会把entery插入到循环队列中的set当中。</p>
-
-<p>2）当有数的数据过来时。</p>
-
-<p><img src="/assets/muduo/7-time-wheel7.png" alt="" /></p>
-
-<p>也会把这个连接的entry加入到循环队列中的set当中。</p>
-
-<p>3）定时器
-每一秒钟会从循环队列中拿掉一个Set。entry的shared_ptr计数就会减1。</p>
-
-<p><img src="/assets/muduo/7-time-wheel8.png" alt="" /></p>
-
-<p>当entry的shared_ptr被减到0时，entry就会被释放。就会断开连接。</p>
-
-<hr />
-
-<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
 ]]></content:encoded>
     </item>
     
