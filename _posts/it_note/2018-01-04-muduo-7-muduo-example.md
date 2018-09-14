@@ -21,8 +21,6 @@ muduo TcpConnection没有提供close()，而只提供shutdown()，这么做是�
 
 分包指的是在发生一个消息（message）或一帧（frame）数据时，通过一定的处理，让接收方能从字节流中识别并截取（还原）出一个个消息。
 
-"粘包问题"是个伪问题。
-
 
 #### muduo buff类的设计与使用
 
