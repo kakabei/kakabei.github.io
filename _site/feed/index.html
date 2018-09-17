@@ -7,8 +7,26 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-14T16:51:13+08:00</lastBuildDate>
+    <lastBuildDate>2018-09-17T19:11:58+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>源码阅读中一个特殊注释说明</title>
+      <link href="http://localhost:4000/sourcecode-comment/"/>
+      <pubDate>2018-09-17T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/sourcecode-comment</guid>
+      <content:encoded><![CDATA[<p><strong>TODO: + 说明：</strong></p>
+
+<p>如果代码中有该标识，说明在标识处有功能代码待编写，待实现的功能在说明中会简略说明。</p>
+
+<p><strong>FIXME: + 说明：</strong>
+如果代码中有该标识，说明标识处代码需要修正，甚至代码是错误的，不能工作，需要修复，如何修正会在说明中简略说明。</p>
+
+<p><strong>XXX: + 说明：</strong>
+如果代码中有该标识，说明标识处代码虽然实现了功能，但是实现的方法有待商榷，希望将来能改进，要改进的地方会在说明中简略说明。</p>
+]]></content:encoded>
+    </item>
     
     <item>
       <title>devlog-2018-09</title>
@@ -40,6 +58,39 @@
 <p>1.要加强对Boost智能指针的理解。 <a href="https://blog.csdn.net/yockie/article/details/8840205">Boost智能指针——scoped_ptr、shared_ptr、weak_ptr、intrusive_ptr</a></p>
 
 <p>2.eventfd 事件 <a href="https://blog.csdn.net/majianfei1023/article/details/51199702">inux网络编程–eventfd</a></p>
+
+<h3 id="2018-09-17">2018-09-17</h3>
+<hr />
+<p>1.TCP中 shutdown 和close的区别。</p>
+
+<p>2.看完Buffer后，要再回看一次TcpConnection。</p>
+
+<p>3.可以看看这个blog<a href="https://dirtysalt.github.io/html/index.html">dirtysalt’s site / 章炎的个人站点</a></p>
+
+<p>4.<a href="https://blog.csdn.net/u012432778/article/details/47323805">分散/聚集 I/O(scatter-gather I/O)</a></p>
+
+<p>5.二是Buffer::readFd()只调用一次read(2)，而没有反复调用read(2) 直到其返回EAGAIN。首先，这么做是正确的，因为muduo采用level trigger，这么做不会丢失 数据或消息。</p>
+
+<p>6.libevent 默认的epoll模式是什么？</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// epoll.c </span>
+<span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">eventop</span> <span class="n">epollops_changelist</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="s">"epoll (with changelist)"</span><span class="p">,</span>
+	<span class="n">epoll_init</span><span class="p">,</span>
+	<span class="n">event_changelist_add</span><span class="p">,</span>
+	<span class="n">event_changelist_del</span><span class="p">,</span>
+	<span class="n">epoll_dispatch</span><span class="p">,</span>
+	<span class="n">epoll_dealloc</span><span class="p">,</span>
+	<span class="mi">1</span><span class="p">,</span> <span class="cm">/* need reinit */</span>
+	<span class="n">EV_FEATURE_ET</span><span class="o">|</span><span class="n">EV_FEATURE_O1</span><span class="p">,</span>
+	<span class="n">EVENT_CHANGELIST_FDINFO_SIZE</span>
+<span class="p">};</span>
+
+<span class="c1">// EV_FEATURE_ET 可以看是Edge_triggered(边缘触发)</span>
+</code></pre></div></div>
+
+<p>7.<a href="https://www.zhihu.com/question/19732473/answer/26091478">怎样理解阻塞非阻塞与同步异步的区别？</a></p>
+
+<p>8.<a href="https://aceld.gitbooks.io/libevent/content/">libevent深入浅出</a></p>
 ]]></content:encoded>
     </item>
     
@@ -919,80 +970,6 @@ build <span class="nb">date</span>: 2018-05-03-03:15:35
   <li>网络编程</li>
   <li>反射</li>
 </ul>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>muduo笔记  第八章 muduo网络库设计与实现</title>
-      <link href="http://localhost:4000/muduo-8-muduo-EventLoop/"/>
-      <pubDate>2018-01-05T04:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/muduo-8-muduo-EventLoop</guid>
-      <content:encoded><![CDATA[<p>runInLoop() 线程安全的理解</p>
-
-<p><img src="/assets/muduo/8-muduo-EventLoop.png" alt="" /></p>
-
-<p>在线程T1 muduo::EventLoop loop;， 并loop.loop();那么这个事件应该在线程T1上跑。但是线程T2做了一件事，就是loop::runInLoop(cb); 这个时候添加回调时和loop并不是同一个线程。会有问题。</p>
-
-<p>所以,runInLoop()的做法是：先判断是不是同一个线程，是的话就直接被执行，不是的话就加到挂起队列中。</p>
-
-<p>// 是否在当线线程，不在就加入队列。 因为可能是其他线程执行这个代码，</p>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">EventLoop</span><span class="o">::</span><span class="n">runInLoop</span><span class="p">(</span><span class="k">const</span> <span class="n">Functor</span> <span class="o">&amp;</span><span class="n">cb</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">isInLoopThread</span><span class="p">())</span>
-  <span class="p">{</span>
-    <span class="n">cb</span><span class="p">();</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="n">queueInLoop</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>在queueInLoop中会唤醒T1线程。做法是：</p>
-
-<p>T1和T2线程有一个channel,写入一个字符。触发T1的事件，T1在loop中会执行被挂起的函数队列。</p>
-
-<p>addTimer 要做到线程安全，就是把它的回调加入到runInLoop，这样它可以触发它所在的线程去执行。</p>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TimerId</span> <span class="n">TimerQueue</span><span class="o">::</span><span class="n">addTimer</span><span class="p">(</span><span class="k">const</span> <span class="n">TimerCallback</span><span class="o">&amp;</span> <span class="n">cb</span><span class="p">,</span>
-                             <span class="n">Timestamp</span> <span class="n">when</span><span class="p">,</span>
-                             <span class="kt">double</span> <span class="n">interval</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">Timer</span><span class="o">*</span> <span class="n">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Timer</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">interval</span><span class="p">);</span>
-  <span class="n">loop_</span><span class="o">-&gt;</span><span class="n">runInLoop</span><span class="p">(</span>
-      <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">TimerQueue</span><span class="o">::</span><span class="n">addTimerInLoop</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">timer</span><span class="p">));</span>
-  <span class="k">return</span> <span class="n">TimerId</span><span class="p">(</span><span class="n">timer</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h4 id="84-实现tcp-网络库">8.4 实现TCP 网络库</h4>
-
-<p>这一节主要是讲 Acceptor class。</p>
-
-<p>Acceptor class是用于封装accept接受新连接的。为什么在单独成为一个模块类呢？</p>
-
-<p>1.Acceptor  的成员有socket channel 。其中socket 是用了RAII handle 。</p>
-
-<p>2.Channel用于观察此socket上的readable事件，并回调Acceptor:: handleRead()，后者会调用accept(2)来接受新连接，并回调用户callback。</p>
-
-<p>3.关于，如果系统的fd耗尽的问题。 在一个开始，就打一个空闲的fd。当系统耗尽时，会先关闭这个空闲的fd。要给新上来的客户端accept。最后，
-断开客户端，把fd交还给空闲的占用。 这么做是为了解决在系统耗尽fd时，不会断开客户端上来的链接。</p>
-
-<h4 id="85-tcpserver--接受新连接">8.5 TcpServer  接受新连接</h4>
-<hr />
-<p>主要是讲TcpServer class。 tcp服务是管理accept获得TcpConnection。
-这是一个新连接的接受的过程：</p>
-
-<p><img src="/assets/muduo/8-muduo-tcpserver-class.png" alt="" /></p>
-
-<p>TcpServer 很简单，用户只 需要设置好callback，再调用start()。就OK了。</p>
-
-<hr />
-<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
 
 ]]></content:encoded>
     </item>

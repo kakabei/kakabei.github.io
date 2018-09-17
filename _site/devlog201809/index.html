@@ -75,13 +75,46 @@
 
 <p>2.eventfd 事件 <a href="https://blog.csdn.net/majianfei1023/article/details/51199702">inux网络编程–eventfd</a></p>
 
+<h3 id="2018-09-17">2018-09-17</h3>
+<hr />
+<p>1.TCP中 shutdown 和close的区别。</p>
+
+<p>2.看完Buffer后，要再回看一次TcpConnection。</p>
+
+<p>3.可以看看这个blog<a href="https://dirtysalt.github.io/html/index.html">dirtysalt’s site / 章炎的个人站点</a></p>
+
+<p>4.<a href="https://blog.csdn.net/u012432778/article/details/47323805">分散/聚集 I/O(scatter-gather I/O)</a></p>
+
+<p>5.二是Buffer::readFd()只调用一次read(2)，而没有反复调用read(2) 直到其返回EAGAIN。首先，这么做是正确的，因为muduo采用level trigger，这么做不会丢失 数据或消息。</p>
+
+<p>6.libevent 默认的epoll模式是什么？</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// epoll.c </span>
+<span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">eventop</span> <span class="n">epollops_changelist</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="s">"epoll (with changelist)"</span><span class="p">,</span>
+	<span class="n">epoll_init</span><span class="p">,</span>
+	<span class="n">event_changelist_add</span><span class="p">,</span>
+	<span class="n">event_changelist_del</span><span class="p">,</span>
+	<span class="n">epoll_dispatch</span><span class="p">,</span>
+	<span class="n">epoll_dealloc</span><span class="p">,</span>
+	<span class="mi">1</span><span class="p">,</span> <span class="cm">/* need reinit */</span>
+	<span class="n">EV_FEATURE_ET</span><span class="o">|</span><span class="n">EV_FEATURE_O1</span><span class="p">,</span>
+	<span class="n">EVENT_CHANGELIST_FDINFO_SIZE</span>
+<span class="p">};</span>
+
+<span class="c1">// EV_FEATURE_ET 可以看是Edge_triggered(边缘触发)</span>
+</code></pre></div></div>
+
+<p>7.<a href="https://www.zhihu.com/question/19732473/answer/26091478">怎样理解阻塞非阻塞与同步异步的区别？</a></p>
+
+<p>8.<a href="https://aceld.gitbooks.io/libevent/content/">libevent深入浅出</a></p>
+
 </section>
 <section align="right">
 <br/>
 <span>
 	<a  href="/go-check-race/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a   class="pageNavInvalid"  >下一篇</a>
+	<a  href="/sourcecode-comment/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->

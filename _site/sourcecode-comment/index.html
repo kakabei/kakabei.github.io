@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>epoll的 两种模式</title>
+    <title>源码阅读中一个特殊注释说明</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>epoll的 两种模式</h1>
+        <h1>源码阅读中一个特殊注释说明</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,14 +28,14 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2014-10-15">2014-10-15</time>
+  <time datetime="2018-09-17">2018-09-17</time>
 </span>
 
  | 
 <span class="categories">
   分类
   
-  <a href="/categories/#Linux" title="Linux">Linux</a>&nbsp;
+  <a href="/categories/#七七八八" title="七七八八">七七八八</a>&nbsp;
   
 </span>
 
@@ -44,37 +44,29 @@
 <span class="tags">
   标签
   
-  <a href="/tags/#network" title="network">network</a>&nbsp;
+  <a href="/tags/#source-code" title="source-code">source-code</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<p>epoll有两种模块， 水平触发（LT）（缺省方式） 和 边缘触发（ET） 。</p>
+<p><strong>TODO: + 说明：</strong></p>
 
-<h4 id="lt触发">LT触发：</h4>
+<p>如果代码中有该标识，说明在标识处有功能代码待编写，待实现的功能在说明中会简略说明。</p>
 
-<p>读事件触发，当读的fd的缓冲区有数据时，就会被触发，而且在缓冲区的数据一次没被读完还会被触发。</p>
+<p><strong>FIXME: + 说明：</strong>
+如果代码中有该标识，说明标识处代码需要修正，甚至代码是错误的，不能工作，需要修复，如何修正会在说明中简略说明。</p>
 
-<p>写事件触发，当写的fd缓冲区可写时，就会被触发，只有可写就会被触发着。</p>
-
-<p>（效率不高的原因是因为，内核态和用户态切换的次数比较多）</p>
-
-<p>缺省的工作方式</p>
-
-<h4 id="et触发">ET触发：</h4>
-
-<p>读事件触发，当读的fd的缓冲区有数据时，就会被触发，只触发一次，所以程序最好一些读完缓冲区里的数据。</p>
-
-<p>写事件触发，当写的fd的缓冲区为代时，就会被触发，只触发一次，所以程序最好要把完整的数据写到fd缓冲区中。</p>
+<p><strong>XXX: + 说明：</strong>
+如果代码中有该标识，说明标识处代码虽然实现了功能，但是实现的方法有待商榷，希望将来能改进，要改进的地方会在说明中简略说明。</p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/linux-dir/" class="pageNav"  >上一篇</a>
+	<a  href="/devlog201809/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/select/" class="pageNav"  >下一篇</a>
+	<a   class="pageNavInvalid"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -139,7 +131,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2014-09-03-epoll-lt-et.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2018-09-17-sourcecode-comment.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
