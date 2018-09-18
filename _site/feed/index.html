@@ -7,7 +7,7 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-17T19:38:16+08:00</lastBuildDate>
+    <lastBuildDate>2018-09-18T20:45:49+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
@@ -94,6 +94,18 @@
 <p>9.<a href="https://www.zhihu.com/question/19732473/answer/26091478">怎样理解阻塞非阻塞与同步异步的区别？</a></p>
 
 <p>10.<a href="https://aceld.gitbooks.io/libevent/content/">libevent深入浅出</a></p>
+
+<h3 id="2018-09-18">2018-09-18</h3>
+<hr />
+<blockquote>
+  <p>注意sendInLoop()和handleWrite()都只调用了一次write(2)而不会反复调用直至它返回EAGAIN，原因是如果第一次write(2)没有能够发送完全部数据的话，第二次调用write(2)几乎肯定会返回EAGAIN。</p>
+</blockquote>
+
+<p>这muduo 8.7关于handleWrite()的一段话？为什么第二次调用 Write几乎肯定会返回EAGAIN呢？ 因为第一次就把fd的缓冲区写满了，所以第二次写且还第一次数据还没以出去时，就会出现EAGAIN。</p>
+
+<p>关于muduo 的时间定时器要重新看一下。</p>
+
+<p>muduo 网络库核心的看完第二遍了，明天整理一下笔记。</p>
 ]]></content:encoded>
     </item>
     
