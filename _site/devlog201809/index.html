@@ -125,6 +125,16 @@
 
 <p>muduo 网络库核心的看完第二遍了，明天整理一下笔记。</p>
 
+<h3 id="2018-09-19">2018-09-19</h3>
+<hr />
+
+<p>1.shutdown和forceClose区别 ?</p>
+
+<p>shutdown()是关闭了socket中的写。<code class="highlighter-rouge">::shutdown(sockfd, SHUT_WR)</code></p>
+
+<p>forceClose()呢？ TcpConnection对象是通过share_ptr来管理的。要销毁它时，就是把所有对它的引用去掉就可以了。</p>
+
+
 </section>
 <section align="right">
 <br/>
