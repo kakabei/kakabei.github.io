@@ -47,7 +47,7 @@ std::vector<TimerQueue::Entry> TimerQueue::getExpired(Timestamp now)
 后来才知道这叫RVO优化
 什么时候应当依靠返回值优化（RVO）？
 知乎上：
-[什么时候应当依靠返回值优化（RVO）？]https://www.zhihu.com/question/27000013
+[什么时候应当依靠返回值优化 (RVO) ?](https://www.zhihu.com/question/27000013)
 
 ---
  \--- 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.

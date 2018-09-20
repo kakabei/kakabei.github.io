@@ -96,7 +96,7 @@ std::vector<TimerQueue::Entry> TimerQueue::getExpired(Timestamp now)
 }
 ```
 
-这个函数的作用是取出过期的Timer列表。 可以它的返回了一个函数内的局部vector。以后是有问题，但又觉得，一个还算比较流行的源开放项目，不太可能会出现这样的问题。查了一下，才知道，还是自己的知识有限啊。 这种方式叫vo realease版本优化。
+这个函数的作用是取出过期的Timer列表。 可以它的返回了一个函数内的局部vector。以后是有问题，但又觉得，一个还算比较流行的源开放项目，不太可能会出现这样的问题。查了一下，才知道，还是自己的知识有限啊。 这种方式叫vo realease版本优化。[rvo realease版本优化](http://blog.xyecho.com/muduo-8-muduo-rvo-realease/)
 
 关于对 TimerList timers_的一些操作也变蛮不好理解的。
 
