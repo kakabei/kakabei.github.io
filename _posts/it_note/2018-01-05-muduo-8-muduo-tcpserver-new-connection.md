@@ -95,7 +95,7 @@ typedef boost::shared_ptr<TcpConnection> TcpConnectionPtr;
       boost::bind(&TcpServer::newConnection, this, _1, _2));
 ```
 
-看Acceptor发生了什么事。[Acceptor class](http://127.0.0.1:4000/muduo-8-muduo-acceptor-class/)
+看Acceptor发生了什么事。[Acceptor class](http://blog.xyecho.com/muduo-8-muduo-acceptor-class/)
 
 在Acceptor的构造函数中 调用了sockets::createNonblockingOrDie() 这里面就是调用::socket() 这时socket被成功创建了。
 
@@ -192,7 +192,7 @@ void Acceptor::handleRead()
 ```
 
 handleRead 回调 newConnectionCallback_() 就是TcpServer类中的TcpServer::newConnection().
-后面是关于连接数过多的处理方式，可以看 [Acceptor class](http://127.0.0.1:4000/muduo-8-muduo-acceptor-class/)
+后面是关于连接数过多的处理方式，可以看 [Acceptor class](http://blog.xyecho.com/muduo-8-muduo-acceptor-class/)
 
 而TcpServer::newConnection()对新连接的处理。
 

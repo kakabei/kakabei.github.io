@@ -147,7 +147,7 @@
       <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">TcpServer</span><span class="o">::</span><span class="n">newConnection</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">_1</span><span class="p">,</span> <span class="n">_2</span><span class="p">));</span>
 </code></pre></div></div>
 
-<p>看Acceptor发生了什么事。<a href="http://127.0.0.1:4000/muduo-8-muduo-acceptor-class/">Acceptor class</a></p>
+<p>看Acceptor发生了什么事。<a href="http://blog.xyecho.com/muduo-8-muduo-acceptor-class/">Acceptor class</a></p>
 
 <p>在Acceptor的构造函数中 调用了sockets::createNonblockingOrDie() 这里面就是调用::socket() 这时socket被成功创建了。</p>
 
@@ -240,7 +240,7 @@
 </code></pre></div></div>
 
 <p>handleRead 回调 newConnectionCallback_() 就是TcpServer类中的TcpServer::newConnection().
-后面是关于连接数过多的处理方式，可以看 <a href="http://127.0.0.1:4000/muduo-8-muduo-acceptor-class/">Acceptor class</a></p>
+后面是关于连接数过多的处理方式，可以看 <a href="http://blog.xyecho.com/muduo-8-muduo-acceptor-class/">Acceptor class</a></p>
 
 <p>而TcpServer::newConnection()对新连接的处理。</p>
 
