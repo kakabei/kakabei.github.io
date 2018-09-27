@@ -7,7 +7,7 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-09-26T18:36:59+08:00</lastBuildDate>
+    <lastBuildDate>2018-09-27T15:34:09+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
@@ -88,7 +88,7 @@
 
 <span class="c1">// EV_FEATURE_ET 可以看是Edge_triggered(边缘触发)</span>
 </code></pre></div></div>
-<p>7.水平触发，写事件怎么理解？</p>
+<p>7.水平触发，写事件怎么理解？ 写入数据时要手动去触发。</p>
 
 <p>8.muduo TcpConnection 类中 为什么有地方是用this 有地方是用shared_from_this()？</p>
 
@@ -162,6 +162,15 @@
   <li>GW游戏的登录验证是用php写的， 好像同事都没搞过php。写的很不好。今天就php模块加了一个日志模块，其实的暂时算了。对于php掌握很有限。</li>
   <li>整理出了内存池的代码了。很自觉加上了google test。当然没有全部测试。后面测试搞。</li>
   <li><a href="https://mp.weixin.qq.com/s/m2YiRyzNSzi9NpWr9ODrwg">《腾讯工程师破解入侵酒店 WiFi，被新加坡网安局逮捕》</a>。<a href="https://hk.saowen.com/a/6e3d908180fb701992fb60035e2a9fcdf8b1b52268516ae75882add040bd39d1">Exploit Singapore Hotels: ezxcess.antlabs.com</a>有意思。</li>
+</ol>
+
+<h2 id="2018-09-27">2018-09-27</h2>
+
+<ol>
+  <li>看一下<a href="https://github.com/WaeCo/agar.io-clone">agar.io-clone</a> <a href="https://github.com/WaeCo/agar.io-clone.git">git clone</a>。</li>
+  <li>STL中，map 对应的数据结构是 红黑树。红黑树是一种近似于平衡的二叉查找树，里面的数据是有序的。在红黑树上做查找操作的时间复杂度为 O(logN)。而 unordered_map 对应 哈希表，哈希表的特点就是查找效率高，时间复杂度为常数级别 O(1)， 而额外空间复杂度则要高出许多。所以对于需要高效率查询的情况，使用 unordered_map 容器。而如果对内存大小比较敏感或者数据存储要求有序的话，则可以用 map 容器。</li>
+  <li>看agar.io-clone的代码。发现自己的对于设计模式不在行。之前看过的模式都忘光。</li>
+  <li>后面要整理一下github上 c++11这个源码。</li>
 </ol>
 ]]></content:encoded>
     </item>
