@@ -7,8 +7,30 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-10-18T15:27:20+08:00</lastBuildDate>
+    <lastBuildDate>2018-11-07T14:23:50+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>devlog-2018-11</title>
+      <link href="http://localhost:4000/devlog201811/"/>
+      <pubDate>2018-11-01T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/devlog201811</guid>
+      <content:encoded><![CDATA[<p>11月份，刚搬完家。10月做的事不多。这个月加油！</p>
+
+<h2 id="2018-11-01">2018-11-01</h2>
+
+<p>看<a href="https://www.amazon.cn/dp/B009WMC3QQ/ref=sr_1_2?ie=UTF8&amp;qid=1540548648&amp;sr=8-2&amp;keywords=git">《Git权威指南》</a></p>
+
+<p>看看Redmine和git的结合。是不是以后项目管理用到呢？</p>
+
+<h2 id="2018-11-07">2018-11-07</h2>
+
+<p>搬家，忙工作上事。之死期间大致看了<a href="https://www.amazon.cn/dp/B009WMC3QQ/ref=sr_1_2?ie=UTF8&amp;qid=1540548648&amp;sr=8-2&amp;keywords=git">《Git权威指南》</a>  想必应该够工作上用了吧。</p>
+
+<p>返回来继续看skynet吧。</p>
+]]></content:encoded>
+    </item>
     
     <item>
       <title>devlog-2018-10</title>
@@ -56,6 +78,29 @@ stack traceback:</code></p>
 <h2 id="2018-10-15">2018-10-15</h2>
 
 <p>做go开发，发现很多依赖库被墙在国外了。搞不懂为什么要对技术做封锁。在网看找到这个 <a href="https://gopm.io/">https://gopm.io/</a></p>
+
+<h2 id="2018-10-24">2018-10-24</h2>
+
+<p>抓紧时间把skynet的源码看完。 – 今天忙了一天，需求不断，bugg不断。</p>
+
+<h2 id="2018-10-25">2018-10-25</h2>
+<p>lua gc 要看一下，其实应该是看一下lua源码。 今天看几个skynet源码的文件。 算是一个开端吧。</p>
+
+<p><a href="https://blog.csdn.net/vermilliontear/article/details/50895658">快速掌握Lua 5.3 —— Lua与C之间的交互概览</a></p>
+
+<p>为什么 skynet 函数为什么没对传入的指针做判断呢？</p>
+
+<h2 id="2018-10-25-1">2018-10-25</h2>
+<p>昨晚加班很晚 3点多才回去。 今天比较晚上班，看一些skynet源码。 在提交git时，出了问题。代码不见了。靠， 不知道发生了什么事， 对git了解不。</p>
+
+<p>立马买一本， <a href="https://www.amazon.cn/dp/B009WMC3QQ/ref=sr_1_2?ie=UTF8&amp;qid=1540548648&amp;sr=8-2&amp;keywords=git">《Git权威指南》</a></p>
+
+<p>无法接受这个事故。</p>
+
+<h2 id="2018-10-25-2">2018-10-25</h2>
+<p>看<a href="https://www.amazon.cn/dp/B009WMC3QQ/ref=sr_1_2?ie=UTF8&amp;qid=1540548648&amp;sr=8-2&amp;keywords=git">《Git权威指南》</a></p>
+
+<p>搬家了</p>
 ]]></content:encoded>
     </item>
     
@@ -429,39 +474,6 @@ demo.go:8: wrong number of args <span class="k">for </span>format <span class="k
   <li>这不是一个go项目，他是一个学习go的资料网站，属于著名的awesome系列，里面关于go的资源非常详细。<a href="https://github.com/avelino/awesome-go">https://github.com/avelino/awesome-go</a></li>
 </ul>
 
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go 编译时传递参数</title>
-      <link href="http://localhost:4000/go-build-ldflags/"/>
-      <pubDate>2018-03-01T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-build-ldflags</guid>
-      <content:encoded><![CDATA[<p>很有意思，可能运用的场景不多。如果想调试某个模块时，可以在编译直接给他赋值。</p>
-
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
-
-</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
-
-</span><span class="k">var</span><span class="x"> </span><span class="n">BuildDate</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="s">"no build date"</span><span class="x">
-
-</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"build date: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">BuildDate</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
-
-<p>传递参数步骤：</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go build demo.go
-<span class="nv">$ </span>./demo
-build <span class="nb">date</span>: no build <span class="nb">date</span>
-<span class="nv">$ DATE</span><span class="o">=</span><span class="sb">`</span><span class="nb">date</span> <span class="s1">'+%Y-%m-%d-%I:%M:%S'</span><span class="sb">`</span>
-<span class="nv">$ </span>go build <span class="nt">-ldflags</span> <span class="s2">"-X main.BuildDate=</span><span class="nv">$DATE</span><span class="s2">"</span> demo.go
-<span class="nv">$ </span>./demo
-build <span class="nb">date</span>: 2018-05-03-03:15:35
-</code></pre></div></div>
-<p>通过-X选项，可以给go程序传递相关参数。例如示例中，借助-X选项，将编译日期BuildDate实时传递到程序中。另外，如版本信息之类也可以通过该方式实现。</p>
 ]]></content:encoded>
     </item>
     
