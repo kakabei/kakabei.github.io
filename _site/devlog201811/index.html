@@ -64,13 +64,42 @@
 
 <p>返回来继续看skynet吧。</p>
 
+<h2 id="2018-11-08">2018-11-08</h2>
+
+<p>为什么skynet 中的一些函数正常情况下也返回-1。这和c编码习惯相悖啊。风云是出什么考虑呢？</p>
+
+<h2 id="2018-11-09">2018-11-09</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define SIZEOF_TCPBUFFER (offsetof(struct write_buffer, udp_address[0]))
+</span></code></pre></div></div>
+<p>offsetof 该宏用于求结构体中一个成员在该结构体中的偏移量。</p>
+
+<p>那么 offsetof和sizeof的区别在哪里呢？</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define THREAD_MAIN 1
+</span><span class="kt">uint32_t</span> <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)(</span><span class="o">-</span><span class="n">THREAD_MAIN</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>在计算机中负数是用补码表示的,即反码加1 正数直接用原码表示</p>
+
+<p>如： （这里用10位表示）</p>
+
+<p>因为-1是负数就用补码表示为</p>
+
+<p>00000000 00000001 的反码 11111111 11111110+1 即 11111111 11111111 转换为十进制数为</p>
+
+<h2 id="2018-11-12">2018-11-12</h2>
+
+<p>感觉自己有点害怕锁。看源码时，看到锁都会小心翼翼的。也会怀疑它会不会导致性能问题。</p>
+
+<p>开始使用golang语言了。刚开始会写的慢一些，没关系，多用用，就可以了。</p>
+
 </section>
 <section align="right">
 <br/>
 <span>
 	<a  href="/devlog201810/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a   class="pageNavInvalid"  >下一篇</a>
+	<a  href="/timegeekbang-go-synWaitGroup/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -136,7 +165,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/devlog/2018-11-01-devlog201811.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2018 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2019 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

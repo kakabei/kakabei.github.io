@@ -7,8 +7,424 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2018-11-07T14:23:50+08:00</lastBuildDate>
+    <lastBuildDate>2019-10-05T17:20:56+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>《极客时间》go语言核心36讲 条件变量 sync.Cond</title>
+      <link href="http://localhost:4000/timegeekbang-go-syncCond/"/>
+      <pubDate>2019-03-28T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/timegeekbang-go-syncCond</guid>
+      <content:encoded><![CDATA[<p>条件变量是和互斥锁一起使用的。
+条件变量是和互斥锁一起使用的。</p>
+
+<p>条件变量并不是被用来保护临界区和共享资源的，它是用于协调想要访问共享资源的那些线程的。当共享资源的状态发生变化时，它可以被用来通知被互斥锁阻塞的线程。</p>
+
+<p>条件变量提供的方法有三个：等待通知（wait）、单发通知（signal）和广播通知（broadcast）。</p>
+
+<p>这里有一个疑问：</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span><span class="x"> </span><span class="n">mailbox</span><span class="x"> </span><span class="kt">uint8</span><span class="x">
+</span><span class="k">var</span><span class="x"> </span><span class="n">lock</span><span class="x"> </span><span class="n">sync</span><span class="o">.</span><span class="n">RWMutex</span><span class="x">
+</span><span class="n">sendCond</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">)</span><span class="x">
+</span><span class="n">recvCond</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="n">lock</span><span class="o">.</span><span class="n">RLocker</span><span class="p">())</span><span class="x">
+</span></code></pre></div></div>
+
+<p>endCond := sync.NewCond(&amp;lock)和recvCond := sync.NewCond(lock.RLocker())</p>
+
+<p>传入的一个是 &amp;lock 另一个是 lock.RLocker() 为什么？</p>
+
+<p><strong>条件变量的Wait方法做了什么？</strong></p>
+
+<p>条件变量的Wait方法主要做了四件事。</p>
+
+<p>1　把调用它的 goroutine（也就是当前的 goroutine）加入到当前条件变量的通知队列中。</p>
+
+<p>2　解锁当前的条件变量基于的那个互斥锁。</p>
+
+<p>3　让当前的 goroutine 处于等待状态，等到通知到来时再决定是否唤醒它。此时，这个 goroutine 就会阻塞在调用这个Wait方法的那行代码上。</p>
+
+<p>4　如果通知到来并且决定唤醒这个 goroutine，那么就在唤醒它之后重新锁定当前条件变量基于的互斥锁。自此之后，当前的goroutine 就会继续执行后面的代码了。</p>
+
+<p><strong>条件变量的Signal方法和Broadcast方法有哪些异同？</strong></p>
+
+<p>条件变量的Signal方法和Broadcast方法都是被用来发送通知的，不同的是，前者的通知只会唤醒一个因此而等待的 goroutine，而后者的通知却会唤醒所有为此等待的 goroutine。</p>
+
+<p>扩展 ：https://blog.csdn.net/wentyoon/article/details/81174288</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《极客时间》go语言核心36讲 互斥锁 sync.Mutex与sync.RWMutex</title>
+      <link href="http://localhost:4000/timegeekbang-go-syncMutex/"/>
+      <pubDate>2019-03-27T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/timegeekbang-go-syncMutex</guid>
+      <content:encoded><![CDATA[<p>一个互斥锁可以被 用来保护一个临界区或一组相关临界区。保证在同一时刻只有一个Goroutine处于该临界区之内</p>
+
+<p>为了兑现这保证上，每当goroutine 想进入临界区时，都要先对它进行锁定 ，离开时临界区时都要及时地对它进行解锁。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span><span class="x">
+</span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">writer</span><span class="o">.</span><span class="n">Write</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="n">data</span><span class="p">))</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+ </span><span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"error: %s [%d]"</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="p">,</span><span class="x"> </span><span class="n">id</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span><span class="x">
+</span></code></pre></div></div>
+
+<p><strong>使用互斥锁时有哪 些注意事项：</strong></p>
+
+<p>1 不要重复锁定互斥锁。</p>
+
+<p>2 不要忘记解锁互斥锁，必要时用 defer 语句</p>
+
+<p>3 不要对沿未锁定或者已经解锁的互斥锁解锁</p>
+
+<p>4 不要在多个函数之前直接传递互斥锁</p>
+
+<p>死锁时抛出的panic是属于致使错误，都是无法被恢复的，调用recover函数对它们起不了任何作用。</p>
+
+<p>互斥锁是开箱即用的。sysnc.Mutex类型 是一个结构体类型，属于值类型中的一种，把它传给一个函数、将它从函数中返回，把它赋给其他变量。让它进入 某个通道都会导致它的副本的产生。
+它们是独立的，都是不同的互斥锁。</p>
+
+<p><strong>读写锁与互斥锁有哪 异同？</strong></p>
+
+<p>sync.RWMute类型的值代表。 都是开箱即用。 它是把对共享资源的“读操作”和“写操作”区别对待。</p>
+
+<p>比互斥锁有列加细腻的访问控制。</p>
+
+<p>一个读写锁中实际上包含了两个锁，即：读锁和写锁。sync.RWMutex类型中的Lock方法和Unlock方法分别用于对写锁进行锁定和解锁，而它的RLock方法和RUnlock方法则分别用于对读锁进行锁定和解锁。</p>
+
+<p><strong>另外，对于同一个读写锁来说有如下规则：</strong></p>
+
+<p>1 在写锁已被锁定的情况下再试图锁定写锁，会阻塞当前的 goroutine。</p>
+
+<p>2 在写锁已被锁定的情况下试图锁定读锁，也会阻塞当前的 goroutine</p>
+
+<p>3 在读锁已被锁定的情况下试图锁定写锁，同样会阻塞当前的goroutine。</p>
+
+<p>4 在读锁已被锁定的情况下再试图锁定读锁，并不会阻塞当前的goroutine。</p>
+
+<p>换一个角度来说，对于某个受到读写锁保护的共享资源，多个写操作不能同时进行，写操作和读操作也不能同时进行，但多个读操作却可以同时进行。</p>
+
+<p>go 语言代码  实例：</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
+
+</span><span class="k">import</span><span class="x"> </span><span class="p">(</span><span class="x">
+    </span><span class="s">"bytes"</span><span class="x">
+    </span><span class="s">"errors"</span><span class="x">
+    </span><span class="s">"fmt"</span><span class="x">
+    </span><span class="s">"io"</span><span class="x">
+    </span><span class="s">"log"</span><span class="x">
+    </span><span class="s">"sync"</span><span class="x">
+    </span><span class="s">"time"</span><span class="x">
+</span><span class="p">)</span><span class="x">
+
+</span><span class="c">// singleHandler 代表单次处理函数的类型。</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">singleHandler</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">(</span><span class="n">data</span><span class="x"> </span><span class="kt">string</span><span class="p">,</span><span class="x"> </span><span class="n">n</span><span class="x"> </span><span class="kt">int</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x">
+
+</span><span class="c">// handlerConfig 代表处理流程配置的类型。</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">handlerConfig</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">handler</span><span class="x">   </span><span class="n">singleHandler</span><span class="x"> </span><span class="c">// 单次处理函数。</span><span class="x">
+    </span><span class="n">goNum</span><span class="x">     </span><span class="kt">int</span><span class="x">           </span><span class="c">// 需要启用的goroutine的数量。</span><span class="x">
+    </span><span class="n">number</span><span class="x">    </span><span class="kt">int</span><span class="x">           </span><span class="c">// 单个goroutine中的处理次数。</span><span class="x">
+    </span><span class="n">interval</span><span class="x">  </span><span class="n">time</span><span class="o">.</span><span class="n">Duration</span><span class="x"> </span><span class="c">// 单个goroutine中的处理间隔时间。</span><span class="x">
+    </span><span class="n">counter</span><span class="x">   </span><span class="kt">int</span><span class="x">           </span><span class="c">// 数据量计数器，以字节为单位。</span><span class="x">
+    </span><span class="n">counterMu</span><span class="x"> </span><span class="n">sync</span><span class="o">.</span><span class="n">Mutex</span><span class="x">    </span><span class="c">// 数据量计数器专用的互斥锁。</span><span class="x">
+
+</span><span class="p">}</span><span class="x">
+
+</span><span class="c">// count 会增加计数器的值，并会返回增加后的计数。</span><span class="x">
+</span><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">hc</span><span class="x"> </span><span class="o">*</span><span class="n">handlerConfig</span><span class="p">)</span><span class="x"> </span><span class="n">count</span><span class="p">(</span><span class="n">increment</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">hc</span><span class="o">.</span><span class="n">counterMu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span><span class="x">
+    </span><span class="k">defer</span><span class="x"> </span><span class="n">hc</span><span class="o">.</span><span class="n">counterMu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span><span class="x">
+    </span><span class="n">hc</span><span class="o">.</span><span class="n">counter</span><span class="x"> </span><span class="o">+=</span><span class="x"> </span><span class="n">increment</span><span class="x">
+    </span><span class="k">return</span><span class="x"> </span><span class="n">hc</span><span class="o">.</span><span class="n">counter</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="c">// mu 代表以下流程要使用的互斥锁。</span><span class="x">
+    </span><span class="c">// 在下面的函数中直接使用即可，不要传递。</span><span class="x">
+    </span><span class="k">var</span><span class="x"> </span><span class="n">mu</span><span class="x"> </span><span class="n">sync</span><span class="o">.</span><span class="n">Mutex</span><span class="x">
+
+    </span><span class="c">// genWriter 代表的是用于生成写入函数的函数。</span><span class="x">
+    </span><span class="n">genWriter</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="k">func</span><span class="p">(</span><span class="n">writer</span><span class="x"> </span><span class="n">io</span><span class="o">.</span><span class="n">Writer</span><span class="p">)</span><span class="x"> </span><span class="n">singleHandler</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="k">return</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">(</span><span class="n">data</span><span class="x"> </span><span class="kt">string</span><span class="p">,</span><span class="x"> </span><span class="n">n</span><span class="x"> </span><span class="kt">int</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+            </span><span class="c">// 准备数据。</span><span class="x">
+            </span><span class="n">data</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\t</span><span class="s">"</span><span class="p">,</span><span class="x">
+                </span><span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span><span class="o">.</span><span class="n">Format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">StampNano</span><span class="p">))</span><span class="x">
+            </span><span class="c">// 写入数据。</span><span class="x">
+            </span><span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span><span class="x">
+            </span><span class="k">defer</span><span class="x"> </span><span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span><span class="x">
+            </span><span class="n">n</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">writer</span><span class="o">.</span><span class="n">Write</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="n">data</span><span class="p">))</span><span class="x">
+            </span><span class="k">return</span><span class="x">
+        </span><span class="p">}</span><span class="x">
+    </span><span class="p">}</span><span class="x">
+
+    </span><span class="c">// genReader 代表的是用于生成读取函数的函数。</span><span class="x">
+    </span><span class="n">genReader</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="k">func</span><span class="p">(</span><span class="n">reader</span><span class="x"> </span><span class="n">io</span><span class="o">.</span><span class="n">Reader</span><span class="p">)</span><span class="x"> </span><span class="n">singleHandler</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="k">return</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">(</span><span class="n">data</span><span class="x"> </span><span class="kt">string</span><span class="p">,</span><span class="x"> </span><span class="n">n</span><span class="x"> </span><span class="kt">int</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+            </span><span class="n">buffer</span><span class="p">,</span><span class="x"> </span><span class="n">ok</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">reader</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">bytes</span><span class="o">.</span><span class="n">Buffer</span><span class="p">)</span><span class="x">
+            </span><span class="k">if</span><span class="x"> </span><span class="o">!</span><span class="n">ok</span><span class="x"> </span><span class="p">{</span><span class="x">
+                </span><span class="n">err</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"unsupported reader"</span><span class="p">)</span><span class="x">
+                </span><span class="k">return</span><span class="x">
+            </span><span class="p">}</span><span class="x">
+            </span><span class="c">// 读取数据。</span><span class="x">
+            </span><span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span><span class="x">
+            </span><span class="k">defer</span><span class="x"> </span><span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span><span class="x">
+            </span><span class="n">data</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">buffer</span><span class="o">.</span><span class="n">ReadString</span><span class="p">(</span><span class="sc">'\t'</span><span class="p">)</span><span class="x">
+            </span><span class="n">n</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="x">
+            </span><span class="k">return</span><span class="x">
+        </span><span class="p">}</span><span class="x">
+    </span><span class="p">}</span><span class="x">
+
+    </span><span class="c">// buffer 代表缓冲区。</span><span class="x">
+    </span><span class="k">var</span><span class="x"> </span><span class="n">buffer</span><span class="x"> </span><span class="n">bytes</span><span class="o">.</span><span class="n">Buffer</span><span class="x">
+
+    </span><span class="c">// 数据写入配置。</span><span class="x">
+    </span><span class="n">writingConfig</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">handlerConfig</span><span class="p">{</span><span class="x">
+        </span><span class="n">handler</span><span class="o">:</span><span class="x">  </span><span class="n">genWriter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">),</span><span class="x">
+        </span><span class="n">goNum</span><span class="o">:</span><span class="x">    </span><span class="m">5</span><span class="p">,</span><span class="x">
+        </span><span class="n">number</span><span class="o">:</span><span class="x">   </span><span class="m">4</span><span class="p">,</span><span class="x">
+        </span><span class="n">interval</span><span class="o">:</span><span class="x"> </span><span class="n">time</span><span class="o">.</span><span class="n">Millisecond</span><span class="x"> </span><span class="o">*</span><span class="x"> </span><span class="m">100</span><span class="p">,</span><span class="x">
+    </span><span class="p">}</span><span class="x">
+    </span><span class="c">// 数据读取配置。</span><span class="x">
+    </span><span class="n">readingConfig</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">handlerConfig</span><span class="p">{</span><span class="x">
+        </span><span class="n">handler</span><span class="o">:</span><span class="x">  </span><span class="n">genReader</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">),</span><span class="x">
+        </span><span class="n">goNum</span><span class="o">:</span><span class="x">    </span><span class="m">10</span><span class="p">,</span><span class="x">
+        </span><span class="n">number</span><span class="o">:</span><span class="x">   </span><span class="m">2</span><span class="p">,</span><span class="x">
+        </span><span class="n">interval</span><span class="o">:</span><span class="x"> </span><span class="n">time</span><span class="o">.</span><span class="n">Millisecond</span><span class="x"> </span><span class="o">*</span><span class="x"> </span><span class="m">100</span><span class="p">,</span><span class="x">
+    </span><span class="p">}</span><span class="x">
+
+    </span><span class="c">// sign 代表信号的通道。</span><span class="x">
+    </span><span class="n">sign</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">make</span><span class="p">(</span><span class="k">chan</span><span class="x"> </span><span class="k">struct</span><span class="p">{},</span><span class="x"> </span><span class="n">writingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="o">+</span><span class="n">readingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="p">)</span><span class="x">
+
+    </span><span class="c">// 启用多个goroutine对缓冲区进行多次数据写入。</span><span class="x">
+    </span><span class="k">for</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">&lt;=</span><span class="x"> </span><span class="n">writingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="o">++</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="k">go</span><span class="x"> </span><span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+            </span><span class="k">defer</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+                </span><span class="n">sign</span><span class="x"> </span><span class="o">&lt;-</span><span class="x"> </span><span class="k">struct</span><span class="p">{}{}</span><span class="x">
+            </span><span class="p">}()</span><span class="x">
+            </span><span class="k">for</span><span class="x"> </span><span class="n">j</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="p">;</span><span class="x"> </span><span class="n">j</span><span class="x"> </span><span class="o">&lt;=</span><span class="x"> </span><span class="n">writingConfig</span><span class="o">.</span><span class="n">number</span><span class="p">;</span><span class="x"> </span><span class="n">j</span><span class="o">++</span><span class="x"> </span><span class="p">{</span><span class="x">
+                </span><span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">writingConfig</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span><span class="x">
+                </span><span class="n">data</span><span class="p">,</span><span class="x"> </span><span class="n">n</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">writingConfig</span><span class="o">.</span><span class="n">handler</span><span class="p">()</span><span class="x">
+                </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+                    </span><span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"writer [%d-%d]: error: %s"</span><span class="p">,</span><span class="x">
+                        </span><span class="n">i</span><span class="p">,</span><span class="x"> </span><span class="n">j</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="p">)</span><span class="x">
+                    </span><span class="k">continue</span><span class="x">
+                </span><span class="p">}</span><span class="x">
+                </span><span class="n">total</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">writingConfig</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="x">
+                </span><span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"writer [%d-%d]: %s (total: %d)"</span><span class="p">,</span><span class="x">
+                    </span><span class="n">i</span><span class="p">,</span><span class="x"> </span><span class="n">j</span><span class="p">,</span><span class="x"> </span><span class="n">data</span><span class="p">,</span><span class="x"> </span><span class="n">total</span><span class="p">)</span><span class="x">
+            </span><span class="p">}</span><span class="x">
+        </span><span class="p">}(</span><span class="n">i</span><span class="p">)</span><span class="x">
+    </span><span class="p">}</span><span class="x">
+
+    </span><span class="c">// 启用多个goroutine对缓冲区进行多次数据读取。</span><span class="x">
+    </span><span class="k">for</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">&lt;=</span><span class="x"> </span><span class="n">readingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="o">++</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="k">go</span><span class="x"> </span><span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+            </span><span class="k">defer</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+                </span><span class="n">sign</span><span class="x"> </span><span class="o">&lt;-</span><span class="x"> </span><span class="k">struct</span><span class="p">{}{}</span><span class="x">
+            </span><span class="p">}()</span><span class="x">
+            </span><span class="k">for</span><span class="x"> </span><span class="n">j</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="p">;</span><span class="x"> </span><span class="n">j</span><span class="x"> </span><span class="o">&lt;=</span><span class="x"> </span><span class="n">readingConfig</span><span class="o">.</span><span class="n">number</span><span class="p">;</span><span class="x"> </span><span class="n">j</span><span class="o">++</span><span class="x"> </span><span class="p">{</span><span class="x">
+                </span><span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">readingConfig</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span><span class="x">
+                </span><span class="k">var</span><span class="x"> </span><span class="n">data</span><span class="x"> </span><span class="kt">string</span><span class="x">
+                </span><span class="k">var</span><span class="x"> </span><span class="n">n</span><span class="x"> </span><span class="kt">int</span><span class="x">
+                </span><span class="k">var</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="kt">error</span><span class="x">
+                </span><span class="k">for</span><span class="x"> </span><span class="p">{</span><span class="x">
+                    </span><span class="n">data</span><span class="p">,</span><span class="x"> </span><span class="n">n</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">readingConfig</span><span class="o">.</span><span class="n">handler</span><span class="p">()</span><span class="x">
+                    </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">==</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="o">||</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="n">io</span><span class="o">.</span><span class="n">EOF</span><span class="x"> </span><span class="p">{</span><span class="x">
+                        </span><span class="k">break</span><span class="x">
+                    </span><span class="p">}</span><span class="x">
+                    </span><span class="c">// 如果读比写快（读时会发生EOF错误），那就等一会儿再读。</span><span class="x">
+                    </span><span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">readingConfig</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span><span class="x">
+                </span><span class="p">}</span><span class="x">
+                </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+                    </span><span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"reader [%d-%d]: error: %s"</span><span class="p">,</span><span class="x">
+                        </span><span class="n">i</span><span class="p">,</span><span class="x"> </span><span class="n">j</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="p">)</span><span class="x">
+                    </span><span class="k">continue</span><span class="x">
+                </span><span class="p">}</span><span class="x">
+                </span><span class="n">total</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">readingConfig</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="x">
+                </span><span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"reader [%d-%d]: %s (total: %d)"</span><span class="p">,</span><span class="x">
+                    </span><span class="n">i</span><span class="p">,</span><span class="x"> </span><span class="n">j</span><span class="p">,</span><span class="x"> </span><span class="n">data</span><span class="p">,</span><span class="x"> </span><span class="n">total</span><span class="p">)</span><span class="x">
+            </span><span class="p">}</span><span class="x">
+        </span><span class="p">}(</span><span class="n">i</span><span class="p">)</span><span class="x">
+    </span><span class="p">}</span><span class="x">
+
+    </span><span class="c">// signNumber 代表需要接收的信号的数量。</span><span class="x">
+    </span><span class="n">signNumber</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">writingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="x"> </span><span class="o">+</span><span class="x"> </span><span class="n">readingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="x">
+    </span><span class="c">// 等待上面启用的所有goroutine的运行全部结束。</span><span class="x">
+    </span><span class="k">for</span><span class="x"> </span><span class="n">j</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="p">;</span><span class="x"> </span><span class="n">j</span><span class="x"> </span><span class="o">&lt;</span><span class="x"> </span><span class="n">signNumber</span><span class="p">;</span><span class="x"> </span><span class="n">j</span><span class="o">++</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="o">&lt;-</span><span class="n">sign</span><span class="x">
+    </span><span class="p">}</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《极客时间》go语言核心36讲 原子操作</title>
+      <link href="http://localhost:4000/timegeekbang-go-sync-atomic/"/>
+      <pubDate>2019-03-26T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/timegeekbang-go-sync-atomic</guid>
+      <content:encoded><![CDATA[<p>在众多的同步工具中，真正能够保证原子性执行的只有原子操作（atomic operation）。原子操作在进行的过程中是不允许中断的。在底层，这会由 CPU 提供芯片级别的支持。</p>
+
+<p><strong>sync/atomic包中提供了几种原子操作？可操作的数据类型又有哪些？</strong></p>
+
+<p>sync/atomic包中的函数可以做的原子操作有：加法（add）、比较并交换（compare and swap，简称 CAS）、加载（load）、存储（store）和交换（swap）。</p>
+
+<p><strong>第一个衍生问题 ：</strong>我们都知道，传入这些原子操作函数的第一个参数值对应的都应该是那个被操作的值。比如，atomic.AddInt32函数的第一个参数，对应的一定是那个要被增大的整数。可是，这个参数的类型为什么不是int32而是*int32呢？</p>
+
+<p>回答是：因为原子操作函数需要的是被操作值的指针，而不是这个值本身；被传入函数的参数值都会被复制，像这种基本类型的值一旦被.传入函数，就已经与函数外的那个值毫无关系了。</p>
+
+<p>所以，传入值本身没有任何意义。unsafe.Pointer类型虽然是指针类型，但是那些原子操作函数要操作的是这个指针值，而不是它指向的那个值，所以需要的仍然是指向这个指针值的指针。</p>
+
+<p><strong>第二个衍生问题：</strong> 用于原子加法操作的函数可以做原子减法吗？比如，atomic.AddInt32函数可以用于减小那个被操作的整数值吗？</p>
+
+<p>回答是：当然是可以的。atomic.AddInt32函数的第二个参数代表差量，它的类型是int32，是有符号的。如果我们想做原子减法，那么把这个差量设置为负整数就可以了。</p>
+
+<p>对于atomic.AddUint64函数做原子减法，就不能这么直接了，因为它们的第二个参数的类型分别是uint32和uint64，都是无符号的。所以要做转换 uint32(int32(-3))。如果不这么做的话，可报错。还有一种更加考虑直接的方式可以传入^uint32(-N-1)</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">atomic</span><span class="o">.</span><span class="n">AddUint32</span><span class="p">(</span><span class="o">*</span><span class="n">addr</span><span class="p">,</span><span class="kt">uint32</span><span class="p">(</span><span class="kt">int32</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span><span class="x">
+</span><span class="c">//或</span><span class="x">
+</span><span class="n">atomic</span><span class="o">.</span><span class="n">AddUint32</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span><span class="o">^</span><span class="kt">uint32</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">))</span><span class="x">
+</span></code></pre></div></div>
+
+<p><strong>第三个衍生问题：</strong> 比较并交换操作与交换操作相比有什么不同？优势在哪里？</p>
+
+<p>回答是：比较并交换操作即 CAS 操作，是有条件的交换操作，只有在条件满足的情况下才会进行值的交换。
+所谓的交换指的是，把新值赋给变量，并返回变量的旧值。</p>
+
+<p><strong>第四个衍生问题：</strong> 假设我已经保证了对一个变量的写操作都是原子操作，比如：加或减、存储、交换等等，，还有必要使用原子操作吗？</p>
+
+<p>回答是：很有必要。如果写操作还没有进行完，读操作就来读了，那么就只能读到仅修改了一部分的值。这显然破坏了值的完整性，读出来的值也是完全错误的。</p>
+
+<p>** 问题：怎样用好sync/atomic.Value?**</p>
+
+<p>atomic.Value类型是开箱即用的，我们声明一个该类型的变量（以下简称原子变量）之后就可以直接使用了。这个类型使用起来很简单，它只有两个指针方法：Store和Load。不过，虽然简单，但还是有一些值得注意的地方的。</p>
+
+<p>1 一旦被真正的使用，就不应该被复制，atomic.Value类型属于结构体类型， 而结构体类型属于值类型。复制时会产生个一完全分离的新值。</p>
+
+<p>2 不能用原子偷走一存储nil</p>
+
+<p>3 向原子值存储的第一个值，决定了它今后能且只能在座哪一个类型的值。即使使用接口类型，然后再存储这个接口的某个实现类型的值，还是不可以的。</p>
+
+<p><strong>使用建议：</strong></p>
+
+<p>1 不要把内部使用的原子值暴露给外界</p>
+
+<p>2 如果不和地不让包外，或模块外的代码使用你的原子值，那么可以声明一个包级私有的原子变量，然后再通过一个或多个公开的函数让外界间接地信息使用它。注意，这种情况下不要把原子值传递外界，不论是传递原子值本身还是它的指针值。</p>
+
+<p>3 如果通过某个函数可以向内部民的原子值 存储的话，那么就应该在这个函数中先判断被存储值类型的合法性。</p>
+
+<p>4 最好把原子值封装到一个数据类型中，比如结构体类型。</p>
+
+<p>尽量不要向原子值中存储引用类型的值，容易造成安全漏洞。</p>
+
+<p>扩展阅读：https://www.jianshu.com/p/228c119a7d0e</p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《极客时间》go语言核心36讲 程序性能分析基本</title>
+      <link href="http://localhost:4000/timegeekbang-go-pprof/"/>
+      <pubDate>2019-03-25T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/timegeekbang-go-pprof</guid>
+      <content:encoded><![CDATA[<p>Go 语言为程序开发者们提供了丰富的性能分析 API和标准工具。这些主要存在于：</p>
+
+<blockquote>
+  <p>1 runtime/pprof</p>
+
+  <p>2 net/http/pprof</p>
+
+  <p>3 runtime/trace</p>
+</blockquote>
+
+<p>在 Go 语言中，用于分析程序性能的概要文件有三种，分别是CPU 概要文件（CPU Profile）、内存概要文件（Mem Profile）和阻塞概要文件（Block Profile）。</p>
+
+<p>对于 CPU 概要文件来说，其中的每一段独立的概要信息都记录着，在进行某一次采样的那个时刻，CPU 上正在执行的Go 代码。</p>
+
+<p>而对于内存概要文件，其中的每一段概要信息都记载着，在某个采样时刻，正在执行的 Go 代码以及堆内存的使用情况，这里包含已分配和已释放的字节数量和对象数量。至于阻塞概要文件，其中的每一段概要信息，都代表着 Go 程序中的一个 goroutine 阻塞事件。</p>
+
+<p>这时就可以显现出go tool pprof这个工具的作用了。我们可以通过它进入一个基于命令行的交互式界面，并对指定的概要文件进行查阅。概要文件是protoclo buffer 方式存储的。</p>
+
+<p><strong>怎样设定内存概要信息的采样频率？</strong></p>
+
+<p>只要为<code class="highlighter-rouge">runtime.MemProfileRate</code>变量赋值即可。</p>
+
+<p>这个变量的含义是，平均每分配多少个字节，就对堆内存的使用情况进行一次采样。如果把该变量的值设为0，那么，Go 语言运行时系统就会完全停止对内存概要信息的采样。该变量的缺省值是512 KB，也就是512千字节。</p>
+
+<p>越早设置越好，在main 开始时就设置。之后，需要调用<code class="highlighter-rouge">runtime/pprof</code>包中的<code class="highlighter-rouge">WriteHeapProfile</code>函数。该函数会把收集好的内存概要信息，写到我们指定的写入器中。</p>
+
+<p>注意，我们通过<code class="highlighter-rouge">WriteHeapProfile</code>函数得到的内存概要信息并不是实时的，它是一个快照，是在最近一次的内存垃圾收集工作完成时产生的。如果你想要实时的信息，那么可以调用<code class="highlighter-rouge">runtime.ReadMemStats</code>函数。不过要特别注意，该函数会引起 Go 语言调度器的短暂停顿。</p>
+
+<p><strong>怎样获取到阻塞概要信息？</strong></p>
+
+<p>我们调用runtime包中的<code class="highlighter-rouge">SetBlockProfileRate</code>函数，即可对阻塞概要信息的采样频率进行设定。该函数有一个名叫rate的参数，它是int类型的。</p>
+
+<p>这个参数的含义是，只要发现一个阻塞事件的持续时间达到了多少个纳秒，就可以对其进行采样。如果这个参数的值小于或等于0，那么就意味着 Go 语言运行时系统将会完全停止对阻塞概要信息的采样。</p>
+
+<p>还有一个名叫<code class="highlighter-rouge">blockprofilerate</code>的包级私有变量，它是uint64类型的。这个变量的含义是，只要发现一个阻塞事事件的持续时间跨越了多少个 CPU 时钟周期，就可以对其进行采样。</p>
+
+<p>另一方面，当我们需要获取阻塞概要信息的时候，需要先调用runtime/pprof包中的Lookup函数并传入参数值”block”，从而得到一个*runtime/pprof.Profile类型的值（以下简称Profile值）。在这之后，我们还需要调用这个Profile值的WriteTo方法，以驱使它把概要信息写进我们指定的写入器中。</p>
+
+<p><strong>runtime/pprof.Lookup函数的调用方式是什么？</strong></p>
+
+<p><code class="highlighter-rouge">runtime/pprof.Lookup</code>函数（以下简称Lookup函数）的功能是，提供与给定的名称相对应的概要信息。这个概要信息会由一个Profile值代表。如果该函数返回了一个nil，那么就说明不存在与给定名称对应的概要信息。</p>
+
+<p><code class="highlighter-rouge">runtime/pprof</code>包已经为我们预先定义了 6 个概要名称。它们对应的概要信息收集方法和输出方法也都已经准备好了。我们直接拿来使用就可以了。</p>
+
+<p>它们是：<code class="highlighter-rouge">goroutine、heap、allocs、threadcreate、block和mutex</code>。</p>
+
+<p><strong>问题 4：如何为基于 HTTP 协议的网络服务添加性能分析接口？</strong></p>
+
+<p>这个问题说起来还是很简单的。这是因为我们在一般情况下只要在程序中导入net/http/pprof代码包就可以了，就像这样：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span><span class="x"> </span><span class="n">_</span><span class="x"> </span><span class="s">"net/http/pprof"</span><span class="x">
+</span></code></pre></div></div>
+<p>然后，启动网络服务并开始监听，比如：</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">log</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">ListenAndServe</span><span class="p">(</span><span class="s">"localhost:8082"</span><span class="p">,</span><span class="x"> </span><span class="no">nil</span><span class="p">))</span><span class="x">
+</span></code></pre></div></div>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《极客时间》go语言核心36讲 sync.WaitGroup和sync.Once</title>
+      <link href="http://localhost:4000/timegeekbang-go-synWaitGroup/"/>
+      <pubDate>2019-03-25T17:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/timegeekbang-go-synWaitGroup</guid>
+      <content:encoded><![CDATA[<p>sync.WaitGroup类型（以下简称WaitGroup类型）是开箱即用的，也是并发安全的。同时，它一旦被真正使用就不能被复制了。</p>
+
+<p>WaitGroup类型拥有三个指针方法：Add、Done和Wait。你可以想象该类型中有一个计数器，它的默认值是0。我们可以通过调用该类型值的Add方法来增加，或者减少这个计数器的值。</p>
+
+<p>一般情况下，我会用这个方法来记录需要等待的 goroutine 的数量。相对应的，这个类型的Done方法，用于对其所属值中计数器的值进行减一操作。我们可以在需要等待的 goroutine 中，通过defer语句调用它。</p>
+
+<p>而此类型的Wait方法的功能是，阻塞当前的 goroutine，直到其所属值中的计数器归零。如果在该方法被调用的时候，那个计数器的值就是0，那么它将不会做任何事情。</p>
+
+<p>sync.WaitGroup类型值中计数器的值可以小于0吗？</p>
+
+<p>这里的典型回答是：不可以。</p>
+
+<p>另外，你可能已经知道，WaitGroup值是可以被复用的，但需要保证其计数周期的完整性。这里的计数周期指的是这样一个过程：该值中的计数器值由0变为了某个正整数，而后又经过一系列的变化，最终由某个正整数又变回了0。</p>
+
+<p>也就是说，只要计数器的值始于0又归为0，就可以被视为一个计数周期。在一个此类值的生命周期中，它可以经历任意多个计数周期。但是，只有在它走完当前的计数周期之后，才能够开始下一个计数周期。</p>
+
+<p><img src="/assets/timegeekbang/go-sync.png" alt="" /></p>
+
+<p>不要把增加其计数器值的操作和调用其Wait方法的代码，放在不同的 goroutine 中执行。换句话说，要杜绝对同一个WaitGroup值的两种操作的并发执行。</p>
+
+<p>问题：sync.Once类型值的Do方法是怎么保证只执行参数函数一次的？
+与sync.WaitGroup类型一样，sync.Once类型（以下简称Once类型）也属于结构体类型，同样也是开箱即用和并发安全的。由于这个类型中包含了一个sync.Mutex类型的字段，所以，复制该类型的值也会导致功能的失效。</p>
+
+<p>扩展：https://www.cnblogs.com/linyihai/p/10285437.html</p>
+]]></content:encoded>
+    </item>
     
     <item>
       <title>devlog-2018-11</title>
@@ -29,6 +445,35 @@
 <p>搬家，忙工作上事。之死期间大致看了<a href="https://www.amazon.cn/dp/B009WMC3QQ/ref=sr_1_2?ie=UTF8&amp;qid=1540548648&amp;sr=8-2&amp;keywords=git">《Git权威指南》</a>  想必应该够工作上用了吧。</p>
 
 <p>返回来继续看skynet吧。</p>
+
+<h2 id="2018-11-08">2018-11-08</h2>
+
+<p>为什么skynet 中的一些函数正常情况下也返回-1。这和c编码习惯相悖啊。风云是出什么考虑呢？</p>
+
+<h2 id="2018-11-09">2018-11-09</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define SIZEOF_TCPBUFFER (offsetof(struct write_buffer, udp_address[0]))
+</span></code></pre></div></div>
+<p>offsetof 该宏用于求结构体中一个成员在该结构体中的偏移量。</p>
+
+<p>那么 offsetof和sizeof的区别在哪里呢？</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define THREAD_MAIN 1
+</span><span class="kt">uint32_t</span> <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)(</span><span class="o">-</span><span class="n">THREAD_MAIN</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>在计算机中负数是用补码表示的,即反码加1 正数直接用原码表示</p>
+
+<p>如： （这里用10位表示）</p>
+
+<p>因为-1是负数就用补码表示为</p>
+
+<p>00000000 00000001 的反码 11111111 11111110+1 即 11111111 11111111 转换为十进制数为</p>
+
+<h2 id="2018-11-12">2018-11-12</h2>
+
+<p>感觉自己有点害怕锁。看源码时，看到锁都会小心翼翼的。也会怀疑它会不会导致性能问题。</p>
+
+<p>开始使用golang语言了。刚开始会写的慢一些，没关系，多用用，就可以了。</p>
 ]]></content:encoded>
     </item>
     
@@ -343,137 +788,6 @@ stack traceback:</code></p>
 </span><span class="n">exit</span><span class="x"> </span><span class="n">status</span><span class="x"> </span><span class="m">66</span><span class="x">
 </span></code></pre></div></div>
 <p><strong>13行 出现变量竞争。</strong></p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go build 时的错误分析</title>
-      <link href="http://localhost:4000/go-build-error/"/>
-      <pubDate>2018-03-01T19:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-build-error</guid>
-      <content:encoded><![CDATA[<p>go build 程序时，如果出现：</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: building out-of-date packages:
-
-runtime/pprof
-
-testing
-
-regexp/syntax
-
-regexp
-
-installing these packages with <span class="s1">'go test -i'</span> will speed future tests.
-</code></pre></div></div>
-
-<p>那么就是说明下面的包已经有修改过了，但是没有重新install</p>
-
-<p>如果有标准的包过期，使用go install -a -v std来进行更新</p>
-
-<p>如果是自定义的包过期，重新调用go install</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go gdb 编译</title>
-      <link href="http://localhost:4000/go-gdb/"/>
-      <pubDate>2018-03-01T18:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-gdb</guid>
-      <content:encoded><![CDATA[<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go build <span class="nt">-gcflags</span> <span class="s2">"-N -l"</span> demo.go
-</code></pre></div></div>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go关于defer的一道面试题</title>
-      <link href="http://localhost:4000/go-defer-1/"/>
-      <pubDate>2018-03-01T18:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-defer-1</guid>
-      <content:encoded><![CDATA[<p>请写出输出结果</p>
-
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">(){</span><span class="x">
-    </span><span class="n">a</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="x">
-    </span><span class="n">b</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">2</span><span class="x">
-    </span><span class="k">defer</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span><span class="x">
-    </span><span class="n">a</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">0</span><span class="x">
-    </span><span class="k">defer</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span><span class="k">func</span><span class="x"> </span><span class="n">calc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="x"> </span><span class="kt">int</span><span class="p">){</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span><span class="x">
-    </span><span class="k">return</span><span class="x"> </span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="x">
-</span><span class="p">}</span><span class="x">
-
-</span></code></pre></div></div>
-
-<p>结果是</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 2 3
-0 2 2
-0 2 2
-1 3 4
-</code></pre></div></div>
-
-<h4 id="考察两个知识点">考察两个知识点：</h4>
-
-<p>1.defer是栈调用，后写的先执行</p>
-
-<p>2.defer的函数调用语句会在父函数调用后执行，但是用到的参数会在当时就执行得出</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go vet检测代码错误</title>
-      <link href="http://localhost:4000/go-ver/"/>
-      <pubDate>2018-03-01T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-ver</guid>
-      <content:encoded><![CDATA[<p>这个种方式很不错，当代码量很大时，可以用这种方式去做检测。</p>
-
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x"> </span><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
-
-</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
-
-</span><span class="k">func</span><span class="x"> </span><span class="n">Func</span><span class="p">(</span><span class="n">num</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"call Func</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"num = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">num</span><span class="p">)</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"num = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="m">1</span><span class="p">,</span><span class="x"> </span><span class="m">2</span><span class="p">,</span><span class="x"> </span><span class="m">3</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
-
-</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">Func</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
-
-<p>使用vet工具检测代码：</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go build demo.go
-<span class="nv">$ </span>go tool vet demo.go
-demo.go:7: arg num <span class="k">for </span><span class="nb">printf </span>verb %s of wrong <span class="nb">type</span>: int
-demo.go:8: wrong number of args <span class="k">for </span>format <span class="k">in </span>Printf call: 1 needed but 3 args
- 
-</code></pre></div></div>
-
-<p>通过vet工具，可以检测到go代码中一些可疑的结构，虽然vet不能确保发现的问题都是真正的错误，但是它可以发现一些编译器无法捕获的错误。</p>
-
-<p>例如示例中，这段代码能正常的编译通过，但是通过vet检测出2个问题，第一个问题是打印的格式与参数类型不匹配，第二个问题需要打印的参数和所给参数数量不一致。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go 资料</title>
-      <link href="http://localhost:4000/go-material/"/>
-      <pubDate>2018-03-01T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/go-material</guid>
-      <content:encoded><![CDATA[<ul>
-  <li>github Go语言资料收集 <a href="https://github.com/wonderfo/wonderfogo/wiki">https://github.com/wonderfo/wonderfogo/wiki</a></li>
-  <li>这个人的几篇blog可以看 <a href="http://www.cnblogs.com/yjf512/category/385369.html">http://www.cnblogs.com/yjf512/category/385369.html</a></li>
-  <li>这不是一个go项目，他是一个学习go的资料网站，属于著名的awesome系列，里面关于go的资源非常详细。<a href="https://github.com/avelino/awesome-go">https://github.com/avelino/awesome-go</a></li>
-</ul>
-
 ]]></content:encoded>
     </item>
     
