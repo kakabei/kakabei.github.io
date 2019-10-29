@@ -25,3 +25,56 @@ excerpt:
 `useSystemClipboard`  使用系统的粘贴板
 
 `<C-a>` 屏蔽 Ctrl+A
+
+vscode setting.json 配置
+
+```json
+{
+    "editor.minimap.enabled": false,
+    "C_Cpp.updateChannel": "Insiders",
+    "[cpp]": {
+        "editor.quickSuggestions": true
+    },
+    "[c]": {
+        "editor.quickSuggestions": true
+    },
+    
+    "gnuGlobal.globalExecutable": "d:\\tools\\glo582wb\\bin\\global.exe",
+    "gnuGlobal.gtagsExecutable": "d:\\tools\\glo582wb\\bin\\gtags.exe",
+    "gnuGlobal.encoding": "Big5",
+    "workbench.activityBar.visible": true, 
+    "workbench.colorCustomizations": {
+        //设置用户选中代码段的颜色 
+        //"editor.selectionBackground": "#2f00ff",
+        //搜索匹配的背景色
+        "editor.findMatchBackground": "#ff0000",
+        "editor.findMatchHighlightBackground": "#EE6A50",
+        "editor.findRangeHighlightBackground": "#ff9900"
+
+    },
+
+    "php.validate.enable": true,
+    "php.validate.executablePath": "d:\\tools\\php-7.3.7-Win32-VC15-x64\\php.exe",
+    "php.executablePath": "d:\\tools\\php-7.3.7-Win32-VC15-x64\\php.exe",
+    "php.validate.run": "onType",
+    "window.zoomLevel": 0,
+    
+
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "yapf",
+    "python.linting.flake8Args": ["--max-line-length=248"],
+    "python.linting.pylintEnabled": false,
+
+    "vim.useSystemClipboard": true,
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-f>": false,
+        "<C-x>": false,
+        "<C-c>": false,
+        "<C-h>": false
+    }
+
+    
+}
+
+```
