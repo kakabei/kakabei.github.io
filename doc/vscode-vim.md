@@ -78,3 +78,14 @@ vscode setting.json 配置
 }
 
 ```
+
+### Better Comments 
+
+让代码的注释更加人性化。
+
+* ! 红色
+* ? 蓝色
+* TODO 橙色
+   
+![](/assets/vscode/better-comments.png)  
+
