@@ -320,14 +320,10 @@ Netfiix  Hystrix 具有熔断 隔离 限流 降级的功能 。
 
 说明： 
 
-* 3 Cirult OPen 判断是否可以熔断， 是则执行 getFAllBack() 降级处理函数 
-
+* 3 Cirult OPen 判断是否可以熔断， 是则执行 getFAllBack() 降级处理函数
 * 5 run() 超时 也执行降级处理函数。
-
 * 6 不成功也 执行处理函数 。   
-
 * Calculate Cirult Health 就是在正常执行成功后计算是否需要熔断。
-
 
 ## 19 Docker 容器部署技术 & 持续交付流水线
 ---
