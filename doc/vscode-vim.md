@@ -9,7 +9,7 @@ excerpt:
 
 ### vscode + vim
 
-1. vscode上安装了vim插件（vscodevim），有一些快键冲突。 可以更改一下配置setting.json。 如下： 
+1. vscode上安装了vim插件（vscodevim），有一些快键冲突。 可以更改一下配置setting.json。（用起来好别扭） 如下： 
 
 ```sh 
     "vim.useSystemClipboard": true,
@@ -26,7 +26,7 @@ excerpt:
 
 `<C-a>` 屏蔽 Ctrl+A
 
-vscode setting.json 配置
+vscode setting.json 的一些配置
 
 ```json
 {
@@ -88,4 +88,10 @@ vscode setting.json 配置
 * TODO 橙色
    
 ![](/assets/vscode/better-comments.png)  
+
+### vscode ssh 连接linux
+
+vscode　有一些remote-ssh的插件可以用，但其实感觉最方便的是自己装一个ssh客户端，然后在Terminal用ssh连接就可以了。 如果想方便管理ip地址，可自己写cmd脚本。
+
+### vscode 的一些快捷键的运用
 
