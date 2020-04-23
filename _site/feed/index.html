@@ -7,7 +7,7 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2020-02-09T19:48:16+08:00</lastBuildDate>
+    <lastBuildDate>2020-04-24T02:05:39+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
@@ -33,8 +33,10 @@
   <li>轻量级通信</li>
   <li>基于业务能务</li>
   <li>独立部署</li>
-  <li>无集中式管理</li>
+  <li>无集中式管理 （这里指的是可以用不同的技术栈，不同的存储）</li>
 </ul>
+
+<p>微服框架的定义者马丁福勒：他的一篇博客：</p>
 
 <p><a href="https://www.martinfowler.com/articles/microservices.html">马丁福勒的文章 https://www.martinfowler.com/articles/microservices.htm</a></p>
 
@@ -44,7 +46,7 @@
 
 <h2 id="２架构师如何权衡微服务的利弊">２　架构师如何权衡微服务的利弊</h2>
 <hr />
-<p>架构师的一个重要职责就是权衡</p>
+<p>开发者的一个重要职责就是权衡</p>
 
 <p>利:</p>
 
@@ -96,6 +98,8 @@
 
 <p>架构是演化出来的。</p>
 
+<p>不可能一步到位， 所以一般是单块优先原则，然后不断迭代，不断的微服化。</p>
+
 <h2 id="5-什么样组织架构更适合微服务">5 什么样组织架构更适合微服务</h2>
 <hr />
 
@@ -103,7 +107,7 @@
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_5_1.png" alt="" /></p>
 
-<p>左边是比较传统的组织架构。产品从左到右流程走，可能出现的问题，反馈比较慢，对业务支持比较慢。</p>
+<p>左边是比较传统的组织架构。产品从左到右流程走，可能出现的问题，反馈比较慢，对业务支持比较慢。沟通成本比较大。</p>
 
 <p>右边是比较合适微服务的组织架构， 每一个团队（基于微服务的跨职能的团队），有开发，有产品，有测试，团队都支持自己的微服务。交付的产口是平台，对外提供API
 接口支持多样的业务。</p>
@@ -217,6 +221,12 @@
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_11_2.png" alt="" /></p>
 
+<p>前置路由过滤器</p>
+
+<p>路由过滤器</p>
+
+<p>后置路由过滤器</p>
+
 <h2 id="12-跟-netflix-学习微服务路由发现体系">12 跟 Netflix 学习微服务路由发现体系</h2>
 <hr />
 
@@ -254,8 +264,13 @@
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_13_2.png" alt="" /></p>
 
+<p>github : https://github.com/ctripcorp/apollo</p>
+
 <h2 id="14-微服务通讯方式-rpc-vs-rest">14 微服务通讯方式 RPC vs REST</h2>
 <hr />
+<p>RPC：Remote Procedure Call 远程过程调用</p>
+
+<p>REST ：Restful</p>
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_14.png" alt="" /></p>
 
@@ -264,15 +279,17 @@
 
 <p>一个公司的微服务多了，就要需要考虑治理。</p>
 
-<p>软负载： 负载 跟帖</p>
+<p>软负载： 蓝绿发布， 灰度发布</p>
 
 <p>Metrics: 服务的调用量， 耗时监控。</p>
 
 <p>调用链埋点： 方便快速定位问题，</p>
 
+<p>契约生成代码： 定义结构体可自动生成json格式， vscode 有插件。</p>
+
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_15.png" alt="" /></p>
 
-<p>阿里巴巴微服务治理生态：Dubbo</p>
+<p>阿里巴巴微服务治理生态：Dubbo 	http://dubbo.apache.org/en-us/</p>
 
 <h2 id="16-微服务监控系统分层和监控架构">16 微服务监控系统分层和监控架构</h2>
 <hr />
@@ -290,7 +307,7 @@
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_16_1.png" alt="" /></p>
 
 <p>日志 监控  对应Elasticsearch<br />
-metrcs 监控
+metrics 监控
 健康检查
 调用链监控
 告警系统</p>
@@ -341,11 +358,13 @@ metrcs 监控
 
 <p>统一、标准化的交付流水线。</p>
 
+<p>UAT 环境： User Acceptance Test （用户验收测试）</p>
+
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_19_1.png" alt="" /></p>
 
-<p>发布模式： 蓝绿布置，灰度发布。</p>
+<p>发布模式： 蓝绿布置，灰度发布（金丝雀发布）。</p>
 
-<p>蓝绿、金丝雀和灰度发布：</p>
+<p>金丝雀发布 滚动发布：</p>
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_19_2.png" alt="" /></p>
 
@@ -780,129 +799,6 @@ metrcs 监控
     </item>
     
     <item>
-      <title>devlog-2018-11</title>
-      <link href="http://localhost:4000/devlog201811/"/>
-      <pubDate>2018-11-01T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/devlog201811</guid>
-      <content:encoded><![CDATA[<p>11月份，刚搬完家。10月做的事不多。这个月加油！</p>
-
-<h2 id="2018-11-01">2018-11-01</h2>
-
-<p>看<a href="https://www.amazon.cn/dp/B009WMC3QQ/ref=sr_1_2?ie=UTF8&amp;qid=1540548648&amp;sr=8-2&amp;keywords=git">《Git权威指南》</a></p>
-
-<p>看看Redmine和git的结合。是不是以后项目管理用到呢？</p>
-
-<h2 id="2018-11-07">2018-11-07</h2>
-
-<p>搬家，忙工作上事。之死期间大致看了<a href="https://www.amazon.cn/dp/B009WMC3QQ/ref=sr_1_2?ie=UTF8&amp;qid=1540548648&amp;sr=8-2&amp;keywords=git">《Git权威指南》</a>  想必应该够工作上用了吧。</p>
-
-<p>返回来继续看skynet吧。</p>
-
-<h2 id="2018-11-08">2018-11-08</h2>
-
-<p>为什么skynet 中的一些函数正常情况下也返回-1。这和c编码习惯相悖啊。风云是出什么考虑呢？</p>
-
-<h2 id="2018-11-09">2018-11-09</h2>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define SIZEOF_TCPBUFFER (offsetof(struct write_buffer, udp_address[0]))
-</span></code></pre></div></div>
-<p>offsetof 该宏用于求结构体中一个成员在该结构体中的偏移量。</p>
-
-<p>那么 offsetof和sizeof的区别在哪里呢？</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define THREAD_MAIN 1
-</span><span class="kt">uint32_t</span> <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)(</span><span class="o">-</span><span class="n">THREAD_MAIN</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>在计算机中负数是用补码表示的,即反码加1 正数直接用原码表示</p>
-
-<p>如： （这里用10位表示）</p>
-
-<p>因为-1是负数就用补码表示为</p>
-
-<p>00000000 00000001 的反码 11111111 11111110+1 即 11111111 11111111 转换为十进制数为</p>
-
-<h2 id="2018-11-12">2018-11-12</h2>
-
-<p>感觉自己有点害怕锁。看源码时，看到锁都会小心翼翼的。也会怀疑它会不会导致性能问题。</p>
-
-<p>开始使用golang语言了。刚开始会写的慢一些，没关系，多用用，就可以了。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>devlog-2018-10</title>
-      <link href="http://localhost:4000/devlog201810/"/>
-      <pubDate>2018-10-12T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/devlog201810</guid>
-      <content:encoded><![CDATA[<p>10月份，国庆回老家。感觉，回家比加班累。但是吃的，真的比较外面好很多。</p>
-
-<h2 id="2018-10-09">2018-10-09</h2>
-
-<p>国庆放假回老家。放假回来，发现公司的要svn挂了，他们搞了很久，没搞定。去支援一下。把网络搞好。csvn搞起来了。发现数据没了? what? 好像有盘没加载进来。一搞一天就没了。</p>
-
-<h2 id="2018-10-10">2018-10-10</h2>
-
-<p>学习skynet游戏框架。</p>
-
-<h2 id="2018-10-11">2018-10-11</h2>
-
-<p>学习skynet游戏框架，对于lua的代码不是很熟练。搞了一下mac系统。升级时失败了，开不了机。很麻烦。</p>
-
-<h2 id="2018-10-12">2018-10-12</h2>
-
-<p>学习skynet游戏框架。报了一个错误，不知道为什么 <code class="highlighter-rouge">error : ./lualib/skynet.lua:525: ./lualib/skynet.lua:155: ./../script/gateservice.lua:133: attempt to call a nil value (field 'open')
-stack traceback:</code></p>
-
-<p>这个错误是说 没有open这个函数。 后面发现我看错工程了。呵呵~</p>
-
-<p><a href="http://xg.qq.com/docs/">腾讯信鸽推送</a></p>
-
-<h2 id="2018-10-13">2018-10-13</h2>
-
-<p>skynet 对lua的要求是在5.3版本以上的。</p>
-
-<p>今天去苹果店修电脑，排了一个小时的队，然后告诉我是这队是帮回答我问题的，不是帮我修改的。 一脸蒙逼啊。让我明天早上10点半之前过去，登记排队修，或者 预约了一下，在四天后. 呵呵。</p>
-
-<h2 id="2018-10-14">2018-10-14</h2>
-
-<p>一早就是苹果店，又排了一个小时队的，又重复了昨天流程。他们说今天的话要排到晚上8点钟才行。好吧，我先回了。晚上有没有时间真的不一定了。</p>
-
-<p>朱哥留下的游戏服务端代码 是skynet写，我也不知道它是个成品，还是个不成品，反正我是跑了好几天都没能跑成功。 直到昨天我才发现我看错目录，那个应该旧的源码，没有删除，可能他是出于备份的目的。但那代码是跑不起来了。今天算是跑起来了。把Skynet更到了最新，发现少许问题，更了一下配置。OK，服务可以启来了。</p>
-
-<p>我的想法是通过这一套代码。熟悉skynet的用法，然后再把skynet源码看完。</p>
-
-<h2 id="2018-10-15">2018-10-15</h2>
-
-<p>做go开发，发现很多依赖库被墙在国外了。搞不懂为什么要对技术做封锁。在网看找到这个 <a href="https://gopm.io/">https://gopm.io/</a></p>
-
-<h2 id="2018-10-24">2018-10-24</h2>
-
-<p>抓紧时间把skynet的源码看完。 – 今天忙了一天，需求不断，bugg不断。</p>
-
-<h2 id="2018-10-25">2018-10-25</h2>
-<p>lua gc 要看一下，其实应该是看一下lua源码。 今天看几个skynet源码的文件。 算是一个开端吧。</p>
-
-<p><a href="https://blog.csdn.net/vermilliontear/article/details/50895658">快速掌握Lua 5.3 —— Lua与C之间的交互概览</a></p>
-
-<p>为什么 skynet 函数为什么没对传入的指针做判断呢？</p>
-
-<h2 id="2018-10-25-1">2018-10-25</h2>
-<p>昨晚加班很晚 3点多才回去。 今天比较晚上班，看一些skynet源码。 在提交git时，出了问题。代码不见了。靠， 不知道发生了什么事， 对git了解不。</p>
-
-<p>立马买一本， <a href="https://www.amazon.cn/dp/B009WMC3QQ/ref=sr_1_2?ie=UTF8&amp;qid=1540548648&amp;sr=8-2&amp;keywords=git">《Git权威指南》</a></p>
-
-<p>无法接受这个事故。</p>
-
-<h2 id="2018-10-25-2">2018-10-25</h2>
-<p>看<a href="https://www.amazon.cn/dp/B009WMC3QQ/ref=sr_1_2?ie=UTF8&amp;qid=1540548648&amp;sr=8-2&amp;keywords=git">《Git权威指南》</a></p>
-
-<p>搬家了</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
       <title>源码阅读中一个特殊注释说明</title>
       <link href="http://localhost:4000/sourcecode-comment/"/>
       <pubDate>2018-09-17T17:21:12+08:00</pubDate>
@@ -921,166 +817,102 @@ stack traceback:</code></p>
     </item>
     
     <item>
-      <title>devlog-2018-09</title>
-      <link href="http://localhost:4000/devlog201809/"/>
-      <pubDate>2018-09-13T17:21:12+08:00</pubDate>
+      <title>go的竞争检测</title>
+      <link href="http://localhost:4000/go-check-race/"/>
+      <pubDate>2018-03-02T04:21:12+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/devlog201809</guid>
-      <content:encoded><![CDATA[<p>9月份，开发，学习日志，适量的公开。</p>
+      <guid>http://localhost:4000/go-check-race</guid>
+      <content:encoded><![CDATA[<p><code class="highlighter-rouge">go run -race</code> 或者 <code class="highlighter-rouge">go build -race</code> 来进行竞争检测。</p>
 
-<h2 id="2018-09-13">2018-09-13</h2>
+<p>golang语言内部大概的实现就是同时开启多个goroutine执行同一个命令，并且纪录每个变量的状态。</p>
 
-<p>1.muduo 中的 epoll 能否支持超时回调呢？其实就是问epoll 能否支持超时回调？<a href="https://github.com/chenshuo/muduo/issues/337">muduo能否支持epoll超时回调？？？</a></p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
 
-<p>2.epoll 超时的话就应该是在 outtime时间里没有等到事件就返回了。这时返回值应该0。这么理解有问题吗？</p>
+</span><span class="k">import</span><span class="p">(</span><span class="x">
+    </span><span class="s">"time"</span><span class="x">
+    </span><span class="s">"fmt"</span><span class="x">
+</span><span class="p">)</span><span class="x">
 
-<p>3.今天重新看muduo的一些源码，加强对muduo的一些解理。还是有一些收获的。对于EventLoop Poller Channel 有了一些加强。
-  也慢慢的开始注意了一些细节的事物了。如：一些 <code class="highlighter-rouge">(void) t</code> 的运用。只是想让这个变量被使用。从而不会变量未被使用的错误。</p>
+</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">a</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="x">
+    </span><span class="k">go</span><span class="x"> </span><span class="k">func</span><span class="p">(){</span><span class="x">
+        </span><span class="n">a</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">2</span><span class="x">
+    </span><span class="p">}()</span><span class="x">
+    </span><span class="n">a</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">3</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"a is "</span><span class="p">,</span><span class="x"> </span><span class="n">a</span><span class="p">)</span><span class="x">
 
-<p>在知乎上有一个关于这个讨论， 陈硕回答下的下评论，有意思。<a href="https://www.zhihu.com/question/24311085">muduo库的很多返回值为空的函数的最后一行都有类似 (void) n的一句， 为什么要这样做？</a></p>
+    </span><span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">2</span><span class="x"> </span><span class="o">*</span><span class="x"> </span><span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
 
-<p>4.后面写代码时要多用assert。 把gcc的编译严格等级设置为任何警告当成错误，而有的变量实际上是在debug版本中assert时有用的，release时这个变量就没用了， 此时编译器就会提醒有个变量没用的警告。</p>
+</span></code></pre></div></div>
 
-<p>5.rvo优化  <a href="https://www.zhihu.com/question/27000013">什么时候应当依靠返回值优化（RVO）？</a>
-<a href="https://stackoverflow.com/questions/4986673/c11-rvalues-and-move-semantics-confusion-return-statement?lq=1">C++11 rvalues and move semantics confusion (return statement)</a>
- 2018-09-14
-——</p>
+<p>这个程序可以看出变量a出现了竞争。</p>
 
-<p>0.继续看muduo 的源码</p>
-
-<p>1.要加强对Boost智能指针的理解。 <a href="https://blog.csdn.net/yockie/article/details/8840205">Boost智能指针——scoped_ptr、shared_ptr、weak_ptr、intrusive_ptr</a></p>
-
-<p>2.eventfd 事件 <a href="https://blog.csdn.net/majianfei1023/article/details/51199702">inux网络编程–eventfd</a></p>
-
-<h2 id="2018-09-17">2018-09-17</h2>
-
-<p>1.TCP中 shutdown 和close的区别。</p>
-
-<p>2.看完Buffer后，要再回看一次TcpConnection。</p>
-
-<p>3.可以看看这个blog<a href="https://dirtysalt.github.io/html/index.html">dirtysalt’s site / 章炎的个人站点</a></p>
-
-<p>4.<a href="https://blog.csdn.net/u012432778/article/details/47323805">分散/聚集 I/O(scatter-gather I/O)</a></p>
-
-<p>5.二是Buffer::readFd()只调用一次read(2)，而没有反复调用read(2) 直到其返回EAGAIN。首先，这么做是正确的，因为muduo采用level trigger，这么做不会丢失 数据或消息。</p>
-
-<p>6.libevent 默认的epoll模式是什么？</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// epoll.c </span>
-<span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">eventop</span> <span class="n">epollops_changelist</span> <span class="o">=</span> <span class="p">{</span>
-	<span class="s">"epoll (with changelist)"</span><span class="p">,</span>
-	<span class="n">epoll_init</span><span class="p">,</span>
-	<span class="n">event_changelist_add</span><span class="p">,</span>
-	<span class="n">event_changelist_del</span><span class="p">,</span>
-	<span class="n">epoll_dispatch</span><span class="p">,</span>
-	<span class="n">epoll_dealloc</span><span class="p">,</span>
-	<span class="mi">1</span><span class="p">,</span> <span class="cm">/* need reinit */</span>
-	<span class="n">EV_FEATURE_ET</span><span class="o">|</span><span class="n">EV_FEATURE_O1</span><span class="p">,</span>
-	<span class="n">EVENT_CHANGELIST_FDINFO_SIZE</span>
-<span class="p">};</span>
-
-<span class="c1">// EV_FEATURE_ET 可以看是Edge_triggered(边缘触发)</span>
+<p>在windows下执行</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go run: <span class="nt">-race</span> and <span class="nt">-msan</span> are only supported on linux/amd64, freebsd/amd64, darwin
+/amd64 and windows/amd64
 </code></pre></div></div>
-<p>7.水平触发，写事件怎么理解？ 写入数据时要手动去触发。</p>
 
-<p>8.muduo TcpConnection 类中 为什么有地方是用this 有地方是用shared_from_this()？</p>
+<p>在linux下执行</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span><span class="x"> </span><span class="n">is</span><span class="x">  </span><span class="m">3</span><span class="x">
+</span><span class="o">==================</span><span class="x">
+</span><span class="n">WARNING</span><span class="o">:</span><span class="x"> </span><span class="n">DATA</span><span class="x"> </span><span class="n">RACE</span><span class="x">
+</span><span class="n">Write</span><span class="x"> </span><span class="n">at</span><span class="x"> </span><span class="m">0x00c4200140a8</span><span class="x"> </span><span class="n">by</span><span class="x"> </span><span class="n">goroutine</span><span class="x"> </span><span class="m">6</span><span class="o">:</span><span class="x">
+  </span><span class="n">main</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">func1</span><span class="p">()</span><span class="x">
+      </span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="n">race</span><span class="o">.</span><span class="k">go</span><span class="o">:</span><span class="m">11</span><span class="x"> </span><span class="o">+</span><span class="m">0x3b</span><span class="x">
 
-<p>9.<a href="https://www.zhihu.com/question/19732473/answer/26091478">怎样理解阻塞非阻塞与同步异步的区别？</a></p>
+</span><span class="n">Previous</span><span class="x"> </span><span class="n">write</span><span class="x"> </span><span class="n">at</span><span class="x"> </span><span class="m">0x00c4200140a8</span><span class="x"> </span><span class="n">by</span><span class="x"> </span><span class="n">main</span><span class="x"> </span><span class="n">goroutine</span><span class="o">:</span><span class="x">
+  </span><span class="n">main</span><span class="o">.</span><span class="n">main</span><span class="p">()</span><span class="x">
+      </span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="n">race</span><span class="o">.</span><span class="k">go</span><span class="o">:</span><span class="m">13</span><span class="x"> </span><span class="o">+</span><span class="m">0x8e</span><span class="x">
 
-<p>10.<a href="https://aceld.gitbooks.io/libevent/content/">libevent深入浅出</a></p>
+</span><span class="n">Goroutine</span><span class="x"> </span><span class="m">6</span><span class="x"> </span><span class="p">(</span><span class="n">running</span><span class="p">)</span><span class="x"> </span><span class="n">created</span><span class="x"> </span><span class="n">at</span><span class="o">:</span><span class="x">
+  </span><span class="n">main</span><span class="o">.</span><span class="n">main</span><span class="p">()</span><span class="x">
+      </span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="n">race</span><span class="o">.</span><span class="k">go</span><span class="o">:</span><span class="m">10</span><span class="x"> </span><span class="o">+</span><span class="m">0x7d</span><span class="x">
+</span><span class="o">==================</span><span class="x">
+</span><span class="n">Found</span><span class="x"> </span><span class="m">1</span><span class="x"> </span><span class="n">data</span><span class="x"> </span><span class="n">race</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="x">
+</span><span class="n">exit</span><span class="x"> </span><span class="n">status</span><span class="x"> </span><span class="m">66</span><span class="x">
+</span></code></pre></div></div>
+<p><strong>13行 出现变量竞争。</strong></p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go build 时的错误分析</title>
+      <link href="http://localhost:4000/go-build-error/"/>
+      <pubDate>2018-03-01T19:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/go-build-error</guid>
+      <content:encoded><![CDATA[<p>go build 程序时，如果出现：</p>
 
-<h2 id="2018-09-18">2018-09-18</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: building out-of-date packages:
 
-<blockquote>
-  <p>注意sendInLoop()和handleWrite()都只调用了一次write(2)而不会反复调用直至它返回EAGAIN，原因是如果第一次write(2)没有能够发送完全部数据的话，第二次调用write(2)几乎肯定会返回EAGAIN。</p>
-</blockquote>
+runtime/pprof
 
-<p>这muduo 8.7关于handleWrite()的一段话？为什么第二次调用 Write几乎肯定会返回EAGAIN呢？ 因为第一次就把fd的缓冲区写满了，所以第二次写且还第一次数据还没以出去时，就会出现EAGAIN。</p>
+testing
 
-<p>在创建链接时，对于有新的客户端链接过来时，会在Acceptor的读事件回调中处理，链接已经创建后，对于连接过来的数据在TcpConnection中的读事件回调中处理。</p>
+regexp/syntax
 
-<p>关于muduo 的时间定时器要重新看一下。</p>
+regexp
 
-<p>muduo 网络库核心的看完第二遍了，明天整理一下笔记。</p>
+installing these packages with <span class="s1">'go test -i'</span> will speed future tests.
+</code></pre></div></div>
 
-<h2 id="2018-09-19">2018-09-19</h2>
+<p>那么就是说明下面的包已经有修改过了，但是没有重新install</p>
 
-<p>1.shutdown和forceClose区别 ?</p>
+<p>如果有标准的包过期，使用go install -a -v std来进行更新</p>
 
-<p>shutdown()是关闭了socket中的写。<code class="highlighter-rouge">::shutdown(sockfd, SHUT_WR)</code></p>
-
-<p>forceClose()呢？ TcpConnection对象是通过share_ptr来管理的。要销毁它时，就是把所有对它的引用去掉就可以了。</p>
-
-<h2 id="2018-09-20">2018-09-20</h2>
-
-<p>1.muduo 的大概是算是看完了。 也上网看了一些网友对muduo的一些评价。</p>
-
-<p>2.有空对应一下boost版本和c++11版本的差异。</p>
-
-<p>3.把stl的封装整理一下。然后把googletest 试一下。</p>
-
-<p>4.然后准备看一下数据库方面的知识。《大规模分布式存储系统 原理理解与实战》</p>
-
-<p>5.重新看一下libevent的原码。</p>
-
-<h2 id="2018-09-20-1">2018-09-20</h2>
-
-<p>1.现在的项目中，对stl做了封装。其实stl的封装没有必要性。而这个模块中重点是对double_map.又key的map的运用还是很广的。</p>
-
-<p>2.用google test 对stl模块的单元测试。stl还是很简单的。也正好把google test 用起来。</p>
-
-<h2 id="2018-09-22">2018-09-22</h2>
-
-<p>1.在网上看到一个io的游戏源码，服务端是c++的。<a href="https://github.com/WaeCo/agar.io-clone">agar.io-clone</a></p>
-
-<p>2.大致瞄了一眼，c++的代码风格还算很好。c++11, boost,websocket的运用。可以看一下，以后做小游戏可能用的到。</p>
-
-<h2 id="2018-09-23">2018-09-23</h2>
-
-<p>1.中秋节放假中。</p>
-
-<h2 id="2018-09-25">2018-09-25</h2>
-
-<p>1.把google test 放到stl里了。写了一个makefile。花了很长时间。就想方便一些，以后加入一些测试用例时，不用去改makefile文件。</p>
-
-<p>2.还好，想起以前就整理过google test。就直接拿来用了。</p>
-
-<h2 id="2018-09-26">2018-09-26</h2>
-
-<ol>
-  <li>GW游戏中用到关于内存的管理方式。就是使用内存池的方式来管理对象。可以把这个一模块整理出来。</li>
-  <li>在内在池模块中看到了有用到nedmalloc的。一个线程缓存式的内存，用宏定义做了开关<a href="http://www.nedprod.com/programs/portable/nedmalloc/">nedmalloc</a>。
-暂时不发散出来了。后有机会再回头看看nedmalloc。先把nedmalloc去掉简洁代码结构。</li>
-  <li>不考虑线程安全，所以不要在里面加锁。</li>
-  <li>GW游戏的登录验证是用php写的， 好像同事都没搞过php。写的很不好。今天就php模块加了一个日志模块，其实的暂时算了。对于php掌握很有限。</li>
-  <li>整理出了内存池的代码了。很自觉加上了google test。当然没有全部测试。后面测试搞。</li>
-  <li><a href="https://mp.weixin.qq.com/s/m2YiRyzNSzi9NpWr9ODrwg">《腾讯工程师破解入侵酒店 WiFi，被新加坡网安局逮捕》</a>。<a href="https://hk.saowen.com/a/6e3d908180fb701992fb60035e2a9fcdf8b1b52268516ae75882add040bd39d1">Exploit Singapore Hotels: ezxcess.antlabs.com</a>有意思。</li>
-</ol>
-
-<h2 id="2018-09-27">2018-09-27</h2>
-
-<ol>
-  <li>看一下<a href="https://github.com/WaeCo/agar.io-clone">agar.io-clone</a> <a href="https://github.com/WaeCo/agar.io-clone.git">git clone</a>。</li>
-  <li>STL中，map 对应的数据结构是 红黑树。红黑树是一种近似于平衡的二叉查找树，里面的数据是有序的。在红黑树上做查找操作的时间复杂度为 O(logN)。而 unordered_map 对应 哈希表，哈希表的特点就是查找效率高，时间复杂度为常数级别 O(1)， 而额外空间复杂度则要高出许多。所以对于需要高效率查询的情况，使用 unordered_map 容器。而如果对内存大小比较敏感或者数据存储要求有序的话，则可以用 map 容器。</li>
-  <li>看agar.io-clone的代码。发现自己的对于设计模式不在行。之前看过的模式都忘光。</li>
-  <li>后面要整理一下github上 c++11这个源码。</li>
-</ol>
-
-<h2 id="2018-09-28">2018-09-28</h2>
-
-<ol>
-  <li>在agar.io-clone看到了它用一个数据结构叫四叉树。是用于管理散布在平面上的对象的。
-    <ul>
-      <li><a href="http://www.cnblogs.com/zhenbianshu/p/7061550.html">空间索引</a></li>
-      <li><a href="https://blog.csdn.net/zhouxuguang236/article/details/12312099">四叉树空间索引原理及其实现</a></li>
-      <li><a href="https://blog.codingnow.com/2006/10/quadtree.html">云风的bog.用四叉树管理散布在平面上的对象</a></li>
-    </ul>
-  </li>
-</ol>
-
-<h2 id="2018-09-29">2018-09-29</h2>
-<ul>
-  <li><a href="https://blog.csdn.net/yuanfengyun/article/details/54706333">电子书网站</a></li>
-</ul>
+<p>如果是自定义的包过期，重新调用go install</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go gdb 编译</title>
+      <link href="http://localhost:4000/go-gdb/"/>
+      <pubDate>2018-03-01T18:21:12+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/go-gdb</guid>
+      <content:encoded><![CDATA[<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go build <span class="nt">-gcflags</span> <span class="s2">"-N -l"</span> demo.go
+</code></pre></div></div>
 ]]></content:encoded>
     </item>
     

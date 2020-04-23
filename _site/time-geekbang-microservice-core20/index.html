@@ -67,8 +67,10 @@
   <li>轻量级通信</li>
   <li>基于业务能务</li>
   <li>独立部署</li>
-  <li>无集中式管理</li>
+  <li>无集中式管理 （这里指的是可以用不同的技术栈，不同的存储）</li>
 </ul>
+
+<p>微服框架的定义者马丁福勒：他的一篇博客：</p>
 
 <p><a href="https://www.martinfowler.com/articles/microservices.html">马丁福勒的文章 https://www.martinfowler.com/articles/microservices.htm</a></p>
 
@@ -78,7 +80,7 @@
 
 <h2 id="２架构师如何权衡微服务的利弊">２　架构师如何权衡微服务的利弊</h2>
 <hr />
-<p>架构师的一个重要职责就是权衡</p>
+<p>开发者的一个重要职责就是权衡</p>
 
 <p>利:</p>
 
@@ -130,6 +132,8 @@
 
 <p>架构是演化出来的。</p>
 
+<p>不可能一步到位， 所以一般是单块优先原则，然后不断迭代，不断的微服化。</p>
+
 <h2 id="5-什么样组织架构更适合微服务">5 什么样组织架构更适合微服务</h2>
 <hr />
 
@@ -137,7 +141,7 @@
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_5_1.png" alt="" /></p>
 
-<p>左边是比较传统的组织架构。产品从左到右流程走，可能出现的问题，反馈比较慢，对业务支持比较慢。</p>
+<p>左边是比较传统的组织架构。产品从左到右流程走，可能出现的问题，反馈比较慢，对业务支持比较慢。沟通成本比较大。</p>
 
 <p>右边是比较合适微服务的组织架构， 每一个团队（基于微服务的跨职能的团队），有开发，有产品，有测试，团队都支持自己的微服务。交付的产口是平台，对外提供API
 接口支持多样的业务。</p>
@@ -251,6 +255,12 @@
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_11_2.png" alt="" /></p>
 
+<p>前置路由过滤器</p>
+
+<p>路由过滤器</p>
+
+<p>后置路由过滤器</p>
+
 <h2 id="12-跟-netflix-学习微服务路由发现体系">12 跟 Netflix 学习微服务路由发现体系</h2>
 <hr />
 
@@ -288,8 +298,13 @@
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_13_2.png" alt="" /></p>
 
+<p>github : https://github.com/ctripcorp/apollo</p>
+
 <h2 id="14-微服务通讯方式-rpc-vs-rest">14 微服务通讯方式 RPC vs REST</h2>
 <hr />
+<p>RPC：Remote Procedure Call 远程过程调用</p>
+
+<p>REST ：Restful</p>
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_14.png" alt="" /></p>
 
@@ -298,15 +313,17 @@
 
 <p>一个公司的微服务多了，就要需要考虑治理。</p>
 
-<p>软负载： 负载 跟帖</p>
+<p>软负载： 蓝绿发布， 灰度发布</p>
 
 <p>Metrics: 服务的调用量， 耗时监控。</p>
 
 <p>调用链埋点： 方便快速定位问题，</p>
 
+<p>契约生成代码： 定义结构体可自动生成json格式， vscode 有插件。</p>
+
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_15.png" alt="" /></p>
 
-<p>阿里巴巴微服务治理生态：Dubbo</p>
+<p>阿里巴巴微服务治理生态：Dubbo 	http://dubbo.apache.org/en-us/</p>
 
 <h2 id="16-微服务监控系统分层和监控架构">16 微服务监控系统分层和监控架构</h2>
 <hr />
@@ -324,7 +341,7 @@
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_16_1.png" alt="" /></p>
 
 <p>日志 监控  对应Elasticsearch<br />
-metrcs 监控
+metrics 监控
 健康检查
 调用链监控
 告警系统</p>
@@ -375,11 +392,13 @@ metrcs 监控
 
 <p>统一、标准化的交付流水线。</p>
 
+<p>UAT 环境： User Acceptance Test （用户验收测试）</p>
+
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_19_1.png" alt="" /></p>
 
-<p>发布模式： 蓝绿布置，灰度发布。</p>
+<p>发布模式： 蓝绿布置，灰度发布（金丝雀发布）。</p>
 
-<p>蓝绿、金丝雀和灰度发布：</p>
+<p>金丝雀发布 滚动发布：</p>
 
 <p><img src="/assets/time-geekbang-microservice-core20/micro_server_19_2.png" alt="" /></p>
 

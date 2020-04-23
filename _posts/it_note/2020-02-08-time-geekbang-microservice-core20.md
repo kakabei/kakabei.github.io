@@ -20,11 +20,13 @@ excerpt: 学习笔记：微服务架构的知识
 
 微服务的六个特点：　
 * 一组小的服务
-* 独立的进程
+* 独立的进程 
 * 轻量级通信
 * 基于业务能务
 * 独立部署
-* 无集中式管理
+* 无集中式管理 （这里指的是可以用不同的技术栈，不同的存储）
+
+微服框架的定义者马丁福勒：他的一篇博客：
 
 [马丁福勒的文章 https://www.martinfowler.com/articles/microservices.htm](https://www.martinfowler.com/articles/microservices.html)
 
@@ -35,7 +37,7 @@ excerpt: 学习笔记：微服务架构的知识
 
 ## ２　架构师如何权衡微服务的利弊
 ---
-架构师的一个重要职责就是权衡
+开发者的一个重要职责就是权衡
 
 利: 
 
@@ -85,6 +87,7 @@ Microservice 微服务
 
 架构是演化出来的。
 
+不可能一步到位， 所以一般是单块优先原则，然后不断迭代，不断的微服化。
 
 ## 5 什么样组织架构更适合微服务
 ---
@@ -93,7 +96,7 @@ Microservice 微服务
 
 ![](/assets/time-geekbang-microservice-core20/micro_server_5_1.png) 
 
-左边是比较传统的组织架构。产品从左到右流程走，可能出现的问题，反馈比较慢，对业务支持比较慢。
+左边是比较传统的组织架构。产品从左到右流程走，可能出现的问题，反馈比较慢，对业务支持比较慢。沟通成本比较大。
 
 右边是比较合适微服务的组织架构， 每一个团队（基于微服务的跨职能的团队），有开发，有产品，有测试，团队都支持自己的微服务。交付的产口是平台，对外提供API
 接口支持多样的业务。
@@ -207,6 +210,14 @@ API　Gateway
 
 ![](/assets/time-geekbang-microservice-core20/micro_server_11_2.png) 
 
+前置路由过滤器
+
+路由过滤器
+
+后置路由过滤器
+
+
+
 ## 12 跟 Netflix 学习微服务路由发现体系
 ---
 
@@ -241,10 +252,13 @@ Svr 更新配置有两种方式 拉和推。
 
 ![](/assets/time-geekbang-microservice-core20/micro_server_13_2.png) 
 
-
+github : https://github.com/ctripcorp/apollo
 
 ## 14 微服务通讯方式 RPC vs REST
 ---
+RPC：Remote Procedure Call 远程过程调用
+
+REST ：Restful
 
 ![](/assets/time-geekbang-microservice-core20/micro_server_14.png) 
 
@@ -254,15 +268,17 @@ Svr 更新配置有两种方式 拉和推。
 
 一个公司的微服务多了，就要需要考虑治理。
 
-软负载： 负载 跟帖
+软负载： 蓝绿发布， 灰度发布
 
 Metrics: 服务的调用量， 耗时监控。
 
 调用链埋点： 方便快速定位问题，
 
+契约生成代码： 定义结构体可自动生成json格式， vscode 有插件。
+
 ![](/assets/time-geekbang-microservice-core20/micro_server_15.png) 
 
-阿里巴巴微服务治理生态：Dubbo 	
+阿里巴巴微服务治理生态：Dubbo 	http://dubbo.apache.org/en-us/
 
 ## 16 微服务监控系统分层和监控架构
 ---
@@ -279,7 +295,7 @@ Metrics: 服务的调用量， 耗时监控。
 
 
 日志 监控  对应Elasticsearch  
-metrcs 监控
+metrics 监控
 健康检查
 调用链监控
 告警系统 
@@ -332,11 +348,13 @@ docker 容器治理就是解决：环境不一致的问题。把依赖的所有�
 
 统一、标准化的交付流水线。 	
 
+UAT 环境： User Acceptance Test （用户验收测试）
+
 ![](/assets/time-geekbang-microservice-core20/micro_server_19_1.png) 
 
-发布模式： 蓝绿布置，灰度发布。
+发布模式： 蓝绿布置，灰度发布（金丝雀发布）。
 
-蓝绿、金丝雀和灰度发布：
+金丝雀发布 滚动发布：
 
 ![](/assets/time-geekbang-microservice-core20/micro_server_19_2.png) 
 
