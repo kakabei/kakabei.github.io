@@ -84,7 +84,7 @@ vector的优点如下：</p>
 
 <p>11、用swap方法强行释放vector所点内存.。这个地方应该怎么解释？</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tmplate</span><span class="o">&lt;</span> <span class="n">class</span> <span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">clearVector</span><span class="p">(</span> <span class="n">vector</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">v</span> <span class="p">)</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tmplate</span><span class="o">&lt;</span> <span class="n">class</span> <span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">clearVector</span><span class="p">(</span> <span class="n">vector</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">v</span> <span class="p">)</span>
 <span class="p">{</span>
      <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">vtTemp</span><span class="p">;</span>
      <span class="n">vtTemp</span><span class="p">,</span><span class="n">swap</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
@@ -99,7 +99,7 @@ vector的优点如下：</p>
 
 <p>[注]</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 关于vector删除的问题。有一些地方要注意。遍历一个vector找到对应的元素删除的正常做法。
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 关于vector删除的问题。有一些地方要注意。遍历一个vector找到对应的元素删除的正常做法。
  for (auto iter = vector.begin(); iter != vector.end(); iter++)
  {
       if (*iter == 3 )   vector.ease(iter);

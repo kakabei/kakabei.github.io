@@ -59,8 +59,8 @@
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
 #include &lt;sys/stat.h&gt;
-</span><span class="kt">int</span> <span class="n">mkfifo</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
-<span class="kt">int</span> <span class="n">mknod</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span> <span class="o">|</span> <span class="n">S_IFIFO</span><span class="p">,</span> <span class="p">(</span><span class="n">dev_t</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
+</span><span class="kt">int</span> <span class="nf">mkfifo</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">mknod</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span> <span class="o">|</span> <span class="n">S_IFIFO</span><span class="p">,</span> <span class="p">(</span><span class="n">dev_t</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>filname是指文件名，而mode是指定文件的读写权限。mknod是比较老的函数，而使用mkfifo函数更加简单和规范，所以建议用mkfifo。</p>

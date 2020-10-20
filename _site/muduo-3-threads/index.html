@@ -119,7 +119,7 @@
 
 <p>5.会涉及用字节流方式通信。会有marshal/unmarshal的开销。</p>
 
-<p>6.用tcp的好处。容易定位分布式系统中的服务之前的依赖关系，<code class="highlighter-rouge">netstat -tpna | grep :port</code> 二通过接收和发送队列的长度也较容易定位网络 或程序故障。</p>
+<p>6.用tcp的好处。容易定位分布式系统中的服务之前的依赖关系，<code class="language-plaintext highlighter-rouge">netstat -tpna | grep :port</code> 二通过接收和发送队列的长度也较容易定位网络 或程序故障。</p>
 
 <p>在正常运行的时候，netstat打印的Recv-Q和Send-Q都应该接近0，或者在0附近摆动。</p>
 

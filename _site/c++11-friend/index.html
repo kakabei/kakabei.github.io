@@ -80,7 +80,7 @@
 <p>虽然 在 C++ 11中这是一个小的改进，却会带来一点应用的变化—程序员可以为类模板声明友元了。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">P</span><span class="p">;</span> 
-<span class="k">template</span> <span class="o">&lt;</span> <span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">People</span> <span class="p">{</span> 
+<span class="k">template</span> <span class="o">&lt;</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">People</span> <span class="p">{</span> 
 <span class="k">friend</span> <span class="n">T</span><span class="p">;</span> 
 <span class="p">};</span> 
 <span class="n">People</span><span class="o">&lt;</span> <span class="n">P</span><span class="o">&gt;</span> <span class="n">PP</span><span class="p">;</span> <span class="c1">// 类型 P 在这里 是 People 类型 的 友 元 </span>

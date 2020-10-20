@@ -70,28 +70,28 @@
 
 <p>一次只能服务一个链接。现在的网络服务器基本不会这么做，所以这种方案基本是废的。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/python</span>
-
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+</span>
 <span class="kn">import</span> <span class="nn">socket</span>
 
 <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">):</span>
     <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">client_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">client_socket</span><span class="p">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">sent</span> <span class="o">=</span> <span class="n">client_socket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>    <span class="c"># sendall?</span>
-        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sent</span> <span class="o">=</span> <span class="n">client_socket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>    <span class="c1"># sendall?
+</span>        <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">"disconnect"</span><span class="p">,</span> <span class="n">client_address</span>
-            <span class="n">client_socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">client_socket</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">break</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
     <span class="n">listen_address</span> <span class="o">=</span> <span class="p">(</span><span class="s">"0.0.0.0"</span><span class="p">,</span> <span class="mi">2007</span><span class="p">)</span>
-    <span class="n">server_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-    <span class="n">server_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">listen_address</span><span class="p">)</span>
-    <span class="n">server_socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">server_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="p">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="p">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="p">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+    <span class="n">server_socket</span><span class="p">.</span><span class="n">bind</span><span class="p">(</span><span class="n">listen_address</span><span class="p">)</span>
+    <span class="n">server_socket</span><span class="p">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 
     <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">)</span> <span class="o">=</span> <span class="n">server_socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+        <span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">)</span> <span class="o">=</span> <span class="n">server_socket</span><span class="p">.</span><span class="n">accept</span><span class="p">()</span>
         <span class="k">print</span> <span class="s">"got connection from"</span><span class="p">,</span> <span class="n">client_address</span>
         <span class="n">handle</span><span class="p">(</span><span class="n">client_socket</span><span class="p">,</span> <span class="n">client_address</span><span class="p">)</span>
 </code></pre></div></div>
@@ -104,26 +104,26 @@
 
 <p>这种方案适合”计算响应的工作量远大于fork()的开销”这种情况，比如数据库服务器。这种方案适合长连接，但不太适合短连接，因为fork()开销大于求解Sudoku的用时。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/python</span>
-<span class="kn">from</span> <span class="nn">SocketServer</span> <span class="kn">import</span> <span class="n">BaseRequestHandler</span><span class="p">,</span> <span class="n">TCPServer</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+</span><span class="kn">from</span> <span class="nn">SocketServer</span> <span class="kn">import</span> <span class="n">BaseRequestHandler</span><span class="p">,</span> <span class="n">TCPServer</span>
 <span class="kn">from</span> <span class="nn">SocketServer</span> <span class="kn">import</span> <span class="n">ForkingTCPServer</span><span class="p">,</span> <span class="n">ThreadingTCPServer</span>
 
 <span class="k">class</span> <span class="nc">EchoHandler</span><span class="p">(</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s">"got connection from"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_address</span>
+        <span class="k">print</span> <span class="s">"got connection from"</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">client_address</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
-                <span class="n">sent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>    <span class="c"># sendall?</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span> <span class="s">"disconnect"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_address</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">sent</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>    <span class="c1"># sendall?
+</span>            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">"disconnect"</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">client_address</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
                 <span class="k">break</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
     <span class="n">listen_address</span> <span class="o">=</span> <span class="p">(</span><span class="s">"0.0.0.0"</span><span class="p">,</span> <span class="mi">2007</span><span class="p">)</span>
     <span class="n">server</span> <span class="o">=</span> <span class="n">ForkingTCPServer</span><span class="p">(</span><span class="n">listen_address</span><span class="p">,</span> <span class="n">EchoHandler</span><span class="p">)</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+    <span class="n">server</span><span class="p">.</span><span class="n">serve_forever</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h4 id="方案2">方案2</h4>
@@ -145,7 +145,7 @@
 <h4 id="方案5">方案5</h4>
 
 <p>基本的单线程Reactor方案。 是IO复用，非阻塞的了。用注册回调可以实现网络和业务的分离。
-\
+<br />
 这种方案的优点是由网络库搞定数据收发，程序只关心业务逻辑；缺点在前面已经谈了：适合IO密集的应用，不太适合CPU密集的应用，因为较难发挥多核的威力。</p>
 
 <p>另外，与方案2相比，方案5处理网络消息的延迟可能要略大一些，因为方案2直接一次read(2)系统调用就能拿到请求数据，而方案5要先poll(2)再read(2)，多了一次系统调用。</p>

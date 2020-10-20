@@ -83,12 +83,12 @@
 
 <h4 id="c日志库的前端大体上有两种api风格">C++日志库的前端大体上有两种API风格：</h4>
 
-<p>C/Java的<code class="highlighter-rouge">printf(fmt, ...)</code>风格，例如 <code class="highlighter-rouge">log_info("Received %d bytes from %s", len, getClientName().c_str());</code></p>
+<p>C/Java的<code class="language-plaintext highlighter-rouge">printf(fmt, ...)</code>风格，例如 <code class="language-plaintext highlighter-rouge">log_info("Received %d bytes from %s", len, getClientName().c_str());</code></p>
 
-<p>C++的<code class="highlighter-rouge">stream &lt;&lt;</code> 风格，例如 <code class="highlighter-rouge">LOG_INFO &lt;&lt; "Received " &lt;&lt; len &lt;&lt; " bytes from " &lt;&lt; getClientName();</code></p>
+<p>C++的<code class="language-plaintext highlighter-rouge">stream &lt;&lt;</code> 风格，例如 <code class="language-plaintext highlighter-rouge">LOG_INFO &lt;&lt; "Received " &lt;&lt; len &lt;&lt; " bytes from " &lt;&lt; getClientName();</code></p>
 
 <p>muduo日志库是C++ stream风格的另一个好处是当输出的日志级别高于语句的日志级别时，打印日志是个空操作, 运行时开销接近零。
-比方说当日志级别为WARNING时，<code class="highlighter-rouge">LOG_INFO &lt;&lt;</code>是空操作，这个语句根本不会调用<code class="highlighter-rouge">std::string getClientName()</code>函数，减小了开销。而printf风格不易做到这一点。</p>
+比方说当日志级别为WARNING时，<code class="language-plaintext highlighter-rouge">LOG_INFO &lt;&lt;</code>是空操作，这个语句根本不会调用<code class="language-plaintext highlighter-rouge">std::string getClientName()</code>函数，减小了开销。而printf风格不易做到这一点。</p>
 
 <p>可以看这篇文章 <a href="http://www.drdobbs.com/cpp/logging-in-c/201804215">Logging In C++</a></p>
 

@@ -72,7 +72,7 @@
 <p>access 函数是按实际用户ID和实际组IDeas进行访问权限测试的。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#inlude &lt;unistd.h&gt;
-</span><span class="kt">int</span> <span class="n">access</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
+</span><span class="kt">int</span> <span class="nf">access</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
 </code></pre></div></div>
 
 <ul>
@@ -89,7 +89,7 @@
 <p>umask函数为进程设置文件模式创建屏蔽字，并返回以前的值。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include&lt;sys/stat.h&gt;
-</span><span class="n">mode_t</span> <span class="n">umask</span><span class="p">(</span><span class="n">mode_t</span> <span class="n">cmask</span><span class="p">);</span>
+</span><span class="n">mode_t</span> <span class="nf">umask</span><span class="p">(</span><span class="n">mode_t</span> <span class="n">cmask</span><span class="p">);</span>
 </code></pre></div></div>
 
 <ol>
@@ -97,8 +97,8 @@
 </ol>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/stat.h&gt;
-</span><span class="kt">int</span> <span class="n">chmod</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span> <span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
-<span class="kt">int</span> <span class="n">fchmod</span><span class="p">(</span><span class="kt">int</span> <span class="n">filedes</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
+</span><span class="kt">int</span> <span class="nf">chmod</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span> <span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">fchmod</span><span class="p">(</span><span class="kt">int</span> <span class="n">filedes</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>chmod 函数在指定的文件上进行操作，而fchmod函数则对已打开的文件进行操作。</p>

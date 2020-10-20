@@ -115,9 +115,9 @@
 
 <h4 id="16神器shared_ptrweak_ptr">1.6　神器shared_ptr/weak_ptr</h4>
 
-<p><code class="highlighter-rouge">shared_ptr</code>控制对象的生命期。shared_ptr是强引用（想象成用铁丝绑住堆上的对象），只要有一个指向x对象的shared_ptr存在，该x对象就不会析构。当指向对象x的最后一个shared_ptr析构或reset()的时候，x保证会被销毁。</p>
+<p><code class="language-plaintext highlighter-rouge">shared_ptr</code>控制对象的生命期。shared_ptr是强引用（想象成用铁丝绑住堆上的对象），只要有一个指向x对象的shared_ptr存在，该x对象就不会析构。当指向对象x的最后一个shared_ptr析构或reset()的时候，x保证会被销毁。</p>
 
-<p><code class="highlighter-rouge">weak_ptr</code>不控制对象的生命期，但是它知道对象是否还活着（想象成用棉线轻轻拴住堆上的对象）。如果对象还活着，那么它可以提升（promote）为有效的shared_ptr；如果对象已经死了，提升会失败，返回一个空的shared_ptr。“提升／lock()”行为是线程安全的。</p>
+<p><code class="language-plaintext highlighter-rouge">weak_ptr</code>不控制对象的生命期，但是它知道对象是否还活着（想象成用棉线轻轻拴住堆上的对象）。如果对象还活着，那么它可以提升（promote）为有效的shared_ptr；如果对象已经死了，提升会失败，返回一个空的shared_ptr。“提升／lock()”行为是线程安全的。</p>
 
 <p>shared_ptr/weak_ptr的“计数”在主流平台上是原子操作，没有用锁，性能不俗。</p>
 

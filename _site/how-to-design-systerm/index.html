@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>《极客时间》go语言核心36讲 条件变量 sync.Cond</title>
+    <title>如何处理一个系统设计</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>《极客时间》go语言核心36讲 条件变量 sync.Cond</h1>
+        <h1>如何处理一个系统设计</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,14 +28,14 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2019-03-28">2019-03-28</time>
+  <time datetime="2017-03-21">2017-03-21</time>
 </span>
 
  | 
 <span class="categories">
   分类
   
-  <a href="/categories/#go" title="go">go</a>&nbsp;
+  <a href="/categories/#学习笔记" title="学习笔记">学习笔记</a>&nbsp;
   
 </span>
 
@@ -44,55 +44,83 @@
 <span class="tags">
   标签
   
-  <a href="/tags/#极客时间笔记" title="极客时间笔记">极客时间笔记</a>&nbsp;
+  <a href="/tags/#系统设计" title="系统设计">系统设计</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<p>条件变量是和互斥锁一起使用的。
-条件变量是和互斥锁一起使用的。</p>
+<p>这是一个开放性问题， 这文章中提供了一个大概的思考步骤。<a href="https://github.com/donnemartin/system-design-primer/blob/master/README-zh-Hans.md#%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E4%B8%AA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98">如何处理一个系统设计的面试题</a>
+后续学习工作中，可以不断的完善这一些思考。</p>
 
-<p>条件变量并不是被用来保护临界区和共享资源的，它是用于协调想要访问共享资源的那些线程的。当共享资源的状态发生变化时，它可以被用来通知被互斥锁阻塞的线程。</p>
+<h2 id="第一步描述使用场景约束和假设">第一步：描述使用场景，约束和假设</h2>
 
-<p>条件变量提供的方法有三个：等待通知（wait）、单发通知（signal）和广播通知（broadcast）。</p>
+<p>把所有需要的东西聚集在一起，审视问题。不停的提问，以至于我们可以明确使用场景和约束。讨论假设。</p>
 
-<p>这里有一个疑问：</p>
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">mailbox</span> <span class="kt">uint8</span>
-<span class="k">var</span> <span class="n">lock</span> <span class="n">sync</span><span class="o">.</span><span class="n">RWMutex</span>
-<span class="n">sendCond</span> <span class="o">:=</span> <span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">)</span>
-<span class="n">recvCond</span> <span class="o">:=</span> <span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="n">lock</span><span class="o">.</span><span class="n">RLocker</span><span class="p">())</span>
-</code></pre></div></div>
+<ul>
+  <li>谁会使用它？</li>
+  <li>他们会怎样使用它？</li>
+  <li>有多少用户？</li>
+  <li>系统的作用是什么？</li>
+  <li>系统的输入输出分别是什么？</li>
+  <li>我们希望处理多少数据？</li>
+  <li>我们希望每秒钟处理多少请求？</li>
+  <li>我们希望的读写比率？</li>
+</ul>
 
-<p>endCond := sync.NewCond(&amp;lock)和recvCond := sync.NewCond(lock.RLocker())</p>
+<h2 id="第二步创造一个高层级的设计">第二步：创造一个高层级的设计</h2>
 
-<p>传入的一个是 &amp;lock 另一个是 lock.RLocker() 为什么？</p>
+<p>使用所有重要的组件来描绘出一个高层级的设计。</p>
 
-<p><strong>条件变量的Wait方法做了什么？</strong></p>
+<ul>
+  <li>画出主要的组件和连接。 画出框架图，不宜太细仔。主要体现出组件的关系和数据流。</li>
+  <li>证明你的想法。 根据框架图，推演一下，能不能解决问题。</li>
+</ul>
 
-<p>条件变量的Wait方法主要做了四件事。</p>
+<h2 id="第三步设计核心组件">第三步：设计核心组件</h2>
 
-<p>1　把调用它的 goroutine（也就是当前的 goroutine）加入到当前条件变量的通知队列中。</p>
+<p>对每一个核心组件进行详细深入的分析。举例来说，如果你被问到设计一个 url 缩写服务，开始讨论：</p>
 
-<p>2　解锁当前的条件变量基于的那个互斥锁。</p>
+<ul>
+  <li>生成并储存一个完整 url 的 hash
+    <ul>
+      <li>MD5 和 Base62</li>
+      <li>Hash 碰撞</li>
+      <li>SQL 还是 NoSQL</li>
+      <li>数据库模型</li>
+    </ul>
+  </li>
+  <li>将一个 hashed url 翻译成完整的 url
+    <ul>
+      <li>数据库查找</li>
+    </ul>
+  </li>
+  <li>API 和面向对象设计</li>
+</ul>
 
-<p>3　让当前的 goroutine 处于等待状态，等到通知到来时再决定是否唤醒它。此时，这个 goroutine 就会阻塞在调用这个Wait方法的那行代码上。</p>
+<h2 id="第四步扩展设计">第四步：扩展设计</h2>
 
-<p>4　如果通知到来并且决定唤醒这个 goroutine，那么就在唤醒它之后重新锁定当前条件变量基于的互斥锁。自此之后，当前的goroutine 就会继续执行后面的代码了。</p>
+<p>确认和处理瓶颈以及一些限制。举例来说就是你需要下面的这些来完成扩展性的议题吗？</p>
+<ul>
+  <li>负载均衡</li>
+  <li>水平扩展</li>
+  <li>缓存</li>
+  <li>数据库分片</li>
+</ul>
 
-<p><strong>条件变量的Signal方法和Broadcast方法有哪些异同？</strong></p>
+<p>论述可能的解决办法和代价。每件事情需要取舍。可以使用可扩展系统的设计原则来处理瓶颈。</p>
 
-<p>条件变量的Signal方法和Broadcast方法都是被用来发送通知的，不同的是，前者的通知只会唤醒一个因此而等待的 goroutine，而后者的通知却会唤醒所有为此等待的 goroutine。</p>
+<h2 id="预估计算量">预估计算量</h2>
 
-<p>扩展 ：https://blog.csdn.net/wentyoon/article/details/81174288</p>
+<p>你或许会被要求通过手算进行一些估算。</p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/timegeekbang-go-syncMutex/" class="pageNav"  >上一篇</a>
+	<a  href="/git-config/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/time-geekbang-microservice-core20/" class="pageNav"  >下一篇</a>
+	<a  href="/linux-spin-lock/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -157,7 +185,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2019-03-28-timegeekbang-go-syncCond.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it_note/2020-08-16-how-to-design-systerm.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2020 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 

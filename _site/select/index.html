@@ -63,7 +63,7 @@
 <p>过去，一个fd_set通常只能包含&lt;32的fd（文件描述字），因为fd_set其实只用了一个32位矢量来表示fd；现在,UNIX系统通常会在头文件&lt;sys/select.h&gt;中定义常量FD_SETSIZE，它是数据类型fd_set的描述字数量，其值通常是1024，这样就能表示&lt;1024的fd。
 select函数的接口比较简单：</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">select</span><span class="p">(</span><span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">readset</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">writeset</span><span class="p">,</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">select</span><span class="p">(</span><span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">readset</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">writeset</span><span class="p">,</span>
 
 <span class="n">fd_set</span><span class="o">*</span> <span class="n">exceptset</span><span class="p">,</span> <span class="k">struct</span> <span class="n">tim</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
 </code></pre></div></div>
@@ -116,7 +116,7 @@ select函数的接口比较简单：</p>
 </code></pre></div></div>
 <p>这段代码将指定测试Socket的描述字的可读可写性，因为Socket使用的也是fd</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uint32 SocketWait(TSocket *s,bool rd,bool wr,uint32 timems)   
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uint32 SocketWait(TSocket *s,bool rd,bool wr,uint32 timems)   
 {
 
 	fd_set rfds,wfds;

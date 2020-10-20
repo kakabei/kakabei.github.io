@@ -4,7 +4,7 @@ title:   《极客时间》 微服务架构核心20讲
 date: 2020-02-08 19:22:12
 categories: microserver
 tags:  极客时间笔记
-excerpt: 学习笔记：微服务架构的知识
+excerpt: 
 ---
 
 极客时间学习笔记， 微服务架构核心20讲 

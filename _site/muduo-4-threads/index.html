@@ -141,7 +141,7 @@
 
 <p>例如：</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">__thread</span> <span class="n">string</span> <span class="n">t_obj1</span><span class="p">(</span><span class="s">"Chen Shou"</span><span class="p">);</span>    <span class="c1">// 错误 不能对象的构造函数</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">__thread</span> <span class="n">string</span> <span class="nf">t_obj1</span><span class="p">(</span><span class="s">"Chen Shou"</span><span class="p">);</span>    <span class="c1">// 错误 不能对象的构造函数</span>
 <span class="kr">__thread</span> <span class="n">string</span> <span class="o">*</span> <span class="n">t_obj2</span><span class="o">=</span> <span class="n">new</span> <span class="n">string</span><span class="p">;</span>   <span class="c1">// 错误 初始化必须用编译期常量</span>
 <span class="kr">__thread</span> <span class="n">string</span> <span class="o">*</span> <span class="n">t_obj3</span><span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>         <span class="c1">// 正常 但是需要手工初始化并销毁对象</span>
 
@@ -150,7 +150,7 @@
 
 <ul>
   <li>muduo/base/Logging.cc 缓存最近一条日志时间的年月日时分秒，如果一秒之内输出多条日志，可避免重复格式化。另外，muduo::strerror_tl把strerror_r(3)做成如同strerror(3)一样好用，而且是线程安全的。</li>
-  <li>muduo/base/ProcessINfo.cc 用线程局部变量来简化<code class="highlighter-rouge">::scandir(3)</code>的使用。</li>
+  <li>muduo/base/ProcessINfo.cc 用线程局部变量来简化<code class="language-plaintext highlighter-rouge">::scandir(3)</code>的使用。</li>
   <li>muduo/base/Thread.cc 缓存每个线程的id。</li>
   <li>用于判断当前线程是否只有一个EventLoop对象。</li>
 </ul>
