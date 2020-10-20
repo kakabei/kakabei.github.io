@@ -1,3 +1,11 @@
+---
+layout: post
+title: service mesh 学习资料收集
+date: 2017-03-20 16:12:15
+categories: 学习笔记
+tags: 系统设计 service-mesh
+excerpt: service mesh 学习资料收集
+---
 
 ### 资料收集
 
