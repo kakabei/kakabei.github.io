@@ -59,7 +59,7 @@
 <p>用函数pipe创建：</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include&lt;unistd.h&gt;
-</span><span class="kt">int</span> <span class="nf">pipe</span><span class="p">(</span><span class="kt">int</span> <span class="n">files</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span><span class="kt">int</span> <span class="n">pipe</span><span class="p">(</span><span class="kt">int</span> <span class="n">files</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
 </code></pre></div></div>
 
 <p>参数：filedes返回两个文件描述符：filedes[0] 为从管道读而打开，filedes[1]为管道写而打开。filedes[1]的输出是filedes[0]的输入。</p>

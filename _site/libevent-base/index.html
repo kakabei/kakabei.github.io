@@ -210,21 +210,21 @@ ev_active_next libevent将所有的激活事件放入到链表active list中，�
 
 <p>内部主要调用了 event_base_new_with_config。()</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">event_add</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_add</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>内部主要调用了 event_del_internal()</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">event_del</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_del</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">);</span>
 </code></pre></div></div>
 <p>函数将删除事件 ev，对于 I/O 事件，从 I/O 的 demultiplexer 上将事件注销；对于 Signal
 事件，将从 Signal 事件链表中删除；对于定时事件，将从堆上删除。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">event_base_loop</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="kt">int</span> <span class="n">loops</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_base_loop</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="kt">int</span> <span class="n">loops</span><span class="p">);</span>
 
-<span class="kt">void</span> <span class="nf">event_active</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">event</span><span class="p">,</span> <span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="kt">short</span> <span class="n">events</span><span class="p">);</span>
+<span class="kt">void</span> <span class="n">event_active</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">event</span><span class="p">,</span> <span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="kt">short</span> <span class="n">events</span><span class="p">);</span>
 
-<span class="kt">void</span> <span class="nf">event_process_active</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">);</span>
+<span class="kt">void</span> <span class="n">event_process_active</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>event_base_loop： 等待事件，分发事件。</p>

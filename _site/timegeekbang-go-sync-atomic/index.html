@@ -68,10 +68,10 @@
 
 <p>对于atomic.AddUint64函数做原子减法，就不能这么直接了，因为它们的第二个参数的类型分别是uint32和uint64，都是无符号的。所以要做转换 uint32(int32(-3))。如果不这么做的话，可报错。还有一种更加考虑直接的方式可以传入^uint32(-N-1)</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">atomic</span><span class="o">.</span><span class="n">AddUint32</span><span class="p">(</span><span class="o">*</span><span class="n">addr</span><span class="p">,</span><span class="kt">uint32</span><span class="p">(</span><span class="kt">int32</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span>
-<span class="c">//或</span>
-<span class="n">atomic</span><span class="o">.</span><span class="n">AddUint32</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span><span class="o">^</span><span class="kt">uint32</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">))</span>
-</code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">atomic</span><span class="o">.</span><span class="n">AddUint32</span><span class="p">(</span><span class="o">*</span><span class="n">addr</span><span class="p">,</span><span class="kt">uint32</span><span class="p">(</span><span class="kt">int32</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span><span class="x">
+</span><span class="c">//或</span><span class="x">
+</span><span class="n">atomic</span><span class="o">.</span><span class="n">AddUint32</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span><span class="o">^</span><span class="kt">uint32</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">))</span><span class="x">
+</span></code></pre></div></div>
 
 <p><strong>第三个衍生问题：</strong> 比较并交换操作与交换操作相比有什么不同？优势在哪里？</p>
 

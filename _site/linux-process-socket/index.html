@@ -111,7 +111,7 @@ d）最后，服务器通过系统调用accept来接受客户的连接。它会�
 
 <p>1、创建套接字</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">socket</span><span class="p">(</span><span class="kt">int</span> <span class="n">domain</span><span class="p">,</span> <span class="kt">int</span> <span class="n">type</span><span class="p">,</span> <span class="kt">int</span> <span class="n">protocol</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">socket</span><span class="p">(</span><span class="kt">int</span> <span class="n">domain</span><span class="p">,</span> <span class="kt">int</span> <span class="n">type</span><span class="p">,</span> <span class="kt">int</span> <span class="n">protocol</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该函数用来创建一个套接字，并返回一个描述符，该描述符可以用来访问该套接字。
@@ -119,7 +119,7 @@ d）最后，服务器通过系统调用accept来接受客户的连接。它会�
 
 <p>2、命名（绑定）套接字</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">bind</span><span class="p">(</span> <span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">address</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">address_len</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">bind</span><span class="p">(</span> <span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">address</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">address_len</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该函数把通过socket调用创建的套接字命名，从而让它可以被其他进程使用。对于AFUNIX，调用该函数后套接字就会关联到一个文件系统路径名，对于AF_INET，则会关联到一个IP端口号。函数原型如下：
@@ -127,7 +127,7 @@ d）最后，服务器通过系统调用accept来接受客户的连接。它会�
 
 <p>3、创建套接字队列（监听）</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">listen</span><span class="p">(</span><span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="kt">int</span> <span class="n">backlog</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">listen</span><span class="p">(</span><span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="kt">int</span> <span class="n">backlog</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该函数用来创建一个队列来保存未处理的请求。成功时返回0，失败时返回-1，其原型如下：
@@ -135,14 +135,14 @@ backlog用于指定队列的长度，等待处理的进入连接的个数最多�
 
 <p>4、接受连接</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">accept</span><span class="p">(</span><span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">address</span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">address_len</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">accept</span><span class="p">(</span><span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">address</span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">address_len</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该系统调用用来等待客户建立对该套接字的连接。accept系统调用只有当客户程序试图连接到由socket参数指定的套接字上时才返回，也就是说，如果套接字队列中没有未处理的连接，accept将阻塞直到有客户建立连接为止。accept函数将创建一个新套接字来与该客户进行通信，并且返回新套接字的描述符，新套接字的类型和服务器监听套接字类型是一样的。</p>
 
 <p>5、请求连接</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">connect</span><span class="p">(</span><span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">address</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">address_len</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">connect</span><span class="p">(</span><span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">address</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">address_len</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该系统调用用来让客户程序通过在一个未命名套接字和服务器监听套接字之间建立连接的方法来连接到服务器。</p>
@@ -176,7 +176,7 @@ backlog用于指定队列的长度，等待处理的进入连接的个数最多�
 <p>socket的接口函数声明在头文件sys/types.h和sys/socket.h中。</p>
 
 <p>1、创建套接字socke</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">socket</span><span class="p">(</span><span class="kt">int</span> <span class="n">domain</span><span class="p">,</span> <span class="kt">int</span> <span class="n">type</span><span class="p">,</span> <span class="kt">int</span> <span class="n">protocol</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">socket</span><span class="p">(</span><span class="kt">int</span> <span class="n">domain</span><span class="p">,</span> <span class="kt">int</span> <span class="n">type</span><span class="p">,</span> <span class="kt">int</span> <span class="n">protocol</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该函数用来创建一个套接字，并返回一个描述符，该描述符可以用来访问该套接字。
@@ -184,7 +184,7 @@ backlog用于指定队列的长度，等待处理的进入连接的个数最多�
 
 <p>3、命名（绑定）套接字bind</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">bind</span><span class="p">(</span> <span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">address</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">address_len</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">bind</span><span class="p">(</span> <span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">address</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">address_len</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该函数把通过socket调用创建的套接字命名，从而让它可以被其他进程使用。对于AF_UNIX，调用该函数后套接字就会关联到一个文件系统路径名，对于AF_INET，则会关联到一个IP端口号。
@@ -192,7 +192,7 @@ backlog用于指定队列的长度，等待处理的进入连接的个数最多�
 
 <p>4、发送数据sendto</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">sendto</span><span class="p">(</span><span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">to</span><span class="p">,</span> <span class="n">socklen_t</span> <span class="n">tolen</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">sendto</span><span class="p">(</span><span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">to</span><span class="p">,</span> <span class="n">socklen_t</span> <span class="n">tolen</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该函数把缓冲区buffer中的信息给送给指定的IP端口的程序，
@@ -201,7 +201,7 @@ buffer中储存着将要发送的数据，len是buffer的长度，而flags在应
 
 <p>5、接收数据recvfrom</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">recvfrom</span><span class="p">(</span><span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="err">，</span><span class="kt">int</span> <span class="n">flags</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">src_from</span><span class="p">,</span> <span class="n">socklen_t</span> <span class="o">*</span><span class="n">src_len</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">recvfrom</span><span class="p">(</span><span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="err">，</span><span class="kt">int</span> <span class="n">flags</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">src_from</span><span class="p">,</span> <span class="n">socklen_t</span> <span class="o">*</span><span class="n">src_len</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该函数把发送给程序的信息储存在缓冲区buffer中，并记录数据来源的程序IP端口。

@@ -121,7 +121,7 @@ SIG_DFL:恢复信号的默认行为
 <p>一个更加健壮的信号接口——sigaction函数。它的原型为：</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;signal.h&gt;
-</span><span class="kt">int</span> <span class="nf">sigaction</span><span class="p">(</span><span class="kt">int</span> <span class="n">sig</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sigaction</span> <span class="o">*</span><span class="n">act</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sigaction</span> <span class="o">*</span><span class="n">oact</span><span class="p">);</span>
+</span><span class="kt">int</span> <span class="n">sigaction</span><span class="p">(</span><span class="kt">int</span> <span class="n">sig</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sigaction</span> <span class="o">*</span><span class="n">act</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sigaction</span> <span class="o">*</span><span class="n">oact</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>参数： 
@@ -130,7 +130,7 @@ act：    如果值非NULL，将安装为sig关联信号的新处理方式。
 oldact： 如果值非NULL，存储以前对sig关联信号的处理方式。
 sigaction的结构形态如下：</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>struct sigaction {
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>struct sigaction {
     void (*sa_handler)(int);
     void (*sa_sigaction)(int, siginfo_t *, void *);
     sigset_t sa_mask;
@@ -187,7 +187,7 @@ sigaction的结构形态如下：</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
 #include &lt;signal.h&gt;
-</span><span class="kt">int</span> <span class="nf">kill</span><span class="p">(</span><span class="n">pid_t</span> <span class="n">pid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sig</span><span class="p">);</span>
+</span><span class="kt">int</span> <span class="n">kill</span><span class="p">(</span><span class="n">pid_t</span> <span class="n">pid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sig</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>它的作用把信号sig发送给进程号为pid的进程，成功时返回0。
@@ -202,7 +202,7 @@ kill调用失败返回-1，调用失败通常有三大原因：</p>
 这个函数跟它的名字一样，给我们提供了一个闹钟的功能，进程可以调用alarm函数在经过预定时间后向发送一个SIGALRM信号。
 alarm函数的型如下：</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
-</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">alarm</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">seconds</span><span class="p">);</span>
+</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">alarm</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">seconds</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>alarm函数用来在seconds秒之后安排发送一个SIGALRM信号，如果seconds为0，将取消所有已设置的闹钟请求。alarm函数的返回值是以前设置的闹钟时间的余留秒数，如果返回失败返回-1。</p>

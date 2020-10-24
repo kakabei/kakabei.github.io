@@ -91,7 +91,7 @@
 <p>在events_和revents_明显对应了struct pollfd结构中的成员。其实poll和 epoll的事件编号应该一样的。muduo 在EPollPoller中
 做了检测：</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BOOST_STATIC_ASSERT(EPOLLIN == POLLIN);
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BOOST_STATIC_ASSERT(EPOLLIN == POLLIN);
 BOOST_STATIC_ASSERT(EPOLLPRI == POLLPRI);
 BOOST_STATIC_ASSERT(EPOLLOUT == POLLOUT);
 BOOST_STATIC_ASSERT(EPOLLRDHUP == POLLRDHUP);

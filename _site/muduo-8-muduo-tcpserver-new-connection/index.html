@@ -89,7 +89,7 @@
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">TcpConnection</span> <span class="o">:</span> <span class="n">boost</span><span class="o">::</span><span class="n">noncopyable</span><span class="p">,</span>
                       <span class="k">public</span> <span class="n">boost</span><span class="o">::</span><span class="n">enable_shared_from_this</span><span class="o">&lt;</span><span class="n">TcpConnection</span><span class="o">&gt;</span>
 <span class="p">{</span>
-<span class="nl">private:</span>
+<span class="k">private</span><span class="o">:</span>
   <span class="k">enum</span> <span class="n">StateE</span> <span class="p">{</span> <span class="n">kDisconnected</span><span class="p">,</span> <span class="n">kConnecting</span><span class="p">,</span> <span class="n">kConnected</span><span class="p">,</span> <span class="n">kDisconnecting</span> <span class="p">};</span>
   <span class="kt">void</span> <span class="n">handleRead</span><span class="p">(</span><span class="n">Timestamp</span> <span class="n">receiveTime</span><span class="p">);</span>
   <span class="kt">void</span> <span class="n">handleWrite</span><span class="p">();</span>
@@ -101,7 +101,7 @@
   <span class="kt">void</span> <span class="n">shutdownInLoop</span><span class="p">();</span>
   <span class="c1">// void shutdownAndForceCloseInLoop(double seconds);</span>
   <span class="kt">void</span> <span class="n">forceCloseInLoop</span><span class="p">();</span>
-  <span class="kt">void</span> <span class="n">setState</span><span class="p">(</span><span class="n">StateE</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span> <span class="n">state_</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span> <span class="p">}</span>
+  <span class="kt">void</span> <span class="nf">setState</span><span class="p">(</span><span class="n">StateE</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span> <span class="n">state_</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span> <span class="p">}</span>
   <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">stateToString</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
   <span class="kt">void</span> <span class="n">startReadInLoop</span><span class="p">();</span>
   <span class="kt">void</span> <span class="n">stopReadInLoop</span><span class="p">();</span>

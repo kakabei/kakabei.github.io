@@ -56,16 +56,16 @@
 <section class="post">
 <p>很有意思，可能运用的场景不多。如果想调试某个模块时，可以在编译直接给他赋值。</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
 
-<span class="k">import</span> <span class="s">"fmt"</span>
+</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
 
-<span class="k">var</span> <span class="n">BuildDate</span> <span class="o">=</span> <span class="s">"no build date"</span>
+</span><span class="k">var</span><span class="x"> </span><span class="n">BuildDate</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="s">"no build date"</span><span class="x">
 
-<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"build date: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">BuildDate</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div></div>
+</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"build date: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">BuildDate</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
 
 <p>传递参数步骤：</p>
 

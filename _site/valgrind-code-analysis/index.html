@@ -92,7 +92,7 @@
 
 <p>而getHead是这样的：</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">_ValType</span><span class="p">,</span> <span class="kt">int</span> <span class="n">COUNT</span><span class="p">&gt;</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">_ValType</span><span class="p">,</span> <span class="kt">int</span> <span class="n">COUNT</span><span class="o">&gt;</span>
 <span class="kr">inline</span> <span class="kt">void</span>	<span class="n">CMemoryPool</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="n">_ValType</span><span class="p">,</span><span class="n">COUNT</span><span class="o">&gt;::</span><span class="n">getHead</span><span class="p">(</span><span class="n">iterator</span><span class="o">&amp;</span> <span class="n">pos</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="k">try</span>

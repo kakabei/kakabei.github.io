@@ -59,7 +59,7 @@
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
 #include &lt;wchar.h&gt;
-</span><span class="kt">int</span> <span class="nf">fwide</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
+</span><span class="kt">int</span> <span class="n">fwide</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
 <span class="c1">// 返回值：若流是宽定向的则返回正值，若流是字节定向的则返回负值，或者流是未定向的则返回0</span>
 </code></pre></div></div>
 
@@ -107,8 +107,8 @@
 <p>4 对于流的缓冲可能通来两个函数更改缓冲类型：</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
-</span><span class="kt">void</span> <span class="nf">setbuf</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">);</span>
-<span class="kt">int</span> <span class="nf">setvbut</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">);</span>
+</span><span class="kt">void</span> <span class="n">setbuf</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">);</span>
+<span class="kt">int</span> <span class="n">setvbut</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">fp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="kr">restrict</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">);</span>
 <span class="c1">//返回值：若成功则返回0，若出错则返回非0值</span>
 </code></pre></div></div>
 
@@ -128,7 +128,7 @@
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
 </span><span class="kt">FILE</span> <span class="o">*</span><span class="nf">fopen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">)</span> <span class="p">;</span>
-<span class="kt">FILE</span> <span class="o">*</span><span class="nf">freopen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">,</span> <span class="kt">FILE</span> <span class="o">*</span> <span class="n">fp</span><span class="p">);</span>
+<span class="kt">FILE</span> <span class="o">*</span><span class="n">freopen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pathname</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">,</span> <span class="kt">FILE</span> <span class="o">*</span> <span class="n">fp</span><span class="p">);</span>
 <span class="kt">FILE</span> <span class="o">*</span><span class="nf">fdopen</span><span class="p">(</span><span class="kt">int</span>  <span class="n">filedes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">type</span><span class="p">)</span> <span class="p">;</span>
 <span class="c1">// 三个函数的返回：若成功则为文件指针，若出错则为 NULL</span>
 </code></pre></div></div>

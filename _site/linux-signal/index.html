@@ -84,7 +84,7 @@
 <p>线程可调用pthread_sigmask()设置本线程的信号屏蔽字，以屏蔽该线程对某些信号的响应处理。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;signal.h&gt;
-</span><span class="kt">int</span> <span class="nf">pthread_sigmask</span><span class="p">(</span><span class="kt">int</span> <span class="n">how</span><span class="p">,</span> <span class="k">const</span> <span class="n">sigset_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">set</span><span class="p">,</span> <span class="n">sigset_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">oset</span><span class="p">);</span>
+</span><span class="kt">int</span> <span class="n">pthread_sigmask</span><span class="p">(</span><span class="kt">int</span> <span class="n">how</span><span class="p">,</span> <span class="k">const</span> <span class="n">sigset_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">set</span><span class="p">,</span> <span class="n">sigset_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">oset</span><span class="p">);</span>
 </code></pre></div></div>
 <p>该函数检查和(或)更改本线程的信号屏蔽字。若参数oset为非空指针，则该指针返回调用前本线程的信号屏蔽字。若参数set为非空指针，则参数how指示如何修改当前信号屏蔽字；否则不改变本线程信号屏蔽字，并忽略how值。该函数执行成功时返回0，否则返回错误编号(errno)。</p>
 
@@ -105,7 +105,7 @@
 <p>线程可通过调用sigwait()函数等待一个或多个信号发生。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;signal.h&gt;
-</span><span class="kt">int</span> <span class="nf">sigwait</span><span class="p">(</span><span class="k">const</span> <span class="n">sigset_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">sigset</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">signop</span><span class="p">);</span>
+</span><span class="kt">int</span> <span class="n">sigwait</span><span class="p">(</span><span class="k">const</span> <span class="n">sigset_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">sigset</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">signop</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>参数sigset指定线程等待的信号集，signop指向的整数表明接收到的信号值。</p>
@@ -118,7 +118,7 @@
 
 <p>若已阻塞等待信号集中的信号，则sigwait()会自动解除信号集的阻塞状态，直到有新的信号被递送。在返回之前，sigwait()将恢复线程的信号屏蔽字。因此，sigwait()并不改变信号的阻塞状态。可见，sigwait()的这种<strong>“解阻-等待-阻塞”</strong>特性，与条件变量非常相似。<strong>[为什么？后面例子说明的第9点有说到]</strong></p>
 
-<p>为避免错误发生，调用sigwait()前必须阻塞那些它正在等待的信号。在单线程环境中，调用程序首先调用<code class="language-plaintext highlighter-rouge">sigprocmask()</code>阻塞等待信号集中的信号，以防这些信号在连续的sigwait()调用之间进入未决状态，从而触发默认动作或信号处理函数。在多线程程序中，所有线程(包括调用线程)都必须阻塞等待信号集中的信号，否则信号可能被递送到调用线程之外的其他线程。建议在创建线程前调用pthread_sigmask()阻塞这些信号(新线程继承信号屏蔽字)，然后绝不显式解除阻塞(sigwait会自动解除信号集的阻塞状态)。</p>
+<p>为避免错误发生，调用sigwait()前必须阻塞那些它正在等待的信号。在单线程环境中，调用程序首先调用<code class="highlighter-rouge">sigprocmask()</code>阻塞等待信号集中的信号，以防这些信号在连续的sigwait()调用之间进入未决状态，从而触发默认动作或信号处理函数。在多线程程序中，所有线程(包括调用线程)都必须阻塞等待信号集中的信号，否则信号可能被递送到调用线程之外的其他线程。建议在创建线程前调用pthread_sigmask()阻塞这些信号(新线程继承信号屏蔽字)，然后绝不显式解除阻塞(sigwait会自动解除信号集的阻塞状态)。</p>
 
 <p>若多个线程调用sigwait()等待同一信号，只有一个(但不确定哪个)线程可从sigwait()中返回。若信号被捕获(通过sigaction安装信号处理函数)，且线程正在sigwait()调用中等待同一信号，则由系统实现来决定以何种方式递送信号。<strong>操作系统实现可让sigwait返回(通常优先级较高)</strong>，也可激活信号处理程序，但不可能出现两者皆可的情况。</p>
 
