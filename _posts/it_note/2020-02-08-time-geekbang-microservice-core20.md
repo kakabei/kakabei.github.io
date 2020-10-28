@@ -66,7 +66,7 @@ excerpt: 极客时间学习笔记， 微服务架构核心20讲
 
 微服务的适用性:
 
-![](/assets/time-geekbang-microservice-core20/micro_server_4.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_4.png) 
 
 Monolth 单块服务
 
@@ -94,7 +94,7 @@ Microservice 微服务
 
 组织架构：
 
-![](/assets/time-geekbang-microservice-core20/micro_server_5_1.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_5_1.png) 
 
 左边是比较传统的组织架构。产品从左到右流程走，可能出现的问题，反馈比较慢，对业务支持比较慢。沟通成本比较大。
 
@@ -102,7 +102,7 @@ Microservice 微服务
 接口支持多样的业务。
 
 
-![](/assets/time-geekbang-microservice-core20/micro_server_5_2.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_5_2.png) 
 
 在团队内做内部循环。端对端的开发。 
 
@@ -114,7 +114,7 @@ Microservice 微服务
 中台战略和微服务的关系
 下图：一线互联网主流的组织架构。 微服的标准的参考架构。
 
-![](/assets/time-geekbang-microservice-core20/micro_server_6.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_6.png) 
 
 业务中台和技术中台 统称为大中台。支撑业务前台。中台越强大，前台越发展越快。
 
@@ -129,7 +129,7 @@ PaaS：Platform-as-a-Service（平台即服务）
 
 大致的服务分层图：
 
-![](/assets/time-geekbang-microservice-core20/micro_server_7.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_7.png) 
 
 
 SOA  Service-Oriented Architecture  （面向服务的架构）
@@ -143,7 +143,7 @@ SOA  Service-Oriented Architecture  （面向服务的架构）
 
 微服务总体架构体系图：
 
-![](/assets/time-geekbang-microservice-core20/micro_server_8.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_8.png) 
 
 * 接入层：　外部和内部接入，主要把流量接入进来，做负载均衡。
 * 网关层：　反向路由，限流，安全，跨横切面的功能。　　
@@ -161,15 +161,15 @@ SOA  Service-Oriented Architecture  （面向服务的架构）
 
 1 通过DNS 访问LB，LB（负载均衡）。
 
-![](/assets/time-geekbang-microservice-core20/micro_server_9_1.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_9_1.png) 
 
 2 　LB功能放到Consumer内， service 注册到 Service Registry上。有定时心跳发到注册中收，Consumer  定期的同步 Service Registry的信息。 
 
-![](/assets/time-geekbang-microservice-core20/micro_server_9_2.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_9_2.png) 
 
 3 结全前面两种方式， 在Consumer的主机上也布置一个LB。 LB会定期同步Service Registry的信息。 运维成本比较高一点。 
 
-![](/assets/time-geekbang-microservice-core20/micro_server_9_3.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_9_3.png) 
 
 ## 10 微服务 API 服务网关（一）原理
 ---
@@ -179,7 +179,7 @@ API　Gateway
 屏蔽掉服务内部的逻辑，希望外部访问看到是统一的接口。
 
 
-![](/assets/time-geekbang-microservice-core20/micro_server_10_1.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_10_1.png) 
 
 
 下面这个图 接入网关的前面有一层LB（负载均衡）如果是网关可以是无状态的，这样方便扩展，单点挂掉时，可以摘除。对系统的稳定性很重要。
@@ -192,7 +192,7 @@ API　Gateway
 
 一般不要把过多的业务逻辑写在网关当中。
 
-![](/assets/time-geekbang-microservice-core20/micro_server_10_2.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_10_2.png) 
 
 ## 11 服务 API 服务网关（二）开源网关 Zuul
 ---
@@ -204,11 +204,11 @@ API　Gateway
 
 各个Fitte 共享数据通过 Request Context 来实现。 
 
-![](/assets/time-geekbang-microservice-core20/micro_server_11_1.png)
+![](../../assets/time-geekbang-microservice-core20/micro_server_11_1.png)
 
 过滤链的流程： 
 
-![](/assets/time-geekbang-microservice-core20/micro_server_11_2.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_11_2.png) 
 
 前置路由过滤器
 
@@ -226,7 +226,7 @@ netflix 有两个比较重要的支撑服务
 * 服务注册中心  Eureka 
 * 网关 zuul
 
-![](/assets/time-geekbang-microservice-core20/micro_server_12.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_12.png) 
 
 ## 13 集中式配置中心的作用和原理是什么
 ---
@@ -245,12 +245,12 @@ netflix 有两个比较重要的支撑服务
 
 Svr 更新配置有两种方式 拉和推。 
 
-![](/assets/time-geekbang-microservice-core20/micro_server_13_1.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_13_1.png) 
 
 
 携程的Apollo配置中心:
 
-![](/assets/time-geekbang-microservice-core20/micro_server_13_2.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_13_2.png) 
 
 github : https://github.com/ctripcorp/apollo
 
@@ -260,7 +260,7 @@ RPC：Remote Procedure Call 远程过程调用
 
 REST ：Restful
 
-![](/assets/time-geekbang-microservice-core20/micro_server_14.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_14.png) 
 
 
 ## 15 微服务框架需要考虑哪些治理环节
@@ -276,7 +276,7 @@ Metrics: 服务的调用量， 耗时监控。
 
 契约生成代码： 定义结构体可自动生成json格式， vscode 有插件。
 
-![](/assets/time-geekbang-microservice-core20/micro_server_15.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_15.png) 
 
 阿里巴巴微服务治理生态：Dubbo 	http://dubbo.apache.org/en-us/
 
@@ -291,7 +291,7 @@ Metrics: 服务的调用量， 耗时监控。
 * 业务层监控 核心指标监控 登录注册 
 * 端用户体验监控
 
-![](/assets/time-geekbang-microservice-core20/micro_server_16_1.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_16_1.png) 
 
 
 日志 监控  对应Elasticsearch  
@@ -303,7 +303,7 @@ metrics 监控
 
 比较典型的监控架构，大部分公司的流程
 
-![](/assets/time-geekbang-microservice-core20/micro_server_16_2.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_16_2.png) 
 
 
 比较大的队列用kafka 。 
@@ -321,18 +321,18 @@ ELK　ELK是Elasticsearch、Logstash、Kibana三大开源框架首字母大写�
 通过 Span来跟踪， RootSpan  ChildSpan  跨进程时  会有Trace di + parant span id
 
 
-![](/assets/time-geekbang-microservice-core20/micro_server_17_1.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_17_1.png) 
 
 三个主流调用链监控系统的比较：
 
-![](/assets/time-geekbang-microservice-core20/micro_server_17_2.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_17_2.png) 
 
 ## 18 微服务的容错限流是如何工作的
 ---
 
 Netfiix  Hystrix 具有熔断 隔离 限流 降级的功能 。 
 
-![](/assets/time-geekbang-microservice-core20/micro_server_18.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_18.png) 
 
 说明： 
 
@@ -350,22 +350,22 @@ docker 容器治理就是解决：环境不一致的问题。把依赖的所有�
 
 UAT 环境： User Acceptance Test （用户验收测试）
 
-![](/assets/time-geekbang-microservice-core20/micro_server_19_1.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_19_1.png) 
 
 发布模式： 蓝绿布置，灰度发布（金丝雀发布）。
 
 金丝雀发布 滚动发布：
 
-![](/assets/time-geekbang-microservice-core20/micro_server_19_2.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_19_2.png) 
 
 ## 20 容器集群调度和基于容器的发布体系
 ---
 
 资源调度框架 Mesos 架构
 
-![](/assets/time-geekbang-microservice-core20/micro_server_20_1.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_20_1.png) 
 
 基于容器的云发布体系	
 
-![](/assets/time-geekbang-microservice-core20/micro_server_20_2.png) 
+![](../../assets/time-geekbang-microservice-core20/micro_server_20_2.png) 
 
