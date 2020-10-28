@@ -112,7 +112,7 @@
 
 <p>微服务的适用性:</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_4.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_4.png" alt="" /></p>
 
 <p>Monolth 单块服务</p>
 
@@ -139,14 +139,14 @@
 
 <p>组织架构：</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_5_1.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_5_1.png" alt="" /></p>
 
 <p>左边是比较传统的组织架构。产品从左到右流程走，可能出现的问题，反馈比较慢，对业务支持比较慢。沟通成本比较大。</p>
 
 <p>右边是比较合适微服务的组织架构， 每一个团队（基于微服务的跨职能的团队），有开发，有产品，有测试，团队都支持自己的微服务。交付的产口是平台，对外提供API
 接口支持多样的业务。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_5_2.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_5_2.png" alt="" /></p>
 
 <p>在团队内做内部循环。端对端的开发。</p>
 
@@ -158,7 +158,7 @@
 <p>中台战略和微服务的关系
 下图：一线互联网主流的组织架构。 微服的标准的参考架构。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_6.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_6.png" alt="" /></p>
 
 <p>业务中台和技术中台 统称为大中台。支撑业务前台。中台越强大，前台越发展越快。</p>
 
@@ -173,7 +173,7 @@
 
 <p>大致的服务分层图：</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_7.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_7.png" alt="" /></p>
 
 <p>SOA  Service-Oriented Architecture  （面向服务的架构）</p>
 
@@ -186,7 +186,7 @@
 
 <p>微服务总体架构体系图：</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_8.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_8.png" alt="" /></p>
 
 <ul>
   <li>接入层：　外部和内部接入，主要把流量接入进来，做负载均衡。</li>
@@ -206,15 +206,15 @@
 
 <p>1 通过DNS 访问LB，LB（负载均衡）。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_9_1.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_9_1.png" alt="" /></p>
 
 <p>2 　LB功能放到Consumer内， service 注册到 Service Registry上。有定时心跳发到注册中收，Consumer  定期的同步 Service Registry的信息。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_9_2.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_9_2.png" alt="" /></p>
 
 <p>3 结全前面两种方式， 在Consumer的主机上也布置一个LB。 LB会定期同步Service Registry的信息。 运维成本比较高一点。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_9_3.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_9_3.png" alt="" /></p>
 
 <h2 id="10-微服务-api-服务网关一原理">10 微服务 API 服务网关（一）原理</h2>
 <hr />
@@ -223,7 +223,7 @@
 
 <p>屏蔽掉服务内部的逻辑，希望外部访问看到是统一的接口。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_10_1.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_10_1.png" alt="" /></p>
 
 <p>下面这个图 接入网关的前面有一层LB（负载均衡）如果是网关可以是无状态的，这样方便扩展，单点挂掉时，可以摘除。对系统的稳定性很重要。</p>
 
@@ -237,7 +237,7 @@
 
 <p>一般不要把过多的业务逻辑写在网关当中。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_10_2.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_10_2.png" alt="" /></p>
 
 <h2 id="11-服务-api-服务网关二开源网关-zuul">11 服务 API 服务网关（二）开源网关 Zuul</h2>
 <hr />
@@ -249,11 +249,11 @@
 
 <p>各个Fitte 共享数据通过 Request Context 来实现。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_11_1.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_11_1.png" alt="" /></p>
 
 <p>过滤链的流程：</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_11_2.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_11_2.png" alt="" /></p>
 
 <p>前置路由过滤器</p>
 
@@ -271,7 +271,7 @@
   <li>网关 zuul</li>
 </ul>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_12.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_12.png" alt="" /></p>
 
 <h2 id="13-集中式配置中心的作用和原理是什么">13 集中式配置中心的作用和原理是什么</h2>
 <hr />
@@ -292,11 +292,11 @@
 
 <p>Svr 更新配置有两种方式 拉和推。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_13_1.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_13_1.png" alt="" /></p>
 
 <p>携程的Apollo配置中心:</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_13_2.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_13_2.png" alt="" /></p>
 
 <p>github : https://github.com/ctripcorp/apollo</p>
 
@@ -306,7 +306,7 @@
 
 <p>REST ：Restful</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_14.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_14.png" alt="" /></p>
 
 <h2 id="15-微服务框架需要考虑哪些治理环节">15 微服务框架需要考虑哪些治理环节</h2>
 <hr />
@@ -321,7 +321,7 @@
 
 <p>契约生成代码： 定义结构体可自动生成json格式， vscode 有插件。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_15.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_15.png" alt="" /></p>
 
 <p>阿里巴巴微服务治理生态：Dubbo 	http://dubbo.apache.org/en-us/</p>
 
@@ -338,7 +338,7 @@
   <li>端用户体验监控</li>
 </ul>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_16_1.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_16_1.png" alt="" /></p>
 
 <p>日志 监控  对应Elasticsearch<br />
 metrics 监控
@@ -348,7 +348,7 @@ metrics 监控
 
 <p>比较典型的监控架构，大部分公司的流程</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_16_2.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_16_2.png" alt="" /></p>
 
 <p>比较大的队列用kafka 。</p>
 
@@ -363,18 +363,18 @@ metrics 监控
 
 <p>通过 Span来跟踪， RootSpan  ChildSpan  跨进程时  会有Trace di + parant span id</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_17_1.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_17_1.png" alt="" /></p>
 
 <p>三个主流调用链监控系统的比较：</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_17_2.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_17_2.png" alt="" /></p>
 
 <h2 id="18-微服务的容错限流是如何工作的">18 微服务的容错限流是如何工作的</h2>
 <hr />
 
 <p>Netfiix  Hystrix 具有熔断 隔离 限流 降级的功能 。</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_18.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_18.png" alt="" /></p>
 
 <p>说明：</p>
 
@@ -394,24 +394,24 @@ metrics 监控
 
 <p>UAT 环境： User Acceptance Test （用户验收测试）</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_19_1.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_19_1.png" alt="" /></p>
 
 <p>发布模式： 蓝绿布置，灰度发布（金丝雀发布）。</p>
 
 <p>金丝雀发布 滚动发布：</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_19_2.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_19_2.png" alt="" /></p>
 
 <h2 id="20-容器集群调度和基于容器的发布体系">20 容器集群调度和基于容器的发布体系</h2>
 <hr />
 
 <p>资源调度框架 Mesos 架构</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_20_1.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_20_1.png" alt="" /></p>
 
 <p>基于容器的云发布体系</p>
 
-<p><img src="/assets/time-geekbang-microservice-core20/micro_server_20_2.png" alt="" /></p>
+<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_20_2.png" alt="" /></p>
 
 
 </section>
