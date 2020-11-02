@@ -16,3 +16,4 @@ excerpt: service mesh 学习资料收集
 * [Envoy 官方文档中文版](https://www.servicemesher.com/envoy/)
 * [蚁金服开源SOFAMesh](https://github.com/sofastack/sofa-mesh)
 * [腾讯云容器团队内部Istio专题分享](https://www.servicemesher.com/blog/istio-the-king-of-service-mesh/)
+* [敖小剑的博客](https://skyao.io/)
