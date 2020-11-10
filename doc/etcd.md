@@ -232,8 +232,7 @@ zookeeper 非常稳定，是一个著名的分布式协调系统，etcd 是后�
 
 
 
-一文入门ETCD https://juejin.im/post/6844904031186321416
-深入浅出etcd之raft实现 https://cloud.tencent.com/developer/article/1394643
+https://landscape.cncf.io/
 
 
 
