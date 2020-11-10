@@ -44,7 +44,10 @@ Raft 一致性算法能够工作的一个关键点是：任意两个 quorum 的�
 * etcd利用raft算法在集群中同步key-value。
 * 可以理解为Raft协议对日志进行管理，etcd对K/V进行管理。
 
-Raft算法：http://thesecretlivesofdata.com/raft/
+
+Raft算法：https://zhuanlan.zhihu.com/p/66441389 
+
+演示图： http://thesecretlivesofdata.com/raft/
 
 ### 二 API 介绍
 
