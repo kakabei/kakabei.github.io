@@ -1,5 +1,8 @@
 
 
+官网： https://etcd.io/
+
+github: https://github.com/etcd-io/etcd
 
 ### 一 总体架构
 
