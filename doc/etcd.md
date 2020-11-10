@@ -47,6 +47,19 @@ Raft 一致性算法能够工作的一个关键点是：任意两个 quorum 的�
 * etcd利用raft算法在集群中同步key-value。
 * 可以理解为Raft协议对日志进行管理，etcd对K/V进行管理。
 
+**leader 选举** 
+
+竞选过程：
+1. 节点由Follower变为Candidate，同时设置当前Term。
+2. Candidate给自己投票，带上termid 和日志序号，同时向其他节点发送拉票请求
+3. 等待结果，成为Leader,follower 或者在选举未成为产生结果的情况下节点状态保持为Candidatae。
+
+选举结果
+1. 成功当选收到超过半数的选票时，成为Leader,定时给其他节点发送心跳，并带上任期id,其他节点发现当前的任期id小于接收到leader发送过来的id,则将将状态切换至follower.
+2. 选举失败在Candidate状态接收到其他节点发送的心跳信息，且心跳中的任期id大于自己，则变为follower。
+3. 未产生结果没有一个Candidate所获得的选票超过半数，未产生leader,则Candidate再进入下一轮投票。为了避免长期没有leader产生，raft采用如下策略避免：
+4. 选举超时时间为随机值，第一个超时的节点带着最大的任期id立刻进入新一任的选举
+5. 如果存在多个Candidate同时竞选的情况，发送拉票请求也是一段随机延时。
 
 Raft算法：https://zhuanlan.zhihu.com/p/66441389 
 
