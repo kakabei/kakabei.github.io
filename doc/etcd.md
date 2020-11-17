@@ -235,6 +235,8 @@ etcd 可以充当消息中间件，生产者可以往etcd中注册 topic 并发�
 * 在 leader 选举时，etcd 会放弃操作，并且不会给 client 发送放弃响应
 * 在网络分区时，当 leader 处于小分区时，读请求会继续被处理
 
+
+
 zookeeper 是用 java 开发的，被 Apache 很多项目采用。
 
 etcd 是用 go 开发的，主要是被 Kubernetes 采用。
