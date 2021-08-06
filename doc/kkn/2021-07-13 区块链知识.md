@@ -1,0 +1,1 @@
+中本聪白皮书英文版： https://bitcoin.org/bitcoin.pdf
