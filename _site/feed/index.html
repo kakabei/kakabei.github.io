@@ -7,8 +7,770 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2020-11-03T00:21:48+08:00</lastBuildDate>
+    <lastBuildDate>2021-08-09T23:38:13+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>java 基本重点知识</title>
+      <link href="http://localhost:4000/java-base-learn1/"/>
+      <pubDate>2021-07-16T00:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/java-base-learn1</guid>
+      <content:encoded><![CDATA[<p>解释虚拟机指令肯定会比全速运行机器指令慢很多。然而，虚拟机有一个选项，可以将执行最频繁的字节码序列翻译成机器码，这一过程被称为即时编译。</p>
+
+<p>Java虚拟机还有一些其他的优点。它可以检测指令序列的行为，从而增强其安全性。</p>
+
+<h3 id="java的特点">Java的特点</h3>
+
+<ul>
+  <li>可移植性</li>
+  <li>解释型</li>
+  <li>高性能</li>
+  <li>多线程</li>
+  <li>动态性</li>
+</ul>
+
+<h3 id="java-官方的一些源码和文档">Java 官方的一些源码和文档</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">javasrc</code> 在JDK的路径上，有一个src.zip，解开后，含了所有公共类库的源代码。</li>
+  <li><code class="highlighter-rouge">javadoc</code>  可以从官网下载文档 https://www.oracle.com/java/technologies/javase-downloads。解压后，可以访问目录上的<code class="highlighter-rouge">jdk-16.0.2_doc-all\docs\index.html</code> 可以在浏览器打开，保存标签，这里可找到所有公共类库的说明。</li>
+</ul>
+
+<p><img src="../../assets/java/2021-07-26-java-learn-202449.png" alt="" /></p>
+
+<ul>
+  <li>编译器、虚拟机、本地方法以及私有辅助类 http://jdk.java.net/8/ 暂时不看吧。</li>
+  <li>书籍代码学习 https://horstmann.com/corejava/ 可以下载。</li>
+</ul>
+
+<h3 id="java应用程序">Java应用程序</h3>
+
+<p><strong>注释</strong></p>
+
+<p>有三种注释方式， <code class="highlighter-rouge">//</code>     <code class="highlighter-rouge">/*  */</code>  第三种注释可以生成文档  <code class="highlighter-rouge">/** */</code></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 1、todo </span>
+
+<span class="cm">/* 2、comment */</span>
+
+<span class="cm">/**
+* 3、This is a doc comment
+*/</span>
+</code></pre></div></div>
+
+<h3 id="数据类型">数据类型</h3>
+
+<p>Java是一种强类型语言。这就意味着必须为每一个变量声明一种类型， 8种基本类型。</p>
+
+<p><code class="highlighter-rouge">big number </code> 大数，是一种对象，不是类型。</p>
+
+<p>8种基本类型</p>
+
+<p>整型 <code class="highlighter-rouge">int</code>  4个字节</p>
+
+<p>整型 <code class="highlighter-rouge">short</code> 2个字节</p>
+
+<p>整型 <code class="highlighter-rouge">long</code> 8个字节</p>
+
+<p>整型 <code class="highlighter-rouge">byte</code> 1字节</p>
+
+<p>长整型数值有一个后缀L或l（如4000000000L）。 从Java 7开始，加上前缀0b或0B就可以写二进制数。</p>
+
+<p>浮点型 <code class="highlighter-rouge">float</code> 4个字节</p>
+
+<p>浮点型 <code class="highlighter-rouge">double</code> 8个字节</p>
+
+<p>float类型的数值有一个后缀F或f（例如，3.14F）。没有后缀F的浮点数值（如3.14）默认为double类型。当然，也可以在浮点数值后面添加后缀D或d（例如，3.14D）。</p>
+
+<p>三个特殊的值。</p>
+
+<p>正无穷大  <code class="highlighter-rouge">Double.POSITIVE_INFINITY</code></p>
+
+<p>负无穷大 <code class="highlighter-rouge">Double.NEGATIVE_INFINITY</code></p>
+
+<p>NaN （不是一个数字） <code class="highlighter-rouge">Double.NaN</code></p>
+
+<p>不能这样检测一个特定值是否等于Double.NaN：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">==</span> <span class="n">Double</span><span class="o">.</span><span class="na">NaN</span><span class="o">)</span> <span class="c1">// is ture </span>
+   
+<span class="k">if</span> <span class="o">(</span><span class="n">Double</span><span class="o">.</span><span class="na">isNaN</span><span class="o">(</span><span class="n">x</span><span class="o">))</span> <span class="c1">// check x is "not a number"</span>
+</code></pre></div></div>
+
+<p>char类型 单个字符， 字面量值要用单引号括起来。<code class="highlighter-rouge">'A'</code>  , <code class="highlighter-rouge">"A"</code> 是一个字符串。可以表示为十六进制值。其范围从<code class="highlighter-rouge">\u0000</code>到<code class="highlighter-rouge">\Uffff</code>。除了转义序列<code class="highlighter-rouge">\u</code>之外，还有一些用于表示特殊字符的转义序列</p>
+
+<p>Unicode类型 另讲。</p>
+
+<p>boolean类型。有两个值：false和true，用来判定逻辑条件。<strong>整型值和布尔值之间不能进行相互转换，这一点要注意和C++不一样</strong>。</p>
+
+<p><strong>枚举类型</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">enum</span> <span class="n">Size</span><span class="o">{</span><span class="n">SMALL</span><span class="o">,</span> <span class="n">MEDIUM</span><span class="o">,</span> <span class="n">LARGE</span><span class="o">,</span> <span class="n">EXTRA_LARGE</span><span class="o">}</span> <span class="o">;</span> 
+</code></pre></div></div>
+
+<h3 id="变量">变量</h3>
+
+<p>在Java中，每个变量都有一个类型（type）。在声明变量时，变量的类型位于变量名之前。 每个声明以分号结束。</p>
+
+<p>变量名必须是一个以字母开头并由字母或数字构成的序列。</p>
+
+<p>不能使用Java保留字作为变量名。</p>
+
+<p>变量名对大小写敏感。</p>
+
+<p>声明一个变量之后，必须用赋值语句对变量进行<strong>显式初始化</strong>。</p>
+
+<p>利用关键字final指示常量。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="kt">double</span> <span class="n">CM_PER_INCH</span> <span class="o">=</span> <span class="mf">2.54</span><span class="o">;</span> 
+</code></pre></div></div>
+
+<p>类常量的定义位于main方法的外部。</p>
+
+<p><code class="highlighter-rouge">const</code>是 Java 保留的关键字，但目前并没有使用。在Java中，必须使用final定义常量。</p>
+
+<h3 id="运算符">运算符</h3>
+
+<p>在Java中，使用算术运算符<code class="highlighter-rouge">+、-、*、/</code>表示加、减、乘、除运算。</p>
+
+<p>整数的求余操作（有时称为取模）用<code class="highlighter-rouge">%</code>s表示.</p>
+
+<p><strong>数值类型之间的转换</strong></p>
+
+<p>数值类型之间的合法转换.。 6个实心箭头，表示无信息丢失的转换；有3个虚箭头，表示可能有精度损失的转换。</p>
+
+<p><img src="../../assets/java/2021-07-26-java-learn-2024459.png" alt="" /></p>
+
+<p><strong>强制类型转换</strong></p>
+
+<p>可能会丢失一些信息。如</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="mf">9.997</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">x</span><span class="o">;</span> 
+</code></pre></div></div>
+
+<p>变量 <code class="highlighter-rouge">nx = 9</code> 小数被截断掉，如果四舍五入用</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="mf">9.997</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">Math</span><span class="o">.</span><span class="na">round</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>round方法返回的结果为long类型。所以最后要<code class="highlighter-rouge">（int）</code>转换一下。</p>
+
+<p><strong>结合赋值和运算符</strong></p>
+
+<p>和c++ 一样， <code class="highlighter-rouge">+=</code> 等操作。如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">+=</span> <span class="mi">4</span><span class="o">;</span> 
+</code></pre></div></div>
+
+<p><strong>自增与自减运算符</strong></p>
+
+<p>和c++一样。 如 <code class="highlighter-rouge">x++</code> 、<code class="highlighter-rouge">x--</code> 、<code class="highlighter-rouge">++n</code>、 <code class="highlighter-rouge">--n</code> 。 <code class="highlighter-rouge">++</code>在前在后有区别， 用在表达式中时，前缀形式会先完成加1；而后缀形式会使用变量原来的值。</p>
+
+<p><strong>关系和boolean运算符</strong></p>
+
+<p>基本都沿用了C++的做法。</p>
+
+<p><code class="highlighter-rouge">&amp;&amp;</code>和<code class="highlighter-rouge">||</code>运算符是按照“短路”方式来求值的：如果第一个操作数已经能够确定表达式的值，第二个操作数就不必计算了。</p>
+
+<p>同样支持三元操作符<code class="highlighter-rouge">？:</code></p>
+
+<p>boolean 类型不要做转换。</p>
+
+<h3 id="位运算符">位运算符</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td>应用在布尔值上时，&amp;和</td>
+      <td>运算符也会得到一个布尔值。这些运算符与&amp;&amp;和</td>
+      <td> </td>
+      <td>运算符很类似，不过&amp;和</td>
+      <td>运算符不采用“短路”方式来求值，也就是说，得到计算结果之前两个操作数都需要计算。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="highlighter-rouge">&gt;&gt;</code>和<code class="highlighter-rouge">&lt;&lt;</code>运算符将位模式左移或右移</p>
+
+<p>有一个新知识：** <code class="highlighter-rouge">&gt;&gt;&gt;</code>运算符会用0填充高位，这与»不同，它会用符号位填充高位。不存在«&lt;运算符。**</p>
+
+<p><strong>括号与运算符级别</strong></p>
+
+<p>与C或C++不同，Java不使用逗号运算符。不过，可以在for语句的第1和第3部分中使用逗号分隔表达式列表。</p>
+
+<h3 id="字符串">字符串</h3>
+
+<p>标准Java类库中提供了一个预定义类，很自然地叫做String。每个用双引号括起来的字符串都是String类的一个实例。</p>
+
+<p>String类的substring方法可以从一个较大的字符串提取出一个子串。</p>
+
+<p>substring的工作方式有一个优点：容易计算子串的长度。字符串s.substring(a, b)的长度为b-a。例如，子串“Hel”的长度为3-0=3。</p>
+
+<p>使用+号连接（拼接）两个字符串。 后面可以是int型。</p>
+
+<p>把多个字符串放在一起，用一个定界符分隔，可以使用静态join方法。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">all</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">" /"</span><span class="o">,</span> <span class="s">"S"</span><span class="o">,</span> <span class="s">"M"</span><span class="o">,</span> <span class="s">"L"</span><span class="o">,</span> <span class="s">"XL"</span><span class="o">);</span> 
+<span class="c1">// all is the string  "S / M / L / XL"</span>
+</code></pre></div></div>
+
+<p>String类没有提供用于修改字符串的方法。要从原字符串中获取后，重新组成，然后再覆盖回原来的字符串。</p>
+
+<p>不可变字符串却有一个优点：编译器可以让字符串共享</p>
+
+<p>字符串存放在公共的存储池中。字符串变量指向存储池中相应的位置。如果复制一个字符串变量，原始字符串与复制的字符串共享相同的字符。</p>
+
+<p>使用equals方法检测两个字符串是否相等。如果字符串s与字符串t相等，则返回true；否则，返回false。需要注意，s与t可以是字符串变量，也可以是字符串字面。</p>
+
+<p>要想检测两个字符串是否相等，而不区分大小写，可以使用<code class="highlighter-rouge">equalsIgnoreCase</code>方法。</p>
+
+<p>一定不要使用==运算符检测两个字符串是否相等！这个运算符只能够确定两个字符串是否放置在同一个位置上。</p>
+
+<p><strong>空串与Null串</strong></p>
+
+<p>空串”“是长度为0的字符串。可以调用以下代码检查一个字符串是否为空。 空串是一个Java对象，有自己的串长度（0）和内容（空）。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">str</span><span class="o">,</span><span class="n">length</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">){</span>
+    <span class="c1">// empty string</span>
+<span class="o">}</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">""</span><span class="o">)){</span>
+    <span class="c1">// empty string</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>String变量还可以存放一个特殊的值，名为null，这表示目前没有任何对象与该变量关联。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">str</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+	<span class="c1">// string is null </span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>检查一个字符串既不是null也不为空串，这种情况下就需要使用以下条件：<strong>首先要检查str不为null</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">str</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">){</span>
+    <span class="c1">// string is not null or empty</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>码点与代码单元</strong></p>
+
+<p>Java字符串由char值序列组成。char数据类型是一个采用UTF-16编码表示Unicode码点的代码单元。大多数的常用Unicode字符使用一个代码单元就可以表示，而辅助字符需要一对代码单元表示。</p>
+
+<p><strong>构建字符串</strong></p>
+
+<p>有些时候，需要由较短的字符串构建字符串，例如，按键或来自文件中的单词。采用字符串连接的方式达到此目的效率比较低。每次连接字符串，都会构建一个新的String对象，既耗时，又浪费空间。使用<strong>StringBuilder</strong>类就可以避免这个问题的发生。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span> 
+
+<span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">ch</span><span class="o">);</span> <span class="c1">// appends a single character </span>
+<span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="c1">// appends a string </span>
+    
+<span class="n">String</span> <span class="n">completeString</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span> 
+</code></pre></div></div>
+
+<h3 id="格式化输出">格式化输出</h3>
+
+<p>使用<code class="highlighter-rouge">System.out.print(x)</code>将数值x输出到控制台上。和C语言中的方法一样的。 <code class="highlighter-rouge">printf</code>和C语言一样。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%8.2f"</span><span class="o">,</span> <span class="n">x</span><span class="o">);</span>  <span class="c1">//  same to c printf </span>
+</code></pre></div></div>
+
+<p>可以使用静态的String.format方法创建一个格式化的字符串，而不打印输出：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">message</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"Hello, %s. Next year, you'll be %d"</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">);</span> 
+</code></pre></div></div>
+
+<p><strong>文件输入与输出</strong></p>
+
+<p>对文件进行读取，就需要一个用File对象构造一个Scanner对象。如下所示：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Scanner</span> <span class="n">in</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scanner</span><span class="o">(</span><span class="n">Paths</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"myfile.txt"</span><span class="o">),</span> <span class="s">"UTF-8"</span><span class="o">);</span> 
+</code></pre></div></div>
+
+<p>要想写入文件，就需要构造一个PrintWriter对象。在构造器中，只需要提供文件名：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PrintWriter</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PrintWriter</span><span class="o">(</span><span class="s">"myfile.txt"</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span> 
+</code></pre></div></div>
+
+<h3 id="控制流程">控制流程</h3>
+
+<p>Java的控制流程结构与C和C++的控制流程结构一样，只有很少的例外情况。没有goto语句，但break语句可以带标签。 foreach循环。</p>
+
+<h4 id="块作用域">块作用域</h4>
+
+<p>块（即复合语句）是指由一对大括号括起来的若干条简单的Java语句。块确定了变量的作用域。</p>
+
+<p>不能在嵌套的两个块中声明同名的变量。例如</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="o">;</span> 
+    <span class="c1">// ...</span>
+    <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">k</span><span class="o">;</span> 
+        <span class="kt">int</span> <span class="n">n</span><span class="o">;</span> <span class="c1">// Error  can't redefine n in inner block</span>
+        <span class="c1">// ... </span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="条件语句">条件语句</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">condition</span><span class="o">){</span>
+    <span class="n">statement</span> 
+<span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+    <span class="n">statement</span> 
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="循环">循环</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while</span> <span class="o">(</span><span class="n">condition</span><span class="o">){</span>
+    <span class="n">statement</span> 
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">do</span> <span class="o">{</span>
+    <span class="n">statement</span> 
+<span class="o">}</span><span class="k">while</span><span class="o">(</span><span class="n">condition</span><span class="o">)</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span> <span class="n">i</span><span class="o">&lt;=</span><span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">i</span><span class="o">);</span> 
+<span class="o">}</span>
+</code></pre></div></div>
+<h3 id="for-each循环">for each循环</h3>
+
+<p>Java有一种功能很强的循环结构，可以用来依次处理数组中的每个元素（其他类型的元素集合亦可）而不必为指定下标值而分心.。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="o">(</span><span class="n">variable</span> <span class="o">:</span> <span class="n">collection</span><span class="o">){</span>
+    <span class="n">statement</span> 
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="多重选择switch语句">多重选择：switch语句</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">choice</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">nextInt</span><span class="o">();</span> 
+<span class="k">switch</span><span class="o">(</span><span class="n">choice</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="k">case</span> <span class="mi">1</span><span class="o">:</span> 
+        <span class="c1">// ...</span>
+        <span class="k">break</span><span class="o">;</span> 
+    <span class="k">case</span> <span class="mi">1</span><span class="o">:</span> 
+        <span class="c1">// ...</span>
+        <span class="k">break</span><span class="o">;</span>
+    <span class="k">default</span><span class="o">:</span> 
+        <span class="c1">// bad input </span>
+        <span class="k">break</span><span class="o">;</span> 
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="中断控制流程语句">中断控制流程语句</h3>
+
+<p>break , goto ，continue 等。</p>
+
+<p>与C++不同，Java还提供了一种带标签的break语句，用于跳出多重嵌套的循环语句。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">test</span><span class="o">()</span>
+<span class="o">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="o">;</span> 
+    <span class="nl">read_data:</span>
+    <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">){</span>
+        <span class="c1">// ...</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">1000</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">){</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"enter anumber &gt;=0:"</span><span class="o">);</span> 
+            <span class="n">n</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">nextInt</span><span class="o">();</span> 
+            <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">){</span> <span class="c1">// should never  happend-can't go to </span>
+                <span class="k">break</span> <span class="n">read_data</span><span class="o">;</span> <span class="c1">// break out fo read_data loop </span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="大数值">大数值</h3>
+
+<p>如果基本的整数和浮点数精度不能够满足需求，那么可以使用<code class="highlighter-rouge">java.math</code>包中的两个很有用的类：<code class="highlighter-rouge">BigInteger</code>  和 <code class="highlighter-rouge">BigDecimal</code>。</p>
+
+<p>这两个类可以处理包含任意长度数字序列的数值。<code class="highlighter-rouge">BigInteger</code>类实现了任意精度的整数运算，<code class="highlighter-rouge">BigDecimal</code>实现了任意精度的浮点数运算。</p>
+
+<p>使用静态的valueOf方法可以将普通的数值转换为大数值：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BigInteger</span> <span class="n">a</span> <span class="o">=</span> <span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span> 
+<span class="n">BigInteger</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">b</span><span class="o">);</span> <span class="c1">// c = a+b</span>
+<span class="n">BigInteger</span> <span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">multiply</span><span class="o">(</span><span class="n">b</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">2</span><span class="o">)))</span><span class="c1">// d = c * (b+2)</span>
+</code></pre></div></div>
+
+<h3 id="数组">数组</h3>
+
+<p>数组是一种数据结构，用来存储同一类型值的集合。通过一个整型下标可以访问数组中的每一个值。</p>
+
+<p>声明了整型数组a：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">a</span><span class="o">;</span>  <span class="c1">// 声明变更a  或 int a[]</span>
+<span class="kt">int</span><span class="o">[]</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">100</span><span class="o">]</span> <span class="o">;</span> 
+</code></pre></div></div>
+
+<p>有个更加简单的方式打印数组中的所有值，即利用Arrays类的toString方法。调用Arrays.toString(a)，返回一个包含数组元素的字符串，这些元素被放置在括号内，并用逗号分隔，例如，“[2,3,5,7,11,13]”。要想打印数组，可以调用:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Arrays</span><span class="o">,</span><span class="n">toString</span><span class="o">(</span><span class="n">a</span><span class="o">));</span> 
+</code></pre></div></div>
+
+<p><strong>数组初始化以及匿名数组</strong></p>
+
+<p>提供了一种创建数组对象并同时赋予初始值的简化书写形式</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">smallPrimes</span> <span class="o">=</span> <span class="o">{</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">13</span><span class="o">};</span> 
+</code></pre></div></div>
+
+<p>不需要调用 new。</p>
+
+<p>初始化一个匿名的数组：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">13</span><span class="o">};</span> 
+
+<span class="n">smallPrimes</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">13</span><span class="o">};</span> 
+</code></pre></div></div>
+
+<p><strong>数组拷贝</strong></p>
+
+<p>在Java中，允许将一个数组变量拷贝给另一个数组变量。这时，两个变量将引用同一个数组.。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="o">[]</span> <span class="n">luckyNumbers</span> <span class="o">=</span> <span class="n">smallPrimes</span><span class="o">;</span> 
+<span class="n">luckyNumbers</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="o">=</span> <span class="mi">12</span><span class="o">;</span> <span class="c1">// noew smallPrimes[5] is also 12 </span>
+</code></pre></div></div>
+
+<p>如果希望将一个数组的所有值拷贝到一个新的数组中去，就要使用Arrays类的<code class="highlighter-rouge">copyOf</code>方法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">copiedLickyNumbers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">luckyNumbers</span><span class="o">,</span> <span class="n">lickyNumbers</span><span class="o">.</span><span class="na">length</span><span class="o">);</span> 
+</code></pre></div></div>
+
+<p>第2个参数是新数组的长度。这个方法通常用来增加数组的大小：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">copiedLickyNumbers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">luckyNumbers</span><span class="o">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">lickyNumbers</span><span class="o">.</span><span class="na">length</span><span class="o">);</span> 
+</code></pre></div></div>
+
+<p>Java数组与C++数组在堆栈上有很大不同，但基本上与<strong>分配在堆（heap）</strong>上的数组指针一样。</p>
+
+<h3 id="命令行参数">命令行参数</h3>
+
+<p>每一个Java应用程序都有一个带Stringarg[]参数的main方法。这个参数表明main方法将接收一个字符串数组，也就是命令行参数。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> 
+<span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> 
+    <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">arg</span> <span class="o">:</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="s">"-version"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">arg</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"v10000.0"</span><span class="o">);</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>java 技术栈学习脉络</title>
+      <link href="http://localhost:4000/java-learn-map/"/>
+      <pubDate>2021-07-16T00:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/java-learn-map</guid>
+      <content:encoded><![CDATA[<p>继续整理更新中~</p>
+
+<h3 id="一-java基础">一、 java基础</h3>
+
+<ol>
+  <li>Linux常用命令</li>
+  <li>Shell 脚本编程</li>
+  <li>数据结构</li>
+  <li>算法</li>
+  <li>集合</li>
+  <li>IO/NIO</li>
+  <li>并发编程
+    <ul>
+      <li>并发基石线程基础</li>
+      <li>synchronized</li>
+      <li>JUC</li>
+    </ul>
+  </li>
+  <li>JVM</li>
+  <li>JDBC 连接池</li>
+  <li>编码规范</li>
+</ol>
+
+<h3 id="二jave-web-略过">二、jave web 略过</h3>
+
+<p>JSP、Servlet 、Html、CSS、JavaScript、JQuery、Tomcat</p>
+
+<h3 id="三-重构设计">三 重构设计</h3>
+
+<p>设计原则</p>
+
+<ol>
+  <li>开闭原则总则</li>
+  <li>依赖倒置原则</li>
+  <li>接口隔离原则</li>
+  <li>单一职责原则</li>
+  <li>里氏替换原则</li>
+  <li>最少知道原则</li>
+  <li>合成复用原则</li>
+</ol>
+
+<p>常用设计模式</p>
+
+<ul>
+  <li>创建型模式
+    <ul>
+      <li>单例模式</li>
+      <li>工厂模式</li>
+    </ul>
+  </li>
+  <li>结构型模式
+    <ul>
+      <li>代理模式</li>
+      <li>装饰模式</li>
+      <li>适配器模式</li>
+    </ul>
+  </li>
+  <li>行为型模式
+    <ul>
+      <li>策略模式</li>
+      <li>命令模式</li>
+      <li>责任链模式</li>
+      <li>观察者模式</li>
+      <li>模板方法模式</li>
+    </ul>
+  </li>
+</ul>
+
+<p>重构-改善既有代码的设计</p>
+
+<h3 id="三开源框架-重点">三、开源框架 （重点）</h3>
+
+<ol>
+  <li>NET 框架 
+​    - Netty 
+​    - HttpClient 
+​    - Mina</li>
+  <li>MVC框架
+    <ul>
+      <li>Sping</li>
+      <li>Structs</li>
+    </ul>
+  </li>
+  <li>ORM 框架
+    <ul>
+      <li>MyBatis</li>
+      <li>Hibernate</li>
+    </ul>
+  </li>
+  <li>RPC 框架
+    <ul>
+      <li>Dubbo</li>
+      <li>springCloud</li>
+      <li>Thrift</li>
+    </ul>
+  </li>
+  <li>模板引擎
+    <ul>
+      <li>Velocity</li>
+      <li>Freemarker</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="四数据存储">四、数据存储</h3>
+
+<ol>
+  <li>SQL数据库
+    <ul>
+      <li>MySQL</li>
+      <li>Oracle</li>
+      <li>DB2</li>
+      <li>分库分表 
+ShardingSphere 
+MyCat 
+TDDL</li>
+    </ul>
+  </li>
+  <li>NoSQL
+    <ul>
+      <li>Redis</li>
+      <li>Hbase</li>
+      <li>MongoDB</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="五测试技能">五、测试技能</h3>
+
+<ol>
+  <li>单元测试MockSpringTest</li>
+  <li>压力测试 JMeter</li>
+</ol>
+
+<h3 id="六中间件">六、中间件</h3>
+
+<ol>
+  <li>Redis</li>
+  <li>RocketMQ</li>
+  <li>Zookerper</li>
+  <li>elasticStack</li>
+  <li>etcd</li>
+  <li>kafka</li>
+  <li>memcashed</li>
+</ol>
+
+<h3 id="七性能优化">七、性能优化</h3>
+
+<ol>
+  <li>web 前端性能优化 （略过）</li>
+  <li>应用服务性能优化
+    <ul>
+      <li>集群</li>
+      <li>缓存</li>
+      <li>异步</li>
+      <li>代码
+        <ul>
+          <li>并发</li>
+          <li>编程</li>
+          <li>资源得胜</li>
+          <li>数据结构</li>
+        </ul>
+      </li>
+      <li>JVM</li>
+    </ul>
+  </li>
+  <li>数据存取性能优化
+    <ul>
+      <li>SQL优化</li>
+      <li>索引优化</li>
+      <li>数据库架构 + 分库分表</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="八架构技能">八、架构技能</h3>
+
+<ol>
+  <li>分布式架构
+    <ul>
+      <li>keepalive + nginx/lvs</li>
+      <li>Zooperper</li>
+      <li>RPC
+        <ul>
+          <li>Dubbo</li>
+          <li>SpringCloud</li>
+        </ul>
+      </li>
+      <li>服务治理
+        <ul>
+          <li>服务熔断</li>
+          <li>服务降级</li>
+          <li>服务限流</li>
+          <li>服务隔离</li>
+        </ul>
+      </li>
+      <li>MQ
+        <ul>
+          <li>RockerMQ</li>
+          <li>kafka</li>
+        </ul>
+      </li>
+      <li>缓存
+        <ul>
+          <li>redis</li>
+          <li>memchached</li>
+        </ul>
+      </li>
+      <li>分布数据一致性</li>
+      <li>微服务架构</li>
+      <li>Docker</li>
+      <li>数据库架构
+        <ul>
+          <li>主备架构</li>
+          <li>主从架构</li>
+          <li>双主架构 （什么场景会有这个？）</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="九大数据">九、大数据</h3>
+
+<ol>
+  <li>数据收集
+    <ul>
+      <li>网络爬虫</li>
+      <li>Flume/Logstash</li>
+    </ul>
+  </li>
+  <li>数据存储
+    <ul>
+      <li>HDFSHive (这个算是存储吗？)</li>
+      <li>Hbase</li>
+      <li>MongoDB</li>
+    </ul>
+  </li>
+  <li>数据检索
+    <ul>
+      <li>Elasticsearch</li>
+    </ul>
+  </li>
+  <li>数据处理
+    <ul>
+      <li>Hive</li>
+      <li>Storm</li>
+      <li>ParkFlink</li>
+    </ul>
+  </li>
+  <li>数据挖掘
+    <ul>
+      <li>机器学习</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="十解决方案">十、解决方案</h3>
+
+<ol>
+  <li>技术实践方案</li>
+  <li>业务实现方案</li>
+</ol>
+
+<h3 id="十一其他技能">十一、其他技能</h3>
+
+<ol>
+  <li>开发工具
+    <ul>
+      <li>Intellij</li>
+      <li>IDEA</li>
+      <li>Eclipse</li>
+    </ul>
+  </li>
+  <li>项目构建
+    <ul>
+      <li>MavenGradle</li>
+    </ul>
+  </li>
+  <li>版本控制
+    <ul>
+      <li>Git</li>
+      <li>SVN</li>
+    </ul>
+  </li>
+</ol>
+]]></content:encoded>
+    </item>
     
     <item>
       <title>腾讯云容器团队内部Istio 笔记</title>
@@ -105,19 +867,38 @@ Motan: 是一套基于java开发的RPC框架, Weibo Mesh 是基于Motan</li>
 <ul>
   <li><a href="https://zhuanlan.zhihu.com/p/61901608">什么是Service Mesh</a></li>
   <li><a href="https://philcalcado.com/2017/08/03/pattern_service_mesh.html">Pattern: Service Mesh</a></li>
+  <li><a href="https://philcalcado.com/">Phil Calçado: https://philcalcado.com/</a></li>
   <li><a href="https://www.servicemesher.com/istio-handbook/">Istio Handbook——Istio 服务网格进阶实战</a></li>
   <li><a href="https://istio.io/">istio官网 https://istio.io/</a></li>
   <li><a href="https://www.servicemesher.com/envoy/">Envoy 官方文档中文版</a></li>
+  <li><a href="https://istio.io/latest/zh/docs/ops/deployment/architecture/">Istio</a></li>
   <li><a href="https://github.com/sofastack/sofa-mesh">蚁金服开源SOFAMesh</a></li>
   <li><a href="https://www.servicemesher.com/blog/istio-the-king-of-service-mesh/">腾讯云容器团队内部Istio专题分享</a></li>
   <li><a href="https://zhuanlan.zhihu.com/p/38994623">企业级应用弹性伸缩的最佳方式：Service Mesh</a></li>
   <li><a href="https://zjj2wry.github.io/network/iptables/">理解 kube-proxy 中 iptables 规则</a></li>
   <li><a href="https://www.qikqiak.com/post/how-to-use-ipvs-in-kubernetes/">ipvs vs. iptables</a></li>
   <li><a href="https://jimmysong.io/kubernetes-handbook/">Kubernetes Handbook——Kubernetes 中文指南/云原生应用架构实践手册</a></li>
-  <li><a href="https://skyao.io/">敖小剑的博客</a></li>
-  <li><a href="https://www.infoq.cn/article/azCFGyTDGakZqaLEEDMN">蚂蚁金服 API Gateway Mesh 思考与实践</a></li>
-  <li><a href="https://www.servicemesher.com/blog/do-i-need-an-api-gateway-if-i-have-a-service-mesh/">使用了 Service Mesh 后我还需要 API 网关吗</a></li>
+  <li> <a href="https://skyao.io/">敖小剑的博客</a></li>
+  <li> <a href="https://www.infoq.cn/article/azCFGyTDGakZqaLEEDMN">蚂蚁金服 API Gateway Mesh 思考与实践</a></li>
+  <li> <a href="https://www.servicemesher.com/blog/do-i-need-an-api-gateway-if-i-have-a-service-mesh/">使用了 Service Mesh 后我还需要 API 网关吗</a></li>
+  <li><a href="http://blog.itpub.net/69904796/viewspace-2648816/">蚂蚁金服 Service Mesh 落地实践与挑战，附全套PPT下载</a></li>
+  <li><a href="http://xiaorui.cc/archives/6051">技术分享之service mesh (k8s&amp;istio)的那些事儿</a></li>
 </ul>
+
+<p>书箱：</p>
+
+<p>《Service Mesh实战：用Istio软负载实现服务网格 》</p>
+
+<p>作者：周遥 http://seflerzhou.net</p>
+
+<p>微信读书：https://weread.qq.com/web/bookReview/list?bookId=f57324607188b37df57c39e</p>
+
+<p>《书名：Service Mesh微服务架构设计》</p>
+
+<p>作者：刘俊海</p>
+
+<p>微信读书： https://weread.qq.com/web/reader/42932ba07195510b429d842kc81322c012c81e728d9d180</p>
+
 ]]></content:encoded>
     </item>
     
@@ -146,7 +927,7 @@ Motan: 是一套基于java开发的RPC框架, Weibo Mesh 是基于Motan</li>
 
 <p>一般指的是请求的缓存在本地的方式，可以位于客户端（操作系统，浏览器），服务器（当作客户端看待）另一个角度上看可以是进程内。</p>
 
-<p>### CDN缓存</p>
+<h3 id="cdn缓存">CDN缓存</h3>
 
 <p>可以当做一种缓存，主要缓存静态文件。</p>
 
@@ -1089,104 +1870,6 @@ metrics 监控
 
 <p>扩展阅读：https://www.jianshu.com/p/228c119a7d0e</p>
 
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>《极客时间》go语言核心36讲 程序性能分析基本</title>
-      <link href="http://localhost:4000/timegeekbang-go-pprof/"/>
-      <pubDate>2019-03-25T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/timegeekbang-go-pprof</guid>
-      <content:encoded><![CDATA[<p>Go 语言为程序开发者们提供了丰富的性能分析 API和标准工具。这些主要存在于：</p>
-
-<blockquote>
-  <p>1 runtime/pprof</p>
-
-  <p>2 net/http/pprof</p>
-
-  <p>3 runtime/trace</p>
-</blockquote>
-
-<p>在 Go 语言中，用于分析程序性能的概要文件有三种，分别是CPU 概要文件（CPU Profile）、内存概要文件（Mem Profile）和阻塞概要文件（Block Profile）。</p>
-
-<p>对于 CPU 概要文件来说，其中的每一段独立的概要信息都记录着，在进行某一次采样的那个时刻，CPU 上正在执行的Go 代码。</p>
-
-<p>而对于内存概要文件，其中的每一段概要信息都记载着，在某个采样时刻，正在执行的 Go 代码以及堆内存的使用情况，这里包含已分配和已释放的字节数量和对象数量。至于阻塞概要文件，其中的每一段概要信息，都代表着 Go 程序中的一个 goroutine 阻塞事件。</p>
-
-<p>这时就可以显现出go tool pprof这个工具的作用了。我们可以通过它进入一个基于命令行的交互式界面，并对指定的概要文件进行查阅。概要文件是protoclo buffer 方式存储的。</p>
-
-<p><strong>怎样设定内存概要信息的采样频率？</strong></p>
-
-<p>只要为<code class="highlighter-rouge">runtime.MemProfileRate</code>变量赋值即可。</p>
-
-<p>这个变量的含义是，平均每分配多少个字节，就对堆内存的使用情况进行一次采样。如果把该变量的值设为0，那么，Go 语言运行时系统就会完全停止对内存概要信息的采样。该变量的缺省值是512 KB，也就是512千字节。</p>
-
-<p>越早设置越好，在main 开始时就设置。之后，需要调用<code class="highlighter-rouge">runtime/pprof</code>包中的<code class="highlighter-rouge">WriteHeapProfile</code>函数。该函数会把收集好的内存概要信息，写到我们指定的写入器中。</p>
-
-<p>注意，我们通过<code class="highlighter-rouge">WriteHeapProfile</code>函数得到的内存概要信息并不是实时的，它是一个快照，是在最近一次的内存垃圾收集工作完成时产生的。如果你想要实时的信息，那么可以调用<code class="highlighter-rouge">runtime.ReadMemStats</code>函数。不过要特别注意，该函数会引起 Go 语言调度器的短暂停顿。</p>
-
-<p><strong>怎样获取到阻塞概要信息？</strong></p>
-
-<p>我们调用runtime包中的<code class="highlighter-rouge">SetBlockProfileRate</code>函数，即可对阻塞概要信息的采样频率进行设定。该函数有一个名叫rate的参数，它是int类型的。</p>
-
-<p>这个参数的含义是，只要发现一个阻塞事件的持续时间达到了多少个纳秒，就可以对其进行采样。如果这个参数的值小于或等于0，那么就意味着 Go 语言运行时系统将会完全停止对阻塞概要信息的采样。</p>
-
-<p>还有一个名叫<code class="highlighter-rouge">blockprofilerate</code>的包级私有变量，它是uint64类型的。这个变量的含义是，只要发现一个阻塞事事件的持续时间跨越了多少个 CPU 时钟周期，就可以对其进行采样。</p>
-
-<p>另一方面，当我们需要获取阻塞概要信息的时候，需要先调用runtime/pprof包中的Lookup函数并传入参数值”block”，从而得到一个*runtime/pprof.Profile类型的值（以下简称Profile值）。在这之后，我们还需要调用这个Profile值的WriteTo方法，以驱使它把概要信息写进我们指定的写入器中。</p>
-
-<p><strong>runtime/pprof.Lookup函数的调用方式是什么？</strong></p>
-
-<p><code class="highlighter-rouge">runtime/pprof.Lookup</code>函数（以下简称Lookup函数）的功能是，提供与给定的名称相对应的概要信息。这个概要信息会由一个Profile值代表。如果该函数返回了一个nil，那么就说明不存在与给定名称对应的概要信息。</p>
-
-<p><code class="highlighter-rouge">runtime/pprof</code>包已经为我们预先定义了 6 个概要名称。它们对应的概要信息收集方法和输出方法也都已经准备好了。我们直接拿来使用就可以了。</p>
-
-<p>它们是：<code class="highlighter-rouge">goroutine、heap、allocs、threadcreate、block和mutex</code>。</p>
-
-<p><strong>问题 4：如何为基于 HTTP 协议的网络服务添加性能分析接口？</strong></p>
-
-<p>这个问题说起来还是很简单的。这是因为我们在一般情况下只要在程序中导入net/http/pprof代码包就可以了，就像这样：</p>
-
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span><span class="x"> </span><span class="n">_</span><span class="x"> </span><span class="s">"net/http/pprof"</span><span class="x">
-</span></code></pre></div></div>
-<p>然后，启动网络服务并开始监听，比如：</p>
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">log</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">ListenAndServe</span><span class="p">(</span><span class="s">"localhost:8082"</span><span class="p">,</span><span class="x"> </span><span class="no">nil</span><span class="p">))</span><span class="x">
-</span></code></pre></div></div>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>《极客时间》go语言核心36讲 sync.WaitGroup和sync.Once</title>
-      <link href="http://localhost:4000/timegeekbang-go-synWaitGroup/"/>
-      <pubDate>2019-03-25T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/timegeekbang-go-synWaitGroup</guid>
-      <content:encoded><![CDATA[<p>sync.WaitGroup类型（以下简称WaitGroup类型）是开箱即用的，也是并发安全的。同时，它一旦被真正使用就不能被复制了。</p>
-
-<p>WaitGroup类型拥有三个指针方法：Add、Done和Wait。你可以想象该类型中有一个计数器，它的默认值是0。我们可以通过调用该类型值的Add方法来增加，或者减少这个计数器的值。</p>
-
-<p>一般情况下，我会用这个方法来记录需要等待的 goroutine 的数量。相对应的，这个类型的Done方法，用于对其所属值中计数器的值进行减一操作。我们可以在需要等待的 goroutine 中，通过defer语句调用它。</p>
-
-<p>而此类型的Wait方法的功能是，阻塞当前的 goroutine，直到其所属值中的计数器归零。如果在该方法被调用的时候，那个计数器的值就是0，那么它将不会做任何事情。</p>
-
-<p>sync.WaitGroup类型值中计数器的值可以小于0吗？</p>
-
-<p>这里的典型回答是：不可以。</p>
-
-<p>另外，你可能已经知道，WaitGroup值是可以被复用的，但需要保证其计数周期的完整性。这里的计数周期指的是这样一个过程：该值中的计数器值由0变为了某个正整数，而后又经过一系列的变化，最终由某个正整数又变回了0。</p>
-
-<p>也就是说，只要计数器的值始于0又归为0，就可以被视为一个计数周期。在一个此类值的生命周期中，它可以经历任意多个计数周期。但是，只有在它走完当前的计数周期之后，才能够开始下一个计数周期。</p>
-
-<p><img src="/assets/timegeekbang/go-sync.png" alt="" /></p>
-
-<p>不要把增加其计数器值的操作和调用其Wait方法的代码，放在不同的 goroutine 中执行。换句话说，要杜绝对同一个WaitGroup值的两种操作的并发执行。</p>
-
-<p>问题：sync.Once类型值的Do方法是怎么保证只执行参数函数一次的？
-与sync.WaitGroup类型一样，sync.Once类型（以下简称Once类型）也属于结构体类型，同样也是开箱即用和并发安全的。由于这个类型中包含了一个sync.Mutex类型的字段，所以，复制该类型的值也会导致功能的失效。</p>
-
-<p>扩展：https://www.cnblogs.com/linyihai/p/10285437.html</p>
 ]]></content:encoded>
     </item>
     
