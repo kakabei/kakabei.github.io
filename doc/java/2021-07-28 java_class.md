@@ -37,7 +37,7 @@ String s = new Date().toString();
 
 定义了一个对象变量deadline，它可以引用Date类型的对象。但是，一定要认识到：变量deadline不是一个对象，实际上也没有引用对象。此时，不能将任何Date方法应用于这个变量上。这一点和C++ 有区别，c++定义了对象变量，即是一个可以用的对象，只是它在栈中，不在堆中。
 
-![](assets/java-object_2021-08-05_20-36-31.png)
+![](../..	/assets/java/2021-08-10-java-learn-2024333.png)
 
 **一个对象变量并没有实际包含一个对象，而仅仅引用一个对象。**
 
@@ -158,6 +158,79 @@ public void giveGoldStar()
 - Java 虚拟机在加载类时会执行静态代码块，如果类中包含多个静态代码块，则 Java 虚拟机将按它们在类中出现的顺序依次执行它们，每个静态代码块只会被执行一次。
 - 静态代码块与静态方法一样，不能直接访问类的实例变量和实例方法，而需要通过类的实例对象来访问。
 
-### 工厂方法
+### main方法
 
-静态方法还有另外一种常见的用途。类似LocalDate和NumberFormat的类使用静态工厂方法（factory method）来构造对象。
+每一个类可以有一个main方法。这是一个常用于对类进行单元测试的技巧。例如，可以在Employee类中添加一个main方法：
+
+```java
+class Employee
+{
+   private static int nextId = 1;
+
+   private String name;
+   private double salary;
+   private int id;
+
+   public Employee(String n, double s)
+   {
+      name 	 = n;
+      salary = s;
+      id     = 0;
+   }
+
+   public String getName()
+   {
+      return name;
+   }
+
+   public double getSalary()
+   {
+      return salary;
+   }
+
+   public int getId()
+   {
+      return id;
+   }
+
+   public void setId()
+   {
+      id = nextId; // set id to next available id
+      nextId++;
+   }
+
+   public static int getNextId()
+   {
+      return nextId; // returns static field
+   }
+
+   public static void main(String[] args) // unit test
+   {
+      Employee e = new Employee("Harry", 50000);
+      System.out.println(e.getName() + " " + e.getSalary());
+   }
+}
+```
+
+### 方法参数
+
+Java程序设计语言总是采用按值调用。也就是说，方法得到的是所有参数值的一个拷贝，特别是，方法不能修改传递给它的任何参数变量的内容。
+
+法参数共有两种类型：
+
+- 基本数据类型（数字、布尔值） 
+
+- 对象引用
+
+个方法不可能修改一个基本数据类型的参数。而对象引用作为参数就不同了。 
+
+```java
+public static void triplieSalary(Employee x) // work
+{
+    x.raiseSalary(200); 
+}
+```
+
+实现一个改变对象参数状态的方法并不是一件难事。理由很简单，方法得到的是对象引用的拷贝，对象引用及其他的拷贝同时引用同一个对象。
+
+![](../../assets/java/2021-08-10-java-learn-2024342.png)
