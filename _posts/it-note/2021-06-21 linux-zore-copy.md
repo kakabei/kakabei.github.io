@@ -46,7 +46,7 @@ Linux对于磁盘与主存之间的数据传输有三种机制， 分别是轮�
 
 
 
-![](assets\2021-06-21-linux-zero-copy-001.png)
+![](..\..\assets\linux\2021-06-21-linux-zero-copy-001.png)
 
 
 
@@ -66,7 +66,7 @@ DMA 全称**直接内存访问**（**D**irect **M**emory **A**ccess）
 
 DMA技术的运用，改变了传统数据的传输流程。这个流程中比上面的多了一个DMA 角色，处在CPU和磁盘的中间。如下图:
 
-![](assets\2021-06-21-linux-zero-copy-002.png)
+![](..\..\assets\linux\2021-06-21-linux-zero-copy-002.png)
 
 具体过程：
 
@@ -99,7 +99,7 @@ write(socket_fd, tmp_buf, len);
 
 程序调用时只是两个很简单的函数调用，便背后也有复杂的数据传输流程。如下图：
 
-![](assets\2021-06-21-linux-zero-copy-003.png)
+![](..\..\assets\linux\2021-06-21-linux-zero-copy-003.png)
 
 具体过程：
 
@@ -128,7 +128,7 @@ write(socket_fd, tmp_buf, len);
 
 应用程序可以直接访问硬件存储，操作系统内核只是辅助数据传输。这种方式依旧存在用户空间和内核空间的上下文切换，硬件上的数据直接拷贝至了用户空间，不经过内核空间。因此，直接 I/O 不存在内核空间缓冲区和用户空间缓冲区之间的数据拷贝。
 
-![](assets/2021-06-21-linux-zero-copy-004.png)
+![](..\..\assets\linux\2021-06-21-linux-zero-copy-004.png)
 
 应用程序通常在进程地址空间有自己的数据缓存机制，称为自缓存应用程序，如**数据库管理系统**就是一个代表。
 
@@ -145,7 +145,7 @@ write(socket_fd, tmp_buf, len);
 
 通过数据共享，减少了CPU的拷贝次数。数据传输的流程变化成如下图：
 
-![](assets\2021-06-21-linux-zero-copy-005.png)
+![](..\..\assets\linux\2021-06-21-linux-zero-copy-005.png)
 
 具体过程：
 
@@ -174,7 +174,7 @@ sendfile(socket_fd, file_fd, len);
 
 这个系统调用目的就是简化网络间的数据传输过程。通过`sendfile()`  ,数据可以内核空间直接被拷贝传输，不用经过用户空间。对于用户态不可见，所以减少了上下文的切换。
 
-![](assets\2021-06-21-linux-zero-copy-006.png)
+![](..\..\assets\linux\2021-06-21-linux-zero-copy-006.png)
 
 具体过程：
 
@@ -194,7 +194,7 @@ sendfile(socket_fd, file_fd, len);
 
 Linux 2.4 版本的内核对 `sendfile()` 系统调用进行修改，为 DMA 拷贝引入了 gather 操作。它将内核空间的读缓冲区中对应的数据描述信息（内存地址、地址偏移量）记录到相应的socket缓冲区。由 DMA 根据内存地址、地址偏移量将数据批量地从读缓冲区（read buffer）拷贝到网卡设备中，这样就省去了内核空间中仅剩的 1 次 CPU 拷贝操作。如图：
 
-![](assets\2021-06-21-linux-zero-copy-007.png)
+![](..\..\assets\linux\2021-06-21-linux-zero-copy-007.png)
 
 具体过程：
 
@@ -250,7 +250,7 @@ splice 系统调用可以在内核空间的读缓冲区（read buffer）和网�
 
 通过映射页面来工作，实际上并不复制任何数据。[3]
 
-![](assets\2021-06-21-linux-zero-copy-008.png)
+![](..\..\assets\linux\2021-06-21-linux-zero-copy-008.png)
 
 具体过程：
 
