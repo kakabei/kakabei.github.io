@@ -1,3 +1,12 @@
+---
+layout: post
+title: java 类相关知识
+date: 2021-07-15 16:12:15
+categories: 学习笔记
+tags: java
+excerpt: java 类和对应相关的知识点
+---
+
 ## 对象
 
 对象的三个主要特性：
@@ -312,8 +321,44 @@ class Employee // simplified Employee class
 {
    private String name;
    private double salary;
-
+    
    public Employee(String n, double s)
+   {
+      name = n;
+      salary = s;
+   }
+
+ 	public Employee()
+    {
+        name = ""; 
+        salary = 0; 
+	}
+}
+
+```
+
+### 初始化块
+
+初始化数据域的方法有三种：
+
+- 在构造器中设置值
+- 在声明中赋值，即显式域初始化
+- 初始化块
+
+```java
+lass Employee // simplified Employee class
+{
+   private String name = ""; // 显式域初始化
+   private double salary;
+
+   
+   //   初始化块
+   {
+        in = nextId; 
+        nextID++; 
+   }
+    
+   public Employee(String n, double s) // 构造器 即构造函数
    {
       name = n;
       salary = s;
@@ -337,4 +382,6 @@ class Employee // simplified Employee class
 }
 
 ```
+
+无论使用哪个构造器构造对象，id域都在对象初始化块中被初始化。首先运行初始化块，然后才运行构造器的主体部分。
 
