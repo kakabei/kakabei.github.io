@@ -385,3 +385,103 @@ lass Employee // simplified Employee class
 
 无论使用哪个构造器构造对象，id域都在对象初始化块中被初始化。首先运行初始化块，然后才运行构造器的主体部分。
 
+## 类
+
+### 定义子类
+
+关键字extends表示继承。在Java中，所有的继承都是公有继承。
+
+
+
+关键字extends表明正在构造的新类派生于一个已存在的类。已存在的类称为超类（superclass）、基类（base class）或父类（parent class）；新类称为子类（subclass）、派生类（derived class）或孩子类（child class）
+
+
+
+### 覆盖方法
+
+然而，超类中的有些方法对子类Manager并不一定适用。具体来说，Manager类中的getSalary方法应该返回薪水和奖金的总和。为此，需要提供一个新的方法来覆盖（override）超类中的这个方法。
+
+
+
+要访问超类的方法时，要用`super` 如：
+
+```java
+public double  getSalary()
+{
+    double baseSalary = super.getSalary(); 
+    return baseSalary + bonus; 
+}
+```
+
+
+
+### 子类构造器
+
+```java 
+public Manager（String name, double salary, int year, int month,int day)
+{
+    super(name, salary, year, month, day); 
+    bonus = 0; 
+}
+```
+
+这里的super是调用超类的构造器。
+
+子类不能直接访问超类的私域变量和方法，必须使用super的方式。
+
+如果子类的构造器没有显式地的调用 超类的构造器，则将自动地调用超类默认（没有参数）的构造器。 如果超类没有不带参数的构造器，并且在子类的构造器中又没有显式地调用超类的其他构造器，则Java编译器将报告错误。
+
+一个对象变量可以指示多种实际类型的现象被称为**多态**（polymorphism）。
+
+在运行时能够自动地选择调用哪个方法的现象称为**动态绑定**（dynamic binding）。
+
+如果是private方法、static方法、final方法（有关final修饰符的含义将在下一节讲述）或者构造器，那么编译器将可以准确地知道应该调用哪个方法，我们将这种调用方式称为**静态绑定**（static binding）
+
+```java
+public class Manager extends Employee
+{
+   private double bonus;
+
+   /**
+    * @param name the employee's name
+    * @param salary the salary
+    * @param year the hire year
+    * @param month the hire month
+    * @param day the hire day
+    */
+   public Manager(String name, double salary, int year, int month, int day)
+   {
+      super(name, salary, year, month, day);
+      bonus = 0;
+   }
+
+   public double getSalary()
+   {
+      double baseSalary = super.getSalary();
+      return baseSalary + bonus;
+   }
+
+   public void setBonus(double b)
+   {
+      bonus = b;
+   }
+}
+```
+
+
+
+Java不支持多继承
+
+### 多态
+
+### 理解方法调用
+
+1. 编译器查看对象的声明类型和方法名。 一个类可以存在多个相同方法名，但它们参数类不一样。编译器将会列举类中相同的方法和其超类中访问属性为public且相同的方法（超类的私有方法不可访问）。 
+2. 编译器将查看调用方法时提供的参数类型。如果在所有名为f的方法中存在一个与提供的参数类型完全匹配，就选择这个方法。这个过程被称为**重载解析**（overloading resolution）。
+3. 如果是private方法、static方法、final方法（有关final修饰符的含义将在下一节讲述）或者构造器，那么编译器将可以准确地知道应该调用哪个方法，我们将这种调用方式称为**静态绑定**（static binding）。
+4. 当程序运行，并且采用动态绑定调用方法时，虚拟机一定调用与x所引用对象的实际类型最合适的那个类的方法。
+
+### 阻止继承：final类和方法
+
+
+
