@@ -57,10 +57,10 @@
 <p>（1）创建命名管道
  用如下两个函数中的其中一个，可以创建命名管道。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
-#include &lt;sys/stat.h&gt;
-</span><span class="kt">int</span> <span class="n">mkfifo</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
-<span class="kt">int</span> <span class="n">mknod</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span> <span class="o">|</span> <span class="n">S_IFIFO</span><span class="p">,</span> <span class="p">(</span><span class="n">dev_t</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">mkfifo</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">mknod</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span> <span class="o">|</span> <span class="n">S_IFIFO</span><span class="p">,</span> <span class="p">(</span><span class="n">dev_t</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>filname是指文件名，而mode是指定文件的读写权限。mknod是比较老的函数，而使用mkfifo函数更加简单和规范，所以建议用mkfifo。</p>
@@ -87,14 +87,14 @@ c、第二个参数中的选项O_NONBLOCK，选项O_NONBLOCK表示非阻塞，�
 管道的写入端从一个文件读出数据，然后写入写管道。管道的读取端从管道读出后写到文件中。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//写入端代码：fifowrite.c</span>
-<span class="cp">#include &lt;unistd.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;fcntl.h&gt;
-#include &lt;limits.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;sys/stat.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+<span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;limits.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
 </span> 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
@@ -155,14 +155,14 @@ c、第二个参数中的选项O_NONBLOCK，选项O_NONBLOCK表示非阻塞，�
 
 
 <span class="c1">//管道读取端 fiforead.c</span>
-<span class="cp">#include &lt;unistd.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;fcntl.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;sys/stat.h&gt;
-#include &lt;limits.h&gt;
-#include &lt;string.h&gt;
+<span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;limits.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
 </span> 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
@@ -281,7 +281,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2014-10-11-linux-process-fifo.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

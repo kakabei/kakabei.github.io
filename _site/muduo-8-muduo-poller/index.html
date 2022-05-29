@@ -68,7 +68,7 @@
 
 <p>Polller 核心是：</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">struct</span> <span class="n">pollfd</span><span class="o">&gt;</span> <span class="n">PollFdList</span><span class="p">;</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">struct</span> <span class="nc">pollfd</span><span class="o">&gt;</span> <span class="n">PollFdList</span><span class="p">;</span>
 <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Channel</span><span class="o">*&gt;</span> <span class="n">ChannelMap</span><span class="p">;</span>  <span class="c1">// fd to Channel</span>
 <span class="n">PollFdList</span> <span class="n">pollfds_</span><span class="p">;</span>   <span class="c1">//  不在基类中 而是在PollPoller 中 而EPollPoller 中 EventList 都存在各的类的中，</span>
 <span class="n">ChannelMap</span> <span class="n">channels_</span><span class="p">;</span>
@@ -77,7 +77,7 @@
 
 <p>ChannelMap 是对Channel的映射。用fd对应着一个Channel。从这里也说明了一个Channel对应关一个fd。</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">struct</span> <span class="n">epoll_event</span><span class="o">&gt;</span> <span class="n">EventList</span><span class="p">;</span> <span class="c1">//事件列表</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">struct</span> <span class="nc">epoll_event</span><span class="o">&gt;</span> <span class="n">EventList</span><span class="p">;</span> <span class="c1">//事件列表</span>
 
 <span class="kt">int</span> <span class="n">epollfd_</span><span class="p">;</span>
 <span class="n">EventList</span> <span class="n">events_</span><span class="p">;</span>
@@ -87,13 +87,13 @@
 
 <p>Polller 主要的方法：(有个三个是虚函数)</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">virtual</span> <span class="n">Timestamp</span> <span class="n">poll</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMs</span><span class="p">,</span> <span class="n">ChannelList</span><span class="o">*</span> <span class="n">activeChannels</span><span class="p">);</span>
-<span class="k">virtual</span> <span class="kt">void</span> <span class="n">updateChannel</span><span class="p">(</span><span class="n">Channel</span><span class="o">*</span> <span class="n">channel</span><span class="p">);</span>
-<span class="k">virtual</span> <span class="kt">void</span> <span class="n">removeChannel</span><span class="p">(</span><span class="n">Channel</span><span class="o">*</span> <span class="n">channel</span><span class="p">);</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">virtual</span> <span class="n">Timestamp</span> <span class="nf">poll</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMs</span><span class="p">,</span> <span class="n">ChannelList</span><span class="o">*</span> <span class="n">activeChannels</span><span class="p">);</span>
+<span class="k">virtual</span> <span class="kt">void</span> <span class="nf">updateChannel</span><span class="p">(</span><span class="n">Channel</span><span class="o">*</span> <span class="n">channel</span><span class="p">);</span>
+<span class="k">virtual</span> <span class="kt">void</span> <span class="nf">removeChannel</span><span class="p">(</span><span class="n">Channel</span><span class="o">*</span> <span class="n">channel</span><span class="p">);</span>
 
 <span class="kt">void</span> <span class="n">fillActiveChannels</span><span class="p">(</span><span class="kt">int</span> <span class="n">numEvents</span><span class="p">,</span>
                           <span class="n">ChannelList</span><span class="o">*</span> <span class="n">activeChannels</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
-<span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">operation</span><span class="p">,</span> <span class="n">Channel</span><span class="o">*</span> <span class="n">channel</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">operation</span><span class="p">,</span> <span class="n">Channel</span><span class="o">*</span> <span class="n">channel</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>updateChannel和removeChannel都是对上面两个数据结构的操作，poll函数是对::poll的封装。私有的fillActiveChannels函数负责把返回的活动时间添加到activeChannels（vector&lt;Channel*&gt;）这个结构中，返回给用户。Poller的职责也很简单，负责IO multiplexing，一个EventLoop有一个Poller，Poller的生命周期和EventLoop一样长。</p>
@@ -247,7 +247,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2018-01-05-muduo-8-muduo-poller.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

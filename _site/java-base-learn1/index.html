@@ -67,8 +67,8 @@
 <h3 id="java-官方的一些源码和文档">Java 官方的一些源码和文档</h3>
 
 <ul>
-  <li><code class="highlighter-rouge">javasrc</code> 在JDK的路径上，有一个src.zip，解开后，含了所有公共类库的源代码。</li>
-  <li><code class="highlighter-rouge">javadoc</code>  可以从官网下载文档 https://www.oracle.com/java/technologies/javase-downloads。解压后，可以访问目录上的<code class="highlighter-rouge">jdk-16.0.2_doc-all\docs\index.html</code> 可以在浏览器打开，保存标签，这里可找到所有公共类库的说明。</li>
+  <li><code class="language-plaintext highlighter-rouge">javasrc</code> 在JDK的路径上，有一个src.zip，解开后，含了所有公共类库的源代码。</li>
+  <li><code class="language-plaintext highlighter-rouge">javadoc</code>  可以从官网下载文档 https://www.oracle.com/java/technologies/javase-downloads。解压后，可以访问目录上的<code class="language-plaintext highlighter-rouge">jdk-16.0.2_doc-all\docs\index.html</code> 可以在浏览器打开，保存标签，这里可找到所有公共类库的说明。</li>
 </ul>
 
 <p><img src="../../assets/java/2021-07-26-java-learn-202449.png" alt="" /></p>
@@ -82,7 +82,7 @@
 
 <p><strong>注释</strong></p>
 
-<p>有三种注释方式， <code class="highlighter-rouge">//</code>     <code class="highlighter-rouge">/*  */</code>  第三种注释可以生成文档  <code class="highlighter-rouge">/** */</code></p>
+<p>有三种注释方式， <code class="language-plaintext highlighter-rouge">//</code>     <code class="language-plaintext highlighter-rouge">/*  */</code>  第三种注释可以生成文档  <code class="language-plaintext highlighter-rouge">/** */</code></p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 1、todo </span>
 
@@ -97,42 +97,42 @@
 
 <p>Java是一种强类型语言。这就意味着必须为每一个变量声明一种类型， 8种基本类型。</p>
 
-<p><code class="highlighter-rouge">big number </code> 大数，是一种对象，不是类型。</p>
+<p><code class="language-plaintext highlighter-rouge">big number </code> 大数，是一种对象，不是类型。</p>
 
 <p>8种基本类型</p>
 
-<p>整型 <code class="highlighter-rouge">int</code>  4个字节</p>
+<p>整型 <code class="language-plaintext highlighter-rouge">int</code>  4个字节</p>
 
-<p>整型 <code class="highlighter-rouge">short</code> 2个字节</p>
+<p>整型 <code class="language-plaintext highlighter-rouge">short</code> 2个字节</p>
 
-<p>整型 <code class="highlighter-rouge">long</code> 8个字节</p>
+<p>整型 <code class="language-plaintext highlighter-rouge">long</code> 8个字节</p>
 
-<p>整型 <code class="highlighter-rouge">byte</code> 1字节</p>
+<p>整型 <code class="language-plaintext highlighter-rouge">byte</code> 1字节</p>
 
 <p>长整型数值有一个后缀L或l（如4000000000L）。 从Java 7开始，加上前缀0b或0B就可以写二进制数。</p>
 
-<p>浮点型 <code class="highlighter-rouge">float</code> 4个字节</p>
+<p>浮点型 <code class="language-plaintext highlighter-rouge">float</code> 4个字节</p>
 
-<p>浮点型 <code class="highlighter-rouge">double</code> 8个字节</p>
+<p>浮点型 <code class="language-plaintext highlighter-rouge">double</code> 8个字节</p>
 
 <p>float类型的数值有一个后缀F或f（例如，3.14F）。没有后缀F的浮点数值（如3.14）默认为double类型。当然，也可以在浮点数值后面添加后缀D或d（例如，3.14D）。</p>
 
 <p>三个特殊的值。</p>
 
-<p>正无穷大  <code class="highlighter-rouge">Double.POSITIVE_INFINITY</code></p>
+<p>正无穷大  <code class="language-plaintext highlighter-rouge">Double.POSITIVE_INFINITY</code></p>
 
-<p>负无穷大 <code class="highlighter-rouge">Double.NEGATIVE_INFINITY</code></p>
+<p>负无穷大 <code class="language-plaintext highlighter-rouge">Double.NEGATIVE_INFINITY</code></p>
 
-<p>NaN （不是一个数字） <code class="highlighter-rouge">Double.NaN</code></p>
+<p>NaN （不是一个数字） <code class="language-plaintext highlighter-rouge">Double.NaN</code></p>
 
 <p>不能这样检测一个特定值是否等于Double.NaN：</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">==</span> <span class="n">Double</span><span class="o">.</span><span class="na">NaN</span><span class="o">)</span> <span class="c1">// is ture </span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">==</span> <span class="nc">Double</span><span class="o">.</span><span class="na">NaN</span><span class="o">)</span> <span class="c1">// is ture </span>
    
-<span class="k">if</span> <span class="o">(</span><span class="n">Double</span><span class="o">.</span><span class="na">isNaN</span><span class="o">(</span><span class="n">x</span><span class="o">))</span> <span class="c1">// check x is "not a number"</span>
+<span class="k">if</span> <span class="o">(</span><span class="nc">Double</span><span class="o">.</span><span class="na">isNaN</span><span class="o">(</span><span class="n">x</span><span class="o">))</span> <span class="c1">// check x is "not a number"</span>
 </code></pre></div></div>
 
-<p>char类型 单个字符， 字面量值要用单引号括起来。<code class="highlighter-rouge">'A'</code>  , <code class="highlighter-rouge">"A"</code> 是一个字符串。可以表示为十六进制值。其范围从<code class="highlighter-rouge">\u0000</code>到<code class="highlighter-rouge">\Uffff</code>。除了转义序列<code class="highlighter-rouge">\u</code>之外，还有一些用于表示特殊字符的转义序列</p>
+<p>char类型 单个字符， 字面量值要用单引号括起来。<code class="language-plaintext highlighter-rouge">'A'</code>  , <code class="language-plaintext highlighter-rouge">"A"</code> 是一个字符串。可以表示为十六进制值。其范围从<code class="language-plaintext highlighter-rouge">\u0000</code>到<code class="language-plaintext highlighter-rouge">\Uffff</code>。除了转义序列<code class="language-plaintext highlighter-rouge">\u</code>之外，还有一些用于表示特殊字符的转义序列</p>
 
 <p>Unicode类型 另讲。</p>
 
@@ -140,7 +140,7 @@
 
 <p><strong>枚举类型</strong></p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">enum</span> <span class="n">Size</span><span class="o">{</span><span class="n">SMALL</span><span class="o">,</span> <span class="n">MEDIUM</span><span class="o">,</span> <span class="n">LARGE</span><span class="o">,</span> <span class="n">EXTRA_LARGE</span><span class="o">}</span> <span class="o">;</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">enum</span> <span class="nc">Size</span><span class="o">{</span><span class="no">SMALL</span><span class="o">,</span> <span class="no">MEDIUM</span><span class="o">,</span> <span class="no">LARGE</span><span class="o">,</span> <span class="no">EXTRA_LARGE</span><span class="o">}</span> <span class="o">;</span> 
 </code></pre></div></div>
 
 <h3 id="变量">变量</h3>
@@ -157,18 +157,18 @@
 
 <p>利用关键字final指示常量。</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="kt">double</span> <span class="n">CM_PER_INCH</span> <span class="o">=</span> <span class="mf">2.54</span><span class="o">;</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="kt">double</span> <span class="no">CM_PER_INCH</span> <span class="o">=</span> <span class="mf">2.54</span><span class="o">;</span> 
 </code></pre></div></div>
 
 <p>类常量的定义位于main方法的外部。</p>
 
-<p><code class="highlighter-rouge">const</code>是 Java 保留的关键字，但目前并没有使用。在Java中，必须使用final定义常量。</p>
+<p><code class="language-plaintext highlighter-rouge">const</code>是 Java 保留的关键字，但目前并没有使用。在Java中，必须使用final定义常量。</p>
 
 <h3 id="运算符">运算符</h3>
 
-<p>在Java中，使用算术运算符<code class="highlighter-rouge">+、-、*、/</code>表示加、减、乘、除运算。</p>
+<p>在Java中，使用算术运算符<code class="language-plaintext highlighter-rouge">+、-、*、/</code>表示加、减、乘、除运算。</p>
 
-<p>整数的求余操作（有时称为取模）用<code class="highlighter-rouge">%</code>s表示.</p>
+<p>整数的求余操作（有时称为取模）用<code class="language-plaintext highlighter-rouge">%</code>s表示.</p>
 
 <p><strong>数值类型之间的转换</strong></p>
 
@@ -184,32 +184,32 @@
 <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">x</span><span class="o">;</span> 
 </code></pre></div></div>
 
-<p>变量 <code class="highlighter-rouge">nx = 9</code> 小数被截断掉，如果四舍五入用</p>
+<p>变量 <code class="language-plaintext highlighter-rouge">nx = 9</code> 小数被截断掉，如果四舍五入用</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="mf">9.997</span><span class="o">;</span>
-<span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">Math</span><span class="o">.</span><span class="na">round</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+<span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="nc">Math</span><span class="o">.</span><span class="na">round</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
 </code></pre></div></div>
 
-<p>round方法返回的结果为long类型。所以最后要<code class="highlighter-rouge">（int）</code>转换一下。</p>
+<p>round方法返回的结果为long类型。所以最后要<code class="language-plaintext highlighter-rouge">（int）</code>转换一下。</p>
 
 <p><strong>结合赋值和运算符</strong></p>
 
-<p>和c++ 一样， <code class="highlighter-rouge">+=</code> 等操作。如：</p>
+<p>和c++ 一样， <code class="language-plaintext highlighter-rouge">+=</code> 等操作。如：</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">+=</span> <span class="mi">4</span><span class="o">;</span> 
 </code></pre></div></div>
 
 <p><strong>自增与自减运算符</strong></p>
 
-<p>和c++一样。 如 <code class="highlighter-rouge">x++</code> 、<code class="highlighter-rouge">x--</code> 、<code class="highlighter-rouge">++n</code>、 <code class="highlighter-rouge">--n</code> 。 <code class="highlighter-rouge">++</code>在前在后有区别， 用在表达式中时，前缀形式会先完成加1；而后缀形式会使用变量原来的值。</p>
+<p>和c++一样。 如 <code class="language-plaintext highlighter-rouge">x++</code> 、<code class="language-plaintext highlighter-rouge">x--</code> 、<code class="language-plaintext highlighter-rouge">++n</code>、 <code class="language-plaintext highlighter-rouge">--n</code> 。 <code class="language-plaintext highlighter-rouge">++</code>在前在后有区别， 用在表达式中时，前缀形式会先完成加1；而后缀形式会使用变量原来的值。</p>
 
 <p><strong>关系和boolean运算符</strong></p>
 
 <p>基本都沿用了C++的做法。</p>
 
-<p><code class="highlighter-rouge">&amp;&amp;</code>和<code class="highlighter-rouge">||</code>运算符是按照“短路”方式来求值的：如果第一个操作数已经能够确定表达式的值，第二个操作数就不必计算了。</p>
+<p><code class="language-plaintext highlighter-rouge">&amp;&amp;</code>和<code class="language-plaintext highlighter-rouge">||</code>运算符是按照“短路”方式来求值的：如果第一个操作数已经能够确定表达式的值，第二个操作数就不必计算了。</p>
 
-<p>同样支持三元操作符<code class="highlighter-rouge">？:</code></p>
+<p>同样支持三元操作符<code class="language-plaintext highlighter-rouge">？:</code></p>
 
 <p>boolean 类型不要做转换。</p>
 
@@ -227,9 +227,9 @@
   </tbody>
 </table>
 
-<p><code class="highlighter-rouge">&gt;&gt;</code>和<code class="highlighter-rouge">&lt;&lt;</code>运算符将位模式左移或右移</p>
+<p><code class="language-plaintext highlighter-rouge">&gt;&gt;</code>和<code class="language-plaintext highlighter-rouge">&lt;&lt;</code>运算符将位模式左移或右移</p>
 
-<p>有一个新知识：** <code class="highlighter-rouge">&gt;&gt;&gt;</code>运算符会用0填充高位，这与»不同，它会用符号位填充高位。不存在«&lt;运算符。**</p>
+<p>有一个新知识：** <code class="language-plaintext highlighter-rouge">&gt;&gt;&gt;</code>运算符会用0填充高位，这与»不同，它会用符号位填充高位。不存在«&lt;运算符。**</p>
 
 <p><strong>括号与运算符级别</strong></p>
 
@@ -247,7 +247,7 @@
 
 <p>把多个字符串放在一起，用一个定界符分隔，可以使用静态join方法。</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">all</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">" /"</span><span class="o">,</span> <span class="s">"S"</span><span class="o">,</span> <span class="s">"M"</span><span class="o">,</span> <span class="s">"L"</span><span class="o">,</span> <span class="s">"XL"</span><span class="o">);</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">all</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">" /"</span><span class="o">,</span> <span class="s">"S"</span><span class="o">,</span> <span class="s">"M"</span><span class="o">,</span> <span class="s">"L"</span><span class="o">,</span> <span class="s">"XL"</span><span class="o">);</span> 
 <span class="c1">// all is the string  "S / M / L / XL"</span>
 </code></pre></div></div>
 
@@ -259,7 +259,7 @@
 
 <p>使用equals方法检测两个字符串是否相等。如果字符串s与字符串t相等，则返回true；否则，返回false。需要注意，s与t可以是字符串变量，也可以是字符串字面。</p>
 
-<p>要想检测两个字符串是否相等，而不区分大小写，可以使用<code class="highlighter-rouge">equalsIgnoreCase</code>方法。</p>
+<p>要想检测两个字符串是否相等，而不区分大小写，可以使用<code class="language-plaintext highlighter-rouge">equalsIgnoreCase</code>方法。</p>
 
 <p>一定不要使用==运算符检测两个字符串是否相等！这个运算符只能够确定两个字符串是否放置在同一个位置上。</p>
 
@@ -298,36 +298,36 @@
 
 <p>有些时候，需要由较短的字符串构建字符串，例如，按键或来自文件中的单词。采用字符串连接的方式达到此目的效率比较低。每次连接字符串，都会构建一个新的String对象，既耗时，又浪费空间。使用<strong>StringBuilder</strong>类就可以避免这个问题的发生。</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span> 
 
 <span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">ch</span><span class="o">);</span> <span class="c1">// appends a single character </span>
 <span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="c1">// appends a string </span>
     
-<span class="n">String</span> <span class="n">completeString</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span> 
+<span class="nc">String</span> <span class="n">completeString</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span> 
 </code></pre></div></div>
 
 <h3 id="格式化输出">格式化输出</h3>
 
-<p>使用<code class="highlighter-rouge">System.out.print(x)</code>将数值x输出到控制台上。和C语言中的方法一样的。 <code class="highlighter-rouge">printf</code>和C语言一样。</p>
+<p>使用<code class="language-plaintext highlighter-rouge">System.out.print(x)</code>将数值x输出到控制台上。和C语言中的方法一样的。 <code class="language-plaintext highlighter-rouge">printf</code>和C语言一样。</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%8.2f"</span><span class="o">,</span> <span class="n">x</span><span class="o">);</span>  <span class="c1">//  same to c printf </span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%8.2f"</span><span class="o">,</span> <span class="n">x</span><span class="o">);</span>  <span class="c1">//  same to c printf </span>
 </code></pre></div></div>
 
 <p>可以使用静态的String.format方法创建一个格式化的字符串，而不打印输出：</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">message</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"Hello, %s. Next year, you'll be %d"</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">);</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">message</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"Hello, %s. Next year, you'll be %d"</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">);</span> 
 </code></pre></div></div>
 
 <p><strong>文件输入与输出</strong></p>
 
 <p>对文件进行读取，就需要一个用File对象构造一个Scanner对象。如下所示：</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Scanner</span> <span class="n">in</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scanner</span><span class="o">(</span><span class="n">Paths</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"myfile.txt"</span><span class="o">),</span> <span class="s">"UTF-8"</span><span class="o">);</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Scanner</span> <span class="n">in</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Scanner</span><span class="o">(</span><span class="nc">Paths</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"myfile.txt"</span><span class="o">),</span> <span class="s">"UTF-8"</span><span class="o">);</span> 
 </code></pre></div></div>
 
 <p>要想写入文件，就需要构造一个PrintWriter对象。在构造器中，只需要提供文件名：</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PrintWriter</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PrintWriter</span><span class="o">(</span><span class="s">"myfile.txt"</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">PrintWriter</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PrintWriter</span><span class="o">(</span><span class="s">"myfile.txt"</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span> 
 </code></pre></div></div>
 
 <h3 id="控制流程">控制流程</h3>
@@ -340,7 +340,7 @@
 
 <p>不能在嵌套的两个块中声明同名的变量。例如</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
 <span class="o">{</span>
     <span class="kt">int</span> <span class="n">n</span><span class="o">;</span> 
     <span class="c1">// ...</span>
@@ -374,7 +374,7 @@
 </code></pre></div></div>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span> <span class="n">i</span><span class="o">&lt;=</span><span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">i</span><span class="o">);</span> 
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">i</span><span class="o">);</span> 
 <span class="o">}</span>
 </code></pre></div></div>
 <h3 id="foreach循环">foreach循环</h3>
@@ -416,7 +416,7 @@
     <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">){</span>
         <span class="c1">// ...</span>
         <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">1000</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">){</span>
-            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"enter anumber &gt;=0:"</span><span class="o">);</span> 
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"enter anumber &gt;=0:"</span><span class="o">);</span> 
             <span class="n">n</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">nextInt</span><span class="o">();</span> 
             <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">){</span> <span class="c1">// should never  happend-can't go to </span>
                 <span class="k">break</span> <span class="n">read_data</span><span class="o">;</span> <span class="c1">// break out fo read_data loop </span>
@@ -428,15 +428,15 @@
 
 <h3 id="大数值">大数值</h3>
 
-<p>如果基本的整数和浮点数精度不能够满足需求，那么可以使用<code class="highlighter-rouge">java.math</code>包中的两个很有用的类：<code class="highlighter-rouge">BigInteger</code>  和 <code class="highlighter-rouge">BigDecimal</code>。</p>
+<p>如果基本的整数和浮点数精度不能够满足需求，那么可以使用<code class="language-plaintext highlighter-rouge">java.math</code>包中的两个很有用的类：<code class="language-plaintext highlighter-rouge">BigInteger</code>  和 <code class="language-plaintext highlighter-rouge">BigDecimal</code>。</p>
 
-<p>这两个类可以处理包含任意长度数字序列的数值。<code class="highlighter-rouge">BigInteger</code>类实现了任意精度的整数运算，<code class="highlighter-rouge">BigDecimal</code>实现了任意精度的浮点数运算。</p>
+<p>这两个类可以处理包含任意长度数字序列的数值。<code class="language-plaintext highlighter-rouge">BigInteger</code>类实现了任意精度的整数运算，<code class="language-plaintext highlighter-rouge">BigDecimal</code>实现了任意精度的浮点数运算。</p>
 
 <p>使用静态的valueOf方法可以将普通的数值转换为大数值：</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BigInteger</span> <span class="n">a</span> <span class="o">=</span> <span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span> 
-<span class="n">BigInteger</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">b</span><span class="o">);</span> <span class="c1">// c = a+b</span>
-<span class="n">BigInteger</span> <span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">multiply</span><span class="o">(</span><span class="n">b</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">2</span><span class="o">)))</span><span class="c1">// d = c * (b+2)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">BigInteger</span> <span class="n">a</span> <span class="o">=</span> <span class="nc">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span> 
+<span class="nc">BigInteger</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">b</span><span class="o">);</span> <span class="c1">// c = a+b</span>
+<span class="nc">BigInteger</span> <span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">multiply</span><span class="o">(</span><span class="n">b</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">2</span><span class="o">)))</span><span class="c1">// d = c * (b+2)</span>
 </code></pre></div></div>
 
 <h3 id="数组">数组</h3>
@@ -451,7 +451,7 @@
 
 <p>有个更加简单的方式打印数组中的所有值，即利用Arrays类的toString方法。调用Arrays.toString(a)，返回一个包含数组元素的字符串，这些元素被放置在括号内，并用逗号分隔，例如，“[2,3,5,7,11,13]”。要想打印数组，可以调用:</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Arrays</span><span class="o">,</span><span class="n">toString</span><span class="o">(</span><span class="n">a</span><span class="o">));</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">,</span><span class="n">toString</span><span class="o">(</span><span class="n">a</span><span class="o">));</span> 
 </code></pre></div></div>
 
 <p><strong>数组初始化以及匿名数组</strong></p>
@@ -478,14 +478,14 @@
 <span class="n">luckyNumbers</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="o">=</span> <span class="mi">12</span><span class="o">;</span> <span class="c1">// noew smallPrimes[5] is also 12 </span>
 </code></pre></div></div>
 
-<p>如果希望将一个数组的所有值拷贝到一个新的数组中去，就要使用Arrays类的<code class="highlighter-rouge">copyOf</code>方法：</p>
+<p>如果希望将一个数组的所有值拷贝到一个新的数组中去，就要使用Arrays类的<code class="language-plaintext highlighter-rouge">copyOf</code>方法：</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">copiedLickyNumbers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">luckyNumbers</span><span class="o">,</span> <span class="n">lickyNumbers</span><span class="o">.</span><span class="na">length</span><span class="o">);</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">copiedLickyNumbers</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">luckyNumbers</span><span class="o">,</span> <span class="n">lickyNumbers</span><span class="o">.</span><span class="na">length</span><span class="o">);</span> 
 </code></pre></div></div>
 
 <p>第2个参数是新数组的长度。这个方法通常用来增加数组的大小：</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">copiedLickyNumbers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">luckyNumbers</span><span class="o">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">lickyNumbers</span><span class="o">.</span><span class="na">length</span><span class="o">);</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">copiedLickyNumbers</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">luckyNumbers</span><span class="o">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">lickyNumbers</span><span class="o">.</span><span class="na">length</span><span class="o">);</span> 
 </code></pre></div></div>
 
 <p>Java数组与C++数组在堆栈上有很大不同，但基本上与<strong>分配在堆（heap）</strong>上的数组指针一样。</p>
@@ -496,11 +496,11 @@
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> 
 <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> 
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> 
     <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">arg</span> <span class="o">:</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">arg</span> <span class="o">:</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span><span class="s">"-version"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">arg</span><span class="o">))</span> <span class="o">{</span>
-                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"v10000.0"</span><span class="o">);</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"v10000.0"</span><span class="o">);</span>
                 <span class="k">break</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
@@ -515,7 +515,7 @@
 <span>
 	<a  href="/java-learn-map/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a   class="pageNavInvalid"  >下一篇</a>
+	<a  href="/%E7%BB%93%E6%9E%84%E5%8C%96%E6%80%9D%E7%BB%B4/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -581,7 +581,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2021-06-11-java-base-learn1.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

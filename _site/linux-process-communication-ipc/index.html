@@ -62,7 +62,7 @@
 (2) 在一个公用头文件 中定义 一个客户进程和服务器进程都认可的键。然后服务器进程指定此键创建一个新的IPC结构。
 (3) 客户进程和服务器进程认同一个路径和项目ID（项目ID是０～２５５间的字符值），接着调用函数ftok将这两个值变换一个键。然后使用此键。</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#inlcude &lt;sys/ipc.h&gt;
-</span><span class="n">key_t</span> <span class="n">ftok</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="kt">int</span> <span class="n">id</span><span class="p">);</span>
+</span><span class="n">key_t</span> <span class="nf">ftok</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="kt">int</span> <span class="n">id</span><span class="p">);</span>
 </code></pre></div></div>
 <p>path 参数必须引用一个现存文件，当产键时，保使用id参数的低8位。如果使用同一项目ID，那么对于不同文件 的两个路径可能产相同的键。</p>
 
@@ -191,7 +191,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2014-10-11-linux-process-communication-ipc.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

@@ -80,7 +80,7 @@
 
 <p>程序可用使用signal函数来处理指定的信号，主要通过忽略和恢复其默认行为来工作。signal函数的原型如下：</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;signal.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp">
 </span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">signal</span><span class="p">(</span><span class="kt">int</span> <span class="n">sig</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">func</span><span class="p">)(</span><span class="kt">int</span><span class="p">)))(</span><span class="kt">int</span><span class="p">);</span>
 </code></pre></div></div>
 
@@ -89,9 +89,9 @@ SIG_IGN:忽略信号
 SIG_DFL:恢复信号的默认行为
 例子</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;signal.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;unistd.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
 </span>
 <span class="kt">void</span> <span class="nf">ouch</span><span class="p">(</span><span class="kt">int</span> <span class="n">sig</span><span class="p">)</span>
 <span class="p">{</span>
@@ -120,8 +120,8 @@ SIG_DFL:恢复信号的默认行为
 
 <p>一个更加健壮的信号接口——sigaction函数。它的原型为：</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;signal.h&gt;
-</span><span class="kt">int</span> <span class="n">sigaction</span><span class="p">(</span><span class="kt">int</span> <span class="n">sig</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sigaction</span> <span class="o">*</span><span class="n">act</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sigaction</span> <span class="o">*</span><span class="n">oact</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">sigaction</span><span class="p">(</span><span class="kt">int</span> <span class="n">sig</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sigaction</span> <span class="o">*</span><span class="n">act</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sigaction</span> <span class="o">*</span><span class="n">oact</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>参数： 
@@ -130,7 +130,7 @@ act：    如果值非NULL，将安装为sig关联信号的新处理方式。
 oldact： 如果值非NULL，存储以前对sig关联信号的处理方式。
 sigaction的结构形态如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>struct sigaction {
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>struct sigaction {
     void (*sa_handler)(int);
     void (*sa_sigaction)(int, siginfo_t *, void *);
     sigset_t sa_mask;
@@ -150,9 +150,9 @@ sigaction的结构形态如下：</p>
   <li>SA_SIGINFO 提供附加信息，一个指向siginfo结构的指针以及一个指向进程上下文标识符的指针。</li>
 </ul>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;signal.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp">
 </span><span class="kt">void</span> <span class="nf">ouch</span><span class="p">(</span><span class="kt">int</span> <span class="n">sig</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">OUCH! - I got signal %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">sig</span><span class="p">);</span>
@@ -185,9 +185,9 @@ sigaction的结构形态如下：</p>
 (1)kill函数
 进程可以通过kill函数向包括它本身在内的其他进程发送一个信号。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/types.h&gt;
-#include &lt;signal.h&gt;
-</span><span class="kt">int</span> <span class="n">kill</span><span class="p">(</span><span class="n">pid_t</span> <span class="n">pid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sig</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">kill</span><span class="p">(</span><span class="n">pid_t</span> <span class="n">pid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sig</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>它的作用把信号sig发送给进程号为pid的进程，成功时返回0。
@@ -201,8 +201,8 @@ kill调用失败返回-1，调用失败通常有三大原因：</p>
 <p>(2)alarm函数
 这个函数跟它的名字一样，给我们提供了一个闹钟的功能，进程可以调用alarm函数在经过预定时间后向发送一个SIGALRM信号。
 alarm函数的型如下：</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
-</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">alarm</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">seconds</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">alarm</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">seconds</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>alarm函数用来在seconds秒之后安排发送一个SIGALRM信号，如果seconds为0，将取消所有已设置的闹钟请求。alarm函数的返回值是以前设置的闹钟时间的余留秒数，如果返回失败返回-1。</p>
@@ -397,7 +397,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2014-10-11-linux-process-signal.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

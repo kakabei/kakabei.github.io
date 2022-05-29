@@ -58,11 +58,11 @@
 <p>条件变量提供的方法有三个：等待通知（wait）、单发通知（signal）和广播通知（broadcast）。</p>
 
 <p>这里有一个疑问：</p>
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span><span class="x"> </span><span class="n">mailbox</span><span class="x"> </span><span class="kt">uint8</span><span class="x">
-</span><span class="k">var</span><span class="x"> </span><span class="n">lock</span><span class="x"> </span><span class="n">sync</span><span class="o">.</span><span class="n">RWMutex</span><span class="x">
-</span><span class="n">sendCond</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">)</span><span class="x">
-</span><span class="n">recvCond</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="n">lock</span><span class="o">.</span><span class="n">RLocker</span><span class="p">())</span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">mailbox</span> <span class="kt">uint8</span>
+<span class="k">var</span> <span class="n">lock</span> <span class="n">sync</span><span class="o">.</span><span class="n">RWMutex</span>
+<span class="n">sendCond</span> <span class="o">:=</span> <span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">)</span>
+<span class="n">recvCond</span> <span class="o">:=</span> <span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="n">lock</span><span class="o">.</span><span class="n">RLocker</span><span class="p">())</span>
+</code></pre></div></div>
 
 <p>endCond := sync.NewCond(&amp;lock)和recvCond := sync.NewCond(lock.RLocker())</p>
 
@@ -158,7 +158,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2019-03-28-timegeekbang-go-syncCond.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

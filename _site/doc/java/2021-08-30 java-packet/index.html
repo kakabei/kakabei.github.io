@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>xyecho - java 包</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>java 包</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2021-07-15">2021-07-15</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#学习笔记" title="学习笔记">学习笔记</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#java" title="java">java</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<h2 id="包">包</h2>
+<p>Java允许使用包（package）将类组织起来。借助于包可以方便地组织自己的代码，并将自己的代码与别人提供的代码库分开管理。</p>
+
+<p>使用包的主要原因是确保类名的唯一性。</p>
+
+<p>假如两个程序员不约而同地建立了Employee类。只要将这些类放置在不同的包中，就不会产生冲突。</p>
+
+<p>事实上，为了保证包名的绝对唯一性，Sun公司建议将公司的因特网域名（这显然是独一无二的）以逆序的形式作为包名，并且对于不同的项目使用不同的子包。例如，horstmann.com是本书作者之一注册的域名。逆序形式为com.horstmann。这个包还可以被进一步地划分成子包，如com.horstmann. corejava。</p>
+
+<h2 id="类的导入">类的导入</h2>
+
+<p>一个类可以使所属包的中的所有类，以及其他包中公有类，有两种方法 ，一种是在每一个类名之前添加完整的包名：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java</span><span class="o">.</span><span class="na">time</span><span class="o">.</span><span class="na">LocatDate</span> <span class="n">today</span> <span class="o">=</span> <span class="n">java</span><span class="o">.</span><span class="na">time</span><span class="o">.</span><span class="na">LocaDate</span><span class="o">.</span><span class="na">now</span><span class="o">();</span> 
+</code></pre></div></div>
+
+<p>另一种方法是使用 <code class="language-plaintext highlighter-rouge">import</code>。 可以导入一个特定的类或整个包。 <code class="language-plaintext highlighter-rouge">import</code>语句应该位于源文件的顶部（但位于package语句的后面）如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.time.LocalDate</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span> 
+</code></pre></div></div>
+
+<p>加星号的这种方式，可能导入冲突。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span> 
+<span class="kn">import</span> <span class="nn">java.sql.*</span><span class="o">;</span> 
+
+<span class="nc">Date</span> <span class="n">today</span><span class="o">;</span> <span class="c1">// Error java.util.Date or java.sql.Date ? </span>
+</code></pre></div></div>
+
+<p>编译器无法确定使用哪一个。 解决的方法是： 在类前面加上完整的包名。</p>
+
+<p><code class="language-plaintext highlighter-rouge">import</code>语句的好处是简捷，不用去写出完整的包名。</p>
+
+<h2 id="静态导入">静态导入</h2>
+
+<p><code class="language-plaintext highlighter-rouge">import</code>语句不仅可以导入类，还增加了导入静态方法和静态域的功能。如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">static</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">System</span><span class="o">.*;</span> 
+
+<span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello ShenZhen China."</span><span class="o">)</span>  <span class="c1">//system.out</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">out</code>不用加类名前缀。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sqrt</span><span class="o">(</span><span class="n">pow</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span> <span class="o">+</span> <span class="n">pow</span><span class="o">(</span><span class="n">y</span><span class="o">,</span><span class="mi">2</span><span class="o">));</span> <span class="c1">// 没有Math </span>
+<span class="nc">Maht</span><span class="o">,</span><span class="n">sqrt</span><span class="o">(</span><span class="nc">Math</span><span class="o">.</span><span class="na">pow</span><span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="mi">2</span><span class="o">)</span> <span class="o">+</span> <span class="nc">Math</span><span class="o">,</span><span class="n">pow</span><span class="o">(</span><span class="n">y</span><span class="o">,</span> <span class="mi">2</span><span class="o">))</span> <span class="o">;</span> <span class="c1">// </span>
+</code></pre></div></div>
+
+<h2 id="创建包">创建包</h2>
+
+<p>包声明应该在源文件的第一行，每个源文件只能有一个包声明，这个文件中的每个类型都应用于它。 通常使用小写的字母来命名避免与类、接口名字的冲突。</p>
+
+<p>如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">animals</span><span class="o">;</span> 
+
+<span class="kd">interface</span> <span class="nc">Animal</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eat</span><span class="o">();</span> 
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">travel</span><span class="o">();</span> 
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>将包中的文件放到与完整的包名匹配的子目录中。</p>
+
+<p>如果一个源文件中没有使用包声明，那么其中的类，函数，枚举，注释等将被放在一个无名的包（unnamed package）中。</p>
+
+<h2 id="包作用域">包作用域</h2>
+
+<p>如果一个源文件中没有使用包声明，那么其中的类，函数，枚举，注释等将被放在一个无名的包（unnamed package）中。</p>
+
+<h2 id="类路径">类路径</h2>
+
+<p>类存储在文件系统的子目录中。类的路径必须与包名匹配。</p>
+
+<p>类文件也可以存储在JAR(Java归档)文件中。在一个JAR文件中，可以包含多个压缩形式的类文件和子目录，这样既可以节省又可以改善性能。在程序中用到第三方（third-party）的库文件时，通常会给出一个或多个需要包含的JAR文件。</p>
+
+<p>JAR文件使用ZIP格式组织文件和子目录。可以使用所有ZIP实用程序查看内部的rt.jar以及其他的JAR文件。</p>
+
+<p>采用-classpath（或-cp）选项指定类路径：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java <span class="nt">-classpath</span> /home/user/classdri:.:/home/user/archives/archive.jar Myprog
+</code></pre></div></div>
+
+<p>整个指令应该书写在一行中。将这样一个长的命令行放在一个shell脚本或一个批处理文件中。</p>
+
+<p>利用-classpath选项设置类路径是首选的方法，也可以通过设置CLASSPATH环境变量完成这个操作。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">CLASSPATH</span><span class="o">=</span>/home/user/classdir:.:/home/user/archives/archive.jar
+</code></pre></div></div>
+
+<p>直到退出shell为止，类路径设置均有效。</p>
+
+<p>不建议CLASSPATH设置成环境变量。</p>
+
+<h2 id="文档注释">文档注释</h2>
+
+<p>JDK包含一个很有用的工具，叫做javadoc，它可以由源文件生成一个HTML文档。</p>
+
+<p>如果在源代码中添加以专用的定界符/**开始的注释，那么可以很容易地生成一个看上去具有专业水准的文档。</p>
+
+<p>每个<code class="language-plaintext highlighter-rouge">/** . . . */</code>文档注释在标记之后紧跟着自由格式文本（free-form text）。标记由@开始，如<code class="language-plaintext highlighter-rouge">@autho</code>或<code class="language-plaintext highlighter-rouge">@param</code>。</p>
+
+<h2 id="类设计技巧">类设计技巧</h2>
+
+<p>我们不会面面俱到，也不希望过于沉闷，所以这一章结束之前，简单地介绍几点技巧。应用这些技巧可以使得设计出来的类更具有OOP的专业水准。</p>
+
+<p>1．一定要保证数据私有</p>
+
+<p>2．一定要对数据初始化</p>
+
+<p>3．不要在类中使用过多的基本类型</p>
+
+<p>4．不是所有的域都需要独立的域访问器和域更改器</p>
+
+<p>5．将职责过多的类进行分解</p>
+
+<p>6．类名和方法名要能够体现它们的职责</p>
+
+<p>7．优先使用不可变的类</p>
+
+<h2 id="关键字-final">关键字 final</h2>
+
+<p>使用final关键字的好处：</p>
+
+<ul>
+  <li>final关键字提高了性能。JVM和Java应用都会缓存final变量。</li>
+  <li>final变量可以安全的在多线程环境下进行共享，而不需要额外的同步开销。</li>
+  <li>使用final关键字，JVM会对方法、变量及类进行优化。</li>
+</ul>
+
+<p><strong>不可变类：</strong></p>
+
+<p>创建不可变类要使用final关键字。不可变类是指它的对象一旦被创建了就不能被更改了。String是不可变类的代表。不可变类有很多好处，譬如它们的对象是只读的，可以在多线程环境下安全的共享，不用额外的同步开销等等。</p>
+
+<p><strong>重要知识点：</strong></p>
+
+<ul>
+  <li>final关键字可以用于成员变量、本地变量、方法以及类。</li>
+  <li>final成员变量必须在声明的时候初始化或者在构造器中初始化，否则就会报编译错误。</li>
+  <li>你不能够对final变量再次赋值。</li>
+  <li>本地变量必须在声明时赋值。</li>
+  <li>在匿名类中所有变量都必须是final变量。</li>
+  <li>final方法不能被重写。</li>
+  <li>final类不能被继承。</li>
+  <li>final关键字不同于finally关键字，后者用于异常处理。</li>
+  <li>final关键字容易与finalize()方法搞混，后者是在Object类中定义的方法，是在垃圾回收之前被JVM调用的方法。</li>
+  <li>接口中声明的所有变量本身是final的。</li>
+  <li>final和abstract这两个关键字是反相关的，final类就不可能是abstract的。</li>
+  <li>final方法在编译阶段绑定，称为静态绑定(static binding)。</li>
+  <li>没有在声明时初始化final变量的称为空白final变量(blank final variable)，它们必须在构造器中初始化，或者调用this()初始化。不这么做的话，编译器会报错“final变量(变量名)需要进行初始化”。</li>
+  <li>将类、方法、变量声明为final能够提高性能，这样JVM就有机会进行估计，然后优化。</li>
+  <li>按照Java代码惯例，final变量就是常量，而且通常常量名要大写。</li>
+</ul>
+
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a   class="pageNavInvalid"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a   class="pageNavInvalid"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/doc/java/2021-08-30 java-packet.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

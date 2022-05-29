@@ -58,8 +58,8 @@
 
 <p>用函数pipe创建：</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include&lt;unistd.h&gt;
-</span><span class="kt">int</span> <span class="n">pipe</span><span class="p">(</span><span class="kt">int</span> <span class="n">files</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">pipe</span><span class="p">(</span><span class="kt">int</span> <span class="n">files</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
 </code></pre></div></div>
 
 <p>参数：filedes返回两个文件描述符：filedes[0] 为从管道读而打开，filedes[1]为管道写而打开。filedes[1]的输出是filedes[0]的输入。</p>
@@ -78,9 +78,9 @@
 (3) 在写管道时，常数 PIPE_BUF 规定了内核中管道缓存器的大小。如果对管道进行 write调用，而且要求写的字节数小于等于 PIPE_BUF，则此操作不会与其他进程对同一管道（或 FIFO )的write操作穿插进行。但是，若有多个进程同时写一个管道（或 FIFO） ，而且某个或某些进程要求写的字节数超过 PIPE_BUF字节数，则数据可能会与其他写操作的数据相穿插。</p>
 
 <h3 id="五-例子">五 例子</h3>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
 #define  MAXLINE   (2014)
 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 <span class="p">{</span>
@@ -182,7 +182,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2014-10-11-linux-process-pipe.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

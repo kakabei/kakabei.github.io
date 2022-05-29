@@ -55,7 +55,7 @@
 <p>包含#include<pthread.h>
 创建线程的函数说明：</pthread.h></p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">pthread_create</span><span class="p">(</span><span class="n">pthread_t</span> <span class="o">*</span><span class="kr">thread</span><span class="p">,</span> <span class="n">pthread_addr_t</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span><span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">start_routine</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="p">),</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">pthread_create</span><span class="p">(</span><span class="n">pthread_t</span> <span class="o">*</span><span class="kr">thread</span><span class="p">,</span> <span class="n">pthread_addr_t</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span><span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">start_routine</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="p">),</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">);</span>
 </code></pre></div></div>
 <p>thread     	　：用于返回创建的线程的ID。
 arr           : 用于指定的被创建的线程的属性，上面的函数中使用NULL，表示使用默认的属性。
@@ -66,7 +66,7 @@ arg　　　　　 : 用于给线程传递参数，在本例中没有传递参�
 pthread_join使一个线程等待另一个线程结束。代码中如果没有pthread_join主线程会很快结束从而使整个进程结束，从而使创建的线程没有机会开始执行就结束了。加入pthread_join后，主线程会一直等待直到等待的线程结束自己才结束，使创建的线程有机会执行。
 函数定义：</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">pthread_join</span><span class="p">(</span><span class="n">pthread_t</span> <span class="kr">thread</span><span class="p">,</span> <span class="kt">void</span> <span class="o">**</span><span class="n">retval</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">pthread_join</span><span class="p">(</span><span class="n">pthread_t</span> <span class="kr">thread</span><span class="p">,</span> <span class="kt">void</span> <span class="o">**</span><span class="n">retval</span><span class="p">);</span>
 </code></pre></div></div>
 <p>thread: 线程标识符，即线程ID，标识唯一线程。
 retval: 用户定义的指针，用来存储被等待线程的返回值。
@@ -84,9 +84,9 @@ retval: 用户定义的指针，用来存储被等待线程的返回值。
 
 <p>例子：</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include  &lt;stdio.h&gt;
-#include  &lt;pthread.h&gt;
-#include  &lt;ctype.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span>  <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span>  <span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
+#include</span>  <span class="cpf">&lt;ctype.h&gt;</span><span class="cp">
 </span> 
 <span class="kt">int</span>  <span class="n">total_words</span> <span class="p">;</span>           <span class="cm">/* the counter and its lock */</span>
 <span class="n">pthread_mutex_t</span> <span class="n">counter_lock</span> <span class="o">=</span> <span class="n">PTHREAD_MUTEX_INITIALIZER</span><span class="p">;</span>
@@ -107,7 +107,7 @@ retval: 用户定义的指针，用来存储被等待线程的返回值。
     <span class="n">printf</span><span class="p">(</span><span class="s">"%5d: total words</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">total_words</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="kt">void</span> <span class="o">*</span><span class="n">count_words</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">f</span><span class="p">)</span>
+<span class="kt">void</span> <span class="o">*</span><span class="nf">count_words</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">f</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">f</span><span class="p">;</span>
     <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
@@ -201,8 +201,8 @@ pthread_cond_wait的函数原型为：</p>
 
 <h3 id="四-例子">四 例子</h3>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
-#include &lt;pthread.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
 #define BUFFER_SIZE 16 // 缓冲区数量
 </span>
 <span class="k">struct</span> <span class="n">prodcons</span>
@@ -400,7 +400,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2014-10-12-linux-threads.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

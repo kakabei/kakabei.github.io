@@ -59,7 +59,7 @@
 
 <p>(1)创建共享内存</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">int</span> <span class="n">shmget</span><span class="p">(</span><span class="n">key_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shmflg</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">int</span> <span class="nf">shmget</span><span class="p">(</span><span class="n">key_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shmflg</span><span class="p">);</span>
 </code></pre></div></div>
 
 <ul>
@@ -70,7 +70,7 @@
 
 <p>(2)启动对该共享内存的访问</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="o">*</span><span class="n">shmat</span><span class="p">(</span><span class="kt">int</span> <span class="n">shm_id</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">shm_addr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shmflg</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="o">*</span><span class="nf">shmat</span><span class="p">(</span><span class="kt">int</span> <span class="n">shm_id</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">shm_addr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shmflg</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>第一次创建完共享内存时，它还不能被任何进程访问，shmat函数的作用就是用来启动对该共享内存的访问，并把共享内存连接到当前进程的地址空间。</p>
@@ -83,7 +83,7 @@
 
 <p>(3)将共享内存从当前进程中分离</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">shmdt</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">shmaddr</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">shmdt</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">shmaddr</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>该函数用于将共享内存从当前进程中分离。注意，将共享内存分离并不是删除它，只是使该共享内存对当前进程不再可用。</p>
@@ -93,7 +93,7 @@
 
 <p>(4)控制共享内存</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">shmctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">shm_id</span><span class="p">,</span> <span class="kt">int</span> <span class="n">command</span><span class="p">,</span> <span class="k">struct</span> <span class="n">shmid_ds</span> <span class="o">*</span><span class="n">buf</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">shmctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">shm_id</span><span class="p">,</span> <span class="kt">int</span> <span class="n">command</span><span class="p">,</span> <span class="k">struct</span> <span class="n">shmid_ds</span> <span class="o">*</span><span class="n">buf</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>shm_id是shmget函数返回的共享内存标识符。
@@ -130,11 +130,11 @@ buf是一个结构指针，它指向共享内存模式和访问权限的结构�
 
 <p>shmread.c的源代码</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;sys/shm.h&gt;
-#include "shmdata.h"
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/shm.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">"shmdata.h"</span><span class="cp">
 </span>
 <span class="cp">#define MEM_KEY      (1234)
 </span>
@@ -197,12 +197,12 @@ buf是一个结构指针，它指向共享内存模式和访问权限的结构�
 
 <p>shmwrite.c的源代码</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#include &lt;sys/shm.h&gt;
-#include "shmdata.h"
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/shm.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">"shmdata.h"</span><span class="cp">
 </span> 
 <span class="cp">#define MEM_KEY      (1234)
 </span>
@@ -276,12 +276,12 @@ buf是一个结构指针，它指向共享内存模式和访问权限的结构�
 <p>1、server.c</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*server.c:向共享内存中写入People*/</span>
-<span class="cp">#include &lt;stdio.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;sys/ipc.h&gt;
-#include &lt;sys/sem.h&gt;
-#include &lt;string.h&gt;
-#include "credis.h"
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/ipc.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">"credis.h"</span><span class="cp">
 </span><span class="kt">int</span> <span class="n">semid</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">shmid</span><span class="p">;</span>
 <span class="cm">/*信号量的P操作*/</span>
@@ -360,10 +360,10 @@ buf是一个结构指针，它指向共享内存模式和访问权限的结构�
 <p>2、clinet.c</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*client.c:从共享内存中读出People*/</span>
-<span class="cp">#include &lt;stdio.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;sys/ipc.h&gt;
-#include &lt;sys/sem.h&gt;
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/ipc.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
 </span><span class="kt">int</span> <span class="n">semid</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">shmid</span><span class="p">;</span>
 <span class="cm">/*信号量的P操作*/</span>
@@ -425,10 +425,10 @@ buf是一个结构指针，它指向共享内存模式和访问权限的结构�
 
 <h3 id="五-父子进程共享内存的例子">五 父子进程共享内存的例子</h3>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;  
-#include &lt;sys/types.h&gt;  
-#include &lt;sys/ipc.h&gt;  
-#include &lt;sys/sem.h&gt;  
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/ipc.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="c1">  </span><span class="cp">
 </span>  
 <span class="cp">#define SHM_KEY 0x33  
 #define SEM_KEY 0x44  
@@ -593,7 +593,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2014-10-12-linux-process-shm.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

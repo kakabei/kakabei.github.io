@@ -28,7 +28,7 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2021-06-22">2021-06-22</time>
+  <time datetime="2021-06-21">2021-06-21</time>
 </span>
 
  | 
@@ -54,7 +54,7 @@
 
 <p>零拷贝（zero-copy）技术是一种Linux I/O 的读写方式。指的是CPU不参与拷贝数据，通过I/O设备的DMA控制器，数据不用再通过用户态的就拷贝到目的地 。</p>
 
-<p>linux 中的零拷贝，<code class="highlighter-rouge">用mmap()</code>  、<code class="highlighter-rouge">sendfile()</code>、 DMA gather copy等的方式 ，从而减少数据的拷贝次数。</p>
+<p>linux 中的零拷贝，<code class="language-plaintext highlighter-rouge">用mmap()</code>  、<code class="language-plaintext highlighter-rouge">sendfile()</code>、 DMA gather copy等的方式 ，从而减少数据的拷贝次数。</p>
 
 <p>开源项目Kafka 有很高的I/O吞吐率，其中一个原因是用到了“零拷贝”技术。</p>
 
@@ -76,15 +76,15 @@
 
 <h5 id="io-中断原理">I/O 中断原理</h5>
 
-<p>以系统调用<code class="highlighter-rouge">read()</code>为例. 程序只是一个简单的函数调用，但背面却发生了多次的数据拷贝。如下图。</p>
+<p>以系统调用<code class="language-plaintext highlighter-rouge">read()</code>为例. 程序只是一个简单的函数调用，但背面却发生了多次的数据拷贝。如下图。</p>
 
 <ol>
-  <li>进程调用<code class="highlighter-rouge">read()</code>时，发现系统调用，用户态切换到内核态，进程被阻塞。</li>
+  <li>进程调用<code class="language-plaintext highlighter-rouge">read()</code>时，发现系统调用，用户态切换到内核态，进程被阻塞。</li>
   <li>CPU接到指令后，会磁盘发起IO请求，然后返回。</li>
   <li>磁盘把数据放入到磁盘控制器的缓冲区中，然后向CPU发起IO中断信息。</li>
   <li>CPU收到中断信息后，把数据从磁盘控制器缓冲区拷贝到内核缓冲区。</li>
   <li>再将数据从 内核缓冲区拷贝到用户缓冲区。</li>
-  <li>然后从内核态切换到用户态， <code class="highlighter-rouge">read()</code>返回。</li>
+  <li>然后从内核态切换到用户态， <code class="language-plaintext highlighter-rouge">read()</code>返回。</li>
 </ol>
 
 <p><img src="assets\2021-06-21-linux-zero-copy-001.png" alt="" /></p>
@@ -103,7 +103,7 @@
 
 <p>从这个定义上我们可以看出释放CPU的算力。</p>
 
-<p>DMA技术的运用，改变了传统数据零拷贝时的传输流程。这个流程中比上面的多了一个DMA 角色，处在CPU和磁盘的中间。如下图:</p>
+<p>DMA技术的运用，改变了传统数据的传输流程。这个流程中比上面的多了一个DMA 角色，处在CPU和磁盘的中间。如下图:</p>
 
 <p><img src="assets\2021-06-21-linux-zero-copy-002.png" alt="" /></p>
 
@@ -133,7 +133,7 @@
 
 <h4 id="传统io方式">传统I/O方式</h4>
 
-<p>linux的传统I/O方式，是通过<code class="highlighter-rouge">read()</code>、<code class="highlighter-rouge">write()</code>两个系统调用完成的。</p>
+<p>linux的传统I/O方式，是通过<code class="language-plaintext highlighter-rouge">read()</code>、<code class="language-plaintext highlighter-rouge">write()</code>两个系统调用完成的。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">read</span><span class="p">(</span><span class="n">file_fd</span><span class="p">,</span> <span class="n">tmp_buf</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
 <span class="n">write</span><span class="p">(</span><span class="n">socket_fd</span><span class="p">,</span> <span class="n">tmp_buf</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
@@ -146,16 +146,16 @@
 <p>具体过程：</p>
 
 <ol>
-  <li>程序调用<code class="highlighter-rouge">read()</code>函数，发起系统调用，从用户态切换到内核态。</li>
+  <li>程序调用<code class="language-plaintext highlighter-rouge">read()</code>函数，发起系统调用，从用户态切换到内核态。</li>
   <li>CPU通知DMA拷贝数据，DMA从硬件的缓冲区中把数据拷贝到内核缓冲区。</li>
-  <li>CPU再数据从内核的缓冲区拷贝到用缓冲区。 从内核态切换到用户态。</li>
-  <li>程序调用<code class="highlighter-rouge">write()</code>函数，发起系统调用，从用户态切换到内核态。</li>
+  <li>CPU再数据从内核的缓冲区拷贝到用户缓冲区。 从内核态切换到用户态。</li>
+  <li>程序调用<code class="language-plaintext highlighter-rouge">write()</code>函数，发起系统调用，从用户态切换到内核态。</li>
   <li>CPU把数据拷贝从用户缓冲区socket缓冲区，通知DMA。</li>
   <li>DMA把数据从socket缓冲区把数据拷贝到网卡。</li>
   <li>完成后返回，从内核态切换用户态。</li>
 </ol>
 
-<p>这个过程，2次系统调用，4次上下文的切换。2次CPU拷贝，2次DMA拷贝，一共4次拷贝。</p>
+<p>这个过程，<strong>2次系统调用，4次上下文的切换。2次CPU拷贝，2次DMA拷贝，一共4次拷贝</strong>。</p>
 
 <ul>
   <li>CPU拷贝：由 CPU 直接处理数据的传送，数据拷贝时会一直占用 CPU 的资源。</li>
@@ -178,7 +178,7 @@
 
 <h5 id="mmap-方式">mmap() 方式</h5>
 
-<p>这是一种减少数据拷贝次数的方式。linux下，可以使用<code class="highlighter-rouge">mmap()</code> 、<code class="highlighter-rouge">write()</code>的方式，替换的<code class="highlighter-rouge">read()</code>、<code class="highlighter-rouge">write()</code>方式。<code class="highlighter-rouge">mmap()</code>在进程空间和内核空间进行了映射，从而使缓冲区的数据可以在用户态和内核态下形成数据共享。</p>
+<p>这是一种减少数据拷贝次数的方式。linux下，可以使用<code class="language-plaintext highlighter-rouge">mmap()</code> 、<code class="language-plaintext highlighter-rouge">write()</code>的方式，替换的<code class="language-plaintext highlighter-rouge">read()</code>、<code class="language-plaintext highlighter-rouge">write()</code>方式。<code class="language-plaintext highlighter-rouge">mmap()</code>在进程空间和内核空间进行了映射，从而使缓冲区的数据可以在用户态和内核态下形成数据共享。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tmp_buf</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">(</span><span class="n">file_fd</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
 <span class="n">write</span><span class="p">(</span><span class="n">socket_fd</span><span class="p">,</span> <span class="n">tmp_buf</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
@@ -192,30 +192,30 @@
 
 <ol>
   <li>
-    <p>流程主要的变化是，DMA把数据零拷贝到内核区之后，CPU不用再把数据拷贝到用户空间的缓冲区。这一次由<code class="highlighter-rouge">mmap()</code>的映射机制共享了内存数据。从而，在这个地方减少了一次的CPU拷贝。</p>
+    <p>流程主要的变化是，DMA把数据零拷贝到内核区之后，CPU不用再把数据拷贝到用户空间的缓冲区。这一次由<code class="language-plaintext highlighter-rouge">mmap()</code>的映射机制共享了内存数据。从而，在这个地方减少了一次的CPU拷贝。</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">write()</code>写数据时，从用户空间的缓冲区拷贝数据，其实就是从内核缓冲区拷贝数据，因为数据是共享的。</p>
+    <p><code class="language-plaintext highlighter-rouge">write()</code>写数据时，从用户空间的缓冲区拷贝数据，其实就是从内核缓冲区拷贝数据，因为数据是共享的。</p>
   </li>
   <li>
     <p>所以，总的来说，这种方式减少了一次的数据拷贝。</p>
   </li>
 </ol>
 
-<p><code class="highlighter-rouge">mmap()</code>和<code class="highlighter-rouge">write()</code> 这种方式，数据传输的流程有，4次上下文切换，1次CPU拷贝，2次DMA拷贝。</p>
+<p><code class="language-plaintext highlighter-rouge">mmap()</code>和<code class="language-plaintext highlighter-rouge">write()</code> 这种方式，数据传输的流程有，4次上下文切换，1次CPU拷贝，2次DMA拷贝。</p>
 
-<p><code class="highlighter-rouge">mmap()</code> 主要的于提高对大文件的I/O性能，对于小文件，容易产生内存碎片。</p>
+<p><code class="language-plaintext highlighter-rouge">mmap()</code> 主要的于提高对大文件的I/O性能，对于小文件，容易产生内存碎片。</p>
 
-<p><code class="highlighter-rouge">mmap()</code>隐藏了一个并发问题， 当 <code class="highlighter-rouge">mmap()</code> 一个文件时，如果这个文件被另一个进程所截获，那么 <code class="highlighter-rouge">write()</code> 系统调用会因为访问非法地址被 <code class="highlighter-rouge">SIGBUS</code> 信号终止，<code class="highlighter-rouge">SIGBUS</code> 默认会杀死进程并产生一个  coredump ，服务器可能因此被终止。</p>
+<p><code class="language-plaintext highlighter-rouge">mmap()</code>隐藏了一个并发问题， 当 <code class="language-plaintext highlighter-rouge">mmap()</code> 一个文件时，如果这个文件被另一个进程所截获，那么 <code class="language-plaintext highlighter-rouge">write()</code> 系统调用会因为访问非法地址被 <code class="language-plaintext highlighter-rouge">SIGBUS</code> 信号终止，<code class="language-plaintext highlighter-rouge">SIGBUS</code> 默认会杀死进程并产生一个  coredump ，服务器可能因此被终止。</p>
 
 <h5 id="sendfile-方式">sendfile() 方式</h5>
 
-<p>Linux2.1版本以后有一个方式 <code class="highlighter-rouge">sendfile()</code>，不仅减少了拷贝的次数，也减少了上下文的切换次数。</p>
+<p>Linux2.1版本以后有一个方式 <code class="language-plaintext highlighter-rouge">sendfile()</code>，不仅减少了拷贝的次数，也减少了上下文的切换次数。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sendfile</span><span class="p">(</span><span class="n">socket_fd</span><span class="p">,</span> <span class="n">file_fd</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>这个系统调用目的就是简化网络间的数据传输过程。通过<code class="highlighter-rouge">sendfile()</code>  ,数据可以内核空间直接被拷贝传输，不用经过用户空间。对于用户态不可见，所以减少了上下文的切换。</p>
+<p>这个系统调用目的就是简化网络间的数据传输过程。通过<code class="language-plaintext highlighter-rouge">sendfile()</code>  ,数据可以内核空间直接被拷贝传输，不用经过用户空间。对于用户态不可见，所以减少了上下文的切换。</p>
 
 <p><img src="assets\2021-06-21-linux-zero-copy-006.png" alt="" /></p>
 
@@ -223,7 +223,7 @@
 
 <ol>
   <li>
-    <p>进程调用<code class="highlighter-rouge">sendfile()</code> 后，从用户态切换到内核态，CPU通知DMA 拷贝数据。数据被拷贝到内核缓冲区。</p>
+    <p>进程调用<code class="language-plaintext highlighter-rouge">sendfile()</code> 后，从用户态切换到内核态，CPU通知DMA 拷贝数据。数据被拷贝到内核缓冲区。</p>
   </li>
   <li>
     <p>CPU再把数据从内核的缓冲区拷贝到Socket缓冲区，这一步并不经过用户缓存区。对用户空间无感知。</p>
@@ -236,18 +236,18 @@
   </li>
 </ol>
 
-<p>通过<code class="highlighter-rouge">sendfile()</code>方式，数据传输的过程有：2次上下文的切换，1次CPU的拷贝，2次的DMA拷贝。</p>
+<p>通过<code class="language-plaintext highlighter-rouge">sendfile()</code>方式，数据传输的过程有：2次上下文的切换，1次CPU的拷贝，2次的DMA拷贝。</p>
 
 <h5 id="sendfile--dma-gather-copy-方式">sendfile()  DMA gather copy 方式</h5>
 
-<p>Linux 2.4 版本的内核对 <code class="highlighter-rouge">sendfile()</code> 系统调用进行修改，为 DMA 拷贝引入了 gather 操作。它将内核空间的读缓冲区中对应的数据描述信息（内存地址、地址偏移量）记录到相应的socket缓冲区。由 DMA 根据内存地址、地址偏移量将数据批量地从读缓冲区（read buffer）拷贝到网卡设备中，这样就省去了内核空间中仅剩的 1 次 CPU 拷贝操作。如图：</p>
+<p>Linux 2.4 版本的内核对 <code class="language-plaintext highlighter-rouge">sendfile()</code> 系统调用进行修改，为 DMA 拷贝引入了 gather 操作。它将内核空间的读缓冲区中对应的数据描述信息（内存地址、地址偏移量）记录到相应的socket缓冲区。由 DMA 根据内存地址、地址偏移量将数据批量地从读缓冲区（read buffer）拷贝到网卡设备中，这样就省去了内核空间中仅剩的 1 次 CPU 拷贝操作。如图：</p>
 
 <p><img src="assets\2021-06-21-linux-zero-copy-007.png" alt="" /></p>
 
 <p>具体过程：</p>
 
 <ol>
-  <li>进程调用<code class="highlighter-rouge">sendfile()</code> 后，从用户态切换到内核态，CPU通知DMA 拷贝数据。数据被拷贝到内核缓冲区。</li>
+  <li>进程调用<code class="language-plaintext highlighter-rouge">sendfile()</code> 后，从用户态切换到内核态，CPU通知DMA 拷贝数据。数据被拷贝到内核缓冲区。</li>
   <li>CPU只是把内核缓冲区读的缓冲区的文件描述符和数据长度被记录到Socket缓冲区，所以这里并没有发现数据拷贝。</li>
   <li>DMA从socket缓冲区拿到文件描述符和数据长度后，把数据从内核缓冲区拷贝到网卡。数据并没有通过Socket缓冲区，只有文件描述符和数据长度需要通过Socket缓冲区。</li>
   <li>成功后返回，从内核态切换到用户态。</li>
@@ -280,9 +280,9 @@ Could not change any device features
 
 <h5 id="splice方式">splice()方式</h5>
 
-<p><code class="highlighter-rouge">sendfile()</code> 、DMA gather 拷贝方式要硬件支持，同时也只能在socket上才适用。</p>
+<p><code class="language-plaintext highlighter-rouge">sendfile()</code> 、DMA gather 拷贝方式要硬件支持，同时也只能在socket上才适用。</p>
 
-<p><code class="highlighter-rouge">splice()</code> 系统调用，不仅不需要硬件支持，还实现了两个文件描述符之间的数据零拷贝。<code class="highlighter-rouge">splice()</code> 的伪代码如下：</p>
+<p><code class="language-plaintext highlighter-rouge">splice()</code> 系统调用，不仅不需要硬件支持，还实现了两个文件描述符之间的数据零拷贝。<code class="language-plaintext highlighter-rouge">splice()</code> 的伪代码如下：</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">splice</span><span class="p">(</span><span class="n">fd_in</span><span class="p">,</span> <span class="n">off_in</span><span class="p">,</span> <span class="n">fd_out</span><span class="p">,</span> <span class="n">off_out</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
 </code></pre></div></div>
@@ -298,7 +298,7 @@ Could not change any device features
 <p>具体过程：</p>
 
 <ol>
-  <li>进程调用<code class="highlighter-rouge">splice()</code> 后，从用户态切换到内核态，CPU通知DMA 拷贝数据。数据被拷贝到内核缓冲区。</li>
+  <li>进程调用<code class="language-plaintext highlighter-rouge">splice()</code> 后，从用户态切换到内核态，CPU通知DMA 拷贝数据。数据被拷贝到内核缓冲区。</li>
   <li>CPU在内核缓冲区和Socket缓冲区建立成Pipeline。</li>
   <li>DMA从Socket缓冲区拷贝到网卡。</li>
   <li>成功后返回，从内核态切换到用户态。</li>
@@ -322,35 +322,35 @@ Could not change any device features
   </thead>
   <tbody>
     <tr>
-      <td><code class="highlighter-rouge">read()</code> 、 <code class="highlighter-rouge">write()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">read()</code> 、 <code class="language-plaintext highlighter-rouge">write()</code></td>
       <td style="text-align: center">2</td>
       <td style="text-align: center">2</td>
       <td style="text-align: center">4</td>
       <td>传统方式</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">mmap()</code>、 <code class="highlighter-rouge">write()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">mmap()</code>、 <code class="language-plaintext highlighter-rouge">write()</code></td>
       <td style="text-align: center">1</td>
       <td style="text-align: center">2</td>
       <td style="text-align: center">4</td>
       <td>内存映射方式</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">sendfile()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">sendfile()</code></td>
       <td style="text-align: center">1</td>
       <td style="text-align: center">2</td>
       <td style="text-align: center">2</td>
       <td>linux内核版本2.1以后才有</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">sendfile()</code> 、 DMA gather copy</td>
+      <td><code class="language-plaintext highlighter-rouge">sendfile()</code> 、 DMA gather copy</td>
       <td style="text-align: center">0</td>
       <td style="text-align: center">2</td>
       <td style="text-align: center">2</td>
       <td>Linux 2.4 版本，硬件支持,只能在socket运用</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">splice()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">splice()</code></td>
       <td style="text-align: center">0</td>
       <td style="text-align: center">2</td>
       <td style="text-align: center">2</td>
@@ -359,11 +359,11 @@ Could not change any device features
   </tbody>
 </table>
 
-<p><code class="highlighter-rouge">sendfile()</code> 、 DMA gather copy 和 splice() CPU的拷贝次数已经是0次了。</p>
+<p><code class="language-plaintext highlighter-rouge">sendfile()</code> 、 DMA gather copy 和 splice() CPU的拷贝次数已经是0次了。</p>
 
 <h4 id="实现">实现</h4>
 
-<p>写了一个测试程序，<code class="highlighter-rouge">sendfile()</code>  比<code class="highlighter-rouge">read()</code> 、 <code class="highlighter-rouge">write()</code>是要快一点。 对同一个小文件进行读写900w次。</p>
+<p>写了一个测试程序，<code class="language-plaintext highlighter-rouge">sendfile()</code>  比<code class="language-plaintext highlighter-rouge">read()</code> 、 <code class="language-plaintext highlighter-rouge">write()</code>是要快一点。 对同一个小文件进行读写900w次。</p>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@VM-0-15-centos zorecopy]# ./test_zorecopy test1.txt  test2.txt test3.txt
 use_sendfile <span class="nb">time </span>is: 35567 ms
@@ -372,7 +372,7 @@ use_read_and_write <span class="nb">time </span>is: 36985 ms
 
 <h4 id="总结">总结</h4>
 
-<p>在日常工作中，除非你是做基础组件，不然很多时候,这一些比基础的技术可能不会直接用到。但是，却会时常间接用到。如：我们要选方案，要做出判断那种方案合适，依据是什么。这就要求我们对基础原理所有了解。 再如，这种大原理的优化思路过程。我们可否借鉴，业务需求中数据有多次复制，是否有办法减少复制的次数提高效率。当然，具体问题要具体分析。多了解一些原理拓展知识面，扩大自己的能力圈，可以更好更准确的做判断。</p>
+<p>除非你是做基础组件,不然在日常工作中，很多时候,这一些比基础的技术可能不会直接用到。但是，却会时常间接用到。如：我们要选方案，要做出判断那种方案合适，依据是什么。这就要求我们对基础原理所有了解。 再如，这种大原理的优化思路过程。我们可否借鉴，业务需求中数据有多次复制，是否有办法减少复制的次数提高效率。当然，具体问题要具体分析。多了解一些原理拓展知识面，扩大自己的能力圈，可以更好更准确的做判断。</p>
 
 <h4 id="参考">参考</h4>
 
@@ -455,7 +455,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/doc/kkn/2021-06-21 linux-zore-copy.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

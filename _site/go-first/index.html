@@ -65,24 +65,24 @@
   <li><strong>RPC很有意思</strong></li>
   <li><strong>反射</strong></li>
   <li>预定义常量，iota一个特别常量，可以被认为是一个可被编译器修改的常量，在每一个const关键字出现时被重置为0，然后在下一个const出现之前，每出现一次iota，其所代表的数字会自动增1。
-    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span><span class="x"> </span><span class="p">(</span><span class="x"> </span><span class="c">// iota被重设为0</span><span class="x">
-   </span><span class="n">c0</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="no">iota</span><span class="x"> </span><span class="c">// c0 == 0</span><span class="x">
-   </span><span class="n">c1</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="no">iota</span><span class="x"> </span><span class="c">// c1 == 1</span><span class="x">
-   </span><span class="n">c2</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="no">iota</span><span class="x"> </span><span class="c">// c2 == 2</span><span class="x">
-</span><span class="p">)</span><span class="x"> 
-</span></code></pre></div>    </div>
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="p">(</span> <span class="c">// iota被重设为0</span>
+   <span class="n">c0</span> <span class="o">=</span> <span class="no">iota</span> <span class="c">// c0 == 0</span>
+   <span class="n">c1</span> <span class="o">=</span> <span class="no">iota</span> <span class="c">// c1 == 1</span>
+   <span class="n">c2</span> <span class="o">=</span> <span class="no">iota</span> <span class="c">// c2 == 2</span>
+<span class="p">)</span> 
+</code></pre></div>    </div>
     <p>所以，这个东西可用于枚举。</p>
-    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span><span class="x"> </span><span class="p">(</span><span class="x">
-</span><span class="n">Sunday</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="no">iota</span><span class="x">
-</span><span class="n">Monday</span><span class="x">
-</span><span class="n">Tuesday</span><span class="x">
-</span><span class="n">Wednesday</span><span class="x">
-</span><span class="n">Thursday</span><span class="x">
-</span><span class="n">Friday</span><span class="x">
-</span><span class="n">Saturday</span><span class="x">
-</span><span class="n">numberOfDays</span><span class="x"> </span><span class="c">// 这个常量没有导出</span><span class="x">
-</span><span class="p">)</span><span class="x">  
-</span></code></pre></div>    </div>
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="p">(</span>
+<span class="n">Sunday</span> <span class="o">=</span> <span class="no">iota</span>
+<span class="n">Monday</span>
+<span class="n">Tuesday</span>
+<span class="n">Wednesday</span>
+<span class="n">Thursday</span>
+<span class="n">Friday</span>
+<span class="n">Saturday</span>
+<span class="n">numberOfDays</span> <span class="c">// 这个常量没有导出</span>
+<span class="p">)</span>  
+</code></pre></div>    </div>
   </li>
 </ol>
 
@@ -132,28 +132,28 @@
   <li>make 函数创建一个指定元素类型。长度 和容量的slice。</li>
 </ol>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x"> </span><span class="nb">make</span><span class="p">([]</span><span class="n">T</span><span class="p">,</span><span class="x"> </span><span class="nb">len</span><span class="p">)</span><span class="x">
- </span><span class="nb">make</span><span class="p">([]</span><span class="n">T</span><span class="p">,</span><span class="x">  </span><span class="nb">len</span><span class="p">,</span><span class="x"> </span><span class="nb">cap</span><span class="p">)</span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nb">make</span><span class="p">([]</span><span class="n">T</span><span class="p">,</span> <span class="nb">len</span><span class="p">)</span>
+ <span class="nb">make</span><span class="p">([]</span><span class="n">T</span><span class="p">,</span>  <span class="nb">len</span><span class="p">,</span> <span class="nb">cap</span><span class="p">)</span>
+</code></pre></div></div>
 <ol>
   <li>append函数，用于向slice追加元素。
-    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x">    </span><span class="k">func</span><span class="x"> </span><span class="n">appendInt</span><span class="p">(</span><span class="n">x</span><span class="x"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">,</span><span class="x"> </span><span class="n">y</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="p">][]</span><span class="kt">int</span><span class="x"> </span><span class="p">{</span><span class="x">
-   </span><span class="k">var</span><span class="x"> </span><span class="n">z</span><span class="x"> </span><span class="p">[]</span><span class="kt">int</span><span class="x"> 
-   </span><span class="n">zlen</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="x"> </span><span class="o">+</span><span class="x"> </span><span class="m">1</span><span class="x">
-   </span><span class="k">if</span><span class="x"> </span><span class="n">zlen</span><span class="x"> </span><span class="o">&lt;=</span><span class="x"> </span><span class="nb">cap</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
-       </span><span class="n">z</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">x</span><span class="x"> </span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">]</span><span class="x"> 
-   </span><span class="p">}</span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
-       </span><span class="n">zcap</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">zlen</span><span class="x">
-       </span><span class="k">if</span><span class="x"> </span><span class="nb">cap</span><span class="x"> </span><span class="o">&lt;</span><span class="x"> </span><span class="m">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="x">
-           </span><span class="n">zcap</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="m">2</span><span class="o">*</span><span class="x"> </span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="x">
-       </span><span class="p">}</span><span class="x">
-       </span><span class="n">z</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">mak</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="x"> </span><span class="n">zlen</span><span class="p">,</span><span class="x"> </span><span class="n">zcap</span><span class="p">)</span><span class="x">
-       </span><span class="nb">copy</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="x"> </span><span class="n">x</span><span class="p">)</span><span class="x">
-   </span><span class="p">}</span><span class="x">
-   </span><span class="n">z</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">y</span><span class="x">
-    </span><span class="k">return</span><span class="x"> </span><span class="n">z</span><span class="x"> 
-    </span><span class="p">}</span><span class="x">
-</span></code></pre></div>    </div>
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">func</span> <span class="n">appendInt</span><span class="p">(</span><span class="n">x</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">y</span> <span class="kt">int</span><span class="p">)</span> <span class="p">][]</span><span class="kt">int</span> <span class="p">{</span>
+   <span class="k">var</span> <span class="n">z</span> <span class="p">[]</span><span class="kt">int</span> 
+   <span class="n">zlen</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="m">1</span>
+   <span class="k">if</span> <span class="n">zlen</span> <span class="o">&lt;=</span> <span class="nb">cap</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+       <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">]</span> 
+   <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+       <span class="n">zcap</span> <span class="o">:=</span> <span class="n">zlen</span>
+       <span class="k">if</span> <span class="nb">cap</span> <span class="o">&lt;</span> <span class="m">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">){</span>
+           <span class="n">zcap</span> <span class="o">=</span> <span class="m">2</span><span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+       <span class="p">}</span>
+       <span class="n">z</span> <span class="o">=</span> <span class="n">mak</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">zlen</span><span class="p">,</span> <span class="n">zcap</span><span class="p">)</span>
+       <span class="nb">copy</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+   <span class="p">}</span>
+   <span class="n">z</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">z</span> 
+    <span class="p">}</span>
+</code></pre></div>    </div>
   </li>
   <li>copy函数第一个是目标， 第一个是源</li>
 </ol>
@@ -165,13 +165,13 @@
   <li>浮点数用做key类型则是一个坏的想法，可能会出错。</li>
 </ol>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x">    </span><span class="n">ages</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">make</span><span class="x"> </span><span class="p">(</span><span class="nb">make</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">ages</span> <span class="o">:=</span> <span class="nb">make</span> <span class="p">(</span><span class="nb">make</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
     
-    </span><span class="n">ages</span><span class="x"> </span><span class="p">;</span><span class="o">=</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="x">
-        </span><span class="s">"alice"</span><span class="x"> </span><span class="o">:</span><span class="x"> </span><span class="m">13</span><span class="p">,</span><span class="x">
-        </span><span class="s">"charlie"</span><span class="x"> </span><span class="o">:</span><span class="x"> </span><span class="m">34</span><span class="p">,</span><span class="x">
-    </span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
+    <span class="n">ages</span> <span class="p">;</span><span class="o">=</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+        <span class="s">"alice"</span> <span class="o">:</span> <span class="m">13</span><span class="p">,</span>
+        <span class="s">"charlie"</span> <span class="o">:</span> <span class="m">34</span><span class="p">,</span>
+    <span class="p">}</span>
+</code></pre></div></div>
 <ol>
   <li>不能对map的元素进行取址操作，  _ = &amp;ages[“bob”] // compile error :cannot take address of map elemnet</li>
   <li>因为随着map的增大，可能会重新进行分配空间</li>
@@ -186,12 +186,12 @@
   <li>通常一行对应一个结构体成员，成员的名字在前类型在后，不过如果相邻的成员类型如果相同的话，可以被合并到一行。</li>
 </ol>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x">   </span><span class="k">type</span><span class="x"> </span><span class="n">Employee</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
-       </span><span class="n">ID</span><span class="x">            </span><span class="kt">int</span><span class="x"> 
-       </span><span class="n">Name</span><span class="p">,</span><span class="x"> </span><span class="n">Address</span><span class="x"> </span><span class="kt">string</span><span class="x">
-       </span><span class="n">Dob</span><span class="x">           </span><span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="x">
-   </span><span class="p">}</span><span class="x"> 
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="k">type</span> <span class="n">Employee</span> <span class="k">struct</span> <span class="p">{</span>
+       <span class="n">ID</span>            <span class="kt">int</span> 
+       <span class="n">Name</span><span class="p">,</span> <span class="n">Address</span> <span class="kt">string</span>
+       <span class="n">Dob</span>           <span class="n">time</span><span class="o">.</span><span class="n">Time</span>
+   <span class="p">}</span> 
+</code></pre></div></div>
 <ol>
   <li>结松体成员的输入顺序也有重要的意义。 如果要交换Name和Address 出现的顺序，那么就是定义不同的结构类型。</li>
   <li>如果结构体成员名字是以大写字母开头的，那么成员就是导出的，这是GO语言导出决定的。一个结构体可能同时包含导出和未导出的成员。</li>
@@ -202,20 +202,20 @@
   <li>结构体嵌入和匿名成员。Go语言有一个特性让我们只声明一个成员对应的数据类型而不指名成员的名字，这类成员就是叫匿名成员。匿名成员的数据类型必须是命名的类型或指向一个命名的类型的指针。</li>
 </ol>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x">   </span><span class="k">type</span><span class="x"> </span><span class="n">Point</span><span class="x"> </span><span class="k">struct</span><span class="p">{</span><span class="x">
-       </span><span class="n">x</span><span class="p">,</span><span class="x"> </span><span class="n">y</span><span class="x"> </span><span class="kt">int</span><span class="x"> 
-   </span><span class="p">}</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="k">type</span> <span class="n">Point</span> <span class="k">struct</span><span class="p">{</span>
+       <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="kt">int</span> 
+   <span class="p">}</span>
    
-   </span><span class="k">type</span><span class="x"> </span><span class="n">Cirecle</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
-       </span><span class="n">Point</span><span class="x">
-       </span><span class="n">Radius</span><span class="x"> </span><span class="kt">int</span><span class="x">
-   </span><span class="p">}</span><span class="x">
+   <span class="k">type</span> <span class="n">Cirecle</span> <span class="k">struct</span> <span class="p">{</span>
+       <span class="n">Point</span>
+       <span class="n">Radius</span> <span class="kt">int</span>
+   <span class="p">}</span>
    
-   </span><span class="k">type</span><span class="x"> </span><span class="n">Wheel</span><span class="x"> </span><span class="k">struct</span><span class="p">{</span><span class="x">
-       </span><span class="n">Circle</span><span class="x"> 
-       </span><span class="n">Spokes</span><span class="x"> </span><span class="kt">int</span><span class="x">
-   </span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
+   <span class="k">type</span> <span class="n">Wheel</span> <span class="k">struct</span><span class="p">{</span>
+       <span class="n">Circle</span> 
+       <span class="n">Spokes</span> <span class="kt">int</span>
+   <span class="p">}</span>
+</code></pre></div></div>
 <ol>
   <li>因为匿名成员也且个隐匿的名字，不能同进包含两个类型相同的匿名成员，这会导致名字冲突。</li>
   <li>成员的名字是由其类型隐匿地决定的。</li>
@@ -225,107 +225,107 @@
 <hr />
 <ol>
   <li>调用多返回值函数时， 返回给调用者的是一组值，调用者必须显式的交这些分配给变量
-    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">link</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">findLinks</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="x">
-</span></code></pre></div>    </div>
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">link</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="o">:=</span> <span class="n">findLinks</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</code></pre></div>    </div>
   </li>
   <li>如果某个值不被使用，可以将其分配给blank indentifier</li>
   <li>也可以交一个返回多个参数的函数伤脑筋为该函数的参数，这很少出现在实际生产代码中，这个可以用在代码debug时很方便。</li>
   <li>v如果一个函数将所有的返回值都显示的变量名，那么该return 语句可以活力操作数。这称之为bare return.
-    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x"> </span><span class="k">func</span><span class="x"> </span><span class="n">ConutWordsAndImages</span><span class="p">(</span><span class="n">url</span><span class="x"> </span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="p">(</span><span class="n">words</span><span class="p">,</span><span class="x">  </span><span class="n">images</span><span class="x"> </span><span class="kt">int</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="p">){</span><span class="x">
-     </span><span class="n">resp</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">http</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="x">
-     </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="n">nul</span><span class="x"> </span><span class="p">{</span><span class="x">
-         </span><span class="k">return</span><span class="x">   </span><span class="c">// 这个地方的返回是  return words, images, err</span><span class="x">
-     </span><span class="p">}</span><span class="x">
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">func</span> <span class="n">ConutWordsAndImages</span><span class="p">(</span><span class="n">url</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">words</span><span class="p">,</span>  <span class="n">images</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span><span class="p">){</span>
+     <span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+     <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="n">nul</span> <span class="p">{</span>
+         <span class="k">return</span>   <span class="c">// 这个地方的返回是  return words, images, err</span>
+     <span class="p">}</span>
         
-     </span><span class="c">//.... </span><span class="x">
- </span><span class="p">}</span><span class="x">
-</span></code></pre></div>    </div>
+     <span class="c">//.... </span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
   </li>
   <li>函数被看作第一类值（first-class values）:函数像其他值一样，拥有类型，可以被赋值其他变量，传递函数，从函数返回。对函数值的调用类似函数调用。
-    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x"> </span><span class="k">func</span><span class="x"> </span><span class="n">square</span><span class="p">(</span><span class="n">n</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="p">{</span><span class="x">    </span><span class="k">return</span><span class="x"> </span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="x"> </span><span class="p">}</span><span class="x">
- </span><span class="n">f</span><span class="o">:=</span><span class="x"> </span><span class="n">square</span><span class="x">
- </span><span class="n">fmt</span><span class="p">,</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="m">3</span><span class="p">))</span><span class="x">  </span><span class="c">// "9"</span><span class="x">
-</span></code></pre></div>    </div>
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">func</span> <span class="n">square</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>    <span class="k">return</span> <span class="n">n</span><span class="o">*</span><span class="n">n</span> <span class="p">}</span>
+ <span class="n">f</span><span class="o">:=</span> <span class="n">square</span>
+ <span class="n">fmt</span><span class="p">,</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="m">3</span><span class="p">))</span>  <span class="c">// "9"</span>
+</code></pre></div>    </div>
   </li>
   <li>函数值可与nil比较
-    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x"> </span><span class="k">var</span><span class="x"> </span><span class="n">f</span><span class="x"> </span><span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="kt">int</span><span class="x"> 
- </span><span class="k">if</span><span class="x"> </span><span class="n">f</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
-     </span><span class="n">f</span><span class="p">(</span><span class="m">3</span><span class="p">)</span><span class="x">
- </span><span class="p">}</span><span class="x">
-</span></code></pre></div>    </div>
+    <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">var</span> <span class="n">f</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> 
+ <span class="k">if</span> <span class="n">f</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+     <span class="n">f</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
   </li>
   <li>函数值之间是不能可比较的，也不能做map的key。</li>
   <li>匿名函数 在func关键籽后没有函数名。</li>
 </ol>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">squares</span><span class="p">()</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="k">var</span><span class="x"> </span><span class="n">x</span><span class="x">  </span><span class="kt">int</span><span class="x">
-    </span><span class="k">return</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="p">{</span><span class="x">
-        </span><span class="n">x</span><span class="o">++</span><span class="x">
-        </span><span class="k">return</span><span class="x"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="x">
-    </span><span class="p">}</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">squares</span><span class="p">()</span> <span class="k">func</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">x</span>  <span class="kt">int</span>
+    <span class="k">return</span> <span class="k">func</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+        <span class="n">x</span><span class="o">++</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">f</span><span class="x"> </span><span class="err">：</span><span class="o">=</span><span class="x"> </span><span class="n">squares</span><span class="p">()</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">())</span><span class="x"> </span><span class="c">// "1"</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">())</span><span class="x"> </span><span class="c">// "4"</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">f</span> <span class="err">：</span><span class="o">=</span> <span class="n">squares</span><span class="p">()</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">())</span> <span class="c">// "1"</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">())</span> <span class="c">// "4"</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>9.这个地方的变量生命周期不由它的作用域决定。</p>
 
 <p>10.当匿名函数需要被递归调用时，我们必须首先声明一个变量。再将匿名函数赋值给这变量。</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span><span class="x"> </span><span class="n">visiAll</span><span class="x"> </span><span class="n">finc</span><span class="p">(</span><span class="n">item</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">)</span><span class="x">
-</span><span class="n">visiAll</span><span class="x">  </span><span class="o">=</span><span class="x"> </span><span class="k">func</span><span class="p">(</span><span class="n">items</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="k">for</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">item</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="k">range</span><span class="x"> </span><span class="n">items</span><span class="x"> </span><span class="p">{</span><span class="x">
-        </span><span class="k">if</span><span class="x"> </span><span class="o">!</span><span class="n">seen</span><span class="p">[</span><span class="n">item</span><span class="p">]</span><span class="x"> </span><span class="p">{</span><span class="x">
-            </span><span class="n">seen</span><span class="p">[</span><span class="n">item</span><span class="p">]</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="no">true</span><span class="x">
-            </span><span class="n">visitAll</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="n">item</span><span class="p">])</span><span class="x">
-            </span><span class="c">//...</span><span class="x">
-        </span><span class="p">}</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">visiAll</span> <span class="n">finc</span><span class="p">(</span><span class="n">item</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span>
+<span class="n">visiAll</span>  <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">items</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">item</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">items</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">seen</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">seen</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+            <span class="n">visitAll</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
+            <span class="c">//...</span>
+        <span class="p">}</span>
 
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>11.在循环中生成的所有函数值都共享相同的循环变量。需要注意，函数值中记录的是循环变量的内存地址，而不是循环变量某一时刻的值，以dir为例，后续的迭代会不断更新dir的值，当删除操作执行时，for循环已完成，dir中存储的值等于最后一次迭代的值。</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x">    </span><span class="k">var</span><span class="x"> </span><span class="n">rmdirs</span><span class="x"> </span><span class="p">[]</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x">
-    </span><span class="k">for</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">d</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="k">range</span><span class="x"> </span><span class="n">tempDirs</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-        </span><span class="n">dir</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">d</span><span class="x"> </span><span class="c">// NOTE: necessary </span><span class="x">
-        </span><span class="n">os</span><span class="o">.</span><span class="n">MkdirAll</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="x"> </span><span class="m">0755</span><span class="p">)</span><span class="x"> </span><span class="c">// creates parent directiories too </span><span class="x">
-        </span><span class="n">rmdirs</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="nb">append</span><span class="p">(</span><span class="n">rmdirs</span><span class="p">,</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-            </span><span class="n">os</span><span class="o">.</span><span class="n">RemoverAll</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">var</span> <span class="n">rmdirs</span> <span class="p">[]</span> <span class="k">func</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">d</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">tempDirs</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">dir</span> <span class="o">:=</span> <span class="n">d</span> <span class="c">// NOTE: necessary </span>
+        <span class="n">os</span><span class="o">.</span><span class="n">MkdirAll</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="m">0755</span><span class="p">)</span> <span class="c">// creates parent directiories too </span>
+        <span class="n">rmdirs</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">rmdirs</span><span class="p">,</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">RemoverAll</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
             
-        </span><span class="p">})</span><span class="x">
-    </span><span class="p">}</span><span class="x">
+        <span class="p">})</span>
+    <span class="p">}</span>
     
-    </span><span class="c">/////</span><span class="x">
-     </span><span class="k">var</span><span class="x"> </span><span class="n">rmdirs</span><span class="x"> </span><span class="p">[]</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x">
-    </span><span class="k">for</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">dir</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="k">range</span><span class="x"> </span><span class="n">tempDirs</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-        </span><span class="n">os</span><span class="o">.</span><span class="n">MkdirAll</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="x"> </span><span class="m">0755</span><span class="p">)</span><span class="x"> </span><span class="c">// creates parent directiories too </span><span class="x">
-        </span><span class="n">rmdirs</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="nb">append</span><span class="p">(</span><span class="n">rmdirs</span><span class="p">,</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-            </span><span class="n">os</span><span class="o">.</span><span class="n">RemoverAll</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span><span class="x"> </span><span class="c">// NOTE incorrect </span><span class="x">
+    <span class="c">/////</span>
+     <span class="k">var</span> <span class="n">rmdirs</span> <span class="p">[]</span> <span class="k">func</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">dir</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">tempDirs</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">MkdirAll</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="m">0755</span><span class="p">)</span> <span class="c">// creates parent directiories too </span>
+        <span class="n">rmdirs</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">rmdirs</span><span class="p">,</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">RemoverAll</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span> <span class="c">// NOTE incorrect </span>
             
-        </span><span class="p">})</span><span class="x">
-    </span><span class="p">}</span><span class="x">
+        <span class="p">})</span>
+    <span class="p">}</span>
 
-</span></code></pre></div></div>
+</code></pre></div></div>
 
 <p>12.如果你使用go语句或者defer语句，会经常遇到些类问题，这不是go或defer本身导致的，而是因为它们都会等待的循环结束后，再执行函数值。</p>
 
 <p>13.参数数量可变的函数称为可变参函数。 在声明可变参数函数时，要在参数列表的最后一个参数类型之前加上省略符号”…”</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">sum</span><span class="x"> </span><span class="p">(</span><span class="n">vals</span><span class="x"> </span><span class="o">...</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">total</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="x">
-    </span><span class="k">for</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="n">val</span><span class="x"> </span><span class="o">:=</span><span class="x">  </span><span class="k">range</span><span class="x"> </span><span class="n">vals</span><span class="x"> </span><span class="p">{</span><span class="x">
-        </span><span class="n">total</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">val</span><span class="x"> 
-    </span><span class="p">}</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">sum</span> <span class="p">(</span><span class="n">vals</span> <span class="o">...</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">total</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">val</span> <span class="o">:=</span>  <span class="k">range</span> <span class="n">vals</span> <span class="p">{</span>
+        <span class="n">total</span> <span class="o">:=</span> <span class="n">val</span> 
+    <span class="p">}</span>
+<span class="p">}</span>
     
-</span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">5</span><span class="p">))</span><span class="x">
-</span></code></pre></div></div>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">5</span><span class="p">))</span>
+</code></pre></div></div>
 
 <p>14.当defer语句被执行时，跟在defer后面的函数会被重视迟执行。直到包含该defer语句的函数执行完毕时，defer后的函数才会被执行，不论包含defer语句的函数是通过return正常结束，还是由于panic导致的异常结束。你可以在一个函数中执行多条dfer语句，它们的执行与声明顺序相反。</p>
 
@@ -333,22 +333,22 @@
 
 <p>16.调试复杂程序时，defer机制也常被用于记录何时进入和退出函数。下例中的bigSlowOperation函数，直接调用trace记录函数的被调用情况。通过这种方式，我们可以只通过一个语句控制函数的入口和所有的出口，甚至可以记录函数的运行时间，需要注意一点：不要忘记defer语句的圆的括号。</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">bigSlowOperation</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="k">defer</span><span class="x"> </span><span class="n">trace</span><span class="p">(</span><span class="s">"bigSlowOperation"</span><span class="p">)()</span><span class="x"> </span><span class="c">// don't forget the</span><span class="x">
-    </span><span class="n">extra</span><span class="x"> </span><span class="n">parentheses</span><span class="x">
-    </span><span class="c">// ...lots of work…</span><span class="x">
-    </span><span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">10</span><span class="x"> </span><span class="o">*</span><span class="x"> </span><span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">)</span><span class="x"> </span><span class="c">// simulate slow</span><span class="x">
-    </span><span class="n">operation</span><span class="x"> </span><span class="n">by</span><span class="x"> </span><span class="n">sleeping</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">bigSlowOperation</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">defer</span> <span class="n">trace</span><span class="p">(</span><span class="s">"bigSlowOperation"</span><span class="p">)()</span> <span class="c">// don't forget the</span>
+    <span class="n">extra</span> <span class="n">parentheses</span>
+    <span class="c">// ...lots of work…</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">10</span> <span class="o">*</span> <span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">)</span> <span class="c">// simulate slow</span>
+    <span class="n">operation</span> <span class="n">by</span> <span class="n">sleeping</span>
+<span class="p">}</span>
 
-</span><span class="k">func</span><span class="x"> </span><span class="n">trace</span><span class="p">(</span><span class="n">msg</span><span class="x"> </span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">start</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span><span class="x">
-    </span><span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"enter %s"</span><span class="p">,</span><span class="x"> </span><span class="n">msg</span><span class="p">)</span><span class="x">
-    </span><span class="k">return</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"exit %s (%s)"</span><span class="p">,</span><span class="x"> </span><span class="n">msg</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">Since</span><span class="p">(</span><span class="n">start</span><span class="p">))</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
+<span class="k">func</span> <span class="n">trace</span><span class="p">(</span><span class="n">msg</span> <span class="kt">string</span><span class="p">)</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">start</span> <span class="o">:=</span> <span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"enter %s"</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"exit %s (%s)"</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">Since</span><span class="p">(</span><span class="n">start</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h3 id="方法">方法</h3>
 <hr />
@@ -356,28 +356,28 @@
   <li>在函数声明时，在其名字之前放上一个变量，即是一个方法。这个附加的参数会将该函数附加到这种类型上。即相当 于为这种类型定义了一个独占的方法。</li>
 </ol>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">geometry</span><span class="x">
-</span><span class="k">import</span><span class="x"> </span><span class="s">"math"</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">geometry</span>
+<span class="k">import</span> <span class="s">"math"</span>
 
-</span><span class="k">type</span><span class="x"> </span><span class="n">Point</span><span class="x"> </span><span class="k">struct</span><span class="p">{</span><span class="x"> </span><span class="n">X</span><span class="p">,</span><span class="x"> </span><span class="n">Y</span><span class="x"> </span><span class="kt">float64</span><span class="x"> </span><span class="p">}</span><span class="x">
+<span class="k">type</span> <span class="n">Point</span> <span class="k">struct</span><span class="p">{</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="kt">float64</span> <span class="p">}</span>
 
-</span><span class="c">// traditional function</span><span class="x">
-</span><span class="k">func</span><span class="x"> </span><span class="n">Distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="x"> </span><span class="n">q</span><span class="x"> </span><span class="n">Point</span><span class="p">)</span><span class="x"> </span><span class="kt">float64</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="k">return</span><span class="x"> </span><span class="n">math</span><span class="o">.</span><span class="n">Hypot</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">X</span><span class="o">-</span><span class="n">p</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="x"> </span><span class="n">q</span><span class="o">.</span><span class="n">Y</span><span class="o">-</span><span class="n">p</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<span class="c">// traditional function</span>
+<span class="k">func</span> <span class="n">Distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="n">Point</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">Hypot</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">X</span><span class="o">-</span><span class="n">p</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">Y</span><span class="o">-</span><span class="n">p</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span>
+<span class="p">}</span>
 
-</span><span class="c">// same thing, but as a method of the Point type</span><span class="x">
-</span><span class="c">// 参数p叫做访求的接收器</span><span class="x">
-</span><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="n">Point</span><span class="p">)</span><span class="x"> </span><span class="n">Distance</span><span class="p">(</span><span class="n">q</span><span class="x"> </span><span class="n">Point</span><span class="p">)</span><span class="x"> </span><span class="kt">float64</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="k">return</span><span class="x"> </span><span class="n">math</span><span class="o">.</span><span class="n">Hypot</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">X</span><span class="o">-</span><span class="n">p</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="x"> </span><span class="n">q</span><span class="o">.</span><span class="n">Y</span><span class="o">-</span><span class="n">p</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<span class="c">// same thing, but as a method of the Point type</span>
+<span class="c">// 参数p叫做访求的接收器</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="n">Point</span><span class="p">)</span> <span class="n">Distance</span><span class="p">(</span><span class="n">q</span> <span class="n">Point</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">Hypot</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">X</span><span class="o">-</span><span class="n">p</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">Y</span><span class="o">-</span><span class="n">p</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span>
+<span class="p">}</span>
 
-</span><span class="n">p</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Point</span><span class="p">{</span><span class="m">1</span><span class="p">,</span><span class="x"> </span><span class="m">2</span><span class="p">}</span><span class="x">
-</span><span class="n">q</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Point</span><span class="p">{</span><span class="m">4</span><span class="p">,</span><span class="x"> </span><span class="m">6</span><span class="p">}</span><span class="x">
-</span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">Distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="x"> </span><span class="n">q</span><span class="p">))</span><span class="x"> </span><span class="c">// "5", function call</span><span class="x">
-</span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">Distance</span><span class="p">(</span><span class="n">q</span><span class="p">))</span><span class="x"> </span><span class="c">// "5", method call</span><span class="x">
+<span class="n">p</span> <span class="o">:=</span> <span class="n">Point</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">}</span>
+<span class="n">q</span> <span class="o">:=</span> <span class="n">Point</span><span class="p">{</span><span class="m">4</span><span class="p">,</span> <span class="m">6</span><span class="p">}</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">Distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span> <span class="c">// "5", function call</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">Distance</span><span class="p">(</span><span class="n">q</span><span class="p">))</span> <span class="c">// "5", method call</span>
 
-</span></code></pre></div></div>
+</code></pre></div></div>
 <p>2.在Go语言里，我们为一些简单的数值、字符串、slice、map来定义一些附加行为很方便。方法可以被 声明到任意类型，只要不是一个指针或者一个interface。</p>
 
 <p>3.当调用一个函数时，会对其每一个参数值进行拷贝，如果一个函数需要更新一个变量，或者函数的其中一个参数实在太大我们希望能够避免进行这种默认的拷贝，这种情况下我们就需要用到指针了。对应到我们这里用来更新接收器的对象的方法，当这个接受者变量本身比较大时，我们就可以用其指针而不是对象来声明方法。</p>
@@ -386,9 +386,9 @@
 
 <p>5.如果接收器p是一个Point类型的变量，并且其方法需要一个Point指针作为接收器，我们可以用如下这种写法：</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="x">
-</span><span class="n">p</span><span class="o">.</span><span class="n">ScaleBy</span><span class="p">(</span><span class="m">2</span><span class="p">)</span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">p</span><span class="o">.</span><span class="n">ScaleBy</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+</code></pre></div></div>
 
 <p>编译器会隐式的帮我们用&amp;p去调用ScaleBy这认方法。这种简写的方法只适用于“变量”，包括struct里字段比如p.X,以及array和slice内的元素比如perim[0]。</p>
 
@@ -402,14 +402,14 @@
 
 <p>9.通过嵌入结构体来扩展类型。这个有点类型于C++中对于类的继承。</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span><span class="x"> </span><span class="s">"image/color"</span><span class="x">
-</span><span class="k">type</span><span class="x"> </span><span class="n">Point</span><span class="x"> </span><span class="k">struct</span><span class="p">{</span><span class="x"> </span><span class="n">X</span><span class="p">,</span><span class="x"> </span><span class="n">Y</span><span class="x"> </span><span class="kt">float64</span><span class="x"> </span><span class="p">}</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"image/color"</span>
+<span class="k">type</span> <span class="n">Point</span> <span class="k">struct</span><span class="p">{</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="kt">float64</span> <span class="p">}</span>
 
-</span><span class="k">type</span><span class="x"> </span><span class="n">ColoredPoint</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">Point</span><span class="x">
-    </span><span class="n">Color</span><span class="x"> </span><span class="n">color</span><span class="o">.</span><span class="n">RGBA</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
+<span class="k">type</span> <span class="n">ColoredPoint</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">Point</span>
+    <span class="n">Color</span> <span class="n">color</span><span class="o">.</span><span class="n">RGBA</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>10.当结构体嵌入时，被嵌入的结构体和嵌入的结构体的一些方法的调用应该注意的事项，这个地方还是很理解。要复习一下。</p>
 
@@ -428,10 +428,10 @@
 
 <p>3.type绝不只是对应于C/C++中的typedef,它不是用于定义一系列的别名。它的作用是定义一系列互不相干的行为特征：通过这些互不相干的行为特征， 本质上同一的事物表现出不同事物的特征。</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">Age</span><span class="x"> </span><span class="kt">int</span><span class="x"> 
-</span><span class="k">type</span><span class="x"> </span><span class="n">Height</span><span class="x"> </span><span class="kt">int</span><span class="x"> 
-</span><span class="n">tytpe</span><span class="x"> </span><span class="n">Grade</span><span class="x"> </span><span class="kt">int</span><span class="x"> 
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Age</span> <span class="kt">int</span> 
+<span class="k">type</span> <span class="n">Height</span> <span class="kt">int</span> 
+<span class="n">tytpe</span> <span class="n">Grade</span> <span class="kt">int</span> 
+</code></pre></div></div>
 
 <p>用type定义出的，是完全不同的类型。（面向不同的对象）,可对他们定义不同的方法或函数</p>
 
@@ -439,31 +439,31 @@
 
 <p>5.接口内嵌</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">ReadWriter</span><span class="x"> </span><span class="k">interface</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">Reader</span><span class="x">
-    </span><span class="n">Writer</span><span class="x">
-</span><span class="p">}</span><span class="x"> 
-</span><span class="k">type</span><span class="x"> </span><span class="n">ReadWriteCloser</span><span class="x"> </span><span class="k">interface</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">Reader</span><span class="x">
-    </span><span class="n">Writer</span><span class="x">  
-    </span><span class="n">Closer</span><span class="x">
-</span><span class="p">}</span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">ReadWriter</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">Reader</span>
+    <span class="n">Writer</span>
+<span class="p">}</span> 
+<span class="k">type</span> <span class="n">ReadWriteCloser</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">Reader</span>
+    <span class="n">Writer</span>  
+    <span class="n">Closer</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>6.一个类型如果拥有一个接口需要的所有方法，那么这个类型就袖了这个接口。</p>
 
 <p>7.flag.Value接口 帮忙命令行标记定义新的符号的</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span><span class="x"> </span><span class="n">period</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">flag</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="s">"period"</span><span class="p">,</span><span class="x"> </span><span class="m">1</span><span class="o">*</span><span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">,</span><span class="x"> </span><span class="s">"sleep period"</span><span class="p">)</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">period</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="s">"period"</span><span class="p">,</span> <span class="m">1</span><span class="o">*</span><span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">,</span> <span class="s">"sleep period"</span><span class="p">)</span>
 
-</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">flag</span><span class="o">.</span><span class="n">Parese</span><span class="p">()</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"sleeping for %v ..."</span><span class="p">,</span><span class="x"> </span><span class="o">*</span><span class="n">period</span><span class="p">)</span><span class="x">
-    </span><span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="o">*</span><span class="n">period</span><span class="p">)</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">()</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">flag</span><span class="o">.</span><span class="n">Parese</span><span class="p">()</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"sleeping for %v ..."</span><span class="p">,</span> <span class="o">*</span><span class="n">period</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="o">*</span><span class="n">period</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">()</span>
+<span class="p">}</span>
 
-</span></code></pre></div></div>
+</code></pre></div></div>
 
 <p>8.接口赋值</p>
 <ul>
@@ -472,21 +472,21 @@
 
 <p>9.接口查询</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span><span class="x"> </span><span class="n">file1</span><span class="x"> </span><span class="n">Writer</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="o">...</span><span class="x">
-</span><span class="k">if</span><span class="x"> </span><span class="n">file5</span><span class="p">,</span><span class="x"> </span><span class="n">ok</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">file1</span><span class="o">.</span><span class="p">(</span><span class="n">two</span><span class="o">.</span><span class="n">IStream</span><span class="p">);</span><span class="x"> </span><span class="n">ok</span><span class="x"> </span><span class="p">{</span><span class="x">
-</span><span class="o">...</span><span class="x">
-</span><span class="p">}</span><span class="x">  
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">file1</span> <span class="n">Writer</span> <span class="o">=</span> <span class="o">...</span>
+<span class="k">if</span> <span class="n">file5</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">file1</span><span class="o">.</span><span class="p">(</span><span class="n">two</span><span class="o">.</span><span class="n">IStream</span><span class="p">);</span> <span class="n">ok</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="p">}</span>  
+</code></pre></div></div>
 
 <p>这个if语句检查file1接口指向的对象实例是否实现了two.IStream接口，如果实现了，则执行特定的代码。
 在Go语言中，你可以询问接口它指向的对象是否是某个类型，比如：</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span><span class="x"> </span><span class="n">file1</span><span class="x"> </span><span class="n">Writer</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="o">...</span><span class="x">
-</span><span class="k">if</span><span class="x"> </span><span class="n">file6</span><span class="p">,</span><span class="x"> </span><span class="n">ok</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">file1</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">File</span><span class="p">);</span><span class="x"> </span><span class="n">ok</span><span class="x"> </span><span class="p">{</span><span class="x">
-</span><span class="o">...</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">file1</span> <span class="n">Writer</span> <span class="o">=</span> <span class="o">...</span>
+<span class="k">if</span> <span class="n">file6</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">file1</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">File</span><span class="p">);</span> <span class="n">ok</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="p">}</span>
 
-</span></code></pre></div></div>
+</code></pre></div></div>
 
 <p>这个if语句判断file1接口指向的对象实例是否是*File类型，如果是则执行特定代码。</p>
 
@@ -500,40 +500,40 @@
   <li>接口与动态类型。 用一个例子说明可能会好很多。</li>
 </ol>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
 
-</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
+<span class="k">import</span> <span class="s">"fmt"</span>
 
-</span><span class="k">type</span><span class="x"> </span><span class="n">IDuck</span><span class="x"> </span><span class="k">interface</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">Quack</span><span class="p">()</span><span class="x">
-    </span><span class="n">Walk</span><span class="p">()</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<span class="k">type</span> <span class="n">IDuck</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">Quack</span><span class="p">()</span>
+    <span class="n">Walk</span><span class="p">()</span>
+<span class="p">}</span>
 
-</span><span class="k">func</span><span class="x"> </span><span class="n">DuckDance</span><span class="p">(</span><span class="n">duck</span><span class="x"> </span><span class="n">IDuck</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="k">for</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">&lt;=</span><span class="x"> </span><span class="m">3</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="o">++</span><span class="x"> </span><span class="p">{</span><span class="x">
-        </span><span class="n">duck</span><span class="o">.</span><span class="n">Quack</span><span class="p">()</span><span class="x">
-        </span><span class="n">duck</span><span class="o">.</span><span class="n">Walk</span><span class="p">()</span><span class="x">
-    </span><span class="p">}</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<span class="k">func</span> <span class="n">DuckDance</span><span class="p">(</span><span class="n">duck</span> <span class="n">IDuck</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="m">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">duck</span><span class="o">.</span><span class="n">Quack</span><span class="p">()</span>
+        <span class="n">duck</span><span class="o">.</span><span class="n">Walk</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-</span><span class="k">type</span><span class="x"> </span><span class="n">Bird</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="c">// ...</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<span class="k">type</span> <span class="n">Bird</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="c">// ...</span>
+<span class="p">}</span>
 
-</span><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">b</span><span class="x"> </span><span class="o">*</span><span class="n">Bird</span><span class="p">)</span><span class="x"> </span><span class="n">Quack</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"I am quacking!"</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<span class="k">func</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span><span class="n">Bird</span><span class="p">)</span> <span class="n">Quack</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"I am quacking!"</span><span class="p">)</span>
+<span class="p">}</span>
 
-</span><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">b</span><span class="x"> </span><span class="o">*</span><span class="n">Bird</span><span class="p">)</span><span class="x"> </span><span class="n">Walk</span><span class="p">()</span><span class="x">  </span><span class="p">{</span><span class="x">
-    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"I am walking!"</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<span class="k">func</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span><span class="n">Bird</span><span class="p">)</span> <span class="n">Walk</span><span class="p">()</span>  <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"I am walking!"</span><span class="p">)</span>
+<span class="p">}</span>
 
-</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">b</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">new</span><span class="p">(</span><span class="n">Bird</span><span class="p">)</span><span class="x">
-    </span><span class="n">DuckDance</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="x">
-</span><span class="p">}</span><span class="x">
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">b</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="n">Bird</span><span class="p">)</span>
+    <span class="n">DuckDance</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="p">}</span>
 
-</span></code></pre></div></div>
+</code></pre></div></div>
 
 <h3 id="类型系统">类型系统</h3>
 <hr />
@@ -559,19 +559,19 @@
 一般channel的声明形式为：</li>
 </ol>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span><span class="x"> </span><span class="n">chanName</span><span class="x"> </span><span class="k">chan</span><span class="x"> </span><span class="n">ElementType</span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">chanName</span> <span class="k">chan</span> <span class="n">ElementType</span>
+</code></pre></div></div>
 
 <p>与一般的变量声明不同的地方仅仅是在类型之前加了chan关键字。ElementType指定这个</p>
 
 <p>channel所能传递的元素类型。举个例子，我们声明一个传递类型为int的channel：</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span><span class="x"> </span><span class="n">ch</span><span class="x"> </span><span class="k">chan</span><span class="x"> </span><span class="kt">int</span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">ch</span> <span class="k">chan</span> <span class="kt">int</span>
+</code></pre></div></div>
 
 <p>或者，我们声明一个map，元素是bool型的channel:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var m map[string] chan bool  
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var m map[string] chan bool  
 </code></pre></div></div>
 
 <p>2.两个相同类型的channel可以使用==运算符比较。如果两个channnel引用是相通的对象，那比较的结果为真。一个channel也可以和nil进行比较。</p>
@@ -580,15 +580,15 @@
 
 <p>select的用法与switch语言非常类似，由select开始一个新的选择块，每个选择条件由case语句来描述。与switch语句可以选择任何可使用相等比较的条件相比，select有比较多的限制，其中最大的一条限制就是每个case语句里必须是一个IO操作，大致的结构如下：</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="k">case</span><span class="x"> </span><span class="o">&lt;-</span><span class="n">chan1</span><span class="o">:</span><span class="x">
-    </span><span class="c">// 如果chan1成功读到数据，则进行该case处理语句</span><span class="x">
-    </span><span class="k">case</span><span class="x"> </span><span class="n">chan2</span><span class="x"> </span><span class="o">&lt;-</span><span class="x"> </span><span class="m">1</span><span class="o">:</span><span class="x">
-    </span><span class="c">// 如果成功向chan2写入数据，则进行该case处理语句</span><span class="x">
-    </span><span class="k">default</span><span class="o">:</span><span class="x">
-    </span><span class="c">// 如果上面都没有成功，则进入default处理流程</span><span class="x">
-</span><span class="p">}</span><span class="x">  
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">&lt;-</span><span class="n">chan1</span><span class="o">:</span>
+    <span class="c">// 如果chan1成功读到数据，则进行该case处理语句</span>
+    <span class="k">case</span> <span class="n">chan2</span> <span class="o">&lt;-</span> <span class="m">1</span><span class="o">:</span>
+    <span class="c">// 如果成功向chan2写入数据，则进行该case处理语句</span>
+    <span class="k">default</span><span class="o">:</span>
+    <span class="c">// 如果上面都没有成功，则进入default处理流程</span>
+<span class="p">}</span>  
+</code></pre></div></div>
 
 <p>4.一个基于无缓存Channels的发送操作将导致发送者的goroutine阻塞，直到另一个goroutine在相同的Channels上执行接收操作，当发送值通过Channels成功传输之后，两个goroutine可以继续执行后面语句。反之，如果接收者操作先发生，那么接收者goroutine也将阻塞，直到有 另一个goroutine在相同的Channles执行发送的操作。</p>
 
@@ -598,29 +598,29 @@
 
 <p>单向channel变量的声明非常简单，如下：</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span><span class="x"> </span><span class="n">ch1</span><span class="x"> </span><span class="k">chan</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="c">// ch1是一个正常的channel，不是单向的</span><span class="x">
-</span><span class="k">var</span><span class="x"> </span><span class="n">ch2</span><span class="x"> </span><span class="k">chan</span><span class="o">&lt;-</span><span class="x"> </span><span class="kt">float64</span><span class="c">// ch2是单向channel，只用于写float64数据</span><span class="x">
-</span><span class="k">var</span><span class="x"> </span><span class="n">ch3</span><span class="x"> </span><span class="o">&lt;-</span><span class="k">chan</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="c">// ch3是单向channel，只用于读取int数据  </span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">ch1</span> <span class="k">chan</span> <span class="kt">int</span> <span class="c">// ch1是一个正常的channel，不是单向的</span>
+<span class="k">var</span> <span class="n">ch2</span> <span class="k">chan</span><span class="o">&lt;-</span> <span class="kt">float64</span><span class="c">// ch2是单向channel，只用于写float64数据</span>
+<span class="k">var</span> <span class="n">ch3</span> <span class="o">&lt;-</span><span class="k">chan</span> <span class="kt">int</span> <span class="c">// ch3是单向channel，只用于读取int数据  </span>
+</code></pre></div></div>
 
 <p>6.单身Channle,只有在发送者所在的goroutine才会调用close函数。因此对一个只接收的channel调用close将是一个编译错误。</p>
 
 <p>7.关闭channel</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>close(ch)  
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>close(ch)  
 </code></pre></div></div>
 
 <p>8.如何判断一个channel是否已经被关闭？</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x, ok := &lt;-ch  
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x, ok := &lt;-ch  
 </code></pre></div></div>
 
 <p>只需要看第二个bool返回值即可，如果返回值是false则表示ch已经被关闭。</p>
 
 <p>9.带缓冲的channel。 创建一个带缓冲的channel</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">make</span><span class="p">(</span><span class="k">chan</span><span class="x"> </span><span class="kt">int</span><span class="p">,</span><span class="x"> </span><span class="m">1024</span><span class="p">)</span><span class="x">  
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="kt">int</span><span class="p">,</span> <span class="m">1024</span><span class="p">)</span>  
+</code></pre></div></div>
 
 <p>10.如果内部的缓存队列是满的，那么发送操作将阻塞真到因另一个goroutine执行接收操作面释放了新的队列空间。相反，如果 channel是空的，接收后操作将阻塞直到有另一个goroutine执行发送操作而向队列插入元素。</p>
 
@@ -632,23 +632,23 @@
 
 <p>基于此特性，我们来为channel实现超时机制：</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 首先，我们实现并执行一个匿名的超时等待函数</span><span class="x">
-</span><span class="n">timeout</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">make</span><span class="p">(</span><span class="k">chan</span><span class="x"> </span><span class="kt">bool</span><span class="p">,</span><span class="x"> </span><span class="m">1</span><span class="p">)</span><span class="x">
-</span><span class="k">go</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
-    </span><span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">1e9</span><span class="p">)</span><span class="x"> </span><span class="c">// 等待1秒钟</span><span class="x">
-    </span><span class="n">timeout</span><span class="x"> </span><span class="o">&lt;-</span><span class="x"> </span><span class="no">true</span><span class="x">
-</span><span class="p">}()</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 首先，我们实现并执行一个匿名的超时等待函数</span>
+<span class="n">timeout</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="kt">bool</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+<span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">1e9</span><span class="p">)</span> <span class="c">// 等待1秒钟</span>
+    <span class="n">timeout</span> <span class="o">&lt;-</span> <span class="no">true</span>
+<span class="p">}()</span>
 
-</span><span class="c">// 然后我们把timeout这个channel利用起来</span><span class="x">
+<span class="c">// 然后我们把timeout这个channel利用起来</span>
 
-</span><span class="k">select</span><span class="x"> </span><span class="p">{</span><span class="x">
+<span class="k">select</span> <span class="p">{</span>
 
-    </span><span class="k">case</span><span class="x"> </span><span class="o">&lt;-</span><span class="n">ch</span><span class="o">:</span><span class="x">  
-    </span><span class="c">// 从ch中读取到数据</span><span class="x">
-    </span><span class="k">case</span><span class="x"> </span><span class="o">&lt;-</span><span class="n">timeout</span><span class="o">:</span><span class="x">
-    </span><span class="c">// 一直没有从ch中读取到数据，但从timeout中读取到了数据</span><span class="x">
-</span><span class="p">}</span><span class="x">  
-</span></code></pre></div></div>
+    <span class="k">case</span> <span class="o">&lt;-</span><span class="n">ch</span><span class="o">:</span>  
+    <span class="c">// 从ch中读取到数据</span>
+    <span class="k">case</span> <span class="o">&lt;-</span><span class="n">timeout</span><span class="o">:</span>
+    <span class="c">// 一直没有从ch中读取到数据，但从timeout中读取到了数据</span>
+<span class="p">}</span>  
+</code></pre></div></div>
 
 <h3 id="同步锁">同步锁</h3>
 <hr />
@@ -659,22 +659,22 @@
 
 <p>1.如何导入有相同包名的包。导入声明必须至少为一个同名包指定一个新的包名以避免冲突，叫做导入包的重命名。</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span><span class="x"> </span><span class="p">(</span><span class="x">
-    </span><span class="s">"crypto/rand"</span><span class="x">
-    </span><span class="n">mrand</span><span class="x"> </span><span class="s">"math/rand"</span><span class="x">
-</span><span class="p">)</span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">(</span>
+    <span class="s">"crypto/rand"</span>
+    <span class="n">mrand</span> <span class="s">"math/rand"</span>
+<span class="p">)</span>
+</code></pre></div></div>
 
 <p>2.包的匿名导入，导入一个包而不去使用它，就会发生编译错误。可以用匿名导入</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span><span class="x"> </span><span class="n">_</span><span class="x"> </span><span class="s">"image/png"</span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="n">_</span> <span class="s">"image/png"</span>
+</code></pre></div></div>
 
 <p>3.对大多数的go开发者,只需要 配置一叫GOPATH的环境变量，用来指定当前工作目录即可。当需要切不同工作区的时候，只要更新GOPATH就可以了</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">export</span><span class="x"> </span><span class="n">GOPATH</span><span class="o">=</span><span class="err">$</span><span class="n">HOME</span><span class="o">/</span><span class="n">gobook</span><span class="x">
-</span><span class="k">go</span><span class="x"> </span><span class="n">get</span><span class="x"> </span><span class="n">gopl</span><span class="o">.</span><span class="n">io</span><span class="o">/....</span><span class="x">
-</span></code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">export</span> <span class="n">GOPATH</span><span class="o">=</span><span class="err">$</span><span class="n">HOME</span><span class="o">/</span><span class="n">gobook</span>
+<span class="k">go</span> <span class="n">get</span> <span class="n">gopl</span><span class="o">.</span><span class="n">io</span><span class="o">/....</span>
+</code></pre></div></div>
 
 <p>4.查看Go工具涉及涉的所有环境变量的值。</p>
 
@@ -774,7 +774,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2018-03-01-go-first.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

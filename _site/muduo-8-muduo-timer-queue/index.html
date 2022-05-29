@@ -64,7 +64,7 @@
 <section class="post">
 <p>muduo 对于时间的摆选择可看  <a href="http://blog.xyecho.com/muduo-7-muduo-timer/">muduo笔记 第七章 定时器</a></p>
 
-<p>muduo 的 定时器功能由 三个class实现，<code class="highlighter-rouge">TimerId、Timer、TimerQueue</code>， 用户只能看到第一个class， 另外两个都是内部实现细节。</p>
+<p>muduo 的 定时器功能由 三个class实现，<code class="language-plaintext highlighter-rouge">TimerId、Timer、TimerQueue</code>， 用户只能看到第一个class， 另外两个都是内部实现细节。</p>
 
 <p>Timer中 有用到 Timestamp class  这个一个封装了微秒的时间戳类。</p>
 
@@ -72,10 +72,10 @@
 
 <p>被真正用函数是EventLoop 的：</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">TimerId</span> <span class="n">runAt</span><span class="p">(</span><span class="k">const</span> <span class="n">Timestamp</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">,</span> <span class="n">TimerCallback</span><span class="o">&amp;&amp;</span> <span class="n">cb</span><span class="p">);</span>
- <span class="n">TimerId</span> <span class="n">runAfter</span><span class="p">(</span><span class="kt">double</span> <span class="n">delay</span><span class="p">,</span> <span class="n">TimerCallback</span><span class="o">&amp;&amp;</span> <span class="n">cb</span><span class="p">);</span>
- <span class="n">TimerId</span> <span class="n">runEvery</span><span class="p">(</span><span class="kt">double</span> <span class="n">interval</span><span class="p">,</span> <span class="n">TimerCallback</span><span class="o">&amp;&amp;</span> <span class="n">cb</span><span class="p">);</span>
- <span class="kt">void</span> <span class="n">cancel</span><span class="p">(</span><span class="n">TimerId</span> <span class="n">timerId</span><span class="p">);</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">TimerId</span> <span class="nf">runAt</span><span class="p">(</span><span class="k">const</span> <span class="n">Timestamp</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">,</span> <span class="n">TimerCallback</span><span class="o">&amp;&amp;</span> <span class="n">cb</span><span class="p">);</span>
+ <span class="n">TimerId</span> <span class="nf">runAfter</span><span class="p">(</span><span class="kt">double</span> <span class="n">delay</span><span class="p">,</span> <span class="n">TimerCallback</span><span class="o">&amp;&amp;</span> <span class="n">cb</span><span class="p">);</span>
+ <span class="n">TimerId</span> <span class="nf">runEvery</span><span class="p">(</span><span class="kt">double</span> <span class="n">interval</span><span class="p">,</span> <span class="n">TimerCallback</span><span class="o">&amp;&amp;</span> <span class="n">cb</span><span class="p">);</span>
+ <span class="kt">void</span> <span class="nf">cancel</span><span class="p">(</span><span class="n">TimerId</span> <span class="n">timerId</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>这一些函数都是线程安全的。</p>
@@ -107,7 +107,7 @@ key值是一个pair &lt;Timestamp, Timer*&gt; 。 这样解决了如果时间相
 
 <p>TimerQueue 的主要方法 是 :</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TimerId</span> <span class="n">addTimer</span><span class="p">(</span><span class="k">const</span> <span class="n">TimerCallback</span><span class="o">&amp;</span> <span class="n">cb</span><span class="p">,</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TimerId</span> <span class="nf">addTimer</span><span class="p">(</span><span class="k">const</span> <span class="n">TimerCallback</span><span class="o">&amp;</span> <span class="n">cb</span><span class="p">,</span>
                    <span class="n">Timestamp</span> <span class="n">when</span><span class="p">,</span>
                    <span class="kt">double</span> <span class="n">interval</span><span class="p">);</span>
 
@@ -229,7 +229,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2018-01-05-muduo-8-muduo-timer-queue.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 

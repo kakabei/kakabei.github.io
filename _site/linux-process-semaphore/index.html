@@ -94,7 +94,7 @@ V(sv)：如果有其他进程因等待sv而被挂起，就让它恢复运行，�
 <p>1、创建信号量
 semget函数创建一个信号量集或访问一个已存在的信号量集。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/sem.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
 </span><span class="kt">int</span>  <span class="nf">semget</span> <span class="p">(</span><span class="n">key_t</span> <span class="n">key</span><span class="p">,</span>  <span class="kt">int</span> <span class="n">nsem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">oflag</span><span class="p">)</span> <span class="p">;</span>
 </code></pre></div></div>
 
@@ -105,7 +105,7 @@ semget函数创建一个信号量集或访问一个已存在的信号量集。</
 <p>2、打开信号量
 使用semget打开一个信号量集后，对其中一个或多个信号量的操作就使用semop(op–operate)函数来执行。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/sem.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
 </span><span class="kt">int</span>  <span class="nf">semop</span> <span class="p">(</span><span class="kt">int</span> <span class="n">semid</span><span class="p">,</span>  <span class="k">struct</span> <span class="n">sembuf</span> <span class="o">*</span> <span class="n">opsptr</span><span class="p">,</span>  <span class="kt">size_t</span> <span class="n">nops</span><span class="p">)</span> <span class="p">;</span>
 </code></pre></div></div>
 
@@ -134,7 +134,7 @@ sem_op值：
 <p>3、信号量是操作
 semctl函数对一个信号量执行各种控制操作。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;sys/sem.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
 </span><span class="kt">int</span>  <span class="nf">semctl</span> <span class="p">(</span><span class="kt">int</span> <span class="n">semid</span><span class="p">,</span>  <span class="kt">int</span> <span class="n">semnum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="cm">/*可选参数*/</span> <span class="p">)</span> <span class="p">;</span>
 </code></pre></div></div>
 
@@ -159,14 +159,14 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
 
 <h3 id="六-例子">六 例子</h3>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unistd.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;sys/stat.h&gt;
-#include &lt;fcntl.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#include &lt;sys/sem.h&gt;
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
 </span>
 <span class="k">union</span> <span class="n">semun</span>
 <span class="p">{</span>
@@ -176,10 +176,10 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
 <span class="p">};</span>
 
 <span class="k">static</span> <span class="kt">int</span> <span class="n">sem_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="k">static</span> <span class="kt">int</span> <span class="n">set_semvalue</span><span class="p">();</span>
-<span class="k">static</span> <span class="kt">void</span> <span class="n">del_semvalue</span><span class="p">();</span>
-<span class="k">static</span> <span class="kt">int</span> <span class="n">semaphore_p</span><span class="p">();</span>
-<span class="k">static</span> <span class="kt">int</span> <span class="n">semaphore_v</span><span class="p">();</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">set_semvalue</span><span class="p">();</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">del_semvalue</span><span class="p">();</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">semaphore_p</span><span class="p">();</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">semaphore_v</span><span class="p">();</span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
 <span class="p">{</span>
@@ -287,17 +287,17 @@ SystemV信号量的设计中，创建一个信号量集并将它初始化需两�
 
 <h3 id="七-信号量集合的例子">七 信号量集合的例子</h3>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include&lt;stdio.h&gt;  
-#include&lt;sys/types.h&gt;  
-#include&lt;sys/ipc.h&gt;  
-#include&lt;sys/sem.h&gt;  
-#include&lt;errno.h&gt;  
-#include&lt;string.h&gt;  
-#include&lt;stdlib.h&gt;  
-#include&lt;assert.h&gt;  
-#include&lt;time.h&gt;  
-#include&lt;unistd.h&gt;  
-#include&lt;sys/wait.h&gt;    
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;sys/types.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;sys/ipc.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;sys/sem.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;errno.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;string.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;stdlib.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;assert.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;time.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;unistd.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;sys/wait.h&gt;</span><span class="c1">    </span><span class="cp">
 #define MAX_SEMAPHORE 10   
 #define FILE_NAME "test2.c"  
 </span>  
@@ -513,7 +513,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         </p>
         <p><small>
             <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2014-10-11-linux-process-semaphore.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
-             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2021 <a href="/about/">xyecho</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
 
