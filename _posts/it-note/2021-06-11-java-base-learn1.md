@@ -14,7 +14,7 @@ Java虚拟机还有一些其他的优点。它可以检测指令序列的行为�
 
 
 
-### Java的特点
+## Java的特点
 
 - 可移植性
 - 解释型
@@ -22,7 +22,7 @@ Java虚拟机还有一些其他的优点。它可以检测指令序列的行为�
 - 多线程
 - 动态性
 
-### Java 官方的一些源码和文档
+## Java 官方的一些源码和文档
 
 - `javasrc` 在JDK的路径上，有一个src.zip，解开后，含了所有公共类库的源代码。 
 - `javadoc`  可以从官网下载文档 https://www.oracle.com/java/technologies/javase-downloads。解压后，可以访问目录上的`jdk-16.0.2_doc-all\docs\index.html` 可以在浏览器打开，保存标签，这里可找到所有公共类库的说明。
@@ -32,7 +32,7 @@ Java虚拟机还有一些其他的优点。它可以检测指令序列的行为�
 - 编译器、虚拟机、本地方法以及私有辅助类 http://jdk.java.net/8/ 暂时不看吧。
 - 书籍代码学习 https://horstmann.com/corejava/ 可以下载。 
 
-### Java应用程序
+## Java应用程序
 
 **注释**
 
@@ -48,7 +48,7 @@ Java虚拟机还有一些其他的优点。它可以检测指令序列的行为�
 */
 ```
 
-### 数据类型
+## 数据类型
 
 Java是一种强类型语言。这就意味着必须为每一个变量声明一种类型， 8种基本类型。
 
@@ -104,7 +104,7 @@ enum Size{SMALL, MEDIUM, LARGE, EXTRA_LARGE} ;
 
 
 
-### 变量
+## 变量
 
 在Java中，每个变量都有一个类型（type）。在声明变量时，变量的类型位于变量名之前。 每个声明以分号结束。 
 
@@ -126,7 +126,7 @@ final double CM_PER_INCH = 2.54;
 
 `const`是 Java 保留的关键字，但目前并没有使用。在Java中，必须使用final定义常量。
 
-### 运算符
+## 运算符
 
 在Java中，使用算术运算符`+、-、*、/`表示加、减、乘、除运算。
 
@@ -182,7 +182,7 @@ boolean 类型不要做转换。
 
 
 
-### 位运算符
+## 位运算符
 
 应用在布尔值上时，&和|运算符也会得到一个布尔值。这些运算符与&&和||运算符很类似，不过&和|运算符不采用“短路”方式来求值，也就是说，得到计算结果之前两个操作数都需要计算。
 
@@ -196,7 +196,7 @@ boolean 类型不要做转换。
 
 与C或C++不同，Java不使用逗号运算符。不过，可以在for语句的第1和第3部分中使用逗号分隔表达式列表。
 
-### 字符串
+## 字符串
 
 标准Java类库中提供了一个预定义类，很自然地叫做String。每个用双引号括起来的字符串都是String类的一个实例。
 
@@ -272,7 +272,7 @@ builder.append(str) // appends a string
 String completeString = builder.toString(); 
 ```
 
-### 格式化输出
+## 格式化输出
 
 使用`System.out.print(x)`将数值x输出到控制台上。和C语言中的方法一样的。 `printf`和C语言一样。
 
@@ -300,11 +300,11 @@ Scanner in = new Scanner(Paths.get("myfile.txt"), "UTF-8");
 PrintWriter out = new PrintWriter("myfile.txt", "UTF-8"); 
 ```
 
-### 控制流程
+## 控制流程
 
 Java的控制流程结构与C和C++的控制流程结构一样，只有很少的例外情况。没有goto语句，但break语句可以带标签。 foreach循环。
 
-#### 块作用域
+### 块作用域
 
 块（即复合语句）是指由一对大括号括起来的若干条简单的Java语句。块确定了变量的作用域。
 
@@ -323,7 +323,7 @@ public static void main(String[] args)
 }
 ```
 
-#### 条件语句
+### 条件语句
 
 ```java
 if (condition){
@@ -333,7 +333,7 @@ if (condition){
 }
 ```
 
-#### 循环
+### 循环
 
 ```java
 while (condition){
@@ -352,7 +352,7 @@ for (int i=1 i<=10; i++){
     System.out.println(i); 
 }
 ```
-### foreach循环
+## foreach循环
 
 Java有一种功能很强的循环结构，可以用来依次处理数组中的每个元素（其他类型的元素集合亦可）而不必为指定下标值而分心.。
 
@@ -363,7 +363,7 @@ for (variable : collection){
 ```
 
 
-### 多重选择：switch语句
+## 多重选择：switch语句
 
 ```java
 int choice = in.nextInt(); 
@@ -381,7 +381,7 @@ switch(choice)
 }
 ```
 
-### 中断控制流程语句
+## 中断控制流程语句
 
 break , goto ，continue 等。 
 
@@ -405,7 +405,7 @@ int test()
 }
 ```
 
-### 大数值
+## 大数值
 
 如果基本的整数和浮点数精度不能够满足需求，那么可以使用`java.math`包中的两个很有用的类：`BigInteger`  和 `BigDecimal`。
 
@@ -481,7 +481,7 @@ int[] copiedLickyNumbers = Arrays.copyOf(luckyNumbers, 2*lickyNumbers.length);
 
 Java数组与C++数组在堆栈上有很大不同，但基本上与**分配在堆（heap）**上的数组指针一样。
 
-###  命令行参数
+## 命令行参数
 
 每一个Java应用程序都有一个带Stringarg[]参数的main方法。这个参数表明main方法将接收一个字符串数组，也就是命令行参数。
 
