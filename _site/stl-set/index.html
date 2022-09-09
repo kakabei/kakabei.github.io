@@ -56,43 +56,42 @@
 
 <p>2.set multiset map multimap内部采用的都是红黑树。</p>
 
-<p>3.在set中查找 是使用地二分查找。logn。 效率很高。</p>
+<p>3.在set中查找 是使用地二分查找。<code class="language-plaintext highlighter-rouge">log n</code>。 效率很高。</p>
 
-<p>4.set元素中排序的。</p>
+<p>4.set元素中排序的(从小到大)。</p>
 
 <p>5.set对象的创建方式有5种。</p>
 
 <ul>
-  <li>创建空的set对象，元素类型为int set<int> sl;</int></li>
-  <li>创建空的set对象，元素类型cahr <em>, 比较函数对象（即排序准则）为自定义 set&lt;const char</em> ， strLess&gt; s2(strLess);</li>
+  <li>创建空的set对象，元素类型为<code class="language-plaintext highlighter-rouge">int set&lt;int&gt; sl;</code></li>
+  <li>创建空的set对象，元素类型cahr *, 比较函数对象（即排序准则）为自定义 <code class="language-plaintext highlighter-rouge">set&lt;const char* ， strLess&gt; s2(strLess);</code></li>
   <li>利用set对象S1,拷贝生成set对象S2；set<int>s2(s1);</int></li>
   <li>用迭代区间[&amp;first, &amp;laist)rn所指的元素，创建一个set对象。</li>
 </ul>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">int</span>  <span class="n">iArray</span><span class="p">[]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">19</span> <span class="p">);</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">int</span>  <span class="n">iArray</span><span class="p">[]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">19</span> <span class="p">);</span>
     <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s4</span><span class="p">(</span><span class="n">iArray</span><span class="p">,</span> <span class="n">iArray</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
-
 </code></pre></div></div>
 
 <ul>
   <li>用迭代区间[&amp;first, &amp;laist)rn所指的元素，及比较函数对象strLess, 创建一个set对象。</li>
 </ul>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">szArray</span><span class="p">[]</span> <span class="o">=</span> <span class="p">(</span><span class="s">"hello"</span><span class="p">,</span> <span class="s">"dog"</span><span class="p">,</span> <span class="s">"bird"</span><span class="p">)</span> <span class="p">;</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">szArray</span><span class="p">[]</span> <span class="o">=</span> <span class="p">(</span><span class="s">"hello"</span><span class="p">,</span> <span class="s">"dog"</span><span class="p">,</span> <span class="s">"bird"</span><span class="p">)</span> <span class="p">;</span>
    <span class="n">set</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="n">strLess</span><span class="o">&gt;</span> <span class="n">s5</span><span class="p">(</span><span class="n">szArray</span><span class="p">,</span> <span class="n">szArray</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="n">strLess</span><span class="p">());</span>
 </code></pre></div></div>
 
 <p>6.元素插入的3种方式。</p>
 
 <ul>
-  <li>插入value，返回pair 配对对象，可能根据，secod判断是否插入成功。（value不能与set容器内元素重复）</li>
+  <li>插入value，返回pair 配对对象，可能根据，<code class="language-plaintext highlighter-rouge">second</code>判断是否插入成功。（value不能与set容器内元素重复）</li>
   <li>在pos位置之前插入value，返回新元素的位置，但不一琮能插入成功。</li>
   <li>将换代区间[&amp;first, &amp;last) 内所有元素，插入到set容器。</li>
 </ul>
 
 <p>7.元素删除的4种方式。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">size_type</span> <span class="n">erase</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>      <span class="c1">// 移除set容器内元素值为value的所有元素。返回移除的元素个数。</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">size_type</span> <span class="n">erase</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>      <span class="c1">// 移除set容器内元素值为value的所有元素。返回移除的元素个数。</span>
 <span class="kt">void</span> <span class="n">erase</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pos</span><span class="p">)</span>            <span class="c1">// 移除pos位置上的元素，无返回值。</span>
 <span class="kt">void</span> <span class="n">earse</span><span class="p">(</span><span class="o">&amp;</span><span class="n">first</span><span class="p">,</span> <span class="o">&amp;</span> <span class="n">last</span><span class="p">)</span>  <span class="c1">// 移除迭代区间[&amp;first, &amp;last)内的元素，无返回值。</span>
 <span class="kt">void</span> <span class="n">clear</span><span class="p">()</span>                <span class="c1">// 移除set容器内所有元素。</span>
@@ -100,13 +99,13 @@
 
 <p>8.元素查找的2种方式</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">count</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1">// 返回set对象内元素值为value的元素个数。</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">count</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1">// 返回set对象内元素值为value的元素个数。</span>
 <span class="n">iterator</span> <span class="n">find</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1">// 返回value所在位置，找不到value将返回end()。</span>
 </code></pre></div></div>
 
 <p>9.其他set中的常用方法。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">begin</span><span class="p">()</span>    <span class="c1">// 返回set容器的第一个元素</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">begin</span><span class="p">()</span>    <span class="c1">// 返回set容器的第一个元素</span>
 <span class="n">end</span><span class="p">()</span>      <span class="c1">// 返回set窗口的最后一个元素</span>
 <span class="n">clear</span><span class="p">()</span>    <span class="c1">// 删除set容器中的所有元素</span>
 <span class="n">empty</span><span class="p">()</span>    <span class="c1">// 判断set是否空空 </span>
@@ -116,9 +115,11 @@
 <span class="n">rend</span><span class="p">()</span>     <span class="c1">// 返回set容器的第一个元素</span>
 </code></pre></div></div>
 
-<h5 id="注">[注]</h5>
+<p><strong>[注]</strong></p>
 
-<p>1.auto pos = setOder,find(tmp); 得到 *pos 是 const 类型，不能改变。 要用<code class="language-plaintext highlighter-rouge">const_cast</code>做强制转换。</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">auto pos = setOder.find(tmp);</code> 得到 <code class="language-plaintext highlighter-rouge">*pos</code> 是 <code class="language-plaintext highlighter-rouge">const</code> 类型，不能改变。 要用<code class="language-plaintext highlighter-rouge">const_cast</code>做强制转换。</li>
+</ol>
 
 <p>工作中遇到过的代码（手游排行模块）</p>
 

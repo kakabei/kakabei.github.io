@@ -2,8 +2,8 @@
 layout: post
 title: 用valgrind做一次性能分析
 date: 2017-02-08 21:12:15
-categories: 性能分析
-tags: valgrind  
+categories: 系统设计
+tags: valgrind  性能分析
 excerpt: 用valgrind可以分析出代码的热点
 ---
 

@@ -2,7 +2,7 @@
 layout: post
 title: muduo笔记 第三章 多线程服务器的适用场合与常用编程模型
 date: 2018-01-03 19:08:12
-categories: Linux muduo
+categories:  muduo
 tags: 技术阅读笔记 系统编程 muduo笔记 tcp network thread
 excerpt: 线程同步的要点
 ---

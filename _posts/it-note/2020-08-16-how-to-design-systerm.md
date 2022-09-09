@@ -2,8 +2,8 @@
 layout: post
 title: 如何处理一个系统设计 
 date: 2017-03-20 16:12:15
-categories: 学习笔记
-tags: 系统设计
+categories: 系统设计 
+tags: 
 excerpt: 如何处理一个系统设计
 ---
 

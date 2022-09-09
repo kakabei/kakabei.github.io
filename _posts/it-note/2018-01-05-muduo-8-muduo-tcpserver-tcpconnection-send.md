@@ -2,7 +2,7 @@
 layout: post
 title: muduo笔记  第八章 TcpConnection class 发送数据
 date: 2018-01-05 19:22:12
-categories: Linux muduo
+categories: muduo
 tags:  系统编程 muduo笔记 技术阅读笔记 tcp network thread
 excerpt: muduo TcpConnection class 发送数据
 ---

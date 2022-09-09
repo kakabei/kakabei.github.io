@@ -52,9 +52,9 @@
 
 </section>
 <section class="post">
-<p>1.string.h和cstring都不是string类的头文件，这两个头文件 主要地定义C语言铅笔字符趾操作的一些方法 ，譬如strlen()、strcpy()等。string.h是C语言的头文件格式，而cstring是C++风格的头文件，但是和<string.h>是一样的，它的目的是为了和C语言兼容。</string.h></p>
+<p>1.<code class="language-plaintext highlighter-rouge">string.h</code> 和<code class="language-plaintext highlighter-rouge">cstring</code> 都不是string类的头文件，这两个头文件主要地定义C语言铅笔字符趾操作的一些方法 ，譬如<code class="language-plaintext highlighter-rouge">strlen()</code>、<code class="language-plaintext highlighter-rouge">strcpy()</code> 等。<code class="language-plaintext highlighter-rouge">string.h</code> 是C语言的头文件格式，而 <code class="language-plaintext highlighter-rouge">cstring</code> 是C++风格的头文件，但是和 <code class="language-plaintext highlighter-rouge">&lt;string.h&gt;</code> 是一样的，它的目的是为了和C语言兼容。</p>
 
-<p>2.string的一道面试题。很编写一个类string的7个函数。（后补）</p>
+<p>2.string的一道面试题。编写一个类string的几个函数。（见后面）</p>
 
 <p>3.C++字符串和C字符串的转换</p>
 
@@ -88,6 +88,92 @@
 <p>6、 string的size()和length()的结果是一样的。</p>
 
 <p>length是因为沿用C语言的习惯而保留下来的，string类最初只有length，引入STL之后，为了兼容又加入了size，它是作为STL容器的属性存在的，便于符合STL的接口规则，以便用于STL的算法。string类的size()/length()方法返回的是字节数，不管是否有汉字。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">class</span> <span class="nc">String</span> 
+<span class="p">{</span> 
+<span class="nl">public:</span> 
+   <span class="n">String</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">);</span>  <span class="c1">// 普通构造函数 </span>
+   <span class="n">String</span><span class="p">(</span><span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">);</span>     <span class="c1">// 拷贝构造函数 </span>
+   <span class="n">String</span><span class="p">(</span><span class="n">String</span> <span class="o">&amp;&amp;</span><span class="n">other</span><span class="p">);</span>          <span class="c1">// 移动构造函数 </span>
+   <span class="o">~</span> <span class="n">String</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>                  <span class="c1">// 析构函数 </span>
+   <span class="n">String</span> <span class="o">&amp;</span> <span class="n">operate</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">);</span> <span class="c1">// 赋值函数 </span>
+   <span class="n">String</span> <span class="o">&amp;</span> <span class="n">operate</span> <span class="o">=</span> <span class="p">(</span><span class="n">String</span> <span class="o">&amp;&amp;</span><span class="n">other</span><span class="p">);</span>      <span class="c1">// 移动赋值函数 </span>
+<span class="nl">private:</span> 
+   <span class="kt">char</span> <span class="o">*</span><span class="n">m_data</span><span class="p">;</span> <span class="c1">// 用于保存字符串 </span>
+<span class="p">};</span>
+
+<span class="c1">// String 的普通构造函数</span>
+<span class="n">String</span><span class="o">::</span><span class="n">String</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> 
+<span class="p">{</span> 
+   <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="o">==</span><span class="nb">NULL</span><span class="p">)</span> 
+   <span class="p">{</span> 
+      <span class="n">m_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> 
+      <span class="o">*</span><span class="n">m_data</span> <span class="o">=</span> <span class="err">‘\</span><span class="mi">0</span><span class="err">’</span><span class="p">;</span> 
+   <span class="p">}</span> 
+   <span class="k">else</span> 
+   <span class="p">{</span> 
+      <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">);</span> 
+      <span class="n">m_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">length</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span> 
+      <span class="n">strcpy</span><span class="p">(</span><span class="n">m_data</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span> 
+
+   <span class="p">}</span> 
+<span class="p">}</span>
+
+<span class="c1">// String 移动构造函数</span>
+<span class="n">String</span><span class="o">::</span><span class="n">String</span><span class="p">(</span><span class="n">String</span> <span class="o">&amp;&amp;</span><span class="n">other</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">m_data</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">;</span> 
+    <span class="n">other</span><span class="p">.</span><span class="n">m_data</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span> 
+<span class="p">}</span>
+
+<span class="c1">// String 的析构函数</span>
+ <span class="n">String</span><span class="o">::~</span><span class="n">String</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> 
+<span class="p">{</span> 
+   <span class="k">delete</span> <span class="p">[]</span> <span class="n">m_data</span><span class="p">;</span> <span class="c1">// 由于 m_data 是内部数据类型，也可以写成 delete m_data; </span>
+ <span class="p">}</span>
+
+<span class="c1">// 拷贝构造函数 </span>
+<span class="n">String</span><span class="o">::</span><span class="n">String</span><span class="p">(</span><span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> 
+<span class="p">{</span> 
+    <span class="c1">// 允许操作 other 的私有成员 m_data </span>
+   <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">);</span> 
+   <span class="n">m_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">length</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span> 
+   <span class="n">strcpy</span><span class="p">(</span><span class="n">m_data</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">);</span> 
+<span class="p">}</span>
+
+<span class="c1">// 赋值函数 </span>
+<span class="n">String</span> <span class="o">&amp;</span> <span class="n">String</span><span class="o">::</span><span class="n">operate</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> 
+<span class="p">{</span> 
+   <span class="c1">// 检查自赋值 </span>
+   <span class="k">if</span><span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> 
+   <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> 
+ 
+   <span class="c1">// 释放原有的内存资源 </span>
+   <span class="k">delete</span> <span class="p">[]</span> <span class="n">m_data</span><span class="p">;</span> 
+ 
+   <span class="c1">// 分配新的内存资源，并复制内容 </span>
+   <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">);</span> 
+   <span class="n">m_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">length</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span> 
+   <span class="n">strcpy</span><span class="p">(</span><span class="n">m_data</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">);</span> 
+ 
+   <span class="c1">// 返回本对象的引用 </span>
+   <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> 
+<span class="p">}</span>
+
+<span class="c1">// 赋值函数 </span>
+<span class="n">String</span> <span class="o">&amp;</span> <span class="n">String</span><span class="o">::</span><span class="n">operate</span> <span class="o">=</span> <span class="p">(</span><span class="n">String</span> <span class="o">&amp;&amp;</span><span class="n">other</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="n">other</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">m_data</span><span class="p">;</span> 
+        <span class="n">m_data</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">;</span> 
+        <span class="n">other</span><span class="p">.</span><span class="n">m_data</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span> 
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> 
+<span class="p">}</span>
+
+</code></pre></div></div>
 
 
 </section>

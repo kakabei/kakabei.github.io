@@ -2,8 +2,8 @@
 layout: post
 title: go build 时的错误分析
 date: 2018-03-01   11:21:12
-categories: 编程语言 go
-tags:  编程语言 go
+categories: 编程语言 
+tags:  go
 excerpt: go build 时的错误分析
 ---
 

@@ -2,8 +2,8 @@
 layout: post
 title: 源码阅读中一个特殊注释说明
 date: 2018-09-17 09:21:12
-categories:  七七八八 
-tags:  source-code
+categories:  软件工程 
+tags:  git
 excerpt: TODO and FIXME and XXX
 ---
 

@@ -2,7 +2,7 @@
 layout: post
 title: muduo笔记  第八章 muduo网络库设计与实现
 date: 2018-01-04 20:21:12
-categories: Linux muduo
+categories: muduo
 tags:  系统编程 muduo笔记 技术阅读笔记 tcp network thread
 excerpt: muduo网络库设计与实现
 ---

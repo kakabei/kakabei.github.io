@@ -2,7 +2,7 @@
 layout: post
 title: 多个git帐号的提交
 date: 2017-03-20 16:12:15
-categories: 七七八八
+categories: tools
 tags: git
 excerpt: 同时在使用多个github帐号的情况下，如何配置。
 ---

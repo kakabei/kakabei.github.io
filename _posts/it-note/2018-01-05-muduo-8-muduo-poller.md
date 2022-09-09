@@ -2,7 +2,7 @@
 layout: post
 title: muduo笔记 第八章  Poller 的理解
 date: 2018-01-05 08:21:12
-categories: Linux muduo
+categories: muduo
 tags:  系统编程 muduo笔记 技术阅读笔记 tcp network thread
 excerpt: muduo  Poller 的理解
 ---

@@ -7,9 +7,9 @@ tags: stl note
 excerpt: stl string 杂记
 ---
 
-1.string.h和cstring都不是string类的头文件，这两个头文件 主要地定义C语言铅笔字符趾操作的一些方法 ，譬如strlen()、strcpy()等。string.h是C语言的头文件格式，而cstring是C++风格的头文件，但是和<string.h>是一样的，它的目的是为了和C语言兼容。
+1.`string.h` 和`cstring` 都不是string类的头文件，这两个头文件主要地定义C语言铅笔字符趾操作的一些方法 ，譬如`strlen()`、`strcpy()` 等。`string.h` 是C语言的头文件格式，而 `cstring` 是C++风格的头文件，但是和 `<string.h>` 是一样的，它的目的是为了和C语言兼容。
 
-2.string的一道面试题。很编写一个类string的7个函数。（后补）
+2.string的一道面试题。编写一个类string的几个函数。（见后面）
 
 3.C++字符串和C字符串的转换
 
@@ -48,4 +48,92 @@ length是因为沿用C语言的习惯而保留下来的，string类最初只有l
 
 
  
+```c++
+
+class String 
+{ 
+public: 
+   String(const char *str = NULL);  // 普通构造函数 
+   String(const String &other);     // 拷贝构造函数 
+   String(String &&other);          // 移动构造函数 
+   ~ String(void);                  // 析构函数 
+   String & operate =(const String &other); // 赋值函数 
+   String & operate = (String &&other);      // 移动赋值函数 
+private: 
+   char *m_data; // 用于保存字符串 
+};
+
+// String 的普通构造函数
+String::String(const char *str) 
+{ 
+   if(str==NULL) 
+   { 
+      m_data = new char[1]; 
+      *m_data = ‘\0’; 
+   } 
+   else 
+   { 
+      int length = strlen(str); 
+      m_data = new char[length+1]; 
+      strcpy(m_data, str); 
+
+   } 
+}
+
+// String 移动构造函数
+String::String(String &&other)
+{
+    m_data = other.m_data; 
+    other.m_data = nullptr; 
+}
+
+// String 的析构函数
+ String::~String(void) 
+{ 
+   delete [] m_data; // 由于 m_data 是内部数据类型，也可以写成 delete m_data; 
+ }
+
+// 拷贝构造函数 
+String::String(const String &other) 
+{ 
+    // 允许操作 other 的私有成员 m_data 
+   int length = strlen(other.m_data); 
+   m_data = new char[length+1]; 
+   strcpy(m_data, other.m_data); 
+}
+
+// 赋值函数 
+String & String::operate =(const String &other) 
+{ 
+   // 检查自赋值 
+   if(this == &other) 
+   return *this; 
+ 
+   // 释放原有的内存资源 
+   delete [] m_data; 
+ 
+   // 分配新的内存资源，并复制内容 
+   int length = strlen(other.m_data); 
+   m_data = new char[length+1]; 
+   strcpy(m_data, other.m_data); 
+ 
+   // 返回本对象的引用 
+   return *this; 
+}
+
+// 赋值函数 
+String & String::operate = (String &&other)
+{
+    if (this != other)
+    {
+        delete[] m_data; 
+        m_data = other.m_data; 
+        other.m_data = nullptr; 
+    }
+    return *this; 
+}
+
+```
+
+
 

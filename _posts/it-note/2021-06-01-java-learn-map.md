@@ -2,7 +2,7 @@
 layout: post
 title: java 技术栈学习脉络
 date: 2021-07-15 16:12:15
-categories: 学习笔记
+categories: 编程语言
 tags: java
 excerpt: java 技术栈学习脉络
 ---

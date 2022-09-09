@@ -2,8 +2,8 @@
 layout: post
 title: c++11 移动语义 浅拷贝 深拷贝
 date: 2017-05-01 17:12:15
-categories: 编程语言 c++ 
-tags: 编程语言 c++  技术阅读笔记
+categories: 编程语言 
+tags: c++  技术阅读笔记
 excerpt: c++11 移动语义 浅拷贝 深拷贝
 ---
 

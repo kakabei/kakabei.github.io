@@ -52,9 +52,11 @@
 
 </section>
 <section class="post">
-<p>1.map 内部自建一个红黑树（一种非严格意义上的平衡二叉树）。
-2.map会自动按key值排序（从小到大）。所以，map的key类型一定要支持&lt;操作符, 但这个是可以自定义的。
-3.查找的复杂度基本是Log(n)。</p>
+<p>1.map 内部自建一个红黑树（一种非严格意义上的平衡二叉树）。</p>
+
+<p>2.map会自动按key值排序（从小到大）。所以，map的key类型一定要支持&lt;操作符, 但这个是可以自定义的。</p>
+
+<p>3.查找的复杂度基本是Log(n)。</p>
 
 <h4 id="一-map-的插入">一 map 的插入</h4>
 
@@ -65,9 +67,9 @@
   <li>用数组的方式插入数据。mapStudent[3] = “student_three”;</li>
 </ul>
 
-<h5 id="注">[注]</h5>
-<p>当用第一种和第二种方式插入时，如果已经存在，会返回错误。</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pair</span><span class="o">&lt;</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="n">string</span><span class="o">&gt;::</span><span class="n">iterator</span><span class="p">,</span> <span class="n">bool</span><span class="o">&gt;</span> <span class="n">insert_pair</span> <span class="o">=</span> <span class="n">mapStudent</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"student_one"</span><span class="p">));</span>
+<p><strong>[注]</strong>
+当用第一种和第二种方式插入时，如果已经存在，会返回错误。</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pair</span><span class="o">&lt;</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="n">string</span><span class="o">&gt;::</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert_pair</span> <span class="o">=</span> <span class="n">mapStudent</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"student_one"</span><span class="p">));</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">insert_pair</span><span class="p">,</span><span class="n">second</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span>  <span class="c1">// 失败</span>
 </code></pre></div></div>
 
@@ -85,13 +87,16 @@
 
 <p>用erase访求可以删除 map中的元素。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">map</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>   <span class="c1">// 删除k元素，返回size_type是表示删除的个数。</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">map</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>   <span class="c1">// 删除k元素，返回size_type是表示删除的个数。</span>
 <span class="n">map</span><span class="p">,</span><span class="n">erase</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>    <span class="c1">// 删除迭代器p所指的元素。p必须是真实存在的元素，不能等于end()。</span>
 <span class="n">map</span><span class="p">,</span><span class="n">erase</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>  <span class="c1">// 删除一段范围的元素， 范围由迭代器对b和e标记。这种方式应该比较少见吧。</span>
 </code></pre></div></div>
-<h5 id="注-1">[注]</h5>
+
+<p><strong>[注]</strong></p>
+
 <p>map在遍历删除时，有一个地方要注意的。</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(;</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">mapStudent</span><span class="p">,</span><span class="n">end</span><span class="p">();)</span>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(;</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">mapStudent</span><span class="p">,</span><span class="n">end</span><span class="p">();)</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">second</span> <span class="o">==</span> <span class="s">"student_one"</span><span class="p">)</span>
     <span class="p">{</span> 
@@ -103,7 +108,24 @@
    <span class="p">}</span>  
 <span class="p">}</span>
 </code></pre></div></div>
+
 <p>mapStudent,erase(iter++); 中的iter++，不是erase(iter)， 然后iter++。因为iter指针被erase之后就失效了，不能再iter++; 也不能erase(++iter)这样就不是删iter原来指向的元素了。</p>
+
+<h4 id="无序map-unodered_map">无序map unodered_map</h4>
+
+<p>1、 <code class="language-plaintext highlighter-rouge">unordered_map</code> 容器底层采用的是哈希表存储结构，该结构本身不具有对数据的排序功能，所以此容器内部不会自行对存储的键值对进行排序。</p>
+
+<p>2、可以用 自己的 Hash 函数， 是否相关的方法：Pred。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;unordered_map&gt;</span><span class="cp">
+</span>
+<span class="k">template</span> <span class="o">&lt;</span> <span class="k">class</span> <span class="nc">Key</span><span class="p">,</span>                        <span class="c1">//键值对中键的类型</span>
+           <span class="k">class</span> <span class="nc">T</span><span class="p">,</span>                          <span class="c1">//键值对中值的类型</span>
+           <span class="k">class</span> <span class="nc">Hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">Key</span><span class="p">&gt;,</span>           <span class="c1">//容器内部存储键值对所用的哈希函数</span>
+           <span class="k">class</span> <span class="nc">Pred</span> <span class="o">=</span> <span class="n">equal_to</span><span class="o">&lt;</span><span class="n">Key</span><span class="o">&gt;</span><span class="p">,</span>       <span class="c1">//判断各个键值对键相同的规则</span>
+           <span class="k">class</span> <span class="nc">Alloc</span> <span class="o">=</span> <span class="n">allocator</span><span class="o">&lt;</span> <span class="n">pair</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">Key</span><span class="p">,</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&gt;</span>  <span class="c1">// 指定分配器对象的类型</span>
+           <span class="o">&gt;</span> <span class="k">class</span> <span class="nc">unordered_map</span><span class="p">;</span>
+</code></pre></div></div>
 
 
 </section>

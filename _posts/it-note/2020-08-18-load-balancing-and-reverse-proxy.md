@@ -2,8 +2,8 @@
 layout: post
 title: 负载均衡和反向代理
 date: 2020-08-18 16:12:15
-categories: 学习笔记
-tags: 系统设计
+categories: 系统设计
+tags: 
 excerpt: 负载均衡和反向代理
 ---
 

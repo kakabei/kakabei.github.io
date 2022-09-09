@@ -2,8 +2,8 @@
 layout: post
 title: 《极客时间》go语言核心36讲 互斥锁 sync.Mutex与sync.RWMutex
 date: 2019-03-27 09:21:12
-categories:  go
-tags:  极客时间笔记
+categories:   编程语言 
+tags:  go 极客时间笔记
 excerpt: 一个互斥锁可以被,用来保护一个临界区或一组相关临界区
 ---
 

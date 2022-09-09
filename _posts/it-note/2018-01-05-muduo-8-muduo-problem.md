@@ -2,7 +2,7 @@
 layout: post
 title: muduo笔记  muduo 在网上看到一些疑问
 date: 2018-01-05 21:22:12
-categories: Linux muduo
+categories: muduo
 tags:  系统编程 muduo笔记 技术阅读笔记 tcp network thread
 excerpt: muduo 在网上看到一些疑问
 ---

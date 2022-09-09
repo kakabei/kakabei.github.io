@@ -2,7 +2,7 @@
 layout: post
 title: lua 学习初步记录
 date: 2017-03-14 20:27:03
-categories: 编程语言 lua
+categories: 编程语言 
 tags: lua  
 excerpt: lua 初步看书，后面再分模块详细学习
 ---

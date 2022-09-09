@@ -2,8 +2,8 @@
 layout: post
 title: 腾讯云容器团队内部Istio 笔记
 date: 2020-10-16 16:12:15
-categories: 学习笔记
-tags: 系统设计 service-mesh
+categories: 系统设计
+tags:  service-mesh
 excerpt: 腾讯云容器团队内部Istio专题分享
 ---
 
