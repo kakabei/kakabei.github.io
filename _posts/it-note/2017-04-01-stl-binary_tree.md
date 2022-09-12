@@ -2,8 +2,8 @@
 layout: post
 title: stl binary stree 笔记
 date: 2017-04-01 22:12:15
-categories: stl
-tags: stl note 
+categories: 编程语言
+tags: stl  
 excerpt: 二叉树简记
 ---
 

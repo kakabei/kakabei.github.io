@@ -2,8 +2,8 @@
 layout: post
 title: stl vector 笔记
 date: 2017-04-01 21:12:15
-categories: stl
-tags: stl note 
+categories: 编程语言
+tags: stl  
 excerpt: stl vector 笔记备忘
 ---
 
