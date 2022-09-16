@@ -3,7 +3,7 @@ layout: post
 title: redis 基本操作
 date: 2015-02-03 11:08:12
 categories: redis
-tags: db redis
+tags:  redis
 excerpt: redis base operating
 ---
 

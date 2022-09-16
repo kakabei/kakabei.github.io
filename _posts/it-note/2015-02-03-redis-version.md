@@ -3,7 +3,7 @@ layout: post
 title: redis 查看版本
 date: 2015-02-03 11:08:12
 categories: redis
-tags: db redis
+tags:  redis
 excerpt: redis version
 ---
 
