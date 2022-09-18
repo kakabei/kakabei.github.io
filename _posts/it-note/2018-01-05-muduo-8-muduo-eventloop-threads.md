@@ -3,7 +3,7 @@ layout: post
 title: muduo笔记  第八章 EventLoop 在保证线程安全所做事情
 date: 2018-01-05 15:21:12
 categories: muduo
-tags:  系统编程 muduo笔记 技术阅读笔记 tcp network thread
+tags:  系统编程 muduo 技术阅读笔记 tcp network thread
 excerpt: muduo EventLoop 在保证线程安全所做事情
 ---
 
