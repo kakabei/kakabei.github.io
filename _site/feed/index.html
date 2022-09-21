@@ -7,7 +7,7 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2022-09-20T23:42:42+08:00</lastBuildDate>
+    <lastBuildDate>2022-09-21T20:50:58+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
@@ -246,6 +246,212 @@
 <p>结构化思维对于职场来说是一个很好的思维模型，可以以这个为基础，不断打磨自己的方法论。形成自己的思维工具。</p>
 
 <p>人不固执己见，终身学习才是王者，这个和年纪没有什么关系。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>系统设计方案注意事项</title>
+      <link href="http://localhost:4000/system-design-idea/"/>
+      <pubDate>2022-01-25T00:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/system design-idea</guid>
+      <content:encoded><![CDATA[<h1 id="一需求背景">一、需求背景</h1>
+
+<p>1、 清晰掌握需求的各个场景，以业务为导向，检验技术和系统能否很好支持需求的各个场景。</p>
+
+<p>2、了解需求背景，有助于从技术角度上看，需求是否存在漏洞</p>
+
+<h1 id="二系统架构">二、系统架构</h1>
+
+<p>1、画出清晰的高层框架图，主要体现出用什么组件，之间是怎么连接的，数据流向。</p>
+
+<p>2、证明你的思路，用框架图进行推演，是否可以解决需求问题。</p>
+
+<p>3、各个组件节点，是否存在关键点，是否有备用方案，即容错容灾。</p>
+
+<p>4、 估算业务数据，并发，数据总量，系统是否可以满足。</p>
+
+<h1 id="三关键业务流程图">三、关键业务流程图</h1>
+
+<p>1、深入描述清楚关键组件节点的核心业务逻辑。</p>
+
+<p>2、本地缓存防止热点出现。 本地缓存考虑空标情况。</p>
+
+<p>3、处理外部接口异常情况。</p>
+
+<p>4、防止流程出现阻塞情况。</p>
+
+<p>5、关键接口，或读写缓存/db是否有重试机制。</p>
+
+<p>6、业务或第三方接口是否考虑可重入。</p>
+
+<p>7、关键数据一致性考虑。</p>
+
+<p>8、关键流程是否存在并发，是否需要加锁。极端情况也不能忽略，觉得量少不可能会有并发情况，但极端情况果可以由其他bug导致的。</p>
+
+<p>9、对外接口做频限保护。</p>
+
+<p>10、核心业务流程记录流水。</p>
+
+<h1 id="四业务">四、业务</h1>
+
+<p>1、活动和时间相关的，注意零点和跨年的边界问题。</p>
+
+<h1 id="五数据结构-mysql表设计redis缓存数据">五、数据结构  （mysql 表设计，redis 缓存数据）</h1>
+
+<p>1、<code class="language-plaintext highlighter-rouge">mysql</code> 表设计是否合理，相关字段的索引；字段类型定义；是否有扩展字段；业务的数据总量是否考虑分表，用什么维度分表。</p>
+
+<p>2、<code class="language-plaintext highlighter-rouge">mysql</code> <code class="language-plaintext highlighter-rouge">dao</code> 考虑连接数多少。防止对数据库压力过大，是否要加一层redis缓存。</p>
+
+<p>3、<code class="language-plaintext highlighter-rouge">mysql</code> 优先考虑写主，读从。但也要防止主从同步的时间差可能导致业务逻辑的问题。</p>
+
+<p>4、<code class="language-plaintext highlighter-rouge">mysql</code> sql 效率问题，如:  是否让索引失效，是否有必要连表，连表的是否表设计有问题。</p>
+
+<p>5、<code class="language-plaintext highlighter-rouge">redis</code> 缓存是否存在热点， 是否存在大key， 是否考虑缓存空标，空标有效时间和正常的有效时间要区别出来。有效时间是否考虑打散，防止数据同时失效出现雪崩。</p>
+
+<p>6、<code class="language-plaintext highlighter-rouge">redis</code> 数据结构设计注意版本号或扩展字段。反过来，在迭代新增扩展字段时，要考虑数据序列化问题，即版本号等问题。</p>
+
+<h1 id="六协议">六、协议</h1>
+
+<p>1、协议要简洁易懂，字段命名不要出现歧义，注释清楚。一定要有初始化，且初始化的值要合理。</p>
+
+<p>2、协议要有对应的文档。文档说明清晰。文档要用 <code class="language-plaintext highlighter-rouge">source</code> 记录调用业务来源，预估请量，相关负责人。</p>
+
+<p>3、请求协议要有source字段定义业务来源。</p>
+
+<p>4、服务的协议要注意可扩展，新增字段要在mapExt中添加。</p>
+
+<p>5、服务的协议初始化，序列化要对应正确。</p>
+
+<p>6、响应协议要有错误码和错误信息。在文档要对错误码做出释义。</p>
+
+<h1 id="七配置监控">七、配置监控</h1>
+
+<p>1、对所有第三方接口要单独监控。</p>
+
+<p>2、<code class="language-plaintext highlighter-rouge">dao</code> 操作要做单独监控。</p>
+
+<p>3、<code class="language-plaintext highlighter-rouge">redis</code> 缓存/进程内缓存要监控命中率。</p>
+
+<p>4、对外接口做全局监控。</p>
+
+<p>5、<code class="language-plaintext highlighter-rouge">daemon</code> 也要做全局监控。</p>
+
+<p>6、对外部参数的校验可以不做告警。</p>
+
+<p>7、集中建立个性化视图，写清楚紧急联系人，方便快速找到对应的负责人。</p>
+
+<p>8、接口调用来源做统计监控。</p>
+
+<p>9、关键业务做出错告警。</p>
+
+<p>10、 监控让服务有可观察性。</p>
+
+<h1 id="八异常处理">八、异常处理</h1>
+
+<p>1、考虑兜底方案，降级方案，补偿机制。</p>
+
+<p>2、重试，告警。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>引流活动九宫格抽奖系统设计</title>
+      <link href="http://localhost:4000/server-acitivity-ninebox/"/>
+      <pubDate>2022-01-24T00:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/server-acitivity-ninebox</guid>
+      <content:encoded><![CDATA[<h1 id="一-背景">一 背景</h1>
+
+<p>在用户购买商品后，完成支付，可以一个抽奖活动。很多线上线下的都会搞类似这样的活动。这个位置是一个很好引流活动。可以把流量引向不同的业务。</p>
+
+<p>如华为运动中的活动：</p>
+
+<p><img src="/assets/system-design/server-activity-ninebox-2022-09-21_17-19-20.png" alt="" /></p>
+
+<p>产品的业务逻辑：</p>
+
+<p>1、九宫格中展示7个坑位的奖品，中间一个是抽奖按钮。第8个坑位是“谢谢参与”。</p>
+
+<p>2、这是一个引流推广活动，所以业务逻辑上要求是奖品必中。之所以留一个坑位“谢谢参与”，是为兜底系统错误（如：网络问题）以避免客诉。</p>
+
+<p>3、活动会接入不同业务线，以达到把流量导入到不同业务线的目的。</p>
+
+<p>4、用户进入页面后，会根据不同的策略展示不同业务的奖品，最多7个奖品。</p>
+
+<p>5、当用户点击“立即抽奖”后，根据不同奖品的不同权重，随机出抽中的奖品，发送领取落地页链接，用户在落地页点击领取。</p>
+
+<p>6、奖品都是来不同的业务线。不存储本地。所以业务方一般要提供两个接口。 查询是可以发奖然后显示，中奖时通知业务方发奖。</p>
+
+<p>如何把不同的业务的接入进来才是这个需求的难点。 不同的业务有不同类型的状态，如红包，试用券， 会员积分，  体验卡，  品牌会员等。</p>
+
+<p>每个业务方都要提供一个查询奖励的接口和一个领奖品的接口。 奖励的数量和库存由对业务方自己决定。</p>
+
+<p><strong>这种方式有好有坏：</strong></p>
+
+<p>1）好处是：奖品的类型和库存可以由各个业务自己配置控制。 活动只是做一个中间路由，只是控制展示策略和命中权重，外加一个兜底奖品。</p>
+
+<p>2）坏处是：过于发散，沟通成本太大，后期活动接入的业务越来越多，性能依赖各个业务的接口的性能。如遇大的调整，每个业务都回归测试一下。</p>
+
+<p>其实，大部分奖品都是可以通知奖池来配置完成。 但这样子业务方无法自己把控奖品。同时也增加了我们运营， 九宫格活动不是京喜的业务，是京东的业务，所以人力成本也是一个原因。</p>
+
+<h1 id="二服务框架">二、服务框架</h1>
+
+<p>所用技术  <code class="language-plaintext highlighter-rouge">c++</code> ,<code class="language-plaintext highlighter-rouge">redis</code>, <code class="language-plaintext highlighter-rouge">http</code> 。</p>
+
+<p>服务整体框架：</p>
+
+<p><img src="/assets/system-design/server-activity-ninebox-2022-09-21_16-55-36.png" alt="" /></p>
+
+<p>说明：</p>
+
+<p>1、 活动通过 <code class="language-plaintext highlighter-rouge">http</code>  的方式提供服务。 两个接口： 一个是查询奖品（query），一个抽奖(draw)。</p>
+
+<p>2、App client 是 京东App。收银台支付页完成后展示出来的是一个h5的页面。 App server是，京东App的服务端，跨团队，客户端没有直接接到我们这边的接口。</p>
+
+<p>3、用户抽奖的相关数据用 <code class="language-plaintext highlighter-rouge">Redis</code> 存储。 中奖信息只保留7天。活动本身并不涉及奖品存储，都是通知业务方发放奖品的。奖品的历史查询是业务方自己的业务逻辑了。</p>
+
+<p>4、业务上要求这个活动是必中活动。所以加入自己的奖池做为兜底。当有业务的奖品库存已经耗尽时，可以用到自己的奖品顶上去。</p>
+
+<p>5、对于请求业务方的奖品，要先按策略选出7个业务的奖品，再通过并发调用接口，提高调用性能。这样，一次并发调用7个接口。</p>
+
+<h2 id="21-展示奖品query">2.1  展示奖品（Query）</h2>
+
+<p>主要逻辑流程图：</p>
+
+<p><img src="/assets/system-design/server-activity-ninebox_2022-09-21_16-20-18.png" alt="" /></p>
+
+<p>说明：</p>
+
+<p>1、 关于奖品的展示策略通过配置中心定义，方便对于策略随时更新。所以服务一开始就要加载配置信息。</p>
+
+<p>2、风险控制方面：１）要求登录，２）查询风控系统　３）判断是否重请求，防止被刷，同一个单多次刷新接口展示一点的奖品。</p>
+
+<p>3、兜底逻辑，在筛选各个业务后如果出现不足七个奖品时，要用查询奖口列表做兜底，满足七个坑位。</p>
+
+<p>4、比较极端的情况下，如果不足7个坑位的奖品，则要求前不展示活动。</p>
+
+<h2 id="22-抽奖接口draw">2.2 抽奖接口（draw） </h2>
+
+<p>主要逻辑流程图：</p>
+
+<p><img src="/assets/system-design/server-activity-ninebox_2022-09-21_16-29-08.png" alt="" /></p>
+
+<p>说明：</p>
+
+<p>1、 抽奖时，要做登录检验，数据从redis中读出，保证数据的一致性。数据缓存redis有7天的时效，这个没有必要重新查询风控。因为写入reids的数据是在查询奖品时就写入的，查询奖品时就已经查询过风控了。</p>
+
+<p> 2、 如果出现异常，返回“谢谢参与“，避免客诉。</p>
+
+<p>3、抽奖后会记录在用户的历史记录中。防止用户重复刷新抽奖。</p>
+
+<p>4、 加redis的乐观锁，防止快速刷时，被不同进程处理。</p>
+
+<h1 id="三总结">三、总结</h1>
+
+<p>这个活动需求最有挑战的，不是开发技术问题，而是沟通问题。随着活动的展开，业务的发展，要求接入的业务越来越多。一个业务的背后是一个不同的团队。沟通起来比较耗时，效率也比较低。 团队也是分散易地办公，很难要规范统一起来，沟通过程出现各种推诿。</p>
+
+<p>当然活动可以做起更加通用一些。 查询接口和通知发奖接口按统一标准接入。可以有一个后台管理系统配置接入业务。配置完成生效后，就可以用。不用每一次新填业务都要去做开发。但做成通知性的难度不低，而且要各个业务方按九宫格的标准备开发接口。我们这边是省事了。他们很难受了。</p>
 ]]></content:encoded>
     </item>
     
@@ -1790,259 +1996,6 @@ metrics 监控
 <p>基于容器的云发布体系</p>
 
 <p><img src="../../assets/time-geekbang-microservice-core20/micro_server_20_2.png" alt="" /></p>
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>《极客时间》go语言核心36讲 条件变量 sync.Cond</title>
-      <link href="http://localhost:4000/timegeekbang-go-syncCond/"/>
-      <pubDate>2019-03-28T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/timegeekbang-go-syncCond</guid>
-      <content:encoded><![CDATA[<p>条件变量是和互斥锁一起使用的。
-条件变量是和互斥锁一起使用的。</p>
-
-<p>条件变量并不是被用来保护临界区和共享资源的，它是用于协调想要访问共享资源的那些线程的。当共享资源的状态发生变化时，它可以被用来通知被互斥锁阻塞的线程。</p>
-
-<p>条件变量提供的方法有三个：等待通知（wait）、单发通知（signal）和广播通知（broadcast）。</p>
-
-<p>这里有一个疑问：</p>
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">mailbox</span> <span class="kt">uint8</span>
-<span class="k">var</span> <span class="n">lock</span> <span class="n">sync</span><span class="o">.</span><span class="n">RWMutex</span>
-<span class="n">sendCond</span> <span class="o">:=</span> <span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">)</span>
-<span class="n">recvCond</span> <span class="o">:=</span> <span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="n">lock</span><span class="o">.</span><span class="n">RLocker</span><span class="p">())</span>
-</code></pre></div></div>
-
-<p>endCond := sync.NewCond(&amp;lock)和recvCond := sync.NewCond(lock.RLocker())</p>
-
-<p>传入的一个是 &amp;lock 另一个是 lock.RLocker() 为什么？</p>
-
-<p><strong>条件变量的Wait方法做了什么？</strong></p>
-
-<p>条件变量的Wait方法主要做了四件事。</p>
-
-<p>1　把调用它的 goroutine（也就是当前的 goroutine）加入到当前条件变量的通知队列中。</p>
-
-<p>2　解锁当前的条件变量基于的那个互斥锁。</p>
-
-<p>3　让当前的 goroutine 处于等待状态，等到通知到来时再决定是否唤醒它。此时，这个 goroutine 就会阻塞在调用这个Wait方法的那行代码上。</p>
-
-<p>4　如果通知到来并且决定唤醒这个 goroutine，那么就在唤醒它之后重新锁定当前条件变量基于的互斥锁。自此之后，当前的goroutine 就会继续执行后面的代码了。</p>
-
-<p><strong>条件变量的Signal方法和Broadcast方法有哪些异同？</strong></p>
-
-<p>条件变量的Signal方法和Broadcast方法都是被用来发送通知的，不同的是，前者的通知只会唤醒一个因此而等待的 goroutine，而后者的通知却会唤醒所有为此等待的 goroutine。</p>
-
-<p>扩展 ：https://blog.csdn.net/wentyoon/article/details/81174288</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>《极客时间》go语言核心36讲 互斥锁 sync.Mutex与sync.RWMutex</title>
-      <link href="http://localhost:4000/timegeekbang-go-syncMutex/"/>
-      <pubDate>2019-03-27T17:21:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/timegeekbang-go-syncMutex</guid>
-      <content:encoded><![CDATA[<p>一个互斥锁可以被 用来保护一个临界区或一组相关临界区。保证在同一时刻只有一个Goroutine处于该临界区之内</p>
-
-<p>为了兑现这保证上，每当goroutine 想进入临界区时，都要先对它进行锁定 ，离开时临界区时都要及时地对它进行解锁。</p>
-
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">writer</span><span class="o">.</span><span class="n">Write</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
- <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"error: %s [%d]"</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">id</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
-</code></pre></div></div>
-
-<p><strong>使用互斥锁时有哪 些注意事项：</strong></p>
-
-<p>1 不要重复锁定互斥锁。</p>
-
-<p>2 不要忘记解锁互斥锁，必要时用 defer 语句</p>
-
-<p>3 不要对沿未锁定或者已经解锁的互斥锁解锁</p>
-
-<p>4 不要在多个函数之前直接传递互斥锁</p>
-
-<p>死锁时抛出的panic是属于致使错误，都是无法被恢复的，调用recover函数对它们起不了任何作用。</p>
-
-<p>互斥锁是开箱即用的。sysnc.Mutex类型 是一个结构体类型，属于值类型中的一种，把它传给一个函数、将它从函数中返回，把它赋给其他变量。让它进入 某个通道都会导致它的副本的产生。
-它们是独立的，都是不同的互斥锁。</p>
-
-<p><strong>读写锁与互斥锁有哪 异同？</strong></p>
-
-<p>sync.RWMute类型的值代表。 都是开箱即用。 它是把对共享资源的“读操作”和“写操作”区别对待。</p>
-
-<p>比互斥锁有列加细腻的访问控制。</p>
-
-<p>一个读写锁中实际上包含了两个锁，即：读锁和写锁。sync.RWMutex类型中的Lock方法和Unlock方法分别用于对写锁进行锁定和解锁，而它的RLock方法和RUnlock方法则分别用于对读锁进行锁定和解锁。</p>
-
-<p><strong>另外，对于同一个读写锁来说有如下规则：</strong></p>
-
-<p>1 在写锁已被锁定的情况下再试图锁定写锁，会阻塞当前的 goroutine。</p>
-
-<p>2 在写锁已被锁定的情况下试图锁定读锁，也会阻塞当前的 goroutine</p>
-
-<p>3 在读锁已被锁定的情况下试图锁定写锁，同样会阻塞当前的goroutine。</p>
-
-<p>4 在读锁已被锁定的情况下再试图锁定读锁，并不会阻塞当前的goroutine。</p>
-
-<p>换一个角度来说，对于某个受到读写锁保护的共享资源，多个写操作不能同时进行，写操作和读操作也不能同时进行，但多个读操作却可以同时进行。</p>
-
-<p>go 语言代码  实例：</p>
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
-
-<span class="k">import</span> <span class="p">(</span>
-    <span class="s">"bytes"</span>
-    <span class="s">"errors"</span>
-    <span class="s">"fmt"</span>
-    <span class="s">"io"</span>
-    <span class="s">"log"</span>
-    <span class="s">"sync"</span>
-    <span class="s">"time"</span>
-<span class="p">)</span>
-
-<span class="c">// singleHandler 代表单次处理函数的类型。</span>
-<span class="k">type</span> <span class="n">singleHandler</span> <span class="k">func</span><span class="p">()</span> <span class="p">(</span><span class="n">data</span> <span class="kt">string</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
-
-<span class="c">// handlerConfig 代表处理流程配置的类型。</span>
-<span class="k">type</span> <span class="n">handlerConfig</span> <span class="k">struct</span> <span class="p">{</span>
-    <span class="n">handler</span>   <span class="n">singleHandler</span> <span class="c">// 单次处理函数。</span>
-    <span class="n">goNum</span>     <span class="kt">int</span>           <span class="c">// 需要启用的goroutine的数量。</span>
-    <span class="n">number</span>    <span class="kt">int</span>           <span class="c">// 单个goroutine中的处理次数。</span>
-    <span class="n">interval</span>  <span class="n">time</span><span class="o">.</span><span class="n">Duration</span> <span class="c">// 单个goroutine中的处理间隔时间。</span>
-    <span class="n">counter</span>   <span class="kt">int</span>           <span class="c">// 数据量计数器，以字节为单位。</span>
-    <span class="n">counterMu</span> <span class="n">sync</span><span class="o">.</span><span class="n">Mutex</span>    <span class="c">// 数据量计数器专用的互斥锁。</span>
-
-<span class="p">}</span>
-
-<span class="c">// count 会增加计数器的值，并会返回增加后的计数。</span>
-<span class="k">func</span> <span class="p">(</span><span class="n">hc</span> <span class="o">*</span><span class="n">handlerConfig</span><span class="p">)</span> <span class="n">count</span><span class="p">(</span><span class="n">increment</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
-    <span class="n">hc</span><span class="o">.</span><span class="n">counterMu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-    <span class="k">defer</span> <span class="n">hc</span><span class="o">.</span><span class="n">counterMu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
-    <span class="n">hc</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="n">increment</span>
-    <span class="k">return</span> <span class="n">hc</span><span class="o">.</span><span class="n">counter</span>
-<span class="p">}</span>
-
-<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c">// mu 代表以下流程要使用的互斥锁。</span>
-    <span class="c">// 在下面的函数中直接使用即可，不要传递。</span>
-    <span class="k">var</span> <span class="n">mu</span> <span class="n">sync</span><span class="o">.</span><span class="n">Mutex</span>
-
-    <span class="c">// genWriter 代表的是用于生成写入函数的函数。</span>
-    <span class="n">genWriter</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">writer</span> <span class="n">io</span><span class="o">.</span><span class="n">Writer</span><span class="p">)</span> <span class="n">singleHandler</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">func</span><span class="p">()</span> <span class="p">(</span><span class="n">data</span> <span class="kt">string</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c">// 准备数据。</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\t</span><span class="s">"</span><span class="p">,</span>
-                <span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span><span class="o">.</span><span class="n">Format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">StampNano</span><span class="p">))</span>
-            <span class="c">// 写入数据。</span>
-            <span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-            <span class="k">defer</span> <span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
-            <span class="n">n</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">Write</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="c">// genReader 代表的是用于生成读取函数的函数。</span>
-    <span class="n">genReader</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">reader</span> <span class="n">io</span><span class="o">.</span><span class="n">Reader</span><span class="p">)</span> <span class="n">singleHandler</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">func</span><span class="p">()</span> <span class="p">(</span><span class="n">data</span> <span class="kt">string</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">buffer</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">reader</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">bytes</span><span class="o">.</span><span class="n">Buffer</span><span class="p">)</span>
-            <span class="k">if</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
-                <span class="n">err</span> <span class="o">=</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"unsupported reader"</span><span class="p">)</span>
-                <span class="k">return</span>
-            <span class="p">}</span>
-            <span class="c">// 读取数据。</span>
-            <span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-            <span class="k">defer</span> <span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
-            <span class="n">data</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">ReadString</span><span class="p">(</span><span class="sc">'\t'</span><span class="p">)</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="c">// buffer 代表缓冲区。</span>
-    <span class="k">var</span> <span class="n">buffer</span> <span class="n">bytes</span><span class="o">.</span><span class="n">Buffer</span>
-
-    <span class="c">// 数据写入配置。</span>
-    <span class="n">writingConfig</span> <span class="o">:=</span> <span class="n">handlerConfig</span><span class="p">{</span>
-        <span class="n">handler</span><span class="o">:</span>  <span class="n">genWriter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">),</span>
-        <span class="n">goNum</span><span class="o">:</span>    <span class="m">5</span><span class="p">,</span>
-        <span class="n">number</span><span class="o">:</span>   <span class="m">4</span><span class="p">,</span>
-        <span class="n">interval</span><span class="o">:</span> <span class="n">time</span><span class="o">.</span><span class="n">Millisecond</span> <span class="o">*</span> <span class="m">100</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="c">// 数据读取配置。</span>
-    <span class="n">readingConfig</span> <span class="o">:=</span> <span class="n">handlerConfig</span><span class="p">{</span>
-        <span class="n">handler</span><span class="o">:</span>  <span class="n">genReader</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">),</span>
-        <span class="n">goNum</span><span class="o">:</span>    <span class="m">10</span><span class="p">,</span>
-        <span class="n">number</span><span class="o">:</span>   <span class="m">2</span><span class="p">,</span>
-        <span class="n">interval</span><span class="o">:</span> <span class="n">time</span><span class="o">.</span><span class="n">Millisecond</span> <span class="o">*</span> <span class="m">100</span><span class="p">,</span>
-    <span class="p">}</span>
-
-    <span class="c">// sign 代表信号的通道。</span>
-    <span class="n">sign</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="k">struct</span><span class="p">{},</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="o">+</span><span class="n">readingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="p">)</span>
-
-    <span class="c">// 启用多个goroutine对缓冲区进行多次数据写入。</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
-        <span class="k">go</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">defer</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
-                <span class="n">sign</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
-            <span class="p">}()</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">number</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
-                <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">writingConfig</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span>
-                <span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">handler</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
-                    <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"writer [%d-%d]: error: %s"</span><span class="p">,</span>
-                        <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-                    <span class="k">continue</span>
-                <span class="p">}</span>
-                <span class="n">total</span> <span class="o">:=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"writer [%d-%d]: %s (total: %d)"</span><span class="p">,</span>
-                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
-            <span class="p">}</span>
-        <span class="p">}(</span><span class="n">i</span><span class="p">)</span>
-    <span class="p">}</span>
-
-    <span class="c">// 启用多个goroutine对缓冲区进行多次数据读取。</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
-        <span class="k">go</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">defer</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
-                <span class="n">sign</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
-            <span class="p">}()</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">number</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
-                <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">readingConfig</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span>
-                <span class="k">var</span> <span class="n">data</span> <span class="kt">string</span>
-                <span class="k">var</span> <span class="n">n</span> <span class="kt">int</span>
-                <span class="k">var</span> <span class="n">err</span> <span class="kt">error</span>
-                <span class="k">for</span> <span class="p">{</span>
-                    <span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">handler</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="no">nil</span> <span class="o">||</span> <span class="n">err</span> <span class="o">!=</span> <span class="n">io</span><span class="o">.</span><span class="n">EOF</span> <span class="p">{</span>
-                        <span class="k">break</span>
-                    <span class="p">}</span>
-                    <span class="c">// 如果读比写快（读时会发生EOF错误），那就等一会儿再读。</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">readingConfig</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span>
-                <span class="p">}</span>
-                <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
-                    <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"reader [%d-%d]: error: %s"</span><span class="p">,</span>
-                        <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-                    <span class="k">continue</span>
-                <span class="p">}</span>
-                <span class="n">total</span> <span class="o">:=</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"reader [%d-%d]: %s (total: %d)"</span><span class="p">,</span>
-                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
-            <span class="p">}</span>
-        <span class="p">}(</span><span class="n">i</span><span class="p">)</span>
-    <span class="p">}</span>
-
-    <span class="c">// signNumber 代表需要接收的信号的数量。</span>
-    <span class="n">signNumber</span> <span class="o">:=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">goNum</span> <span class="o">+</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">goNum</span>
-    <span class="c">// 等待上面启用的所有goroutine的运行全部结束。</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">signNumber</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
-        <span class="o">&lt;-</span><span class="n">sign</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
 
 ]]></content:encoded>
     </item>

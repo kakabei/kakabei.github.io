@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>引流活动九宫格抽奖系统设计</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>引流活动九宫格抽奖系统设计</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2022-01-24">2022-01-24</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#系统设计" title="系统设计">系统设计</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#工作经验" title="工作经验">工作经验</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<h1 id="一-背景">一 背景</h1>
+
+<p>在用户购买商品后，完成支付，可以一个抽奖活动。很多线上线下的都会搞类似这样的活动。这个位置是一个很好引流活动。可以把流量引向不同的业务。</p>
+
+<p>如华为运动中的活动：</p>
+
+<p><img src="/assets/system-design/server-activity-ninebox-2022-09-21_17-19-20.png" alt="" /></p>
+
+<p>产品的业务逻辑：</p>
+
+<p>1、九宫格中展示7个坑位的奖品，中间一个是抽奖按钮。第8个坑位是“谢谢参与”。</p>
+
+<p>2、这是一个引流推广活动，所以业务逻辑上要求是奖品必中。之所以留一个坑位“谢谢参与”，是为兜底系统错误（如：网络问题）以避免客诉。</p>
+
+<p>3、活动会接入不同业务线，以达到把流量导入到不同业务线的目的。</p>
+
+<p>4、用户进入页面后，会根据不同的策略展示不同业务的奖品，最多7个奖品。</p>
+
+<p>5、当用户点击“立即抽奖”后，根据不同奖品的不同权重，随机出抽中的奖品，发送领取落地页链接，用户在落地页点击领取。</p>
+
+<p>6、奖品都是来不同的业务线。不存储本地。所以业务方一般要提供两个接口。 查询是可以发奖然后显示，中奖时通知业务方发奖。</p>
+
+<p>如何把不同的业务的接入进来才是这个需求的难点。 不同的业务有不同类型的状态，如红包，试用券， 会员积分，  体验卡，  品牌会员等。</p>
+
+<p>每个业务方都要提供一个查询奖励的接口和一个领奖品的接口。 奖励的数量和库存由对业务方自己决定。</p>
+
+<p><strong>这种方式有好有坏：</strong></p>
+
+<p>1）好处是：奖品的类型和库存可以由各个业务自己配置控制。 活动只是做一个中间路由，只是控制展示策略和命中权重，外加一个兜底奖品。</p>
+
+<p>2）坏处是：过于发散，沟通成本太大，后期活动接入的业务越来越多，性能依赖各个业务的接口的性能。如遇大的调整，每个业务都回归测试一下。</p>
+
+<p>其实，大部分奖品都是可以通知奖池来配置完成。 但这样子业务方无法自己把控奖品。同时也增加了我们运营， 九宫格活动不是京喜的业务，是京东的业务，所以人力成本也是一个原因。</p>
+
+<h1 id="二服务框架">二、服务框架</h1>
+
+<p>所用技术  <code class="language-plaintext highlighter-rouge">c++</code> ,<code class="language-plaintext highlighter-rouge">redis</code>, <code class="language-plaintext highlighter-rouge">http</code> 。</p>
+
+<p>服务整体框架：</p>
+
+<p><img src="/assets/system-design/server-activity-ninebox-2022-09-21_16-55-36.png" alt="" /></p>
+
+<p>说明：</p>
+
+<p>1、 活动通过 <code class="language-plaintext highlighter-rouge">http</code>  的方式提供服务。 两个接口： 一个是查询奖品（query），一个抽奖(draw)。</p>
+
+<p>2、App client 是 京东App。收银台支付页完成后展示出来的是一个h5的页面。 App server是，京东App的服务端，跨团队，客户端没有直接接到我们这边的接口。</p>
+
+<p>3、用户抽奖的相关数据用 <code class="language-plaintext highlighter-rouge">Redis</code> 存储。 中奖信息只保留7天。活动本身并不涉及奖品存储，都是通知业务方发放奖品的。奖品的历史查询是业务方自己的业务逻辑了。</p>
+
+<p>4、业务上要求这个活动是必中活动。所以加入自己的奖池做为兜底。当有业务的奖品库存已经耗尽时，可以用到自己的奖品顶上去。</p>
+
+<p>5、对于请求业务方的奖品，要先按策略选出7个业务的奖品，再通过并发调用接口，提高调用性能。这样，一次并发调用7个接口。</p>
+
+<h2 id="21-展示奖品query">2.1  展示奖品（Query）</h2>
+
+<p>主要逻辑流程图：</p>
+
+<p><img src="/assets/system-design/server-activity-ninebox_2022-09-21_16-20-18.png" alt="" /></p>
+
+<p>说明：</p>
+
+<p>1、 关于奖品的展示策略通过配置中心定义，方便对于策略随时更新。所以服务一开始就要加载配置信息。</p>
+
+<p>2、风险控制方面：１）要求登录，２）查询风控系统　３）判断是否重请求，防止被刷，同一个单多次刷新接口展示一点的奖品。</p>
+
+<p>3、兜底逻辑，在筛选各个业务后如果出现不足七个奖品时，要用查询奖口列表做兜底，满足七个坑位。</p>
+
+<p>4、比较极端的情况下，如果不足7个坑位的奖品，则要求前不展示活动。</p>
+
+<h2 id="22-抽奖接口draw">2.2 抽奖接口（draw） </h2>
+
+<p>主要逻辑流程图：</p>
+
+<p><img src="/assets/system-design/server-activity-ninebox_2022-09-21_16-29-08.png" alt="" /></p>
+
+<p>说明：</p>
+
+<p>1、 抽奖时，要做登录检验，数据从redis中读出，保证数据的一致性。数据缓存redis有7天的时效，这个没有必要重新查询风控。因为写入reids的数据是在查询奖品时就写入的，查询奖品时就已经查询过风控了。</p>
+
+<p> 2、 如果出现异常，返回“谢谢参与“，避免客诉。</p>
+
+<p>3、抽奖后会记录在用户的历史记录中。防止用户重复刷新抽奖。</p>
+
+<p>4、 加redis的乐观锁，防止快速刷时，被不同进程处理。</p>
+
+<h1 id="三总结">三、总结</h1>
+
+<p>这个活动需求最有挑战的，不是开发技术问题，而是沟通问题。随着活动的展开，业务的发展，要求接入的业务越来越多。一个业务的背后是一个不同的团队。沟通起来比较耗时，效率也比较低。 团队也是分散易地办公，很难要规范统一起来，沟通过程出现各种推诿。</p>
+
+<p>当然活动可以做起更加通用一些。 查询接口和通知发奖接口按统一标准接入。可以有一个后台管理系统配置接入业务。配置完成生效后，就可以用。不用每一次新填业务都要去做开发。但做成通知性的难度不低，而且要各个业务方按九宫格的标准备开发接口。我们这边是省事了。他们很难受了。</p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/java-base-learn1/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/system-design-idea/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2022-01-23-server-acitivity-ninebox.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>
