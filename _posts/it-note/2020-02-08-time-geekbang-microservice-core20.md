@@ -163,7 +163,7 @@ SOA  Service-Oriented Architecture  （面向服务的架构）
 
 ![](../../assets/time-geekbang-microservice-core20/micro_server_9_1.png) 
 
-2 　LB功能放到Consumer内， service 注册到 Service Registry上。有定时心跳发到注册中收，Consumer  定期的同步 Service Registry的信息。 
+2 　LB功能放到Consumer内， service 注册到 Service Registry上。有定时心跳发到注册中心，Consumer  定期的同步 Service Registry的信息。 
 
 ![](../../assets/time-geekbang-microservice-core20/micro_server_9_2.png) 
 
