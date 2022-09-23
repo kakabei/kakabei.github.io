@@ -7,7 +7,7 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2022-09-22T20:11:05+08:00</lastBuildDate>
+    <lastBuildDate>2022-09-23T12:29:00+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
@@ -250,11 +250,170 @@
     </item>
     
     <item>
+      <title>服务发现原理</title>
+      <link href="http://localhost:4000/service-discovery/"/>
+      <pubDate>2022-01-26T00:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/service-discovery</guid>
+      <content:encoded><![CDATA[<h1 id="一概述">一、概述</h1>
+
+<p>在微服务分布式框架中，服务被拆分成很微小服务，各自独立。由多个台机器组成，各服务之间相互调用，有管理各种服务的需求。 服务发现机制可以降低服务管理的成本。</p>
+
+<p>在服务发现之前，服务之间的调用，可能要在各服务代码中写死IP 或者 通过配置文件读出服务之间的IP。</p>
+
+<p>服务发现机制则一分两步:</p>
+
+<p>1、服务注册。 在服务启动时，把自己的<strong>IP和端口</strong> 通过服务注册定入到服务管理平台中，以便提供给其他主调用。</p>
+
+<p>2、服务发现。其他方调用时则要先通过服务平台拿到这个服务其中的一个<strong>IP和端口</strong>，然后再调用。</p>
+
+<p>如图：</p>
+
+<p><img src="/assets/system-design/service-discovery-2022-09-23_11-53-40.png" alt="" /></p>
+
+<p>说明：</p>
+
+<p>1、 server b 把自己注册到  service registry  叫做 <strong>服务注册</strong>。</p>
+
+<p>2、 server  a  从 service registry 发现 server b 的节点信息叫做 <strong>服务发现</strong>。</p>
+
+<p>3、最后 server a 调用 server b。</p>
+
+<h1 id="二服务注册">二、服务注册</h1>
+
+<p>服务注册，简单的说是，就是把自己的IP和端口写到服务管理平台上形成一组服务，告诉所有其他的服务，想调用我，可以通过服务管理平台上的服务名找到我的IP和端口。</p>
+
+<p>服务注册的大概框架图：</p>
+
+<p><img src="/assets/system-design/service-discovery-2022-09-23_00-58-18.png" alt="" /></p>
+
+<p>一般一个服务会有多个 IP 和端口。 如：</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="err">user</span><span class="w"> </span><span class="err">server</span><span class="w"> 
+</span><span class="p">[</span><span class="w">
+	</span><span class="p">{</span><span class="w"> 
+		</span><span class="nl">"ip"</span><span class="p">:</span><span class="mf">127.0</span><span class="err">.</span><span class="mf">0.1</span><span class="p">,</span><span class="w">
+		</span><span class="nl">"port"</span><span class="p">:</span><span class="mi">8800</span><span class="w">
+	</span><span class="p">},</span><span class="w">
+	</span><span class="p">{</span><span class="w"> 
+		</span><span class="nl">"ip"</span><span class="p">:</span><span class="mf">127.0</span><span class="err">.</span><span class="mf">0.2</span><span class="p">,</span><span class="w">
+		</span><span class="nl">"port"</span><span class="p">:</span><span class="mi">8800</span><span class="w">
+	</span><span class="p">},</span><span class="w">
+	</span><span class="p">{</span><span class="w"> 
+		</span><span class="nl">"ip"</span><span class="p">:</span><span class="mf">127.0</span><span class="err">.</span><span class="mf">0.3</span><span class="p">,</span><span class="w">
+		</span><span class="nl">"port"</span><span class="p">:</span><span class="mi">8800</span><span class="w">
+	</span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+
+</span><span class="err">#</span><span class="w"> </span><span class="err">live</span><span class="w"> </span><span class="err">server</span><span class="w"> 
+</span><span class="p">[</span><span class="w">
+	</span><span class="p">{</span><span class="w"> 
+		</span><span class="nl">"ip"</span><span class="p">:</span><span class="mf">127.0</span><span class="err">.</span><span class="mf">1.1</span><span class="p">,</span><span class="w">
+		</span><span class="nl">"port"</span><span class="p">:</span><span class="mi">8801</span><span class="w">
+	</span><span class="p">},</span><span class="w">
+	</span><span class="p">{</span><span class="w"> 
+		</span><span class="nl">"ip"</span><span class="p">:</span><span class="mf">127.0</span><span class="err">.</span><span class="mf">1.2</span><span class="p">,</span><span class="w">
+		</span><span class="nl">"port"</span><span class="p">:</span><span class="mi">8801</span><span class="w">
+	</span><span class="p">},</span><span class="w">
+	</span><span class="p">{</span><span class="w"> 
+		</span><span class="nl">"ip"</span><span class="p">:</span><span class="mf">127.0</span><span class="err">.</span><span class="mf">1.3</span><span class="p">,</span><span class="w">
+		</span><span class="nl">"port"</span><span class="p">:</span><span class="mi">8801</span><span class="w">
+	</span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+
+</span></code></pre></div></div>
+
+<p>说明：</p>
+
+<p>1、业务服务会向服务平台注册一个服务名，把自己的 IP和端口号写入。</p>
+
+<p>2、一般情况下，同一个服务，所有端口最好一样，方便管理。</p>
+
+<p>3、以现在docker 的技术，一般是一个实例只能跑一个业务服务。但也有企业了节约成本，也会在同一个docker 跑多个服务。</p>
+
+<p>4、有的解决方案是在服务管理平台手动的写入服务名和对应的IP列表。 服务名要全局惟一。</p>
+
+<h1 id="三服务发现">三、服务发现</h1>
+
+<p>服务发现，即当server a 想请求 serve b 时，应该如何找到合适的IP和端口呢？如：</p>
+
+<p>user sever 这个服务 有三台机器，  live server  也有三台机器。 live sever1  想请求 user server  的业务接口。它就应该先请求服务管理平台。</p>
+
+<p>服务管理平台返回了 user server 中的一个IP和端口。 （负载均衡后的结果）</p>
+
+<p><img src="/assets/system-design/service-discovery-2022-09-23_11-09-13.png" alt="" /></p>
+
+<p>上图说明：</p>
+
+<p>1、 live server1 想请求 user server 中的接口。</p>
+
+<p>2、live server1 要请求服务管理平台，服务管理平台返回了 user server 其中的一个IP 和 端口。 （user server2）</p>
+
+<p>3、live server1 再请求 user server2</p>
+
+<p>这样就完成一个服务的调用。</p>
+
+<h1 id="四活跃检测">四、活跃检测</h1>
+
+<p>服务发现机制，除了在微服务分布式系统中方便服务之间的调用后，还是功能就两个是活跃检测和负载均衡。</p>
+
+<p>即服务管理平台会向注册的服务发送请求，确认服务是否可用，如果服务不可用或机器已挂机。即标记该 IP 不可用，或者直接摘机。</p>
+
+<p>另一种方式是注册的服务定时的向服务管理平台发送确认的状态。告诉服务管理平台，自己还是活跃的。</p>
+
+<p>当时发现服务不通时，可以进行摘机。即把IP从列表中移除掉。</p>
+
+<p>所以，服务提供方一般都要求两个机器以上，这样可以起到容灾的作用。 要求高一点，可以要求机器在不同机房。当一个机房出问题时，另一个机器的服务可以支持着服务。</p>
+
+<p><img src="/assets/system-design/service-discovery-2022-09-23_01-04-49.png" alt="" /></p>
+
+<h1 id="五负载均衡">五、负载均衡</h1>
+
+<p>服务请求时，提供方的服务是无状态的，会存在多个IP，我们只需求访问其中一个IP即可。 所以，服务管理平台同时也起了负载均衡的作用，只返回一个合适的IP。</p>
+
+<p>当然，也有的策略是返回多个 IP， 让调用方自己去选择那个IP访问。</p>
+
+<p>这里也导致一个问题，即所有请求都会预先请求服务管理平台。流量大的时侯会有瓶颈。解决的方案的是，请求到一个IP后，可以在本地缓存几秒钟，减少因流量峰值而带来服务管理平台的压力。</p>
+
+<p><a href="http://blog.xyecho.com/load-balancing-and-reverse-proxy/">负载均衡策略：http://blog.xyecho.com/load-balancing-and-reverse-proxy/</a></p>
+
+<h1 id="五服务发现技术点">五、服务发现技术点</h1>
+
+<p>一套完整的服务发现平台，所需要的技术点：</p>
+
+<p>1、 集群、分布式。 要应对大流量的服务，就一定要用到分布式集群。同时也起到容灾的作用。</p>
+
+<p>2、强一致性、数据同步。由于分布式， 所以数据的一定要同步到每一台机器上，同时也要保证每一台机器的上的数据是一致的。</p>
+
+<p>3、高并发、高可用。服务请求都要预先请求一次服务管理平台，所以流量会比较大。不能因为服务发现的加入而导致整体的性能下降太多。</p>
+
+<p>4、部署管理简单。 简单的管理和好的体验，会让更多开发者去运用它。</p>
+
+<h1 id="六开源的解决方案">六、开源的解决方案</h1>
+
+<p>有资源的企业会基于源开放的解决方案上做一些二次开发，以适用于本企业的研发文化。 github 上也有一些比较靠谱的解决方案。如：
+<code class="language-plaintext highlighter-rouge">etcd</code> 、<code class="language-plaintext highlighter-rouge">zookeeper</code> 、<code class="language-plaintext highlighter-rouge">consul</code> 等。都具有安全稳定，高可用，高并发。强一致性的特点。</p>
+
+<p>1、<code class="language-plaintext highlighter-rouge">etcd</code>  : <a href="https://github.com/etcd-io/etcd">https://github.com/etcd-io/etcd</a></p>
+
+<p>2、<code class="language-plaintext highlighter-rouge">zookeeper</code> : <a href="https://github.com/apache/zookeeper">https://github.com/apache/zookeeper</a></p>
+
+<p>3、<code class="language-plaintext highlighter-rouge">consul</code> :<a href="https://github.com/hashicorp/consul">https://github.com/hashicorp/consul</a></p>
+
+<hr />
+<p>1、<a href="https://zhuanlan.zhihu.com/p/161277955">深入了解服务注册与发现 : https://zhuanlan.zhihu.com/p/161277955</a></p>
+
+<p>2、<a href="https://zhuanlan.zhihu.com/p/409154290">服务注册与发现的原理和实现 : https://zhuanlan.zhihu.com/p/409154290</a></p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>系统设计方案注意事项</title>
       <link href="http://localhost:4000/system-design-idea/"/>
       <pubDate>2022-01-25T00:12:15+08:00</pubDate>
       <author>xyecho</author>
-      <guid>http://localhost:4000/system design-idea</guid>
+      <guid>http://localhost:4000/system-design-idea</guid>
       <content:encoded><![CDATA[<h1 id="一需求背景">一、需求背景</h1>
 
 <p>1、 清晰掌握需求的各个场景，以业务为导向，检验技术和系统能否很好支持需求的各个场景。</p>
@@ -1625,378 +1784,6 @@ Motan: 是一套基于java开发的RPC框架, Weibo Mesh 是基于Motan</li>
   <li><a href="https://www.nginx.com/resources/glossary/reverse-proxy-vs-load-balancer/">What is a Reverse Proxy vs. Load Balancer? https://www.nginx.com/resources/glossary/reverse-proxy-vs-load-balancer/</a></li>
   <li><a href="https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/">NGINX 架构 https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/</a></li>
 </ul>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>《极客时间》 微服务架构核心20讲</title>
-      <link href="http://localhost:4000/time-geekbang-microservice-core20/"/>
-      <pubDate>2020-02-09T03:22:12+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/time-geekbang-microservice-core20</guid>
-      <content:encoded><![CDATA[<p>极客时间学习笔记， 微服务架构核心20讲</p>
-
-<p>作者：杨波　（拍拍贷框架研发部总监，资深架构师，微服务技术专家）</p>
-
-<p><a href="https://time.geekbang.org/course/intro/66">微服务架构核心20讲 https://time.geekbang.org/course/intro/66</a></p>
-
-<h2 id="1-什么是微服务架构">1 什么是微服务架构</h2>
-<hr />
-<p>微服务是一种架构风格（如MVC）　</p>
-
-<p>微服务的六个特点：　</p>
-<ul>
-  <li>一组小的服务</li>
-  <li>独立的进程</li>
-  <li>轻量级通信</li>
-  <li>基于业务能务</li>
-  <li>独立部署</li>
-  <li>无集中式管理 （这里指的是可以用不同的技术栈，不同的存储）</li>
-</ul>
-
-<p>微服框架的定义者马丁福勒：他的一篇博客：</p>
-
-<p><a href="https://www.martinfowler.com/articles/microservices.html">马丁福勒的文章 https://www.martinfowler.com/articles/microservices.htm</a></p>
-
-<p><strong>微服务定义</strong></p>
-
-<p>基于有界上下文的　松散耦合面向服务的架构。</p>
-
-<h2 id="２架构师如何权衡微服务的利弊">２　架构师如何权衡微服务的利弊</h2>
-<hr />
-<p>开发者的一个重要职责就是权衡</p>
-
-<p>利:</p>
-
-<ul>
-  <li>强模块化边界</li>
-  <li>可独立部署</li>
-  <li>技术多样性</li>
-</ul>
-
-<p>弊:</p>
-<ul>
-  <li>分布式系统复杂性</li>
-  <li>最终一致性</li>
-  <li>运维复杂性</li>
-  <li>测试复杂性</li>
-</ul>
-
-<p>分布式系统带来的一个挑战就是取终一致性。</p>
-
-<h2 id="３康威法则和微服务给架构师怎样的启示">３　康威法则和微服务给架构师怎样的启示</h2>
-<hr />
-
-<p>设计系统的组织，其产生的架构设计等价于组织间的沟通结构。</p>
-
-<p>其实就是要规避，多个团队去支持一个服务模块。应该拆解成一个团队支持一个小服务，多个小服务组织成一个大服务（或系统）。</p>
-
-<h2 id="４企业应该在什么时候开始考虑引入微服务">４　企业应该在什么时候开始考虑引入微服务</h2>
-<hr />
-
-<p>微服务的适用性:</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_4.png" alt="" /></p>
-
-<p>Monolth 单块服务</p>
-
-<p>Microservice 微服务</p>
-
-<p>微服务 有基础模块和平台的要求，所以企业刚开始时微服务并不能有高的生产力。</p>
-
-<p>所以一般以单块服务开始。适用于小企业，微服务更加适合于中大型企业。</p>
-
-<p>中间的交点，就是企业要考虑从单块服务切换成微服务的时候了。</p>
-
-<p>业务模块的复杂性已经达到某个点了。 点的把控要架构师应该思考的问题、一般100人的团队可以考虑了这个问题了。</p>
-
-<p>一般业务开始以单块服务优先。如果研发效率开始下降了。再做优化，向微服方向转变。</p>
-
-<p>如果一开始就以微服开始，可能在设计上会更复杂。</p>
-
-<p>架构是演化出来的。</p>
-
-<p>不可能一步到位， 所以一般是单块优先原则，然后不断迭代，不断的微服化。</p>
-
-<h2 id="5-什么样组织架构更适合微服务">5 什么样组织架构更适合微服务</h2>
-<hr />
-
-<p>组织架构：</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_5_1.png" alt="" /></p>
-
-<p>左边是比较传统的组织架构。产品从左到右流程走，可能出现的问题，反馈比较慢，对业务支持比较慢。沟通成本比较大。</p>
-
-<p>右边是比较合适微服务的组织架构， 每一个团队（基于微服务的跨职能的团队），有开发，有产品，有测试，团队都支持自己的微服务。交付的产口是平台，对外提供API
-接口支持多样的业务。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_5_2.png" alt="" /></p>
-
-<p>在团队内做内部循环。端对端的开发。</p>
-
-<p>谁开发的，谁构建，谁支持。</p>
-
-<h2 id="6-如何理解阿里巴巴提出的微服务">6 如何理解阿里巴巴提出的微服务</h2>
-<hr />
-
-<p>中台战略和微服务的关系
-下图：一线互联网主流的组织架构。 微服的标准的参考架构。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_6.png" alt="" /></p>
-
-<p>业务中台和技术中台 统称为大中台。支撑业务前台。中台越强大，前台越发展越快。</p>
-
-<p>PaaS 和 核心业务层是和微服务相关的。这一些基本都可以用微服务来实现。</p>
-
-<p>IaaS：Infrastructure-as-a-Service（基础设施即服务）</p>
-
-<p>PaaS：Platform-as-a-Service（平台即服务）</p>
-
-<h2 id="7-如何给出一个清晰简洁的服务分层方式">7 如何给出一个清晰简洁的服务分层方式</h2>
-<hr />
-
-<p>大致的服务分层图：</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_7.png" alt="" /></p>
-
-<p>SOA  Service-Oriented Architecture  （面向服务的架构）</p>
-
-<p>基础服务：　也有其他的说法。如：核心领域服务、中间层服务、公共服务。</p>
-
-<p>聚合服务：　对基础服务的聚全和裁剪，以达到满足业务的需求，提供给外部调用。　</p>
-
-<h2 id="８微服务总体技术架构体系是怎么设计的">８　微服务总体技术架构体系是怎么设计的</h2>
-<hr />
-
-<p>微服务总体架构体系图：</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_8.png" alt="" /></p>
-
-<ul>
-  <li>接入层：　外部和内部接入，主要把流量接入进来，做负载均衡。</li>
-  <li>网关层：　反向路由，限流，安全，跨横切面的功能。　　</li>
-  <li>业务服务层：　可分为：聚合服务，基础服务。</li>
-  <li>支撑服务： 后台服务。</li>
-  <li>平台服务： 可以是一些管理系统。</li>
-  <li>基础设施　由运维团队运维。　</li>
-</ul>
-
-<p>网关层、业务服务层、支撑服务、平台服务。 这四层可以和微服务相关的，</p>
-
-<h2 id="9-微服务最经典的三种服务发现机制">9 微服务最经典的三种服务发现机制</h2>
-<hr />
-
-<p>消息者应该怎么去发现生产者。三者主流的模式：</p>
-
-<p>1 通过DNS 访问LB，LB（负载均衡）。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_9_1.png" alt="" /></p>
-
-<p>2 　LB功能放到Consumer内， service 注册到 Service Registry上。有定时心跳发到注册中心，Consumer  定期的同步 Service Registry的信息。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_9_2.png" alt="" /></p>
-
-<p>3 结全前面两种方式， 在Consumer的主机上也布置一个LB。 LB会定期同步Service Registry的信息。 运维成本比较高一点。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_9_3.png" alt="" /></p>
-
-<h2 id="10-微服务-api-服务网关一原理">10 微服务 API 服务网关（一）原理</h2>
-<hr />
-
-<p>API　Gateway</p>
-
-<p>屏蔽掉服务内部的逻辑，希望外部访问看到是统一的接口。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_10_1.png" alt="" /></p>
-
-<p>下面这个图 接入网关的前面有一层LB（负载均衡）如果是网关可以是无状态的，这样方便扩展，单点挂掉时，可以摘除。对系统的稳定性很重要。</p>
-
-<h5 id="网关主要的功能">网关主要的功能</h5>
-<ul>
-  <li>反向路由  将外部的请求换成内部调用。</li>
-  <li>认证安全 防刷 防爬虫。</li>
-  <li>限流熔断 处理可能会突发流量。</li>
-  <li>日志监控  进行访问访问审计，监控流量。</li>
-</ul>
-
-<p>一般不要把过多的业务逻辑写在网关当中。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_10_2.png" alt="" /></p>
-
-<h2 id="11-服务-api-服务网关二开源网关-zuul">11 服务 API 服务网关（二）开源网关 Zuul</h2>
-<hr />
-
-<p>核心:  Servlet 和 Fitter Runner 
-过滤器：  前置过滤器，  路由过滤器，后置过滤器</p>
-
-<p>过滤器开发，可以通过脚本开发。开发完后上传到过滤器目录中， 被扫描后加到Filtter Runner中。</p>
-
-<p>各个Fitte 共享数据通过 Request Context 来实现。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_11_1.png" alt="" /></p>
-
-<p>过滤链的流程：</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_11_2.png" alt="" /></p>
-
-<p>前置路由过滤器</p>
-
-<p>路由过滤器</p>
-
-<p>后置路由过滤器</p>
-
-<h2 id="12-跟-netflix-学习微服务路由发现体系">12 跟 Netflix 学习微服务路由发现体系</h2>
-<hr />
-
-<p>netflix 有两个比较重要的支撑服务</p>
-
-<ul>
-  <li>服务注册中心  Eureka</li>
-  <li>网关 zuul</li>
-</ul>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_12.png" alt="" /></p>
-
-<h2 id="13-集中式配置中心的作用和原理是什么">13 集中式配置中心的作用和原理是什么</h2>
-<hr />
-
-<p>为什么要引入配置中心呢？
-　
-小企业一般是写在配置文件中的，不方便管理。响应比较慢。无法审计。配置中心可能解决这些问题。</p>
-
-<p>什么可做配置呢？</p>
-
-<ul>
-  <li>业务开关</li>
-  <li>调用/响应超时</li>
-  <li>限流</li>
-  <li>连接字符串</li>
-  <li>动态参数</li>
-</ul>
-
-<p>Svr 更新配置有两种方式 拉和推。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_13_1.png" alt="" /></p>
-
-<p>携程的Apollo配置中心:</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_13_2.png" alt="" /></p>
-
-<p>github : https://github.com/ctripcorp/apollo</p>
-
-<h2 id="14-微服务通讯方式-rpc-vs-rest">14 微服务通讯方式 RPC vs REST</h2>
-<hr />
-<p>RPC：Remote Procedure Call 远程过程调用</p>
-
-<p>REST ：Restful</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_14.png" alt="" /></p>
-
-<h2 id="15-微服务框架需要考虑哪些治理环节">15 微服务框架需要考虑哪些治理环节</h2>
-<hr />
-
-<p>一个公司的微服务多了，就要需要考虑治理。</p>
-
-<p>软负载： 蓝绿发布， 灰度发布</p>
-
-<p>Metrics: 服务的调用量， 耗时监控。</p>
-
-<p>调用链埋点： 方便快速定位问题，</p>
-
-<p>契约生成代码： 定义结构体可自动生成json格式， vscode 有插件。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_15.png" alt="" /></p>
-
-<p>阿里巴巴微服务治理生态：Dubbo 	http://dubbo.apache.org/en-us/</p>
-
-<h2 id="16-微服务监控系统分层和监控架构">16 微服务监控系统分层和监控架构</h2>
-<hr />
-
-<p>五个层次的监控</p>
-
-<ul>
-  <li>基础设施监控</li>
-  <li>系统层监控</li>
-  <li>应用层监控 url sevice mysql cache 可用率，性能， qps</li>
-  <li>业务层监控 核心指标监控 登录注册</li>
-  <li>端用户体验监控</li>
-</ul>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_16_1.png" alt="" /></p>
-
-<p>日志 监控  对应Elasticsearch<br />
-metrics 监控
-健康检查
-调用链监控
-告警系统</p>
-
-<p>比较典型的监控架构，大部分公司的流程</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_16_2.png" alt="" /></p>
-
-<p>比较大的队列用kafka 。</p>
-
-<p>Nagios 健康检测工具。</p>
-
-<p>ELK　ELK是Elasticsearch、Logstash、Kibana三大开源框架首字母大写简称。</p>
-
-<h2 id="17-微服务的调用链监控该如何选型">17 微服务的调用链监控该如何选型</h2>
-<hr />
-
-<p>调用链的监控　谷歌2010年提出来的。　</p>
-
-<p>通过 Span来跟踪， RootSpan  ChildSpan  跨进程时  会有Trace di + parant span id</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_17_1.png" alt="" /></p>
-
-<p>三个主流调用链监控系统的比较：</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_17_2.png" alt="" /></p>
-
-<h2 id="18-微服务的容错限流是如何工作的">18 微服务的容错限流是如何工作的</h2>
-<hr />
-
-<p>Netfiix  Hystrix 具有熔断 隔离 限流 降级的功能 。</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_18.png" alt="" /></p>
-
-<p>说明：</p>
-
-<ul>
-  <li>3 Cirult OPen 判断是否可以熔断， 是则执行 getFAllBack() 降级处理函数</li>
-  <li>5 run() 超时 也执行降级处理函数。</li>
-  <li>6 不成功也 执行处理函数 。</li>
-  <li>Calculate Cirult Health 就是在正常执行成功后计算是否需要熔断。</li>
-</ul>
-
-<h2 id="19-docker-容器部署技术--持续交付流水线">19 Docker 容器部署技术 &amp; 持续交付流水线</h2>
-<hr />
-
-<p>docker 容器治理就是解决：环境不一致的问题。把依赖的所有包都打在镜像中。</p>
-
-<p>统一、标准化的交付流水线。</p>
-
-<p>UAT 环境： User Acceptance Test （用户验收测试）</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_19_1.png" alt="" /></p>
-
-<p>发布模式： 蓝绿布置，灰度发布（金丝雀发布）。</p>
-
-<p>金丝雀发布 滚动发布：</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_19_2.png" alt="" /></p>
-
-<h2 id="20-容器集群调度和基于容器的发布体系">20 容器集群调度和基于容器的发布体系</h2>
-<hr />
-
-<p>资源调度框架 Mesos 架构</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_20_1.png" alt="" /></p>
-
-<p>基于容器的云发布体系</p>
-
-<p><img src="../../assets/time-geekbang-microservice-core20/micro_server_20_2.png" alt="" /></p>
-
 ]]></content:encoded>
     </item>
     
