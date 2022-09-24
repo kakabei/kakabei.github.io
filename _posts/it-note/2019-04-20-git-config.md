@@ -3,7 +3,7 @@ layout: post
 title: git config
 date: 2017-03-20 16:12:15
 categories: tools
-tags: git
+tags: git 工作经验
 excerpt: git configure set alias 
 ---
 
