@@ -2,8 +2,8 @@
 layout: post
 title: 编码规范
 date: 2014-12-11 21:12:15
-categories: 编程语言
-tags: 系统编程
+categories: work
+tags: 工作经验 优化
 excerpt: c/c++ 语言编程行为规范，对自己而言，对他人无效。
 ---
 
