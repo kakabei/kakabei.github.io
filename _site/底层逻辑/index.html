@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>如何处理一个系统设计</title>
+    <title>《底层逻辑》by 吕白</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>如何处理一个系统设计</h1>
+        <h1>《底层逻辑》by 吕白</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,14 +28,14 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2022-03-21">2022-03-21</time>
+  <time datetime="2022-02-23">2022-02-23</time>
 </span>
 
  | 
 <span class="categories">
   分类
   
-  <a href="/categories/#系统设计" title="系统设计">系统设计</a>&nbsp;
+  <a href="/categories/#reading" title="reading">reading</a>&nbsp;
   
 </span>
 
@@ -44,84 +44,24 @@
 <span class="tags">
   标签
   
-  <a href="/tags/#工作经验" title="工作经验">工作经验</a>&nbsp;
+  <a href="/tags/#读书" title="读书">读书</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<p>这是一个开放性问题， 这文章中提供了一个大概的思考步骤。<a href="https://github.com/donnemartin/system-design-primer/blob/master/README-zh-Hans.md#%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E4%B8%AA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98">如何处理一个系统设计的面试题</a>
-后续学习工作中，可以不断的完善这一些思考。</p>
+<p>不要担心自己赚不到钱，也不要因为赚到了钱而高兴得太早，提升认知是你最需要做的事。当你提升了认知水平之后，哪怕你现在还没赚到钱，也不必太着急，你的财富一定会很快跟上你的认知提升的速度。</p>
 
-<h2 id="第一步描述使用场景约束和假设">第一步：描述使用场景，约束和假设</h2>
+<p>投资理财时，也请牢记“成功=赛道×效率”的公式。如果要投资，就找到未来最厉害的赛道，投第一名或投整个赛道。未来什么赛道最厉害？看钱在哪里，当年“4万亿”经济刺激计划的钱投到了房地产领域，现在钱又在哪里呢？</p>
 
-<p>把所有需要的东西聚集在一起，审视问题。不停的提问，以至于我们可以明确使用场景和约束。讨论假设。</p>
-
-<ul>
-  <li>谁会使用它？</li>
-  <li>他们会怎样使用它？</li>
-  <li>有多少用户？</li>
-  <li>系统的作用是什么？</li>
-  <li>系统的输入输出分别是什么？</li>
-  <li>我们希望处理多少数据？</li>
-  <li>我们希望每秒钟处理多少请求？</li>
-  <li>我们希望的读写比率？分别什么场景？</li>
-</ul>
-
-<h2 id="第二步创造一个高层级的设计">第二步：创造一个高层级的设计</h2>
-
-<p>使用所有重要的组件来描绘出一个高层级的设计。</p>
-
-<ul>
-  <li>画出主要的组件和连接。 画出框架图，不宜太细仔。主要体现出组件的关系和数据流。</li>
-  <li>证明你的想法。 根据框架图，推演一下，能不能解决问题。</li>
-</ul>
-
-<h2 id="第三步设计核心组件">第三步：设计核心组件</h2>
-
-<p>对每一个核心组件进行详细深入的分析。举例来说，如果你被问到设计一个 url 缩写服务，开始讨论：</p>
-
-<ul>
-  <li>生成并储存一个完整 url 的 hash
-    <ul>
-      <li>MD5 和 Base62</li>
-      <li>Hash 碰撞</li>
-      <li>SQL 还是 NoSQL</li>
-      <li>数据库模型</li>
-    </ul>
-  </li>
-  <li>将一个 hashed url 翻译成完整的 url
-    <ul>
-      <li>数据库查找</li>
-    </ul>
-  </li>
-  <li>API 和面向对象设计</li>
-</ul>
-
-<h2 id="第四步扩展设计">第四步：扩展设计</h2>
-
-<p>确认和处理瓶颈以及一些限制。举例来说就是你需要下面的这些来完成扩展性的议题吗？</p>
-
-<ul>
-  <li>负载均衡</li>
-  <li>水平扩展</li>
-  <li>缓存</li>
-  <li>数据库分片</li>
-</ul>
-
-<p>论述可能的解决办法和代价。每件事情需要取舍。可以使用可扩展系统的设计原则来处理瓶颈。</p>
-
-<h2 id="预估计算量">预估计算量</h2>
-
-<p>你或许会被要求通过手算进行一些估算。</p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/%E5%BA%95%E5%B1%82%E9%80%BB%E8%BE%91/" class="pageNav"  >上一篇</a>
+	<a  href="/server-service-discovery/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/%E9%BA%A6%E8%82%AF%E9%94%A1%E7%BB%93%E6%9E%84%E5%8C%96%E6%88%98%E7%95%A5%E6%80%9D%E7%BB%B4/" class="pageNav"  >下一篇</a>
+	<a  href="/server-how-to-design-systerm/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -186,7 +126,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2022-01-16-server-how-to-design-systerm.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/reading/2022-02-23-底层逻辑.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
