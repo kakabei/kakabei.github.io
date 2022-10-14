@@ -2,7 +2,7 @@
 layout: post
 title: redis 配置说明
 date: 2015-02-04 15:08:12
-categories: redis
+categories: db 
 tags: redis
 excerpt: redis configuration
 ---

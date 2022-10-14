@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>redis安装部署</title>
+    <title>redis 安装部署</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>redis安装部署</h1>
+        <h1>redis 安装部署</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -35,7 +35,7 @@
 <span class="categories">
   分类
   
-  <a href="/categories/#redis" title="redis">redis</a>&nbsp;
+  <a href="/categories/#db" title="db">db</a>&nbsp;
   
 </span>
 
@@ -56,9 +56,9 @@
   <li>下载地址</li>
 </ol>
 
-<p>这是redis的官网<a href="http://redis.io/">http://redis.io/</a>。</p>
+<p>这是redis的官网<a href="http://redis.io/">http://redis.io/</a></p>
 
-<p>这是下载页面<a href="http://redis.io/download">http://redis.io/download</a>。</p>
+<p>这是下载页面<a href="http://redis.io/download">http://redis.io/download</a></p>
 
 <p>百度云地址:<a href="http://pan.baidu.com/s/1slsCr97">http://pan.baidu.com/s/1slsCr97</a></p>
 
@@ -72,11 +72,12 @@
 <span class="nv">$ </span>make <span class="nb">install</span>
 <span class="nv">$ </span><span class="nb">cp </span>redis.conf /etc/
 </code></pre></div></div>
+
 <ol>
   <li>文件说明</li>
 </ol>
 
-<p>make install命令执行完成后，会在/usr/local/bin目录下生成本个可执行文件，分别是redis-server、redis-cli、redis-benchmark、redis-check-aof 、redis-check-dump，它们的作用如下：</p>
+<p>make install 命令执行完成后，会在/usr/local/bin目录下生成本个可执行文件，分别是redis-server、redis-cli、redis-benchmark、redis-check-aof 、redis-check-dump，它们的作用如下：</p>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>redis-server：Redis服务器的daemon启动程序
 redis-cli：Redis命令行操作工具。也可以用telnet根据其纯文本协议来操作
