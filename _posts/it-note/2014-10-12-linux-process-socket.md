@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux进程间通信-套接字（socket)
+title: linux 进程间通信-套接字（socket)
 date: 2014-10-12 20:08:12
 categories: Linux
 tags: 系统编程

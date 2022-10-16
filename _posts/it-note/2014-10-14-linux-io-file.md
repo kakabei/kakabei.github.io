@@ -1,6 +1,6 @@
 ---
 layout: post
-title: unix文件IO
+title: unix 文件IO
 date: 2014-10-13 20:08:12
 categories: Linux
 tags: 系统编程

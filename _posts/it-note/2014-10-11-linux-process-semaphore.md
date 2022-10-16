@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux进程间通信-信号量（semaphore）
+title: linux 进程间通信-信号量（semaphore）
 date: 2014-10-11 22:25:30
 categories: Linux
 tags: 系统编程

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux进程基础
+title: linux 进程基础
 date: 2014-10-11 19:40:30
 categories: Linux
 tags: 系统编程

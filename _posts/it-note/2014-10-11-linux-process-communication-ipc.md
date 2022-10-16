@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux进程间通信-XSI IPC
+title: linux 进程间通信-XSI IPC
 date: 2014-10-11 18:10:30
 categories: Linux
 tags: 系统编程

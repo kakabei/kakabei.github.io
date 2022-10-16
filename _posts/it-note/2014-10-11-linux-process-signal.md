@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux进程间通信-信号（signal）
+title: linux 进程间通信-信号（signal）
 date: 2014-10-11 22:02:39
 categories: Linux
 tags: 系统编程

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux进程间通信-消息队列
+title: linux 进程间通信-消息队列
 date: 2014-10-12 18:08:39
 categories: Linux
 tags: 系统编程

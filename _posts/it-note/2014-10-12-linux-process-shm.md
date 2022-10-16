@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux进程间通信-共享内存
+title: linux 进程间通信-共享内存
 date: 2014-10-12 19:08:39
 categories: Linux
 tags: 系统编程

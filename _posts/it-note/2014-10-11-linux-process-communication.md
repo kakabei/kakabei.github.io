@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux进程间通信-概述
+title: linux 进程间通信-概述
 date: 2014-10-11 17:00:30
 categories: Linux
 tags: 系统编程

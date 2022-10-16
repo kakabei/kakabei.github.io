@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>linux 进程间关系</title>
+    <title>mysql 索引</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>linux 进程间关系</h1>
+        <h1>mysql 索引</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -28,14 +28,14 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2014-10-14">2014-10-14</time>
+  <time datetime="2015-05-25">2015-05-25</time>
 </span>
 
  | 
 <span class="categories">
   分类
   
-  <a href="/categories/#Linux" title="Linux">Linux</a>&nbsp;
+  <a href="/categories/#db" title="db">db</a>&nbsp;
   
 </span>
 
@@ -44,34 +44,64 @@
 <span class="tags">
   标签
   
-  <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
+  <a href="/tags/#mysql" title="mysql">mysql</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<p>1 每个进程都隶属于一个进程组，所以它有PID信息还有PGID。可以用pid_t getpgid( pid_t pid);
-2 每个进程组都有一个首领进程，其PGID和PID相同。进程组将一直存在，直到其中所有进程都退出，或者加入到其他进程组。
-3 setpgid(pid_t pid, pid_t pgid); 将PID为pid的进程的PGID设置为pgid。如果pid和pgid相同，则由pid指定的里程将被设置为进程首领。如果pid为0，则表示设置当前进程的PGID为pgid; 如果pgid为0.则使用pid作为目标PGID。
-4 一个进程只能设置自己的或者其子进程的PGID。并且当子进程调用 exec系列函数后，我们也不能再在父进程中对它设置PGID。</p>
+<h1 id="一-索引原则">一、 索引原则</h1>
 
-<p>会话
-一些有关联的进程组开成一个会话。创建一个会话的函数
-pid_t setsid(void);</p>
+<p>1、最左匹配原则：向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配</p>
 
-<p>这个函数不能由进程组的首领进程调用。否则将产生一个错误。对于非组首领的进程，调用该函数不仅创建新会话，而且有如下额外效果：
-（1）调用进程成为会话的首领，此时该进程是新会话的唯一成员
-（2）新建一个进程组，其PGID就是调用进程的PID,调用进程成为该组的首领。
-（3）调用进程将甩开终端，（如果有的话）</p>
+<p>2、尽量选择区分度高的列作为索引,区分度的公式是<code class="language-plaintext highlighter-rouge">count(distinct col)/count(*)</code></p>
 
+<p>3、索引列不能参与计算，保持列“干净”</p>
+
+<p>4、尽量的扩展索引，不要新建索引</p>
+
+<h1 id="二-联合索引选择列顺序">二、 联合索引选择列顺序</h1>
+
+<ul>
+  <li>
+    <p>经常会被使用到的优先</p>
+  </li>
+  <li>
+    <p>选择性高的优先</p>
+  </li>
+  <li>
+    <p>宽度小的列优先</p>
+  </li>
+</ul>
+
+<h1 id="三索引失效">三、索引失效</h1>
+
+<p>1、查询条件使用函数在索引列上</p>
+
+<p>2、隐式转换导致索引失效</p>
+
+<p>3、对索引列进行运算</p>
+
+<p>4、使用like ，like查询是以%开头</p>
+
+<p>5、不符合复合索引 “最左前缀”原则</p>
+
+<p>6、用or分割开的条件，若or前的条件中的列有索引，而后面列中没有索引</p>
+
+<p>7、使用NOT IN和&lt;&gt;操作</p>
+
+<hr />
+<p>1、<a href="https://zhuanlan.zhihu.com/p/394429932">关于MySQL索引原理，讲的最清晰的一篇文章</a></p>
+
+<p>2、<a href="https://zhuanlan.zhihu.com/p/361172794">MySQL索引失效的7种情况及使用建议</a></p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/linux-threads/" class="pageNav"  >上一篇</a>
+	<a  href="/mysql-innodb-engine/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/linux-design-ideas/" class="pageNav"  >下一篇</a>
+	<a  href="/libevent-base/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -136,7 +166,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2014-10-12-linux-process-id.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2015-05-25-mysql-index.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 

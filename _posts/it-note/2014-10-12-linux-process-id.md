@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux进程间关系
+title: linux 进程间关系
 date: 2014-10-13 18:08:39
 categories: Linux
 tags: 系统编程
