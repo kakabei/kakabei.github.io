@@ -132,7 +132,7 @@ mysql 中， varchar 和 char 类型表示字符长度，而其他类型表示�
 
 用什么引擎这是DBA的事了。现在 mysql 默认的都是 InnoDB。应该不会有人在这个样上去搞事情了。
 
-[[mysql InnoDB 引擎]]
+[mysql InnoDB 引擎](http://blog.xyecho.com/mysql-innodb-engine/)
 
 
 # 14、选择合适统一的字符集
