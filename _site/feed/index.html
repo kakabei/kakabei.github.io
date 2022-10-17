@@ -7,8 +7,251 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2022-10-16T23:15:23+08:00</lastBuildDate>
+    <lastBuildDate>2022-10-17T11:21:55+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>mysql 表设计的21个经验准则</title>
+      <link href="http://localhost:4000/mysql-table-design-21-criterion/"/>
+      <pubDate>2022-10-17T00:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/mysql-table-design-21-criterion</guid>
+      <content:encoded><![CDATA[<p>微信公众号看到一篇文章总结了 mysql 工作中的21个设计经验准则。</p>
+
+<p>from : <a href="https://mp.weixin.qq.com/s/OlP0FVnLO_xw7jlahIVOMA">21 个 MySQL 表设计的经验准则</a></p>
+
+<h1 id="1命名规范">1、命名规范</h1>
+
+<p>命名规范是指对数据库，表，字段，索引的规范。每个公司或团队都是自己的命名规范，这和代码命名是一致的。</p>
+
+<p>一般要可读性高，让用者一看就知道是什么意义。</p>
+
+<ul>
+  <li>表名、字段名必须使用小写字母或者数字，禁止使用数字开头，禁止使用拼音，并且一般不使用英文缩写。</li>
+  <li>主键索引名为 pk_字段名 ；唯一索引名为 uk_ 字段名；普通索引名则为 idx_字段名。</li>
+</ul>
+
+<h1 id="2选择合适的字段类型">2、选择合适的字段类型</h1>
+
+<p>设计表时，我们要选择合适的字段类型。</p>
+
+<ul>
+  <li>尽可能选择存储空间小的字段类型，就好像数字类型的，从 tinyint、smallint、int、bigint 从左往右开始选择。</li>
+  <li>小数类型如金额，则选择  <strong>decimal</strong> ，禁止使用  float  和 double。</li>
+  <li>如果存储的字符串长度几乎相等，使用  char  定长字符串类型。一般要要求业务定下最长字符。</li>
+  <li>varchar 是可变长字符串，不预先分配存储空间，长度不要超过 5000。所有 varchar 字段的长度加起来，不能大于 65535。</li>
+  <li>如果存储的值太大，建议字段类型修改为 text，同时抽出单独一张表，用主键与之对应。</li>
+</ul>
+
+<h1 id="3主键设计要合理">3、主键设计要合理</h1>
+
+<p>主键最好是毫无意义的一串独立不重复的数字，比如 UUID，又或者 Auto_increment 自增的主键，或者是雪花算法生成的主键等等;</p>
+
+<p>雪花算法： <a href="https://zhuanlan.zhihu.com/p/433690272">面试官：讲讲雪花算法，越详细越好</a></p>
+
+<h1 id="4选择合适的长度">4、选择合适的长度</h1>
+
+<p>mysql 中， varchar 和 char 类型表示字符长度，而其他类型表示的长度都表示字节长度。比如 char(10) 表示字符长度是10，而 bigint（4）表示显示长度是4个字节，但是因为 bigint 实际长度是8个字节，所以bigint（4）的实际长度就是8个字节。</p>
+
+<p>字段长度一般设置为2的幂（也就是2的n 次方）。</p>
+
+<h1 id="5优先考虑逻辑删除而不是删除">5、优先考虑逻辑删除，而不是删除</h1>
+
+<p>一般不做数据删除，而是更新状态，把数据标志为已删除状态。</p>
+
+<p>但是当业务已经下线，不在用了，且数据已经备份或者已经同步到了集市了，一般会考虑让 DBA 删除，减少数据库的压力。</p>
+
+<ul>
+  <li>物理删除：把数据从硬盘中删除，可释放存储空间。</li>
+  <li>逻辑删除：给数据添加一个字段，比如 is_deleted，以标记该数据已经逻辑删除。</li>
+</ul>
+
+<h1 id="6每个表都需要添加几个通用字段">6、每个表都需要添加几个通用字段</h1>
+
+<p>数据库表，要存在一些字段，没有直接业务意义，但却很重要。如：主键、create_time, update_time, ext等。</p>
+
+<p>如下：</p>
+
+<ul>
+  <li>id：主键，一个表必须得有主键，可以自增长。</li>
+  <li>create_time ：数据创建时间。</li>
+  <li>modifed_time: 修改时间，当数据被增量拉到数据集市时，这个字段是必段的。</li>
+  <li>version : 数据记录的版本号，用于乐观锁。</li>
+  <li>ext : 扩展字段，当有紧急情况时，可以先暂用它，而不会更新表结构。</li>
+  <li>remark ：数据记录备注。</li>
+  <li>modified_by :修改人， 非必须</li>
+  <li>creator ：创建人，非必须</li>
+</ul>
+
+<h1 id="7一张表的字段不宜过多">7、一张表的字段不宜过多</h1>
+
+<p>表的字段不宜过多，过多可能会导致数据库性能问题。表的字段应该是多少，最好根据业务情况而定，可用用领域设计来划分业务范围。</p>
+
+<h1 id="8尽可能使用-not-null-定义字段">8、尽可能使用 NOT NULL 定义字段</h1>
+
+<p>创建表时，所有的字段应该都是 <code class="language-plaintext highlighter-rouge">NOT NULL DEFAULT '' </code>。非空且有默认值。这应该成为一种规范。</p>
+
+<p>可以看：<a href="http://blog.xyecho.com/mysql-commonly-used/">mysql  常用语句</a> 的表创建。</p>
+
+<p>原因：</p>
+
+<ul>
+  <li>NULL 值存储也需要额外的空间的，它也会导致比较运算更为复杂，使优化器难以优化SQL。</li>
+  <li>NULL 值有可能会导致索引失效。</li>
+</ul>
+
+<h1 id="9设计表时评估哪些字段需要加索引">9、设计表时，评估哪些字段需要加索引</h1>
+
+<p>对于索引的考量，是设计表一个重点。mysql 索引的相关的知识</p>
+
+<p><a href="http://blog.xyecho.com/mysql-index/">mysql 索引</a></p>
+
+<p><a href="https://mp.weixin.qq.com/s/QduIxKOykMmoZp13UGF1XQ">MySQL 索引知识点总结</a></p>
+
+<ul>
+  <li>索引也不要建得太多，一般单表索引个数不要超过<code class="language-plaintext highlighter-rouge">5</code>个。因为创建过多的索引，会降低写得速度。</li>
+  <li>区分度不高的字段，不能加索引。（还是要看业务的具体情况矶定。）</li>
+  <li>索引创建完后，还是要注意避免索引失效的情况。</li>
+  <li>索引过多的话，可以通过联合索引的话方式来优化。然后的话，索引还有一些规则，如<strong>覆盖索引</strong>，最左匹配原则等等。</li>
+</ul>
+
+<h1 id="10不需要严格遵守-3nf通过业务字段冗余来减少表的关联">10、不需要严格遵守 3NF，通过业务字段冗余来减少表的关联</h1>
+
+<p>什么是数据库三范式（3NF）</p>
+
+<ul>
+  <li>第一范式：对属性的原子性，要求属性具有原子性，不可再分解；</li>
+  <li>第二范式：对记录的唯一性，要求记录有唯一标识，即实体的唯一性，即不存在部分依赖；</li>
+  <li>第三方式：对字段的冗余性，要求任何字段不能由其他字段派生出来，它要求字段没有冗余，即不存在传递依赖；</li>
+</ul>
+
+<p>系统设计中，对一范式的要求基本没有讲究过。比较在意的是设计能否保证上服务的<strong>高性能</strong>。为了提高性能，冗余一些数据也是正常的事。</p>
+
+<p>从数据原型出发，分析业务数据的读写情况，从而决定是表字段的大小。能减少表的关联尽量少到表的关联。</p>
+
+<h1 id="11避免使用-mysql-保留字">11、避免使用 mysql 保留字</h1>
+
+<p>这是一个基本的常识，做开发的应该都知道保留字段避免使用。 会被用的估计是不小心用到了但不知道你这个保留字。</p>
+
+<h1 id="12不搞外键关联一般都在代码维护">12、不搞外键关联，一般都在代码维护</h1>
+
+<p>外键，也叫  FOREIGN KEY ，它是用于将两个表连接在一起的键。FOREIGN KEY 是一个表中的一个字段（或字段集合），它引用另一个表中的  PRIMARY KEY。它是用来保证数据的一致性和完整性的。</p>
+
+<p>不搞外键，一般在可以在业务层面上搞定的就行了。这应该是一个编程规范。</p>
+
+<p>外键破坏了数据库的扩展性，当以后要分库分表时，就很难办了。</p>
+
+<h1 id="13一般都选择-innobd-存储引擎">13、一般都选择 InnoBD 存储引擎</h1>
+
+<p>用什么引擎这是DBA的事了。现在 mysql 默认的都是 InnoDB。应该不会有人在这个样上去搞事情了。</p>
+
+<p>[[mysql InnoDB 引擎]]</p>
+
+<h1 id="14选择合适统一的字符集">14、选择合适统一的字符集</h1>
+
+<p>字符集一定要定好，特别我们用到很多的中文。有一些情况是，开发人员会在业务代码层面去改变这个字符集。这个也应该被禁止掉。 在工作经历中，发生过事故。mysql 链接发生重连后，就回到原来的字符集了。可能会出乱码的情况。</p>
+
+<p>用python 开发时，也同样被中文的字符集问题搞晕了很多次。</p>
+
+<p>数据库库、表、开发程序等都需要统一字符集，通常中英文环境用<code class="language-plaintext highlighter-rouge">utf8</code>。</p>
+
+<p>MySQL支持的字符集有 utf8、utf8mb4、GBK、latin1 等。</p>
+
+<ul>
+  <li>utf8：支持中英文混合场景，国际通过，3个字节长度</li>
+  <li>utf8mb4:   完全兼容utf8，4个字节长度，一般存储<strong>emoji表情</strong>需要用到它。</li>
+  <li>GBK ：支持中文，但是不支持国际通用字符集，2个字节长度</li>
+  <li>latin1：MySQL默认字符集，1个字节长度</li>
+</ul>
+
+<h1 id="15如果你的数据库字段枚举类型的需要在comment-注释清楚">15、如果你的数据库字段枚举类型的，需要在comment 注释清楚</h1>
+
+<p>comment 注释清楚所有字段，这是方便以后的维护。更进一步讲，增加新字段时，要写清楚对应的业务版本。</p>
+
+<p>字段是枚举类型，就更应该写清楚了。</p>
+
+<h1 id="16-时间的类型选择">16、 时间的类型选择</h1>
+
+<p>对于MySQL来说，主要有 date、datetime、time、timestamp 和 year。</p>
+
+<ul>
+  <li>date ：表示的日期值, 格式<code class="language-plaintext highlighter-rouge">yyyy-mm-dd</code>,范围<code class="language-plaintext highlighter-rouge">1000-01-01 到 9999-12-31</code>，3字节</li>
+  <li>time ：表示的时间值，格式 <code class="language-plaintext highlighter-rouge">hh:mm:ss</code>，范围<code class="language-plaintext highlighter-rouge">-838:59:59 到 838:59:59</code>，3字节</li>
+  <li>datetime：表示的日期时间值，格式<code class="language-plaintext highlighter-rouge">yyyy-mm-dd hh:mm:ss</code>，范围<code class="language-plaintext highlighter-rouge">1000-01-01 00:00:00到</code>9999-12-31 23:59:59```,8字节，跟时区无关</li>
+  <li>timestamp：表示的时间戳值，格式为<code class="language-plaintext highlighter-rouge">yyyymmddhhmmss</code>，范围<code class="language-plaintext highlighter-rouge">1970-01-01 00:00:01到2038-01-19 03:14:07</code>，4字节，跟时区有关</li>
+  <li>year：年份值，格式为<code class="language-plaintext highlighter-rouge">yyyy</code>。范围<code class="language-plaintext highlighter-rouge">1901到2155</code>，1字节</li>
+</ul>
+
+<p>推荐优先使用 datetime 类型来保存日期和时间，因为存储范围更大，且跟时区无关。</p>
+
+<p><strong>要注意的是 timestamp 的单位是秒不是毫秒。</strong></p>
+
+<h1 id="17不建议-stored-procedure-包括存储过程触发器">17、不建议 Stored procedure (包括存储过程，触发器)</h1>
+
+<p>对于MYSQL来说，存储过程、触发器等还不是很成熟， 并没有完善的出错记录处理，不建议使用。</p>
+
+<p>尽量在业务代码中完成这一些逻辑。</p>
+
+<h1 id="181n-关系的设计">18、1:n 关系的设计</h1>
+
+<p>日常开发中，<code class="language-plaintext highlighter-rouge">1</code>对多的关系应该是非常常见的。比如一个班级有多个学生，一个部门有多个员工等等。这种的建表原则就是：在从表（<code class="language-plaintext highlighter-rouge">N</code>的这一方）创建一个字段，以字段作为外键指向主表（<code class="language-plaintext highlighter-rouge">1</code>的这一方）的主键。</p>
+
+<p>有时候两张表存在<code class="language-plaintext highlighter-rouge">N:N</code>关系时，我们应该消除这种关系。通过增加第三张表，把<code class="language-plaintext highlighter-rouge">N:N</code>修改为两个 <code class="language-plaintext highlighter-rouge">1:N</code>。比如图书和读者，是一个典型的多对多的关系。一本书可以被多个读者借，一个读者又可以借多本书。我们就可以设计一个借书表，包含图书表的主键，以及读者的主键，以及借还标记等字段。</p>
+
+<h1 id="19大字段">19、大字段</h1>
+
+<p>字段太大了，不要存入 mysql中。可以选择另外的存储。 如图片，文体，可以通过放到 CDN 上。然后保存 对应的链接到 mysql 表中。</p>
+
+<h1 id="20考虑是否需要分库分表">20、考虑是否需要分库分表</h1>
+
+<p>分库分表是在业务发一定量时要做的事情。 我们在早期的系统设计时就要依据业务需求量做出评估。如果后期有这个需要，在设计是就是充分考虑进去。</p>
+
+<p>一个不利于分库分表的就不要做，如外键。用什么维度去分也要考虑清楚。</p>
+
+<ul>
+  <li>分库：就是一个数据库分成多个数据库，部署到不同机器。</li>
+  <li>分表：就是一个数据库表分成多个表。</li>
+</ul>
+
+<p>分库分表主要有水平拆分、垂直拆分的说法，拆分策略有 range范围、hash取模。而分库分表主要有这些问题：</p>
+
+<ul>
+  <li>事务问题</li>
+  <li>跨库关联</li>
+  <li>排序问题</li>
+  <li>分页问题</li>
+  <li>分布式ID</li>
+</ul>
+
+<h1 id="21-sql-编写的一些优化经验">21、 sql 编写的一些优化经验</h1>
+
+<p>1）不要用 <code class="language-plaintext highlighter-rouge">select * </code> , 而是要指定具体的字段。这样不被业务的代码需要的字段就没有必要被读出。随着业务的发展可能会有新增字段，导致业务代码的不可控。</p>
+
+<p>2）如是业务上已要求结果只有一条，加了 <code class="language-plaintext highlighter-rouge">limit 1</code>。业务上对数据有惟一的要求，一定要通过严格的条件过滤出来。 优先通过 SQL 语言过滤，再考虑业务代码过滤。</p>
+
+<p>3）应尽量避免在 where 子句中使用 or 来连接条件。or 会破坏索引，但select 时要时刻注意索引是否有效，要评估效率。</p>
+
+<p>4）注意优化 limit 深分页问题。<a href="https://github.com/zhangyachen/zhangyachen.github.io/issues/117">mysql 证明为什么用limit时，offset很大会影响性能</a></p>
+
+<p>5）使用 where 条件限定要查询的数据，避免返回多余的行。同 2。</p>
+
+<p>6）尽量避免在索引列上使用 mysql 的内置函数，在where上使用索引，可能会破坏索引，破坏索引。</p>
+
+<p>7）应尽量避免在  where 子句中对字段进行表达式操作。尽量把运算好之后的结果做为 where 的条件。</p>
+
+<p>8）应尽量避免在 where  子句中使用<code class="language-plaintext highlighter-rouge">!=</code>或<code class="language-plaintext highlighter-rouge">&lt;&gt;</code>操作符。破坏索引，破坏索引。</p>
+
+<p>9）使用联合索引时，注意索引列的顺序，一般遵循最左匹配原则。</p>
+
+<p>10） 对查询进行优化，应考虑在 where 及 order by 涉及的列上建立索引。</p>
+
+<p>11）如果插入数据过多，考虑批量插入。无论是插入或查询，都要根据业务情况，考虑批量，分批处理。可能因为极端条件导致性能问题。</p>
+
+<p>12）在适当的时候，使用覆盖索引。<a href="https://zhuanlan.zhihu.com/p/339666157">什么是覆盖索引</a></p>
+
+<p>13）使用explain 分析你SQL的计划。</p>
+]]></content:encoded>
+    </item>
     
     <item>
       <title>《人性的弱点》 by 戴尔·卡耐基</title>
@@ -1801,106 +2044,6 @@
 <p>1、考虑兜底方案，降级方案，补偿机制。</p>
 
 <p>2、重试，告警。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>引流活动九宫格抽奖系统设计</title>
-      <link href="http://localhost:4000/server-acitivity-ninebox/"/>
-      <pubDate>2022-01-24T00:12:15+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/server-acitivity-ninebox</guid>
-      <content:encoded><![CDATA[<h1 id="一-背景">一 背景</h1>
-
-<p>在用户购买商品后，完成支付，可以一个抽奖活动。很多线上线下的都会搞类似这样的活动。这个位置是一个很好引流活动。可以把流量引向不同的业务。</p>
-
-<p>如华为运动中的活动：</p>
-
-<p><img src="/assets/system-design/server-activity-ninebox-2022-09-21_17-19-20.png" alt="" /></p>
-
-<p>产品的业务逻辑：</p>
-
-<p>1、九宫格中展示7个坑位的奖品，中间一个是抽奖按钮。第8个坑位是“谢谢参与”。</p>
-
-<p>2、这是一个引流推广活动，所以业务逻辑上要求是奖品必中。之所以留一个坑位“谢谢参与”，是为兜底系统错误（如：网络问题）以避免客诉。</p>
-
-<p>3、活动会接入不同业务线，以达到把流量导入到不同业务线的目的。</p>
-
-<p>4、用户进入页面后，会根据不同的策略展示不同业务的奖品，最多7个奖品。</p>
-
-<p>5、当用户点击“立即抽奖”后，根据不同奖品的不同权重，随机出抽中的奖品，发送领取落地页链接，用户在落地页点击领取。</p>
-
-<p>6、奖品都是来不同的业务线。不存储本地。所以业务方一般要提供两个接口。 查询是可以发奖然后显示，中奖时通知业务方发奖。</p>
-
-<p>如何把不同的业务的接入进来才是这个需求的难点。 不同的业务有不同类型的状态，如红包，试用券， 会员积分，  体验卡，  品牌会员等。</p>
-
-<p>每个业务方都要提供一个查询奖励的接口和一个领奖品的接口。 奖励的数量和库存由对业务方自己决定。</p>
-
-<p><strong>这种方式有好有坏：</strong></p>
-
-<p>1）好处是：奖品的类型和库存可以由各个业务自己配置控制。 活动只是做一个中间路由，只是控制展示策略和命中权重，外加一个兜底奖品。</p>
-
-<p>2）坏处是：过于发散，沟通成本太大，后期活动接入的业务越来越多，性能依赖各个业务的接口的性能。如遇大的调整，每个业务都回归测试一下。</p>
-
-<p>其实，大部分奖品都是可以通知奖池来配置完成。 但这样子业务方无法自己把控奖品。同时也增加了我们运营， 九宫格活动不是京喜的业务，是京东的业务，所以人力成本也是一个原因。</p>
-
-<h1 id="二服务框架">二、服务框架</h1>
-
-<p>所用技术  <code class="language-plaintext highlighter-rouge">c++</code> ,<code class="language-plaintext highlighter-rouge">redis</code>, <code class="language-plaintext highlighter-rouge">http</code> 。</p>
-
-<p>服务整体框架：</p>
-
-<p><img src="/assets/system-design/server-activity-ninebox-2022-09-21_16-55-36.png" alt="" /></p>
-
-<p>说明：</p>
-
-<p>1、 活动通过 <code class="language-plaintext highlighter-rouge">http</code>  的方式提供服务。 两个接口： 一个是查询奖品（query），一个抽奖(draw)。</p>
-
-<p>2、App client 是 京东App。收银台支付页完成后展示出来的是一个h5的页面。 App server是，京东App的服务端，跨团队，客户端没有直接接到我们这边的接口。</p>
-
-<p>3、用户抽奖的相关数据用 <code class="language-plaintext highlighter-rouge">Redis</code> 存储。 中奖信息只保留7天。活动本身并不涉及奖品存储，都是通知业务方发放奖品的。奖品的历史查询是业务方自己的业务逻辑了。</p>
-
-<p>4、业务上要求这个活动是必中活动。所以加入自己的奖池做为兜底。当有业务的奖品库存已经耗尽时，可以用到自己的奖品顶上去。</p>
-
-<p>5、对于请求业务方的奖品，要先按策略选出7个业务的奖品，再通过并发调用接口，提高调用性能。这样，一次并发调用7个接口。</p>
-
-<h2 id="21-展示奖品query">2.1  展示奖品（Query）</h2>
-
-<p>主要逻辑流程图：</p>
-
-<p><img src="/assets/system-design/server-activity-ninebox_2022-09-21_16-20-18.png" alt="" /></p>
-
-<p>说明：</p>
-
-<p>1、 关于奖品的展示策略通过配置中心定义，方便对于策略随时更新。所以服务一开始就要加载配置信息。</p>
-
-<p>2、风险控制方面：１）要求登录，２）查询风控系统　３）判断是否重请求，防止被刷，同一个单多次刷新接口展示一点的奖品。</p>
-
-<p>3、兜底逻辑，在筛选各个业务后如果出现不足七个奖品时，要用查询奖口列表做兜底，满足七个坑位。</p>
-
-<p>4、比较极端的情况下，如果不足7个坑位的奖品，则要求前不展示活动。</p>
-
-<h2 id="22-抽奖接口draw">2.2 抽奖接口（draw） </h2>
-
-<p>主要逻辑流程图：</p>
-
-<p><img src="/assets/system-design/server-activity-ninebox_2022-09-21_16-29-08.png" alt="" /></p>
-
-<p>说明：</p>
-
-<p>1、 抽奖时，要做登录检验，数据从redis中读出，保证数据的一致性。数据缓存redis有7天的时效，这个没有必要重新查询风控。因为写入reids的数据是在查询奖品时就写入的，查询奖品时就已经查询过风控了。</p>
-
-<p> 2、 如果出现异常，返回“谢谢参与“，避免客诉。</p>
-
-<p>3、抽奖后会记录在用户的历史记录中。防止用户重复刷新抽奖。</p>
-
-<p>4、 加redis的乐观锁，防止快速刷时，被不同进程处理。</p>
-
-<h1 id="三总结">三、总结</h1>
-
-<p>这个活动需求最有挑战的，不是开发技术问题，而是沟通问题。随着活动的展开，业务的发展，要求接入的业务越来越多。一个业务的背后是一个不同的团队。沟通起来比较耗时，效率也比较低。 团队也是分散易地办公，很难要规范统一起来，沟通过程出现各种推诿。</p>
-
-<p>当然活动可以做起更加通用一些。 查询接口和通知发奖接口按统一标准接入。可以有一个后台管理系统配置接入业务。配置完成生效后，就可以用。不用每一次新填业务都要去做开发。但做成通知性的难度不低，而且要各个业务方按九宫格的标准备开发接口。我们这边是省事了。他们很难受了。</p>
 ]]></content:encoded>
     </item>
     
