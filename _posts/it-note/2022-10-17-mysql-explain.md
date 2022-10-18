@@ -59,7 +59,7 @@ explain 命令主要是为了分析 SQL 执行的效率。 explain 显示了 mys
 - Using filesort ：mysql 会对结果使用一个外部索引排序，而不是按索引次序从表里读取行。此时mysql会根据联接类型浏览所有符合条件的记录，并保存排序关键字和行指针，然后排序关键字并按顺序检索行信息。这种情况下一般也是要考虑使用索引来优化的。
 
 ---
-考虑资料：
+参考资料：
 
 [# MySQL _Explain_命令详解：type列详解及案例分析](https://zhuanlan.zhihu.com/p/358920539)
 
