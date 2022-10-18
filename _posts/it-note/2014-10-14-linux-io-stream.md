@@ -1,6 +1,6 @@
 ---
 layout: post
-title: unix标准IO库
+title: unix 标准IO库
 date: 2014-10-13 20:08:12
 categories: Linux
 tags: 系统编程
