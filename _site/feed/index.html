@@ -7,8 +7,78 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2022-10-17T11:27:40+08:00</lastBuildDate>
+    <lastBuildDate>2022-10-18T17:59:27+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>mysql explain 命令详解</title>
+      <link href="http://localhost:4000/mysql-explain/"/>
+      <pubDate>2022-10-18T00:12:15+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/mysql-explain</guid>
+      <content:encoded><![CDATA[<p>explain 命令主要是为了分析 SQL 执行的效率。 explain 显示了 mysql 如何使用索引来处理s elect 语句以及连接表，可以帮助选择更好的索引和写出更优化的查询语句。</p>
+
+<p>使用方法： 在 SQL 语句前加上 explain  命令。</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'root'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><img src="/assets/db/mysql-2022-10-18_16-46-46.png" alt="" /></p>
+
+<p>说明：</p>
+<ul>
+  <li>id：执行编号，标识 select 所属的行。</li>
+  <li>select_type：select 查询的类型。</li>
+  <li>table：查询的是哪个表。</li>
+  <li>partitions：匹配的分区。</li>
+  <li><strong>type：关联类型，或者访问类型。</strong></li>
+  <li>possible_keys：该查询可以选用的索引。</li>
+  <li>key：该查询选用的索引。</li>
+  <li>key_len：索引中使用的字节数。</li>
+  <li>ref：显示上述表的连接匹配条件，即哪些列或常量被用于查询索引列上的值。</li>
+  <li>rows：估计为了找到所需行而要读取的行数。</li>
+  <li>filtered：按表条件过滤的行的百分比。</li>
+  <li><strong>Extra：额外的信息。</strong></li>
+</ul>
+
+<h2 id="type">type</h2>
+
+<p>对表访问方式，表示MySQL在表中找到所需行的方式，又称“访问类型”。</p>
+
+<p>常用的类型有： <strong>ALL &lt; index &lt; range &lt; ref &lt; eq_ref &lt; const &lt; system &lt; NULL（从左到右，性能从差到好）</strong></p>
+
+<ul>
+  <li>ALL：Full Table Scan， MySQL将遍历全表以找到匹配的行。</li>
+  <li>index: Full Index Scan，index与ALL区别为index类型只遍历索引树。</li>
+  <li>range:只检索给定范围的行，使用一个索引来选择行。</li>
+  <li>ref: 表示上述表的连接匹配条件，即哪些列或常量被用于查找索引列上的值。</li>
+  <li>eq_ref: 类似ref，区别就在使用的索引是唯一索引，对于每个索引键值，表中只有一条记录匹配，简单来说，就是多表连接中使用primary key或者 unique key作为关联条件。</li>
+  <li>const、system: 当MySQL对查询某部分进行优化，并转换为一个常量时，使用这些类型访问。如将主键置于where列表中，MySQL就能将该查询转换为一个常量，system是const类型的特例，当查询的表只有一行的情况下，使用system。</li>
+  <li>NULL: MySQL在优化过程中分解语句，执行时甚至不用访问表或索引，例如从一个索引列里选取最小值可以通过单独索引查找完成。</li>
+</ul>
+
+<h2 id="extra">Extra</h2>
+
+<p>这一列展示的是额外信息。常见的重要值如下：</p>
+
+<ul>
+  <li>distinct : 一旦 mysql 找到了与行相联合匹配的行，就不再搜索了。</li>
+  <li>Using index ：这发生在对表的请求列都是同一索引的部分的时候，返回的列数据只使用了索引中的信息，而没有再去访问表中的行记录。是性能高的表现。</li>
+  <li>Using where ：mysql 服务器将在存储引擎检索行后再进行过滤。就是先读取整行数据，再按 where 条件进行检查，符合就留下，不符合就丢弃。</li>
+  <li>Using temporary：mysql 需要创建一张临时表来处理查询。出现这种情况一般是要进行优化的，首先是想到用索引来优化。</li>
+  <li>Using filesort ：mysql 会对结果使用一个外部索引排序，而不是按索引次序从表里读取行。此时mysql会根据联接类型浏览所有符合条件的记录，并保存排序关键字和行指针，然后排序关键字并按顺序检索行信息。这种情况下一般也是要考虑使用索引来优化的。</li>
+</ul>
+
+<hr />
+<p>考虑资料：</p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/358920539"># MySQL _Explain_命令详解：type列详解及案例分析</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/381852677"># MySQL之EXPLAIN命令详解</a></p>
+
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain-join-types"># EXPLAIN Join Types</a></p>
+]]></content:encoded>
+    </item>
     
     <item>
       <title>mysql 表设计的21个经验准则</title>
@@ -1938,112 +2008,6 @@
 
 <p>2、<a href="https://zhuanlan.zhihu.com/p/409154290">服务注册与发现的原理和实现 : https://zhuanlan.zhihu.com/p/409154290</a></p>
 
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>系统设计方案注意事项</title>
-      <link href="http://localhost:4000/server-system-design-idea/"/>
-      <pubDate>2022-01-25T00:12:15+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/server-system-design-idea</guid>
-      <content:encoded><![CDATA[<h1 id="一需求背景">一、需求背景</h1>
-
-<p>1、 清晰掌握需求的各个场景，以业务为导向，检验技术和系统能否很好支持需求的各个场景。</p>
-
-<p>2、了解需求背景，有助于从技术角度上看，需求是否存在漏洞</p>
-
-<h1 id="二系统架构">二、系统架构</h1>
-
-<p>1、画出清晰的高层框架图，主要体现出用什么组件，之间是怎么连接的，数据流向。</p>
-
-<p>2、证明你的思路，用框架图进行推演，是否可以解决需求问题。</p>
-
-<p>3、各个组件节点，是否存在关键点，是否有备用方案，即容错容灾。</p>
-
-<p>4、 估算业务数据，并发，数据总量，系统是否可以满足。</p>
-
-<h1 id="三关键业务流程图">三、关键业务流程图</h1>
-
-<p>1、深入描述清楚关键组件节点的核心业务逻辑。</p>
-
-<p>2、本地缓存防止热点出现。 本地缓存考虑空标情况。</p>
-
-<p>3、处理外部接口异常情况。</p>
-
-<p>4、防止流程出现阻塞情况。</p>
-
-<p>5、关键接口，或读写缓存/db是否有重试机制。</p>
-
-<p>6、业务或第三方接口是否考虑可重入。</p>
-
-<p>7、关键数据一致性考虑。</p>
-
-<p>8、关键流程是否存在并发，是否需要加锁。极端情况也不能忽略，觉得量少不可能会有并发情况，但极端情况果可以由其他bug导致的。</p>
-
-<p>9、对外接口做频限保护。</p>
-
-<p>10、核心业务流程记录流水。</p>
-
-<h1 id="四业务">四、业务</h1>
-
-<p>1、活动和时间相关的，注意零点和跨年的边界问题。</p>
-
-<h1 id="五数据结构-mysql表设计redis缓存数据">五、数据结构  （mysql 表设计，redis 缓存数据）</h1>
-
-<p>1、<code class="language-plaintext highlighter-rouge">mysql</code> 表设计是否合理，相关字段的索引；字段类型定义；是否有扩展字段；业务的数据总量是否考虑分表，用什么维度分表。</p>
-
-<p>2、<code class="language-plaintext highlighter-rouge">mysql</code> <code class="language-plaintext highlighter-rouge">dao</code> 考虑连接数多少。防止对数据库压力过大，是否要加一层redis缓存。</p>
-
-<p>3、<code class="language-plaintext highlighter-rouge">mysql</code> 优先考虑写主，读从。但也要防止主从同步的时间差可能导致业务逻辑的问题。</p>
-
-<p>4、<code class="language-plaintext highlighter-rouge">mysql</code> sql 效率问题，如:  是否让索引失效，是否有必要连表，连表的是否表设计有问题。</p>
-
-<p>5、<code class="language-plaintext highlighter-rouge">redis</code> 缓存是否存在热点， 是否存在大key， 是否考虑缓存空标，空标有效时间和正常的有效时间要区别出来。有效时间是否考虑打散，防止数据同时失效出现雪崩。</p>
-
-<p>6、<code class="language-plaintext highlighter-rouge">redis</code> 数据结构设计注意版本号或扩展字段。反过来，在迭代新增扩展字段时，要考虑数据序列化问题，即版本号等问题。</p>
-
-<h1 id="六协议">六、协议</h1>
-
-<p>1、协议要简洁易懂，字段命名不要出现歧义，注释清楚。一定要有初始化，且初始化的值要合理。</p>
-
-<p>2、协议要有对应的文档。文档说明清晰。文档要用 <code class="language-plaintext highlighter-rouge">source</code> 记录调用业务来源，预估请量，相关负责人。</p>
-
-<p>3、请求协议要有source字段定义业务来源。</p>
-
-<p>4、服务的协议要注意可扩展，新增字段要在mapExt中添加。</p>
-
-<p>5、服务的协议初始化，序列化要对应正确。</p>
-
-<p>6、响应协议要有错误码和错误信息。在文档要对错误码做出释义。</p>
-
-<h1 id="七配置监控">七、配置监控</h1>
-
-<p>1、对所有第三方接口要单独监控。</p>
-
-<p>2、<code class="language-plaintext highlighter-rouge">dao</code> 操作要做单独监控。</p>
-
-<p>3、<code class="language-plaintext highlighter-rouge">redis</code> 缓存/进程内缓存要监控命中率。</p>
-
-<p>4、对外接口做全局监控。</p>
-
-<p>5、<code class="language-plaintext highlighter-rouge">daemon</code> 也要做全局监控。</p>
-
-<p>6、对外部参数的校验可以不做告警。</p>
-
-<p>7、集中建立个性化视图，写清楚紧急联系人，方便快速找到对应的负责人。</p>
-
-<p>8、接口调用来源做统计监控。</p>
-
-<p>9、关键业务做出错告警。</p>
-
-<p>10、 监控让服务有可观察性。</p>
-
-<h1 id="八异常处理">八、异常处理</h1>
-
-<p>1、考虑兜底方案，降级方案，补偿机制。</p>
-
-<p>2、重试，告警。</p>
 ]]></content:encoded>
     </item>
     

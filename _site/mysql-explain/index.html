@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>mysql explain 命令详解</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>mysql explain 命令详解</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2022-10-18">2022-10-18</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#db" title="db">db</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#mysql" title="mysql">mysql</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>explain 命令主要是为了分析 SQL 执行的效率。 explain 显示了 mysql 如何使用索引来处理s elect 语句以及连接表，可以帮助选择更好的索引和写出更优化的查询语句。</p>
+
+<p>使用方法： 在 SQL 语句前加上 explain  命令。</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'root'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><img src="/assets/db/mysql-2022-10-18_16-46-46.png" alt="" /></p>
+
+<p>说明：</p>
+<ul>
+  <li>id：执行编号，标识 select 所属的行。</li>
+  <li>select_type：select 查询的类型。</li>
+  <li>table：查询的是哪个表。</li>
+  <li>partitions：匹配的分区。</li>
+  <li><strong>type：关联类型，或者访问类型。</strong></li>
+  <li>possible_keys：该查询可以选用的索引。</li>
+  <li>key：该查询选用的索引。</li>
+  <li>key_len：索引中使用的字节数。</li>
+  <li>ref：显示上述表的连接匹配条件，即哪些列或常量被用于查询索引列上的值。</li>
+  <li>rows：估计为了找到所需行而要读取的行数。</li>
+  <li>filtered：按表条件过滤的行的百分比。</li>
+  <li><strong>Extra：额外的信息。</strong></li>
+</ul>
+
+<h2 id="type">type</h2>
+
+<p>对表访问方式，表示MySQL在表中找到所需行的方式，又称“访问类型”。</p>
+
+<p>常用的类型有： <strong>ALL &lt; index &lt; range &lt; ref &lt; eq_ref &lt; const &lt; system &lt; NULL（从左到右，性能从差到好）</strong></p>
+
+<ul>
+  <li>ALL：Full Table Scan， MySQL将遍历全表以找到匹配的行。</li>
+  <li>index: Full Index Scan，index与ALL区别为index类型只遍历索引树。</li>
+  <li>range:只检索给定范围的行，使用一个索引来选择行。</li>
+  <li>ref: 表示上述表的连接匹配条件，即哪些列或常量被用于查找索引列上的值。</li>
+  <li>eq_ref: 类似ref，区别就在使用的索引是唯一索引，对于每个索引键值，表中只有一条记录匹配，简单来说，就是多表连接中使用primary key或者 unique key作为关联条件。</li>
+  <li>const、system: 当MySQL对查询某部分进行优化，并转换为一个常量时，使用这些类型访问。如将主键置于where列表中，MySQL就能将该查询转换为一个常量，system是const类型的特例，当查询的表只有一行的情况下，使用system。</li>
+  <li>NULL: MySQL在优化过程中分解语句，执行时甚至不用访问表或索引，例如从一个索引列里选取最小值可以通过单独索引查找完成。</li>
+</ul>
+
+<h2 id="extra">Extra</h2>
+
+<p>这一列展示的是额外信息。常见的重要值如下：</p>
+
+<ul>
+  <li>distinct : 一旦 mysql 找到了与行相联合匹配的行，就不再搜索了。</li>
+  <li>Using index ：这发生在对表的请求列都是同一索引的部分的时候，返回的列数据只使用了索引中的信息，而没有再去访问表中的行记录。是性能高的表现。</li>
+  <li>Using where ：mysql 服务器将在存储引擎检索行后再进行过滤。就是先读取整行数据，再按 where 条件进行检查，符合就留下，不符合就丢弃。</li>
+  <li>Using temporary：mysql 需要创建一张临时表来处理查询。出现这种情况一般是要进行优化的，首先是想到用索引来优化。</li>
+  <li>Using filesort ：mysql 会对结果使用一个外部索引排序，而不是按索引次序从表里读取行。此时mysql会根据联接类型浏览所有符合条件的记录，并保存排序关键字和行指针，然后排序关键字并按顺序检索行信息。这种情况下一般也是要考虑使用索引来优化的。</li>
+</ul>
+
+<hr />
+<p>考虑资料：</p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/358920539"># MySQL _Explain_命令详解：type列详解及案例分析</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/381852677"># MySQL之EXPLAIN命令详解</a></p>
+
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain-join-types"># EXPLAIN Join Types</a></p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/mysql-table-design-21-criterion/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a   class="pageNavInvalid"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/CarlosFang/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/CarlosFang/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2022-10-17-mysql-explain.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/CarlosFang/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>
