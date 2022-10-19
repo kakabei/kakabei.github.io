@@ -161,6 +161,8 @@ user sever 这个服务 有三台机器，  live server  也有三台机器。 l
 
 
 ---
+参考资料：
+
 1、[深入了解服务注册与发现 : https://zhuanlan.zhihu.com/p/161277955](https://zhuanlan.zhihu.com/p/161277955)
 
 2、[服务注册与发现的原理和实现 : https://zhuanlan.zhihu.com/p/409154290](https://zhuanlan.zhihu.com/p/409154290)

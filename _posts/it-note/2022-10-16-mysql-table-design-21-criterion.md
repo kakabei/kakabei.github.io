@@ -236,3 +236,8 @@ comment 注释清楚所有字段，这是方便以后的维护。更进一步讲
 12）在适当的时候，使用覆盖索引。[什么是覆盖索引](https://zhuanlan.zhihu.com/p/339666157)
 
 13）使用explain 分析你SQL的计划。
+
+----
+参考资料：
+
+1、[21 个 MySQL 表设计的经验准则](https://mp.weixin.qq.com/s/OlP0FVnLO_xw7jlahIVOMA)
