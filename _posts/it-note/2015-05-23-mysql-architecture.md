@@ -113,7 +113,7 @@ show engines;
 
 1、[MySQL体系构架、存储引擎和索引结构](https://zhuanlan.zhihu.com/p/500250022)
 
-2、[https://www.cnblogs.com/klvchen/articles/12809342.html](https://www.cnblogs.com/klvchen/articles/12809342.html)
+2、[MySQL 的基础一(连接池, SQL接口, 查询解析器, 查询优化器, 存储引擎接口, 执行器)](https://www.cnblogs.com/klvchen/articles/12809342.html)
 
 3、[Mysql 中 MyISAM 和 InnoDB 的区别有哪些？](https://www.zhihu.com/question/20596402/answer/211492971)
 
