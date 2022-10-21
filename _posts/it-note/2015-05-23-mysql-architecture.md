@@ -65,7 +65,7 @@ select version();
 show engines;
 ```
 
-(补上图)
+![](/assets/db/mysql-2022-10-21_11-27-32.png)
 
 
 **10种存储引擎**：
@@ -92,7 +92,8 @@ show engines;
 
 这一些引擎的区别可以查看官网：[Chapter 15 Alternative Storage Engines](https://dev.mysql.com/doc/refman/5.7/en/storage-engines.html)
 
-一般被问的比较的多的是 MyISAM 和 InnoDB 这两种的区别：
+
+**一般被问的比较的多的是 MyISAM 和 InnoDB 这两种的区别：**
 
 1、InnoDB 支持事务，MyISAM 不支持事务。
 
@@ -104,7 +105,7 @@ show engines;
 
 5、InnoDB 最小的锁粒度是行锁，MyISAM 最小的锁粒度是表锁。
 
-6、InnoDB更消耗资源，读取速度没有MyISAM快。
+6、InnoDB 更消耗资源，读取速度没有MyISAM快。
 
 
 
