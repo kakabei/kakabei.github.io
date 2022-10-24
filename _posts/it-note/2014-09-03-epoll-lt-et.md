@@ -1,6 +1,6 @@
 ---
 layout: post
-title: epoll的 两种模式
+title: epoll 的两种模式
 date: 2014-10-15 9:08:12
 categories: Linux
 tags: network 

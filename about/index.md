@@ -4,19 +4,19 @@ layout: page
 comments: no
 ---
 
----
 ### who am I 
 
 {{ site.about }}
 
-程序员，偶尔看书，喜欢户外 ...
+做软件开发已过十年 ...
 
-关注 Linux Redis、Game、libevent、skynet、 nginx ...
-会一点： c\c++、python、go、lua、
+行业经验：企业安全解决方案、游戏、电商。
+
+技术栈： Linux redis、mysql、libevent、skynet、nginx、 c\c++、python、go、lua
 
 ----
 
-### 联系方式：
+### 联系方式： 
 
 {% if site.qq %}
 QQ ：[{{ site.qq }}](tencent://message/?uin={{ site.qq }})
@@ -25,7 +25,9 @@ QQ ：[{{ site.qq }}](tencent://message/?uin={{ site.qq }})
 
 邮箱：[{{ site.email }}](mailto:{{ site.email }})
 
-----
+微博：[{{ site.weibo }}]({{ site.weibourl }})
+
+github: [{{ site.github }}]({{ site.github }})
 
 
 ----

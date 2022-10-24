@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 多个git帐号的提交
+title: 多个 git 帐号的提交
 date: 2017-03-20 16:12:15
 categories: tools
 tags: git
