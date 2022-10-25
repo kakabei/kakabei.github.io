@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 《极客时间》go语言核心36讲 互斥锁 sync.Mutex与sync.RWMutex
+title: 《极客时间》go语言核心36讲 互斥锁 sync.Mutex 与 sync.RWMutex
 date: 2019-03-27 09:21:12
 categories:   编程语言 
 tags:  go 极客时间笔记

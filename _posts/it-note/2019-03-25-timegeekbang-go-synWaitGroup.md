@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 《极客时间》go语言核心36讲 sync.WaitGroup和sync.Once
+title: 《极客时间》go语言核心36讲 sync.WaitGroup 和 sync.Once
 date: 2019-03-25 09:21:12
 categories:  编程语言
 tags:  go 极客时间笔记
