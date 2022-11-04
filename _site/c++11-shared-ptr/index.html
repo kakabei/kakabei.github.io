@@ -60,7 +60,7 @@
 
 <p>智能指针底层是通过<strong>引用计数</strong>的方式实现的。智能指针在申请堆内存空间的同时，会为其配备一个整形值（初始值为 1），每当有新对象使用此堆内存时，该整形值 +1；反之，每当使用此堆内存的对象被释放时，该整形值减 1。当堆空间对应的整形值为 0 时，即表明不再有对象使用它，该堆空间就会被释放掉。</p>
 
-<p>使用时需添加头文件<code class="language-plaintext highlighter-rouge">&lt;memory&gt;</code>。</p>
+<p>使用时需添加头文件 <code class="language-plaintext highlighter-rouge">&lt;memory&gt;</code>。</p>
 
 <h1 id="shared_ptr-用法">shared_ptr 用法</h1>
 
@@ -88,9 +88,9 @@
 
 <p>2、对 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 类进行拷贝时，计数器就会增加。如：1）用一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 初始化另一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code>、2) 作为参数传递给一个函数或函数的返回值，它所关联的计数器就会增加。</p>
 
-<p>3、当给让 <code class="language-plaintext highlighter-rouge">shared_ptr</code>指向另一个对象或者<code class="language-plaintext highlighter-rouge">shared_ptr</code>销毁时，原对象的计数器就会递减。</p>
+<p>3、当给让 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 指向另一个对象或者 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 销毁时，原对象的计数器就会递减。</p>
 
-<p>4、<code class="language-plaintext highlighter-rouge">shared_ptr</code>的计数器为0，就会自动释放该对象的内存。</p>
+<p>4、<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的计数器为0，就会自动释放该对象的内存。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">);</span> <span class="c1">// ptr 指向一个引用者 </span>
 
@@ -101,7 +101,7 @@
 <span class="n">ptr3</span>  <span class="o">=</span> <span class="n">ptr2</span><span class="p">;</span> <span class="c1">// ptr3 原来所指的对象引用计数变为0，然后自动释放内存。ptr2 所指的对象的引用计数+1</span>
 </code></pre></div></div>
 
-<p>当指向一个对象的最后一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 对象被销毁时，<code class="language-plaintext highlighter-rouge">shared_ptr</code>类会自动销毁此对象。<code class="language-plaintext highlighter-rouge">shared_ptr</code>类是通过析构函数来完成销毁工作。
+<p>当指向一个对象的最后一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 对象被销毁时，<code class="language-plaintext highlighter-rouge">shared_ptr</code>类会自动销毁此对象。<code class="language-plaintext highlighter-rouge">shared_ptr</code> 类是通过析构函数来完成销毁工作。
 只要有存在一个  <code class="language-plaintext highlighter-rouge">shared_ptr</code> ，指向的内存就不会被释放。</p>
 
 <h1 id="shared_ptr-作用域">shared_ptr 作用域</h1>
@@ -155,7 +155,7 @@
 
 <h1 id="shared_ptr--函数传参">shared_ptr  函数传参</h1>
 
-<p>当shared_ptr 用到参数传参时，用的是<strong>传值调用</strong>。调用函数时，该 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 类所指向的对象引用计数加1。调用完成之后，引用计数又减1 。</p>
+<p>当 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 用到参数传参时，用的是<strong>传值调用</strong>。调用函数时，该 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 类所指向的对象引用计数加1。调用完成之后，引用计数又减1 。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">User</span><span class="p">(</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">)</span>
 <span class="p">{</span> 
@@ -238,7 +238,7 @@
 
 <h1 id="shared_prt--删除器">shared_prt  删除器</h1>
 
-<p><code class="language-plaintext highlighter-rouge">shared_ptr</code>生命周期结束时，会调用默认的析构函数来释放自己所指向的内存空间。开发人员可以重置 <code class="language-plaintext highlighter-rouge">shared_prt</code> 类删除器。在生命周期结束时就会自动调用这个删除器。
+<p><code class="language-plaintext highlighter-rouge">shared_ptr</code> 生命周期结束时，会调用默认的析构函数来释放自己所指向的内存空间。开发人员可以重置 <code class="language-plaintext highlighter-rouge">shared_prt</code> 类删除器。在生命周期结束时就会自动调用这个删除器。
 如：</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 

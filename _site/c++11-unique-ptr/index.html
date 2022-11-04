@@ -75,7 +75,7 @@
 
 <h1 id="unique_ptr-拷贝赋值">unique_ptr 拷贝、赋值</h1>
 
-<p><code class="language-plaintext highlighter-rouge">unique_ptr</code> 之间不可以拷贝和赋值。所指向的对象只能有一个<code class="language-plaintext highlighter-rouge">unique_ptr</code>指针，也就是一个引用计数。因此<code class="language-plaintext highlighter-rouge">unique_ptr</code>不支持普通的拷贝和赋值操作。</p>
+<p><code class="language-plaintext highlighter-rouge">unique_ptr</code> 之间不可以拷贝和赋值。所指向的对象只能有一个 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 指针，也就是一个引用计数。因此 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 不支持普通的拷贝和赋值操作。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">(</span><span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">));</span>
 
@@ -86,8 +86,7 @@
 <span class="n">p3</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span> <span class="c1">// ERROR</span>
 </code></pre></div></div>
 
-<p>两个 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 不可以同时指向同一个内存对象，但是可以将一个即将销毁的<code class="language-plaintext highlighter-rouge">unqie_ptr</code>指针拷贝或赋值给另一个<code class="language-plaintext highlighter-rouge">unqie_ptr</code>
-函数的参数传递和返回值就是一个很好的例子。</p>
+<p>两个 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 不可以同时指向同一个内存对象，但是可以将一个即将销毁的 <code class="language-plaintext highlighter-rouge">unqie_ptr</code> 指针拷贝或赋值给另一个 <code class="language-plaintext highlighter-rouge">unqie_ptr</code> 函数的参数传递和返回值就是一个很好的例子。</p>
 
 <h1 id="release-函数">release 函数</h1>
 
@@ -95,11 +94,11 @@
   <li>虽然unique_ptr之间不能拷贝与赋值。但是可以使用release和reset函数来将指针的所有权从一个（非const）unique_ptr转移给另一个unique</li>
 </ul>
 
-<p>1、对当前的<code class="language-plaintext highlighter-rouge">unique_ptr</code>所指的内存置空，对这块内存的所有权消失。并不会去释放对象内存。</p>
+<p>1、对当前的 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 所指的内存置空，对这块内存的所有权消失。并不会去释放对象内存。</p>
 
 <p>2、返回当前unique_ptr所指的内存。是一个普通的指针，这个时所有权就是转换了。</p>
 
-<p>3、调用<code class="language-plaintext highlighter-rouge">release</code> 函数之后要将返回值传递给另一个<code class="language-plaintext highlighter-rouge">unqiue_ptr</code>，不然会内存泄露。</p>
+<p>3、调用 <code class="language-plaintext highlighter-rouge">release</code> 函数之后要将返回值传递给另一个 <code class="language-plaintext highlighter-rouge">unqiue_ptr</code> ，不然会内存泄露。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ptr1 将自己所指的内存空间置空，并且返回该内存空间。之后对该内存空间的操作权消失，从而 ptr2 得到该内存的权限</span>
 

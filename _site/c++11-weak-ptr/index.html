@@ -53,19 +53,19 @@
 </section>
 <section class="post">
 <h1 id="weak_ptr-概念">weak_ptr 概念</h1>
-<p><code class="language-plaintext highlighter-rouge">weak_ptr</code>  从名字上看是具“弱”共享的特点，它指向一个<code class="language-plaintext highlighter-rouge">shared_ptr</code> 管理的对象。</p>
+<p><code class="language-plaintext highlighter-rouge">weak_ptr</code>  从名字上看是具“弱”共享的特点，它指向一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 管理的对象。</p>
 
 <p>1、一个对象被多个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 所指，引用计数会增加。</p>
 
-<p>2、<code class="language-plaintext highlighter-rouge">weak_ptr</code> 指向一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 所指向的对象时，该对象的引用计数不会增加 。这个是<code class="language-plaintext highlighter-rouge">weak_ptr</code>最重要的区别。</p>
+<p>2、<code class="language-plaintext highlighter-rouge">weak_ptr</code> 指向一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 所指向的对象时，该对象的引用计数不会增加 。这个是 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 最重要的区别。</p>
 
-<p>3、当 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 全部被释放时，对应的对象会被释放。即便还有<code class="language-plaintext highlighter-rouge">weak_ptr</code> 指向该对象，该对象的内存仍然会被释放。</p>
+<p>3、当 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 全部被释放时，对应的对象会被释放。即便还有 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 指向该对象，该对象的内存仍然会被释放。</p>
 
-<p>4、使用时需添加头文件<code class="language-plaintext highlighter-rouge">&lt;memory&gt;</code>。</p>
+<p>4、使用时需添加头文件 <code class="language-plaintext highlighter-rouge">&lt;memory&gt;</code>。</p>
 
 <h1 id="weak_ptr--基本使用">weak_ptr  基本使用</h1>
 
-<p><code class="language-plaintext highlighter-rouge">weak_ptr</code>  不用直接的指到普通的指针上，而要通过<code class="language-plaintext highlighter-rouge">shared_ptr</code> 管理的对象。</p>
+<p><code class="language-plaintext highlighter-rouge">weak_ptr</code>  不用直接的指到普通的指针上，而要通过 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 管理的对象。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  
 <span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">);</span> <span class="c1">// 一个shared_ptr对象 </span>
@@ -77,7 +77,7 @@
 
 <h1 id="lock-函数">lock 函数</h1>
 
-<p><code class="language-plaintext highlighter-rouge">lock</code> 函数用到检测 <code class="language-plaintext highlighter-rouge">weak_ptr</code>所指的对象是否仍然存在。 如果 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 所指的<code class="language-plaintext highlighter-rouge">shared_prt</code>引用计数为0，返回一个空的<code class="language-plaintext highlighter-rouge">shared_ptr</code>，否则，返回一个<code class="language-plaintext highlighter-rouge">shared_ptr</code>对象。</p>
+<p><code class="language-plaintext highlighter-rouge">lock</code> 函数用到检测 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 所指的对象是否仍然存在。 如果 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 所指的 <code class="language-plaintext highlighter-rouge">shared_prt</code> 引用计数为0，返回一个空的 <code class="language-plaintext highlighter-rouge">shared_ptr</code>，否则，返回一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 对象。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">);</span> 
 
