@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 腾讯云容器团队内部Istio 笔记
+title: 腾讯云容器团队内部 Istio 笔记
 date: 2020-10-16 16:12:15
 categories: 系统设计
 tags:  service-mesh
