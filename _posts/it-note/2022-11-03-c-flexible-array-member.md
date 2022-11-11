@@ -12,7 +12,7 @@ excerpt: 柔性数组,这种代码结构产生于对动态结构体的需求,在
 **柔性数组成员**（flexible array member）也叫**伸缩性数组成员**，这种代码结构产生于对动态结构体的需求。在日常的编程中，有时候需要在结构体中存放一个长度动态的字符串，鉴于这种代码结构所产生的重要作用，C99 甚至把它收入了标准中：
 
 > As a special case, the last element of a structure with more than one named member may have an incomplete array type; this is called a flexible array member.
-
+    
 -   柔性数组成员必须定义在结构体里面且为最后元素；
 -   结构体中不能单独只有柔性数组成员；
 -   柔性数组不占内存。

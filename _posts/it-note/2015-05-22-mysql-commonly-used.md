@@ -1,7 +1,7 @@
 ---
 layout: post
 title: mysql 常用语句
-date: 2015-05-23 11:08:12
+date: 2015-05-22 11:08:12
 categories: db
 tags:  mysql 
 excerpt: mysql 数据库常用 sql 语句，工作中用到频率比较高 
