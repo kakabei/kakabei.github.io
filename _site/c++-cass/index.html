@@ -102,7 +102,7 @@ unsigned long : 8个字节
 <span class="k">class</span> <span class="nc">B</span>
 <span class="p">{</span>
 <span class="p">};</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="n">A</span> <span class="n">ex1</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
     <span class="n">B</span> <span class="n">ex2</span><span class="p">;</span>
@@ -139,7 +139,7 @@ unsigned long : 8个字节
     <span class="k">virtual</span> <span class="kt">void</span> <span class="n">h</span><span class="p">()</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"A::h"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// 24 字节 12 + 4 (填充) + 8 (指向虚函数的指针) = 24</span>
 <span class="p">};</span>
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="n">A</span> <span class="n">ex1</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
     <span class="n">A</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
@@ -169,7 +169,7 @@ class A
     <span class="k">const</span> <span class="n">A</span> <span class="o">*</span><span class="k">operator</span><span class="o">&amp;</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="p">};</span>    <span class="c1">// 取址运算符（const 版本）</span>
 <span class="p">};</span>
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="n">A</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="n">A</span><span class="p">();</span> 
     <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"sizeof(A):"</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// sizeof(A):1</span>
@@ -329,7 +329,7 @@ class A
 <span class="p">};</span>
 
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
     <span class="n">B</span> <span class="n">b</span><span class="p">;</span>  
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>

@@ -94,7 +94,7 @@
     <span class="c1">//TODO:</span>
 <span class="p">};</span>
 
-<span class="kt">int</span>  <span class="nf">main</span><span class="p">(){</span>
+<span class="kt">int</span>  <span class="n">main</span><span class="p">(){</span>
     <span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">C1</span><span class="p">;</span>
     <span class="n">A</span><span class="o">&lt;</span><span class="k">auto</span><span class="o">&gt;</span> <span class="n">C2</span> <span class="o">=</span> <span class="n">C1</span><span class="p">;</span>  <span class="c1">//错误</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
@@ -137,12 +137,12 @@
 <span class="p">};</span>
 
 <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
-<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
     <span class="k">auto</span> <span class="n">val</span> <span class="o">=</span> <span class="n">T</span><span class="o">::</span><span class="n">get</span><span class="p">();</span>
     <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
     <span class="n">func</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span><span class="p">();</span>
     <span class="n">func</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span><span class="p">();</span>
 

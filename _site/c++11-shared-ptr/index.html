@@ -162,7 +162,7 @@
 	<span class="c1">// todo...  </span>
 <span class="p">}</span>
 
-<span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">(</span><span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">));</span> <span class="c1">// 初始化一个智能指针对象</span>
+<span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">(</span><span class="k">new</span> <span class="n">string</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">));</span> <span class="c1">// 初始化一个智能指针对象</span>
  
  <span class="n">User</span><span class="p">(</span><span class="n">p</span><span class="p">);</span> <span class="c1">// p 所指的对象引用计数加 1 </span>
 
@@ -176,7 +176,7 @@
 	<span class="c1">// todo ...</span>
 <span class="p">}</span>
 
-<span class="n">string</span> <span class="o">*</span><span class="nf">p1</span><span class="p">(</span><span class="k">new</span> <span class="n">string</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">));</span>
+<span class="n">string</span> <span class="o">*</span><span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="n">string</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">));</span>
 
 <span class="n">User</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span> <span class="c1">// ERROR， 要先把 string * 转换为一个shared_ptr&lt;string&gt;</span>
 
@@ -247,7 +247,7 @@
 	<span class="n">InfoFree</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">);</span>
 <span class="p">}</span> 
 
-<span class="kt">void</span> <span class="nf">Proc</span><span class="p">(</span><span class="n">User</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">)</span> 
+<span class="kt">void</span> <span class="n">Proc</span><span class="p">(</span><span class="n">User</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">)</span> 
 <span class="p">{</span>
 	<span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">connection</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">Userfree</span><span class="p">);</span> <span class="c1">// 释放时使用这个 Userfree 来析构掉对象</span>
 <span class="p">}</span>
