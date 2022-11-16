@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>团队能力的提升</title>
+    <title>Code Review</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>团队能力的提升</h1>
+        <h1>Code Review</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -29,7 +29,7 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2022-10-22">2022-10-22</time>
+  <time datetime="2022-11-12">2022-11-12</time>
 </span>
 
  | 
@@ -53,117 +53,64 @@
 
 </section>
 <section class="post">
-<p>无论是做为 leader 还是成员，都应该经常思考如何提升个人的能力，同时也应该思考如何提升团队能力。</p>
+<p>阿里技术微信公众号：<a href="https://mp.weixin.qq.com/s/AejIOMNxsI_Ru5G0W8AeTg">七个建议让 Code Review 高效又高质</a></p>
 
-<p>团队的可以通过如下几方面：规范建设，意识建设、技术建设、团队建设。</p>
+<h1 id="为什么要做代码评审">为什么要做代码评审</h1>
 
-<h1 id="一-规范建设">一、 规范建设</h1>
+<p>代码评审最本质的作用不是问题发现。除了代码评审，我们有更多更好的手段来发现问题。代码评审的作用更多是<strong>关于社会学的，是一种长期行为和组织文化</strong>。</p>
 
-<p>1、系统框架原则</p>
+<p>社会学？上了很高的层次了。</p>
 
-<p>2、设计原则 <a href="http://blog.xyecho.com/server-system-design-idea/">系统设计方案注意事项</a></p>
+<h2 id="1编码者视角良性的社交压力">1. 编码者视角：良性的社交压力</h2>
 
-<p>3、开发指南</p>
+<p>一旦想到你的代码将会发出去给你的同事做 Review，有没有为刚才的这种想法产生一丝丝压力？这种压力是良性的，它能给你带来一种即时的反馈，阻止你去选择那些短期收益、长期损失的 “投机” 行为。如果没有代码评审这个环节，或许你就会真的 “为所欲为” 了，其实最终还是要为这种取巧行为买单。</p>
 
-<p>4、运维文档</p>
+<h2 id="2维护者视角代码可读性的保证">2. 维护者视角：代码可读性的保证</h2>
 
-<p>5、review 规范</p>
+<p>这段代码在编码完成之后，立即经历了可读性的检验。更理想地，如果组织已经有了编码规范和设计规范，还能确保这段代码遵循了这些规范。如果 CR 过程中发现这段代码没有遵循规范，那更是好事，它指向了 CR 的另外一个关键价值：知识传播。</p>
 
-<p>6、发布上线规范</p>
+<h2 id="3cr带来了知识传播和设计共识">3. CR 带来了知识传播和设计共识</h2>
 
-<p>7、复盘规范</p>
+<p>抽象的概念如果不落到具体的事情上，就很难形成共识。有人或许知道海洋系的 “判例”，这是在法律层面形成共识的一种非常好的方法。代码评审，其实也是在形成判例：哪一类设计是合理的，哪一类设计是不合理的。通过针对具体的问题进行分析，团队就会逐渐形成设计共识，在过程中，对这些共识不那么熟悉的新同学，也可以慢慢融入。</p>
 
-<p>8、故障预案</p>
+<h2 id="4检验逻辑正确性">4. 检验逻辑正确性</h2>
 
-<h1 id="二意识建设">二、意识建设</h1>
+<p>1、保证代码逻辑正确，是设计者的责任。</p>
 
-<p>1、价值观</p>
+<p>2、发现逻辑错误的其他方法。</p>
 
-<ul>
-  <li>目标：质量、效率、体验、风险</li>
-  <li>行动：认真、细致、高要求、及时响应</li>
-</ul>
+<p>3、编写自动化单元测试。</p>
 
-<p>2、服务意识</p>
+<p>4、使用代码静态检查工具。</p>
 
-<ul>
-  <li>业务意识：和业务方保持良好地沟通；技术通过业务实现价值；以业务结果为导向。</li>
-  <li>系统意识：不要局限于功能模块，要有上层的系统的整体思维。</li>
-  <li>运营意识：系统开发交付后，并没有结束，线上健康稳定的运营也同样重要。</li>
-  <li>团队技术意识：技术能力的范围不应限制于自身，应该扩大到团队，公司，业界等。</li>
-</ul>
+<h2 id="实际操作建议">实际操作建议</h2>
 
-<p>3、紧迫感</p>
+<p>1、小批量——每次 Review 的代码量要少。</p>
 
-<ul>
-  <li>关注并及时处理告警</li>
-  <li>快速给结果、清晰准确反馈</li>
-</ul>
+<p>2、多批次——Review 要频繁发生。</p>
 
-<p>4、准备度</p>
+<p>3、找对人——合适的 Reviewer。</p>
 
-<ul>
-  <li>技术累积</li>
-  <li>拓展业界视野</li>
-  <li>业务参与度</li>
-</ul>
+<p>4、快速响应。</p>
 
-<p>5、技术意识</p>
+<p>5、使用现代工具。</p>
 
-<ul>
-  <li>分清是自己技术，还是平台能力</li>
-  <li>分清是业务能力，技术能力</li>
-</ul>
+<p>6、考虑结对编程。</p>
 
-<p>6、沟通意识</p>
+<p>7、综合在线 Review 和线下 Review。</p>
 
-<ul>
-  <li>项目进度反馈</li>
-  <li>业务上下游团队沟通、协同</li>
-  <li>以业务完成为目标有效的沟通
-  
-    <h1 id="三技术建设">三、技术建设</h1>
-  </li>
-</ul>
+<hr />
+<p>参考资料：</p>
 
-<p>1、定位清晰，认清自己。 是自己的能力，还是平台的能力。</p>
-
-<p>2、技术职责：业务开发；平台、共同组件开发；系统优化；技术迭代；技术选型；成果分享。</p>
-
-<p>3、技术制度：团队同共决策制度； 周报，值日制度； 设计和代码review制度，系统检验制度。</p>
-
-<p>4、定期复盘、总结分享。</p>
-
-<p>5、技术赋能；专利撰写；技术影响力；业界视野。</p>
-
-<p>6、技术架构升级优化。</p>
-
-<h1 id="四团队建设">四、团队建设</h1>
-
-<p>1、团队定期沟通：坦诚、正向驱动、帮助成长； 自我评价； 微信邮件互动；进度反馈；</p>
-
-<p>2、团队周会：轮岗主持；工作总结；  技术分享； 事件宣导；业务体验；</p>
-
-<p>3、团队活动： 表达会、脑暴会、技术沙龙、外部团建</p>
-
-<p>4、融入团队：定期关怀：聚餐、聊天、游戏、活动；提升凝聚力、信任感、仪式感、技术氛围；</p>
-
-<p>5、团队复盘：定时回顾团队产出、投入、成本、风险、质量和效率。</p>
-
-<p>6、降本增效，开发团队工具箱；能用工具则不用人工。</p>
-
-<p>7、技术和业务两个维度的考核</p>
-
-<p>8、梯队建设、人员培养。</p>
-
+<p><a href="https://mp.weixin.qq.com/s/AejIOMNxsI_Ru5G0W8AeTg"># 七个建议让 Code Review 高效又高质</a></p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/summary-thinking-team/" class="pageNav"  >上一篇</a>
+	<a  href="/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/c-flexible-array-member/" class="pageNav"  >下一篇</a>
+	<a   class="pageNavInvalid"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -228,7 +175,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2022-10-21-summary-improve-team-ability.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2022-11-11-code-review.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 

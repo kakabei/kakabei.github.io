@@ -15,7 +15,7 @@ excerpt: 无论是做为 leader 还是成员，都应该思考如何提升个人
 
 1、系统框架原则
 
-2、设计原则
+2、设计原则 [系统设计方案注意事项](http://blog.xyecho.com/server-system-design-idea/)
 
 3、开发指南
 
