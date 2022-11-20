@@ -3,7 +3,7 @@ layout: post
 title: muduo笔记 第一章 线程安全的对象生命期管理
 date: 2018-01-03 16:08:12
 categories: muduo
-tags: 技术阅读笔记 系统编程 muduo tcp network thread
+tags: 技术阅读笔记 系统编程 muduo 
 excerpt: 线程安全应该注意的一些事项
 ---
 
