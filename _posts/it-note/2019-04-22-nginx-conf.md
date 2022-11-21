@@ -1,7 +1,7 @@
 ---
 layout: post
 title: nginx 配置负载方式
-date: 2019-10-29 21:00:30
+date: 2019-04-22 21:00:30
 categories: tools 
 tags: 工作提效 nginx
 excerpt: nginx 配置负载均衡的的例子
