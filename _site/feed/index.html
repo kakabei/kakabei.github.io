@@ -7,7 +7,7 @@
     <title>xyecho</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2022-11-21T15:39:39+08:00</lastBuildDate>
+    <lastBuildDate>2022-11-21T15:41:57+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
@@ -340,89 +340,6 @@
 
 <p>活在此时此该的自己，感觉是真正的自我。一种自信从身内散发出来，围绕全身，自带光环。</p>
 
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>C 柔性数组</title>
-      <link href="http://localhost:4000/c-flexible-array-member/"/>
-      <pubDate>2022-11-04T00:12:15+08:00</pubDate>
-      <author>xyecho</author>
-      <guid>http://localhost:4000/c-flexible-array-member</guid>
-      <content:encoded><![CDATA[<h1 id="柔性数组">柔性数组</h1>
-
-<p><strong>柔性数组成员</strong>（flexible array member）也叫<strong>伸缩性数组成员</strong>，这种代码结构产生于对动态结构体的需求。在日常的编程中，有时候需要在结构体中存放一个长度动态的字符串，鉴于这种代码结构所产生的重要作用，C99 甚至把它收入了标准中：</p>
-
-<blockquote>
-  <p>As a special case, the last element of a structure with more than one named member may have an incomplete array type; this is called a flexible array member.</p>
-</blockquote>
-
-<ul>
-  <li>柔性数组成员必须定义在结构体里面且为最后元素；</li>
-  <li>结构体中不能单独只有柔性数组成员；</li>
-  <li>柔性数组不占内存。</li>
-</ul>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">test</span> <span class="p">{</span> 
-    <span class="kt">short</span> <span class="n">len</span><span class="p">;</span>   <span class="c1">// 必须至少有一个其它成员     </span>
-    <span class="kt">char</span> <span class="n">arr</span><span class="p">[];</span> <span class="c1">// 柔性数组必须是结构体最后一个成员.</span>
-<span class="p">};</span>
-</code></pre></div></div>
-
-<p>柔性数组是 C99 标准引入的特性，所以当你的编译器提示不支持的语法时，请检查你是否开启了 C99 选项或更高的版本支持。</p>
-
-<p>在一个结构体的最后，申明一个长度为空的数组，就可以使得这个结构体是可变长的。</p>
-
-<p>对于编译器来说，此时长度为 0 的数组并不占用空间，因为数组名本身不占空间，它只是一个偏移量，数组名这个符号本身代表了一个不可修改的地址常量。</p>
-
-<p>对于柔性数组的这个特点，很容易构造出变成结构体，如缓冲区，数据包等等。</p>
-
-<p>其实柔性数组成员在实现跳跃表时有它特别的用法，在 Redis的 SDS 数据结构中和跳跃表的实现上，也使用柔性数组成员。它的主要用途是为了满足需要变长度的结构体，为了解决使用数组时内存的冗余和数组的越界问题。</p>
-
-<h1 id="例子">例子</h1>
-
-<p><strong>结构体</strong>：</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 柔性数组 </span>
-<span class="k">struct</span> <span class="n">soft_buffer</span> <span class="p">{</span>
-    <span class="kt">int</span>    <span class="n">len</span><span class="p">;</span>
-    <span class="kt">char</span>   <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> 
-<span class="p">};</span>
-</code></pre></div></div>
-
-<p>数据结构大小 = <code class="language-plaintext highlighter-rouge">sizeof(struct soft_buffer)</code> = <code class="language-plaintext highlighter-rouge">sizeof(int)</code>，这样的变长数组常用于网络通信中构造不定长数据包, 不会浪费空间浪费网络流量。</p>
-
-<p><strong>申请内存</strong>：</p>
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="k">struct</span> <span class="nc">soft_buffer</span> <span class="o">*</span> <span class="n">softbuffer</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">soft_buffer</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="nc">soft_buffer</span><span class="p">)</span> <span class="o">+</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">*</span> <span class="n">CUR_LENGTH</span><span class="p">);</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="n">softbuffer</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">softbuffer</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">=</span> <span class="n">CUR_LENGTH</span><span class="p">;</span>
-	<span class="n">memcpy</span><span class="p">(</span><span class="n">softbuffer</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="s">"softbuffer test"</span><span class="p">,</span> <span class="n">CUR_LENGTH</span><span class="p">);</span> 
-	<span class="n">printf</span><span class="p">(</span><span class="s">"%d, %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">softbuffer</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">,</span> <span class="n">softbuffer</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p><strong>释放内存</strong>：</p>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">free</span><span class="p">(</span><span class="n">softbuffer</span><span class="p">);</span> 
-<span class="n">softbuffer</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</code></pre></div></div>
-
-<h1 id="优点">优点</h1>
-
-<p>使用柔性数组的优点：</p>
-
-<p>1、减少内存碎片，由于结构体的柔性数组和结构体成员的地址是连续的，即可一同申请内存，因此更大程度地避免了内存碎片。</p>
-
-<p>2、成员本身不占结构体空间，因此，整体而言，比普通的数组成员占用空间要会稍微小点。</p>
-
-<p>缺点：对结构体格式有要求，必要放在最后，不是唯一成员。</p>
-
-<hr />
-<p>参考资料：</p>
-
-<p>1、<a href="https://cloud.tencent.com/developer/article/1764391">C语言解柔性数组是什么？</a></p>
 ]]></content:encoded>
     </item>
     
@@ -2116,6 +2033,94 @@
   <li>准备好写作工具所花费的时间应该不会超过5~10分钟</li>
   <li>使用方式和工具本身一样重要</li>
 </ul>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《一则关于用户导向设计师的寓言》 by David Travis</title>
+      <link href="http://localhost:4000/%E4%B8%80%E5%88%99%E5%85%B3%E4%BA%8E%E7%94%A8%E6%88%B7%E5%AF%BC%E5%90%91%E8%AE%BE%E8%AE%A1%E5%B8%88%E7%9A%84%E5%AF%93%E8%A8%80/"/>
+      <pubDate>2022-09-27T19:13:00+08:00</pubDate>
+      <author>xyecho</author>
+      <guid>http://localhost:4000/一则关于用户导向设计师的寓言</guid>
+      <content:encoded><![CDATA[<p>David Travis 戴维·崔弗斯 著作。</p>
+
+<p>许晴晏 中文翻译。</p>
+
+<p><a href="https://www.userfocus.co.uk/fable/?continueFlag=c1068e7e0e455bd9923ad0f16a65f620">下载：https://www.userfocus.co.uk/fable/?continueFlag=c1068e7e0e455bd9923ad0f16a65f620</a></p>
+
+<p><a href="https://www.userfocus.co.uk/pdf/Fable_Simplified_CN.pdf">中文版：https://www.userfocus.co.uk/pdf/Fable_Simplified_CN.pdf</a></p>
+
+<p><img src="/assets/reading/fable-simplified-cn_2022-09-27_12-27-37.png" alt="" /></p>
+
+<p>大部分的设计师对美的追求：“我的设计在视觉上看起来很惊艳， 我设计的接口很吸引人的目光。”</p>
+
+<p>寻找有效率的设计师，整体来说应该是可以利用科技去创造出对公司、客户或社会有益的产品。</p>
+
+<p>而用户导向设计师则是重视的是在使用产品跟网站的这些人，而不是专注在视觉设计或是偏重新科技设计。</p>
+
+<p><strong>第一个用户导向设计的秘密: 及早并持续的专注在用户以及他们的工作上</strong></p>
+
+<p>大部分设计师其实不了解用户实际上如何使用他们的系统的。一些系统注定了它要面向一些特殊的用户，它的“一般用户”可能并不存在，是设计师自己想像出为的虚构用户。导致做出一些伪需求。</p>
+
+<p>设计师要知道自己的软件是为谁设计的，使用者的群体是什么？他们用这个系统做什么？</p>
+
+<p>所以要建立根据研究资料的典型人物 ， 而不是根据我们推测而出的客户。假设是好事， 但是实际发现更好。</p>
+
+<p>建立一个实际拜访客户的计划：</p>
+
+<p>1、了解客户的动机。创造典型人物，</p>
+
+<p>2、使用产品的环境。例如公司文化。</p>
+
+<p>3、发展红线区。红线区代表关键用户的旅程跟产品。即系统的最主要任务。</p>
+
+<p>有些任务比任何任务都重要，这就是红线区。借着专注在红线区， 我们可以让比较不重要的功能不要占了界面的位置，使得界面看起来复杂凌乱。但这些功能还是存在， 只是当你要使用它时， 你可能要透过对话框或是在界面其他位置去取用它。</p>
+
+<p>到用户实际访谈是要帮助你了解你设计的对象，用户如何使用这软件以及使用软件的环境。</p>
+
+<p>可以使用 ’敏捷设计’ (Agile) 快速开发更新改善版本的软件，节省时间。</p>
+
+<p><strong>第二个关于用户导向设计的秘密：经验性量测用户的行为</strong></p>
+
+<p>如果你想要发现你产品上的问题，你就要找人来使用它。这样才可以发现产品中的<strong>无形的错误</strong>。</p>
+
+<p>做使用性测试 (Usability Test)。他请我们的顾客使用这手机然后当他们使用时，我们观察他们。</p>
+
+<p>量测了产品的使用性；</p>
+
+<p>1、量测有效性：多少人可以正确的 完成红线区的任务。</p>
+
+<p>2、量测效率性：客户完成这些任 务的时间。</p>
+
+<p>3、量测了满意度：他们对这设计的感觉。</p>
+
+<p><strong>第三个用户导向设计的秘密：重复性设计</strong></p>
+
+<p>用户导向设计师介绍我们一种技巧，叫做纸上模型，它可以让我们很快的测试新的网站。或者电子模型测试。</p>
+
+<p>这个测试的意义是：<strong>帮助我们确认我们拿到了正确的信息结构</strong>。</p>
+
+<p>重复性设计。在开始写代码前一定要做设计，然后做重复性的推演，看看其中是否有什么遗漏。这也是我做研发的心得之一。</p>
+
+<p>第一个关于用户导向设计的祕密有四个重点：</p>
+
+<p>1、你必须专注在用户。</p>
+
+<p>2、你必须了解用户的任务。</p>
+
+<p>3、你必须及早开始。</p>
+
+<p>4、你必须持续的做研究</p>
+
+<blockquote>
+  <p>即使他们开始做研究，通常不是那种更好的设计会需要的那种。研究通常在于人口统计学因素而不是真正去了解用户的目标跟动机。</p>
+</blockquote>
+
+<p>很多需要的依据都是数据统计，布数据统计可能并不能体现出人用户目标和动机，而现场访问却是可以真实感受的。</p>
+
+<p>另外，对于用户的主需求的调研，一般都是在研发前期，这没有什么不对的。<strong>只是还不够，用户和需求的调研没有持续进行到整个周期</strong>。</p>
+
+<p>访问用户时，只听听他们怎么说，分析他们的怎么说是不够，应该更进一点，<strong>观察他们是怎么用的，怎么操作的</strong>。</p>
 ]]></content:encoded>
     </item>
     
