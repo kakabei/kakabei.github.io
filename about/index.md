@@ -8,11 +8,11 @@ comments: no
 
 {{ site.about }}
 
-做软件开发已过十年 ...
-
 行业经验：企业安全解决方案、游戏、电商。
 
-技术栈： Linux redis、mysql、libevent、skynet、nginx、 c\c++、python、go、lua
+技术栈： linux redis、mysql、libevent、skynet、nginx、 c\c++、python、go、lua
+
+喜欢读书，写字，努力地去运动。
 
 ----
 

@@ -2,6 +2,7 @@ future: true
 permalink: /:title/
 url: http://blog.xyecho.com
 name: xyecho
+subtitle: 读书，技术，生活笔记
 author: xyecho
 email: 1447675994@qq.com
 duoshuo: xyecho
