@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="xyecho" />
-    <title>源码阅读中一个特殊注释说明</title>
+    <title>git 撤销修改</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>源码阅读中一个特殊注释说明</h1>
+        <h1>git 撤销修改</h1>
         </header>
         <nav>
         <span><a title="网站首页" class="" href="/">首页</a></span>
@@ -29,14 +29,14 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2018-09-17">2018-09-17</time>
+  <time datetime="2017-05-21">2017-05-21</time>
 </span>
 
  | 
 <span class="categories">
   分类
   
-  <a href="/categories/#软件工程" title="软件工程">软件工程</a>&nbsp;
+  <a href="/categories/#tools" title="tools">tools</a>&nbsp;
   
 </span>
 
@@ -45,29 +45,43 @@
 <span class="tags">
   标签
   
+  <a href="/tags/#git" title="git">git</a>&nbsp;
+  
   <a href="/tags/#工作经验" title="工作经验">工作经验</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<p><strong>TODO: + 说明：</strong></p>
+<h1 id="一未使用-git-add-缓存代码">一、未使用 git add 缓存代码</h1>
 
-<p>如果代码中有该标识，说明在标识处有功能代码待编写，待实现的功能在说明中会简略说明。</p>
+<p>撤销指定文件： <code class="language-plaintext highlighter-rouge">git checkout -- filepathname</code></p>
 
-<p><strong>FIXME: + 说明：</strong>
-如果代码中有该标识，说明标识处代码需要修正，甚至代码是错误的，不能工作，需要修复，如何修正会在说明中简略说明。</p>
+<p>撤销所有的文件修改可以使用： <code class="language-plaintext highlighter-rouge">git checkout .</code></p>
 
-<p><strong>XXX: + 说明：</strong>
-如果代码中有该标识，说明标识处代码虽然实现了功能，但是实现的方法有待商榷，希望将来能改进，要改进的地方会在说明中简略说明。</p>
+<p>对新建文件无效</p>
+
+<h1 id="二已经使用了-git-add-缓存了代码">二、已经使用了  git add 缓存了代码</h1>
+
+<p>撤销指定文件:  <code class="language-plaintext highlighter-rouge">git reset HEAD filepathname</code></p>
+
+<p>撤销所有的文件修改可以使用：  <code class="language-plaintext highlighter-rouge">git reset HEAD .</code></p>
+
+<p>清除 git  对于文件修改的缓存。相当于撤销 git add 命令所在的工作。</p>
+
+<h1 id="三已经用-git-commit-提交了代码">三、已经用 git commit  提交了代码</h1>
+
+<p>来回退到上一次commit的状态： <code class="language-plaintext highlighter-rouge">git reset --hard HEAD^ </code></p>
+
+<p>此命令可以用来回退到任意版本：<code class="language-plaintext highlighter-rouge">git reset --hard  commitid</code></p>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/go-check-race/" class="pageNav"  >上一篇</a>
+	<a  href="/c++11-auto/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/timegeekbang-go-synWaitGroup/" class="pageNav"  >下一篇</a>
+	<a  href="/c++11-shared-ptr/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -132,7 +146,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2018-09-17-sourcecode-comment.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2019-04-20-git-undochanges.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
              | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
 
