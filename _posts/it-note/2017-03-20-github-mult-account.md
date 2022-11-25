@@ -7,7 +7,7 @@ tags: git
 excerpt: 同时在使用多个github帐号的情况下，如何配置。
 ---
 
-由于我同时使用了github和云码。所以必须同时配置两个git帐号。
+由于我同时使用了github和码云。所以必须同时配置两个git帐号。
 
 我的所在的环境是windows. （想必linux下也是如此）
 
