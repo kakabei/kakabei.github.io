@@ -6,13 +6,18 @@ comments: no
 
 ### who am I 
 
-{{ site.about }}
-
 行业经验：企业安全解决方案、游戏、电商。
 
 技术栈： linux redis、mysql、libevent、skynet、nginx、 c\c++、python、go、lua
 
-喜欢读书，写字，努力地去运动。
+十年以上的技术经验。
+
+除了编程，其他感兴趣的：看书，写字，运动。
+
+做时间的朋友，与万物和谐相处。
+
+不追求完美，追求合适。
+
 
 ----
 
