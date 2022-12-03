@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="xyecho" />
+    <title>go 笔记 面向对象编程</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="xyecho" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>go 笔记 面向对象编程</h1>
+        </header>
+        <nav>
+        <span><a title="网站首页" class="" href="/">首页</a></span>
+        <span><a title="读书笔记" class="" href="/reading/">读书</a></span>
+        <span><a title="文章分类" class="" href="/categories/">分类</a></span>
+        <span><a title="标签索引" class="" href="/tags/">标签</a></span>
+        <!--<span><a title="友情链接" class="" href="/links/">链接</a></span>-->
+        <span><a title="留言交流" class="" href="/guestbook/">留言</a></span>
+        <span><a title="关于站长" class="" href="/about/">关于</a></span>
+        <span><a title="种子订阅" class="" href="/feed/" target="_blank">订阅</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2018-03-02">2018-03-02</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#编程语言" title="编程语言">编程语言</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#go" title="go">go</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<h1 id="一类型系统">一、类型系统</h1>
+
+<p>类型系统是指一个语言的类型体系结构。通常包含如下基本 内容:</p>
+
+<ul>
+  <li>基础类型，如： byte、int、bool、float等。</li>
+  <li>复合类型，如： 数组、结构体、指针等。</li>
+  <li>可以指向任意对象的类型(Any类型)。</li>
+  <li>值语义和引用语义。</li>
+  <li>面向对象，即所有具备面向对象特征(比如成员方法)的类型。</li>
+  <li>接口。</li>
+</ul>
+
+<h2 id="为类型添加方法">为类型添加方法</h2>
+
+<p>在 Go 语言中，除了指针类型，可以给任意类型添加相应的方法.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Integer</span> <span class="kt">int</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">Integer</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">b</span> <span class="n">Integer</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>定义了一个新类型 Integer，它和 int 没有本质不同，只是它为内置的 int 类型增加了个新方法 Less()。</p>
+
+<p>Go 语言中的面向对象最为直观，也无需支付额外的成本。如果要求对象必须以指针传递， 这有时会是个额外成本，因为对象有时很小(比如4字节)，用指针传递并不划算。只有在你需要修改对象的时候，才必须用指针。</p>
+
+<p>如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">Integer</span><span class="p">)</span> <span class="n">Add</span><span class="p">(</span><span class="n">b</span> <span class="n">Integer</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="o">*</span><span class="n">a</span> <span class="o">+=</span> <span class="n">b</span>
+ <span class="p">}</span>
+</code></pre></div></div>
+
+<p>会改变 a 的值。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">Integer</span><span class="p">)</span> <span class="n">Add</span><span class="p">(</span><span class="n">b</span> <span class="n">Integer</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="n">a</span> <span class="o">+=</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>不会改变 a 的值。</p>
+
+<p>因为 Go 语言和 C 语言一样，类型都是基于<strong>值传递</strong>的。要想修改变量的值，只能传递指针。</p>
+
+<h2 id="值语义和引用语义">值语义和引用语义</h2>
+
+<p>值语义和引用语义的差别在于赋值，比如下面的例子:</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="n">b</span><span class="o">.</span><span class="n">Modify</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>如果 b 的修改不会影响a的值，那么此类型属于值类型。如果会影响 a 的值，那么此类型是引用类型。</p>
+
+<p>Go 语言中的大多数类型都基于值语义，包括:</p>
+
+<ul>
+  <li>基本类型，如： byte、int、bool、float32、float64和string等。</li>
+  <li>复合类型，如： 数组(array)、结构体(struct)和指针(pointer)等。</li>
+</ul>
+
+<p>Go语言中的数组和基本类型没有区别，是很纯粹的值类型。要想表达引用，需要用指针。</p>
+
+<p>Go语言中有 4 个类型是引用类型</p>
+
+<ul>
+  <li>数组切片: 指向数组(array)的一个区间。</li>
+  <li>map: 极其常见的数据结构，提供键值查询能力。</li>
+  <li>channel: 执行体(goroutine)间的通信设施。</li>
+  <li>接口(interface):对一组满足某个契约的类型的抽象。</li>
+</ul>
+
+<h2 id="结构体">结构体</h2>
+
+<p>Go 语言的结构体(struct)和其他语言的类(class)有同等的地位，但G o 语言放弃了包括继承在内的大量面向对象特性，只保留了<strong>组合</strong>(composition)这个最基础的特性。</p>
+
+<p>所有的 Go 语言类型(指针类型除外)都可以有自己的方法。结构体只是很普通的复合类型，平淡无奇。</p>
+
+<p>例如，我们要定义一个矩形类型:</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Rect</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="kt">float64</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="kt">float64</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>然后我们定义成员方法 <code class="language-plaintext highlighter-rouge">Area()</code> 来计算矩形的面积:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span><span class="n">Rect</span><span class="p">)</span> <span class="n">Area</span><span class="p">()</span> <span class="kt">float64</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">r</span><span class="o">.</span><span class="n">height</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>可以看出， Go 语言中结构体的使用方式与 C 语言并没有明显不同。</p>
+
+<h1 id="二初始化">二、初始化</h1>
+
+<p>在 Go 语言中，未进行显式初始化的变量都会被初始化为该类型的零值，例如 bool 类型的零 值为 false，int 类型的零值为 0，string 类型的零值为空字符串。</p>
+
+<p>在 Go 语言中没有构造函数的概念。对象的创建通常交由一个全局的创建函数来完成，以 <code class="language-plaintext highlighter-rouge">NewXXX</code> 来命名，表示“构造函数”。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">NewRect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="kt">float64</span><span class="p">)</span> <span class="o">*</span><span class="n">Rect</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="o">&amp;</span><span class="n">Rect</span><span class="p">{</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="三-匿名组合">三、 匿名组合</h1>
+
+<p>Go 语言也提供了继承，但是采用了组合的方法，所以我们将其称为匿名组合。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Base</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">Name</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">base</span> <span class="o">*</span><span class="n">Base</span><span class="p">)</span> <span class="n">Foo</span><span class="p">()</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">base</span> <span class="o">*</span><span class="n">Base</span><span class="p">)</span> <span class="n">Bar</span><span class="p">()</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Foo</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">Base</span>
+    <span class="c">// ... </span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">foo</span> <span class="o">*</span><span class="n">Foo</span><span class="p">)</span> <span class="n">Bar</span><span class="p">()</span> <span class="p">{</span> 
+    <span class="n">foo</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Bar</span><span class="p">()</span>
+    <span class="c">// ... </span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>定义了一个 Base 类, 实现了 Foo() 和 Bar () 两个成员方法，然后定义了一个 Foo 类，该类从 Base 类“继承”并改写了 Bar() 方法, 该方法实现时先调用了基类的Bar() 方法。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Foo</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="o">*</span><span class="n">Base</span>
+    <span class="c">// ... </span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>代码仍然有“派生”的效果，只是 Foo 创建实例的时候，需要外部提供一个 Base 类 实例的指针。</p>
+
+<p>组合的类型有重名时，外部的名称会隐藏掉内部的名称。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">X</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">Name</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Y</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">X</span>
+    <span class="n">Name</span> <span class="kt">string</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>X 中的 Name 会被隐藏。</p>
+
+<h1 id="四可见性">四、可见性</h1>
+
+<p>要使某个符号对其他包( package )可以访问，需要将该符号定义为以大写字母开头。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">type</span> <span class="n">Rect</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="kt">float64</span>
+    <span class="n">Width</span><span class="p">,</span> <span class="n">Height</span> <span class="kt">float64</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Rect 类型的成员变量就全部被导出了，可以被所有其他引用了 Rect 所在包的代码访问到。</p>
+
+<h1 id="五接口">五、接口</h1>
+
+<h2 id="定义接口">定义接口</h2>
+
+<p>关键字 interface 用来定义接口：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">interface_name</span> <span class="k">interface</span> <span class="p">{</span>
+   <span class="n">method_name1</span><span class="p">([</span><span class="n">args</span> <span class="o">...</span><span class="n">arg_type</span><span class="p">])</span> <span class="p">[</span><span class="n">return_type</span><span class="p">]</span>
+   <span class="n">method_name2</span><span class="p">([</span><span class="n">args</span> <span class="o">...</span><span class="n">arg_type</span><span class="p">])</span> <span class="p">[</span><span class="n">return_type</span><span class="p">]</span>
+   <span class="n">method_name3</span><span class="p">([</span><span class="n">args</span> <span class="o">...</span><span class="n">arg_type</span><span class="p">])</span> <span class="p">[</span><span class="n">return_type</span><span class="p">]</span>
+   <span class="c">//...</span>
+   <span class="n">method_namen</span><span class="p">([</span><span class="n">args</span> <span class="o">...</span><span class="n">arg_type</span><span class="p">])</span> <span class="p">[</span><span class="n">return_type</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="实现接口">实现接口</h2>
+
+<p>一个结构体实现了某个接口的所有方法，则此结构体就实现了该接口。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c">// 接口</span>
+<span class="k">type</span> <span class="n">IFile</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">Read</span><span class="p">(</span><span class="n">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+    <span class="n">Write</span><span class="p">(</span><span class="n">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+    <span class="n">Seek</span><span class="p">(</span><span class="n">off</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">whence</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">pos</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="n">Close</span><span class="p">()</span> <span class="kt">error</span>
+<span class="p">}</span>
+
+<span class="c">// File 实现接口</span>
+<span class="k">type</span> <span class="n">File</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="c">// ...</span>
+<span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">f</span> <span class="o">*</span><span class="n">File</span><span class="p">)</span> <span class="n">Read</span><span class="p">(</span><span class="n">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">f</span> <span class="o">*</span><span class="n">File</span><span class="p">)</span> <span class="n">Write</span><span class="p">(</span><span class="n">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">f</span> <span class="o">*</span><span class="n">File</span><span class="p">)</span> <span class="n">Seek</span><span class="p">(</span><span class="n">off</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">whence</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">pos</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">f</span> <span class="o">*</span><span class="n">File</span><span class="p">)</span> <span class="n">Close</span><span class="p">()</span> <span class="kt">error</span>
+</code></pre></div></div>
+
+<p>File 实现了 IFile 的所有方法，即表式 结构体 File 实现了 IFile 的所有接口。</p>
+
+<h2 id="any-类型">Any 类型</h2>
+
+<p>任何对象实例都满足空接口 interface{}，所以 interface{} 看起来像是可以指向任何对象的Any类型.</p>
+
+<p>空接口 ：<code class="language-plaintext highlighter-rouge">interface{}</code></p>
+
+<p>不包含任何的方法，正因为如此，所有的类型都实现了空接口，因此空接口可以存储任意类型的数值。</p>
+
+<p>fmt 包下的 Print 系列函数，其参数大多是空接口类型，也可以说支持任意类型：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">Print</span><span class="p">(</span><span class="n">a</span> <span class="o">...</span><span class="k">interface</span><span class="p">{})</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">Println</span><span class="p">(</span><span class="n">format</span> <span class="kt">string</span><span class="p">,</span> <span class="n">a</span> <span class="o">...</span><span class="k">interface</span><span class="p">{})</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">Println</span><span class="p">(</span><span class="n">a</span> <span class="o">...</span><span class="k">interface</span><span class="p">{})</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 定义一个空接口</span>
+<span class="k">type</span> <span class="n">Empyt_interface</span> <span class="k">interface</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="c">// 定义一个入参为任意类型的函数</span>
+<span class="k">func</span> <span class="n">getInfo</span><span class="p">(</span><span class="n">arg</span> <span class="n">Empyt_interface</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"getInfo 函数....."</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c">// 也可以写成如下形式，更推荐</span>
+<span class="k">func</span> <span class="n">getInfo2</span><span class="p">(</span><span class="n">arg</span> <span class="k">interface</span><span class="p">{})</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"getInfo2 函数....."</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="接口嵌套">接口嵌套</h2>
+
+<p>接口嵌套就是一个接口中包含了其他接口，如果要实现外部接口，那么就要把内部嵌套的接口对应的所有方法全实现了。</p>
+
+<p>如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 定义3个接口</span>
+<span class="k">type</span> <span class="n">A</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">test1</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">B</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">test2</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="c">// 定义嵌套接口</span>
+<span class="k">type</span> <span class="n">C</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">A</span>
+    <span class="n">B</span>
+    <span class="n">test3</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Person</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="c">// 如果想实现接口C，那不止要实现接口C的方法，还要实现接口A，B中的方法</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="n">Person</span><span class="p">)</span> <span class="n">test1</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"test1 方法................"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="n">Person</span><span class="p">)</span> <span class="n">test2</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"test2 方法................"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="n">Person</span><span class="p">)</span> <span class="n">test3</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"test3 方法................"</span><span class="p">)</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+<h2 id="接口赋值">接口赋值</h2>
+
+<p>接口赋值在Go语言中分为如下两种情况:</p>
+
+<ul>
+  <li>将对象实例赋值给接口。</li>
+  <li>将一个接口赋值给另一个接口。</li>
+</ul>
+
+<h2 id="类型查询">类型查询</h2>
+
+<p>在Go语言中，还可以更加直截了当地询问接口指向的对象实例的类型，例如:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">v1</span> <span class="k">interface</span><span class="p">{}</span> <span class="o">=</span> <span class="o">...</span> 
+<span class="k">switch</span> <span class="n">v</span> <span class="o">:=</span> <span class="n">v1</span><span class="o">.</span><span class="p">(</span><span class="k">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">int</span><span class="o">:</span> <span class="c">// 现在v的类型是int </span>
+    <span class="k">case</span> <span class="kt">string</span><span class="o">:</span> <span class="c">// 现在v的类型是string </span>
+    <span class="c">//...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<hr />
+
+<p>参考资料：</p>
+
+<p>1、<a href="https://learnku.com/articles/44099">Golang 学习——interface 接口学习（一）</a></p>
+
+<p>2、<a href="https://learnku.com/articles/44168">Golang 学习——interface 接口学习（二）</a></p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/go-sequential-programming/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/go-ver/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+	<div class="ds-thread" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xyecho"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io/edit/gh-pages/_posts/it-note/2018-03-02-go-object-oriented-programming.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/https://github.com/kakabei/CarlosFang.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2022 <a href="/about/">xyecho</a>
+             | <a href="http://blog.xyecho.com" target="_blank">@cnblogs</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

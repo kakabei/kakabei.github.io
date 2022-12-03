@@ -1,7 +1,7 @@
 ---
 layout: post
 title: go 编译时传递参数
-date: 2018-03-01 09:21:12
+date: 2018-04-10 09:21:12
 categories: 编程语言 
 tags:  go
 excerpt: go 编译时传递参数
