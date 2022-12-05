@@ -2,7 +2,7 @@
 layout: post
 title: stl string 笔记
 date: 2017-04-01 14:12:15
-categories: 编程语言
+categories: c++
 tags: stl  
 excerpt: stl string 杂记
 ---

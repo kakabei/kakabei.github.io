@@ -3,7 +3,7 @@ layout: post
 title: c++11 初始化列表
 date: 2017-05-02 15:12:15
 categories: 编程语言 
-tags: c++  技术阅读笔记
+tags: c++  
 excerpt: c++11 初始化列表
 ---
 

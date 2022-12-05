@@ -2,7 +2,7 @@
 layout: post
 title: c++ 关键字库函数知识点
 date: 2017-04-10 16:12:15
-categories: 编程语言 
+categories: c++
 tags: c++  
 excerpt: c++ 关键字库函数知识点 
 ---
