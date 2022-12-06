@@ -2,7 +2,7 @@
 layout: post
 title: go 笔记 基础语法
 date: 2018-03-01 07:21:12
-categories:  编程语言 
+categories:  go 
 tags: go
 excerpt: 看 golang 语言书籍的一些小笔记，基础语法熟悉度可以提高日常的工作效率
 ---

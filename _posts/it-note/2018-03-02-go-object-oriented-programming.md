@@ -2,7 +2,7 @@
 layout: post
 title: go 笔记 面向对象编程
 date: 2018-03-02 07:21:12
-categories:  编程语言 
+categories:  go 
 tags: go
 excerpt: go 在面各对象编程中最重要的就是接口这个知识点了。
 ---

@@ -2,7 +2,7 @@
 layout: post
 title:  go 的竞争检测
 date: 2018-04-10 20:21:12
-categories: 编程语言 
+categories: go 
 tags:  go
 excerpt: go的竞争检测
 ---

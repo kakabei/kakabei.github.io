@@ -2,7 +2,7 @@
 layout: post
 title: 《极客时间》go语言核心36讲 sync.WaitGroup 和 sync.Once
 date: 2019-03-25 09:21:12
-categories:  编程语言
+categories:  go
 tags:  go 极客时间笔记
 excerpt: sync.WaitGroup类型（以下简称WaitGroup类型）是开箱即用的，也是并发安全的
 ---

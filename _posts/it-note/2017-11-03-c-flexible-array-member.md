@@ -1,6 +1,6 @@
 ---
 layout: post
-title: C 柔性数组
+title: c 柔性数组
 date: 2017-11-03 16:12:15
 categories: c++  
 tags: c++ c 技术笔记

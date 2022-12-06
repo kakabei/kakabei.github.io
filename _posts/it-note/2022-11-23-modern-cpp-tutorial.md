@@ -2,7 +2,7 @@
 layout: post
 title: 《现代 C++ 教程》 by 欧长坤
 date: 2022-11-23 16:12:15
-categories: 编程语言  
+categories: c++   
 tags:  读书 c++ 
 excerpt: c++ 最近几年的发展活跃了很多，如 c++11/14/17/20
 ---
