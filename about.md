@@ -14,7 +14,7 @@ author_footer: false
 
 * Reading, Life, Tech
 
-## 对自己的要求
+##  My principle
 
 1、做时间的朋友，与万物和谐相处。
 
@@ -27,6 +27,11 @@ author_footer: false
 5、慎独，暗屋之内人性的魔鬼在苏醒。
 
 
+##  About this Site
+
+1、base on jekyll、 markdown、 github.
+
+2、just notes.
 ## Contact me
 
 email ：1447675994@qq.com
