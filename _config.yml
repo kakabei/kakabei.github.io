@@ -1,18 +1,34 @@
-future: true
-permalink: /:title/
-url: http://blog.xyecho.com
-name: xyecho
-subtitle: 读书，技术，生活笔记
-author: xyecho
+# Site settings
+title: xyecho - Reading, Life, Tech
+author: carlos
+author_avatar: /images/header.jpg
 email: 1447675994@qq.com
-duoshuo: xyecho
-beian: 
-cnzz: 
-weibo: 万盏风铃木
-weibourl: https://weibo.com/u/1770097211
-github: https://github.com/kakabei
-paginate: 20
+description: 读书，生活，技术
+url: "https://blog.xyecho.com"
+domain: "http://xyecho.com"
+#github_username: dongyado
+#github_site_repo: dongyado/dongyado.github.io
+#disqus: xyecho
+
+
+# Build settings
 highlighter: rouge
-truncate: true
-about: "xyecho(xyecho)"
-plugins: [jekyll-paginate]
+markdown: kramdown
+kramdown:
+    syntax_highlighter: rouge
+    extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
+
+sass:
+    style: :compressed
+    sass_dir: _sass
+
+permalink: /:title
+excerpt_separator: "<!-- more -->"
+
+# path
+categories_path: categories/
+tags_path: tags/
+
+
+gems:
+  - jekyll-sitemap

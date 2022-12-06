@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>mysql explain 命令详解</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/mysql-explain">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/mysql-explain">mysql explain 命令详解</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2022-10-18
+     • Category: 
+        
+        <a href="/categories//#db-ref" >Db</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#mysql-ref" >Mysql</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>explain 命令主要是为了分析 SQL 执行的效率。 explain 显示了 mysql 如何使用索引来处理s elect 语句以及连接表，可以帮助选择更好的索引和写出更优化的查询语句。</p>
+
+<p>使用方法： 在 SQL 语句前加上 explain  命令。</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'root'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><img src="/assets/db/mysql-2022-10-18_16-46-46.png" alt="" /></p>
+
+<p>说明：</p>
+<ul>
+  <li>id：执行编号，标识 select 所属的行。</li>
+  <li>select_type：select 查询的类型。</li>
+  <li>table：查询的是哪个表。</li>
+  <li>partitions：匹配的分区。</li>
+  <li><strong>type：关联类型，或者访问类型。</strong></li>
+  <li>possible_keys：该查询可以选用的索引。</li>
+  <li>key：该查询选用的索引。</li>
+  <li>key_len：索引中使用的字节数。</li>
+  <li>ref：显示上述表的连接匹配条件，即哪些列或常量被用于查询索引列上的值。</li>
+  <li>rows：估计为了找到所需行而要读取的行数。</li>
+  <li>filtered：按表条件过滤的行的百分比。</li>
+  <li><strong>Extra：额外的信息。</strong></li>
+</ul>
+
+<h2 id="type">type</h2>
+
+<p>对表访问方式，表示MySQL在表中找到所需行的方式，又称“访问类型”。</p>
+
+<p>常用的类型有： <strong>ALL &lt; index &lt; range &lt; ref &lt; eq_ref &lt; const &lt; system &lt; NULL（从左到右，性能从差到好）</strong></p>
+
+<ul>
+  <li>ALL：Full Table Scan， MySQL将遍历全表以找到匹配的行。</li>
+  <li>index: Full Index Scan，index与ALL区别为index类型只遍历索引树。</li>
+  <li>range:只检索给定范围的行，使用一个索引来选择行。</li>
+  <li>ref: 表示上述表的连接匹配条件，即哪些列或常量被用于查找索引列上的值。</li>
+  <li>eq_ref: 类似ref，区别就在使用的索引是唯一索引，对于每个索引键值，表中只有一条记录匹配，简单来说，就是多表连接中使用primary key或者 unique key作为关联条件。</li>
+  <li>const、system: 当MySQL对查询某部分进行优化，并转换为一个常量时，使用这些类型访问。如将主键置于where列表中，MySQL就能将该查询转换为一个常量，system是const类型的特例，当查询的表只有一行的情况下，使用system。</li>
+  <li>NULL: MySQL在优化过程中分解语句，执行时甚至不用访问表或索引，例如从一个索引列里选取最小值可以通过单独索引查找完成。</li>
+</ul>
+
+<h2 id="extra">Extra</h2>
+
+<p>这一列展示的是额外信息。常见的重要值如下：</p>
+
+<ul>
+  <li>distinct : 一旦 mysql 找到了与行相联合匹配的行，就不再搜索了。</li>
+  <li>Using index ：这发生在对表的请求列都是同一索引的部分的时候，返回的列数据只使用了索引中的信息，而没有再去访问表中的行记录。是性能高的表现。</li>
+  <li>Using where ：mysql 服务器将在存储引擎检索行后再进行过滤。就是先读取整行数据，再按 where 条件进行检查，符合就留下，不符合就丢弃。</li>
+  <li>Using temporary：mysql 需要创建一张临时表来处理查询。出现这种情况一般是要进行优化的，首先是想到用索引来优化。</li>
+  <li>Using filesort ：mysql 会对结果使用一个外部索引排序，而不是按索引次序从表里读取行。此时mysql会根据联接类型浏览所有符合条件的记录，并保存排序关键字和行指针，然后排序关键字并按顺序检索行信息。这种情况下一般也是要考虑使用索引来优化的。</li>
+</ul>
+
+<hr />
+<p>参考资料：</p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/358920539"># MySQL _Explain_命令详解：type列详解及案例分析</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/381852677"># MySQL之EXPLAIN命令详解</a></p>
+
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain-join-types"># EXPLAIN Join Types</a></p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

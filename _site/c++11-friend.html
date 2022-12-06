@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>c++11 扩展的friend语法</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/c++11-friend">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/c++11-friend">c++11 扩展的friend语法</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2017-05-01
+     • Category: 
+        
+        <a href="/categories//#编程语言-ref" >编程语言</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#c++-ref" >C++</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>扩展的friend语法</p>
+
+<p>如：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Poly</span><span class="p">;</span> 
+<span class="k">typedef</span> <span class="n">Poly</span> <span class="n">P</span><span class="p">;</span>
+ <span class="k">class</span> <span class="nc">LiLei</span> <span class="p">{</span> 
+<span class="k">friend</span> <span class="k">class</span> <span class="nc">Poly</span><span class="p">;</span> <span class="c1">// C++ 98 通过, C++ 11 通过 </span>
+<span class="p">};</span>
+
+ <span class="k">class</span> <span class="nc">Jim</span> <span class="p">{</span>
+ <span class="k">friend</span> <span class="n">Poly</span><span class="p">;</span> <span class="c1">// C++ 98 失败, C++ 11 通过 </span>
+<span class="p">};</span> 
+
+<span class="k">class</span> <span class="nc">HanMeiMei</span> <span class="p">{</span>
+ <span class="k">friend</span> <span class="n">P</span><span class="p">;</span>    <span class="c1">// C++ 98 失败, C++ 11 通过 </span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>// 编译 选项: g++ -std= c++ 11 2- 9- 1. cpp</p>
+
+<p>虽然 在 C++ 11中这是一个小的改进，却会带来一点应用的变化—程序员可以为类模板声明友元了。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">P</span><span class="p">;</span> 
+<span class="k">template</span> <span class="o">&lt;</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">People</span> <span class="p">{</span> 
+<span class="k">friend</span> <span class="n">T</span><span class="p">;</span> 
+<span class="p">};</span> 
+<span class="n">People</span><span class="o">&lt;</span> <span class="n">P</span><span class="o">&gt;</span> <span class="n">PP</span><span class="p">;</span> <span class="c1">// 类型 P 在这里 是 People 类型 的 友 元 </span>
+<span class="n">People</span><span class="o">&lt;</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">Pi</span><span class="p">;</span> <span class="c1">// 对于 int 类型 模板 参数， 友 元 声明 被 忽略 </span>
+
+</code></pre></div></div>
+
+<p>// 编译 选项: g++ -std= c++ 11 2- 9- 2. cpp</p>
+
+<hr />
+<p>--《深入理解C++11：C++11新特性解析与应用》</p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

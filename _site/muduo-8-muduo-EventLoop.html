@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>muduo笔记  第八章 muduo 网络库设计与实现</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/muduo-8-muduo-EventLoop">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/muduo-8-muduo-EventLoop">muduo笔记  第八章 muduo 网络库设计与实现</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2018-01-05
+     • Category: 
+        
+        <a href="/categories//#muduo-ref" >Muduo</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#系统编程-ref" >系统编程</a>
+        
+            <a href="/tags//#muduo-ref" >Muduo</a>
+        
+            <a href="/tags//#技术阅读笔记-ref" >技术阅读笔记</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>runInLoop() 线程安全的理解</p>
+
+<p><img src="/assets/muduo/8-muduo-EventLoop.png" alt="" /></p>
+
+<p>在线程T1 muduo::EventLoop loop;， 并loop.loop();那么这个事件应该在线程T1上跑。但是线程T2做了一件事，就是loop::runInLoop(cb); 这个时候添加回调时和loop并不是同一个线程。会有问题。</p>
+
+<p>所以,runInLoop()的做法是：先判断是不是同一个线程，是的话就直接被执行，不是的话就加到挂起队列中。</p>
+
+<p>// 是否在当线线程，不在就加入队列。 因为可能是其他线程执行这个代码，</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">EventLoop</span><span class="o">::</span><span class="n">runInLoop</span><span class="p">(</span><span class="k">const</span> <span class="n">Functor</span> <span class="o">&amp;</span><span class="n">cb</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">isInLoopThread</span><span class="p">())</span>
+  <span class="p">{</span>
+    <span class="n">cb</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="n">queueInLoop</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>在queueInLoop中会唤醒T1线程。做法是：</p>
+
+<p>T1和T2线程有一个channel,写入一个字符。触发T1的事件，T1在loop中会执行被挂起的函数队列。</p>
+
+<p>addTimer 要做到线程安全，就是把它的回调加入到runInLoop，这样它可以触发它所在的线程去执行。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TimerId</span> <span class="n">TimerQueue</span><span class="o">::</span><span class="n">addTimer</span><span class="p">(</span><span class="k">const</span> <span class="n">TimerCallback</span><span class="o">&amp;</span> <span class="n">cb</span><span class="p">,</span>
+                             <span class="n">Timestamp</span> <span class="n">when</span><span class="p">,</span>
+                             <span class="kt">double</span> <span class="n">interval</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Timer</span><span class="o">*</span> <span class="n">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Timer</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">interval</span><span class="p">);</span>
+  <span class="n">loop_</span><span class="o">-&gt;</span><span class="n">runInLoop</span><span class="p">(</span>
+      <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">TimerQueue</span><span class="o">::</span><span class="n">addTimerInLoop</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">timer</span><span class="p">));</span>
+  <span class="k">return</span> <span class="n">TimerId</span><span class="p">(</span><span class="n">timer</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="84-实现tcp-网络库">8.4 实现TCP 网络库</h4>
+
+<p>这一节主要是讲 Acceptor class。</p>
+
+<p>Acceptor class是用于封装accept接受新连接的。为什么在单独成为一个模块类呢？</p>
+
+<p>1.Acceptor  的成员有socket channel 。其中socket 是用了RAII handle 。</p>
+
+<p>2.Channel用于观察此socket上的readable事件，并回调Acceptor:: handleRead()，后者会调用accept(2)来接受新连接，并回调用户callback。</p>
+
+<p>3.关于，如果系统的fd耗尽的问题。 在一个开始，就打一个空闲的fd。当系统耗尽时，会先关闭这个空闲的fd。要给新上来的客户端accept。最后，
+断开客户端，把fd交还给空闲的占用。 这么做是为了解决在系统耗尽fd时，不会断开客户端上来的链接。</p>
+
+<h4 id="85-tcpserver--接受新连接">8.5 TcpServer  接受新连接</h4>
+<hr />
+<p>主要是讲TcpServer class。 tcp服务是管理accept获得TcpConnection。
+这是一个新连接的接受的过程：</p>
+
+<p><img src="/assets/muduo/8-muduo-tcpserver-class.png" alt="" /></p>
+
+<p>TcpServer 很简单，用户只 需要设置好callback，再调用start()。就OK了。</p>
+
+<hr />
+<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
+
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

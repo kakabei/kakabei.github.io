@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>muduo笔记 第八章  Poller 的理解</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/muduo-8-muduo-poller">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/muduo-8-muduo-poller">muduo笔记 第八章  Poller 的理解</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2018-01-05
+     • Category: 
+        
+        <a href="/categories//#muduo-ref" >Muduo</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#系统编程-ref" >系统编程</a>
+        
+            <a href="/tags//#muduo-ref" >Muduo</a>
+        
+            <a href="/tags//#技术阅读笔记-ref" >技术阅读笔记</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>Poller 可以看成是对 epoll和poll的方式的封装。是多路复用的基类。</p>
+
+<p>muduo 的做法是  Polller 是一个基类。而 epoll 封装在EPollPoller中， poll 封装在PollPoller中， 而EPollPoller 和PollPoller都继承了Polller。</p>
+
+<p>Polller 核心是：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">struct</span> <span class="nc">pollfd</span><span class="o">&gt;</span> <span class="n">PollFdList</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Channel</span><span class="o">*&gt;</span> <span class="n">ChannelMap</span><span class="p">;</span>  <span class="c1">// fd to Channel</span>
+<span class="n">PollFdList</span> <span class="n">pollfds_</span><span class="p">;</span>   <span class="c1">//  不在基类中 而是在PollPoller 中 而EPollPoller 中 EventList 都存在各的类的中，</span>
+<span class="n">ChannelMap</span> <span class="n">channels_</span><span class="p">;</span>
+
+</code></pre></div></div>
+
+<p>ChannelMap 是对Channel的映射。用fd对应着一个Channel。从这里也说明了一个Channel对应关一个fd。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">struct</span> <span class="nc">epoll_event</span><span class="o">&gt;</span> <span class="n">EventList</span><span class="p">;</span> <span class="c1">//事件列表</span>
+
+<span class="kt">int</span> <span class="n">epollfd_</span><span class="p">;</span>
+<span class="n">EventList</span> <span class="n">events_</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>所有的evntes_ 都是从Channel中来的</p>
+
+<p>Polller 主要的方法：(有个三个是虚函数)</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">virtual</span> <span class="n">Timestamp</span> <span class="nf">poll</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMs</span><span class="p">,</span> <span class="n">ChannelList</span><span class="o">*</span> <span class="n">activeChannels</span><span class="p">);</span>
+<span class="k">virtual</span> <span class="kt">void</span> <span class="nf">updateChannel</span><span class="p">(</span><span class="n">Channel</span><span class="o">*</span> <span class="n">channel</span><span class="p">);</span>
+<span class="k">virtual</span> <span class="kt">void</span> <span class="nf">removeChannel</span><span class="p">(</span><span class="n">Channel</span><span class="o">*</span> <span class="n">channel</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="n">fillActiveChannels</span><span class="p">(</span><span class="kt">int</span> <span class="n">numEvents</span><span class="p">,</span>
+                          <span class="n">ChannelList</span><span class="o">*</span> <span class="n">activeChannels</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">operation</span><span class="p">,</span> <span class="n">Channel</span><span class="o">*</span> <span class="n">channel</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>updateChannel和removeChannel都是对上面两个数据结构的操作，poll函数是对::poll的封装。私有的fillActiveChannels函数负责把返回的活动时间添加到activeChannels（vector&lt;Channel*&gt;）这个结构中，返回给用户。Poller的职责也很简单，负责IO multiplexing，一个EventLoop有一个Poller，Poller的生命周期和EventLoop一样长。</p>
+
+<p>Poller 的主要逻辑在poll中。它主要是等待事件，然后把事件放到活跃列表中。</p>
+
+<p>poll分别封装了epoll_wait  和 poll 等待事件的方法。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// EPollPoller</span>
+<span class="n">Timestamp</span> <span class="n">EPollPoller</span><span class="o">::</span><span class="n">poll</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMs</span><span class="p">,</span> <span class="n">ChannelList</span><span class="o">*</span> <span class="n">activeChannels</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">LOG_TRACE</span> <span class="o">&lt;&lt;</span> <span class="s">"fd total count "</span> <span class="o">&lt;&lt;</span> <span class="n">channels_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+  <span class="c1">// 等待事件 epoll_wait 被触发的所有事件入在events_ 中</span>
+  <span class="kt">int</span> <span class="n">numEvents</span> <span class="o">=</span> <span class="o">::</span><span class="n">epoll_wait</span><span class="p">(</span><span class="n">epollfd_</span><span class="p">,</span>
+                               <span class="o">&amp;*</span><span class="n">events_</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
+                               <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">events_</span><span class="p">.</span><span class="n">size</span><span class="p">()),</span>
+                               <span class="n">timeoutMs</span><span class="p">);</span>
+  <span class="kt">int</span> <span class="n">savedErrno</span> <span class="o">=</span> <span class="n">errno</span><span class="p">;</span>
+  <span class="n">Timestamp</span> <span class="n">now</span><span class="p">(</span><span class="n">Timestamp</span><span class="o">::</span><span class="n">now</span><span class="p">());</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">numEvents</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">LOG_TRACE</span> <span class="o">&lt;&lt;</span> <span class="n">numEvents</span> <span class="o">&lt;&lt;</span> <span class="s">" events happended"</span><span class="p">;</span>
+    <span class="n">fillActiveChannels</span><span class="p">(</span><span class="n">numEvents</span><span class="p">,</span> <span class="n">activeChannels</span><span class="p">);</span> <span class="c1">//找出所有活跃的事件fd</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">implicit_cast</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">numEvents</span><span class="p">)</span> <span class="o">==</span> <span class="n">events_</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+    <span class="p">{</span>
+      <span class="n">events_</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">events_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// 扩展一倍</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">numEvents</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">LOG_TRACE</span> <span class="o">&lt;&lt;</span> <span class="s">"nothing happended"</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="c1">// error happens, log uncommon ones</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">savedErrno</span> <span class="o">!=</span> <span class="n">EINTR</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">errno</span> <span class="o">=</span> <span class="n">savedErrno</span><span class="p">;</span>
+      <span class="n">LOG_SYSERR</span> <span class="o">&lt;&lt;</span> <span class="s">"EPollPoller::poll()"</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">now</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// PollPoller</span>
+<span class="n">Timestamp</span> <span class="n">PollPoller</span><span class="o">::</span><span class="n">poll</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMs</span><span class="p">,</span> <span class="n">ChannelList</span><span class="o">*</span> <span class="n">activeChannels</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="c1">// XXX pollfds_ shouldn't change</span>
+  <span class="kt">int</span> <span class="n">numEvents</span> <span class="o">=</span> <span class="o">::</span><span class="n">poll</span><span class="p">(</span><span class="o">&amp;*</span><span class="n">pollfds_</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">pollfds_</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">timeoutMs</span><span class="p">);</span>
+  <span class="kt">int</span> <span class="n">savedErrno</span> <span class="o">=</span> <span class="n">errno</span><span class="p">;</span>
+  <span class="n">Timestamp</span> <span class="n">now</span><span class="p">(</span><span class="n">Timestamp</span><span class="o">::</span><span class="n">now</span><span class="p">());</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">numEvents</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">LOG_TRACE</span> <span class="o">&lt;&lt;</span> <span class="n">numEvents</span> <span class="o">&lt;&lt;</span> <span class="s">" events happended"</span><span class="p">;</span>
+    <span class="n">fillActiveChannels</span><span class="p">(</span><span class="n">numEvents</span><span class="p">,</span> <span class="n">activeChannels</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">numEvents</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">LOG_TRACE</span> <span class="o">&lt;&lt;</span> <span class="s">" nothing happended"</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">savedErrno</span> <span class="o">!=</span> <span class="n">EINTR</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">errno</span> <span class="o">=</span> <span class="n">savedErrno</span><span class="p">;</span>
+      <span class="n">LOG_SYSERR</span> <span class="o">&lt;&lt;</span> <span class="s">"PollPoller::poll()"</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">now</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>感觉 最不好理解的就是updateChannel这个方法了。两个继承类中updateChannel对indix_的定义不一样。
+但大致上都是因 channel的信息变化了 对 ChannelMap 的更新。
+还感觉这一个地方写的不太好。</p>
+
+<hr />
+<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
+
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>mysql 索引</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/mysql-index">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/mysql-index">mysql 索引</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2015-05-25
+     • Category: 
+        
+        <a href="/categories//#db-ref" >Db</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#mysql-ref" >Mysql</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<h1 id="一-索引原则">一、 索引原则</h1>
+
+<p>1、最左匹配原则：向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配</p>
+
+<p>2、尽量选择区分度高的列作为索引,区分度的公式是<code class="language-plaintext highlighter-rouge">count(distinct col)/count(*)</code></p>
+
+<p>3、索引列不能参与计算，保持列“干净”</p>
+
+<p>4、尽量的扩展索引，不要新建索引</p>
+
+<h1 id="二-联合索引选择列顺序">二、 联合索引选择列顺序</h1>
+
+<p>1、经常会被使用到的优先</p>
+
+<p>2、选择性高的优先</p>
+
+<p>3、宽度小的列优先</p>
+
+<h1 id="三索引失效">三、索引失效</h1>
+
+<p>1、查询条件使用函数在索引列上</p>
+
+<p>2、隐式转换导致索引失效</p>
+
+<p>3、对索引列进行运算</p>
+
+<p>4、使用like ，like查询是以%开头</p>
+
+<p>5、不符合复合索引 “最左前缀”原则</p>
+
+<p>6、用or分割开的条件，若or前的条件中的列有索引，而后面列中没有索引</p>
+
+<p>7、使用NOT IN和&lt;&gt;操作</p>
+
+<hr />
+<p>1、<a href="https://zhuanlan.zhihu.com/p/394429932">关于MySQL索引原理，讲的最清晰的一篇文章</a></p>
+
+<p>2、<a href="https://zhuanlan.zhihu.com/p/361172794">MySQL索引失效的7种情况及使用建议</a></p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

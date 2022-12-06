@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>mysql 表设计的21个经验准则</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/mysql-table-design-21-criterion">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/mysql-table-design-21-criterion">mysql 表设计的21个经验准则</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2022-10-17
+     • Category: 
+        
+        <a href="/categories//#db-ref" >Db</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#mysql-ref" >Mysql</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>微信公众号看到一篇文章总结了 mysql 工作中的21个设计经验准则。</p>
+
+<p>from : <a href="https://mp.weixin.qq.com/s/OlP0FVnLO_xw7jlahIVOMA">21 个 MySQL 表设计的经验准则</a></p>
+
+<h1 id="1命名规范">1、命名规范</h1>
+
+<p>命名规范是指对数据库，表，字段，索引的规范。每个公司或团队都是自己的命名规范，这和代码命名是一致的。</p>
+
+<p>一般要可读性高，让用者一看就知道是什么意义。</p>
+
+<ul>
+  <li>表名、字段名必须使用小写字母或者数字，禁止使用数字开头，禁止使用拼音，并且一般不使用英文缩写。</li>
+  <li>主键索引名为 pk_字段名 ；唯一索引名为 uk_ 字段名；普通索引名则为 idx_字段名。</li>
+</ul>
+
+<h1 id="2选择合适的字段类型">2、选择合适的字段类型</h1>
+
+<p>设计表时，我们要选择合适的字段类型。</p>
+
+<ul>
+  <li>尽可能选择存储空间小的字段类型，就好像数字类型的，从 tinyint、smallint、int、bigint 从左往右开始选择。</li>
+  <li>小数类型如金额，则选择  <strong>decimal</strong> ，禁止使用  float  和 double。</li>
+  <li>如果存储的字符串长度几乎相等，使用  char  定长字符串类型。一般要要求业务定下最长字符。</li>
+  <li>varchar 是可变长字符串，不预先分配存储空间，长度不要超过 5000。所有 varchar 字段的长度加起来，不能大于 65535。</li>
+  <li>如果存储的值太大，建议字段类型修改为 text，同时抽出单独一张表，用主键与之对应。</li>
+</ul>
+
+<h1 id="3主键设计要合理">3、主键设计要合理</h1>
+
+<p>主键最好是毫无意义的一串独立不重复的数字，比如 UUID，又或者 Auto_increment 自增的主键，或者是雪花算法生成的主键等等;</p>
+
+<p>雪花算法： <a href="https://zhuanlan.zhihu.com/p/433690272">面试官：讲讲雪花算法，越详细越好</a></p>
+
+<h1 id="4选择合适的长度">4、选择合适的长度</h1>
+
+<p>mysql 中， varchar 和 char 类型表示字符长度，而其他类型表示的长度都表示字节长度。比如 char(10) 表示字符长度是10，而 bigint（4）表示显示长度是4个字节，但是因为 bigint 实际长度是8个字节，所以bigint（4）的实际长度就是8个字节。</p>
+
+<p>字段长度一般设置为2的幂（也就是2的n 次方）。</p>
+
+<h1 id="5优先考虑逻辑删除而不是删除">5、优先考虑逻辑删除，而不是删除</h1>
+
+<p>一般不做数据删除，而是更新状态，把数据标志为已删除状态。</p>
+
+<p>但是当业务已经下线，不在用了，且数据已经备份或者已经同步到了集市了，一般会考虑让 DBA 删除，减少数据库的压力。</p>
+
+<ul>
+  <li>物理删除：把数据从硬盘中删除，可释放存储空间。</li>
+  <li>逻辑删除：给数据添加一个字段，比如 is_deleted，以标记该数据已经逻辑删除。</li>
+</ul>
+
+<h1 id="6每个表都需要添加几个通用字段">6、每个表都需要添加几个通用字段</h1>
+
+<p>数据库表，要存在一些字段，没有直接业务意义，但却很重要。如：主键、create_time, update_time, ext等。</p>
+
+<p>如下：</p>
+
+<ul>
+  <li>id：主键，一个表必须得有主键，可以自增长。</li>
+  <li>create_time ：数据创建时间。</li>
+  <li>modifed_time: 修改时间，当数据被增量拉到数据集市时，这个字段是必段的。</li>
+  <li>version : 数据记录的版本号，用于乐观锁。</li>
+  <li>ext : 扩展字段，当有紧急情况时，可以先暂用它，而不会更新表结构。</li>
+  <li>remark ：数据记录备注。</li>
+  <li>modified_by :修改人， 非必须</li>
+  <li>creator ：创建人，非必须</li>
+</ul>
+
+<h1 id="7一张表的字段不宜过多">7、一张表的字段不宜过多</h1>
+
+<p>表的字段不宜过多，过多可能会导致数据库性能问题。表的字段应该是多少，最好根据业务情况而定，可用用领域设计来划分业务范围。</p>
+
+<h1 id="8尽可能使用-not-null-定义字段">8、尽可能使用 NOT NULL 定义字段</h1>
+
+<p>创建表时，所有的字段应该都是 <code class="language-plaintext highlighter-rouge">NOT NULL DEFAULT '' </code>。非空且有默认值。这应该成为一种规范。</p>
+
+<p>可以看：<a href="http://blog.xyecho.com/mysql-commonly-used/">mysql  常用语句</a> 的表创建。</p>
+
+<p>原因：</p>
+
+<ul>
+  <li>NULL 值存储也需要额外的空间的，它也会导致比较运算更为复杂，使优化器难以优化SQL。</li>
+  <li>NULL 值有可能会导致索引失效。</li>
+</ul>
+
+<h1 id="9设计表时评估哪些字段需要加索引">9、设计表时，评估哪些字段需要加索引</h1>
+
+<p>对于索引的考量，是设计表一个重点。mysql 索引的相关的知识</p>
+
+<p><a href="http://blog.xyecho.com/mysql-index/">mysql 索引</a></p>
+
+<p><a href="https://mp.weixin.qq.com/s/QduIxKOykMmoZp13UGF1XQ">MySQL 索引知识点总结</a></p>
+
+<ul>
+  <li>索引也不要建得太多，一般单表索引个数不要超过<code class="language-plaintext highlighter-rouge">5</code>个。因为创建过多的索引，会降低写得速度。</li>
+  <li>区分度不高的字段，不能加索引。（还是要看业务的具体情况矶定。）</li>
+  <li>索引创建完后，还是要注意避免索引失效的情况。</li>
+  <li>索引过多的话，可以通过联合索引的话方式来优化。然后的话，索引还有一些规则，如<strong>覆盖索引</strong>，最左匹配原则等等。</li>
+</ul>
+
+<h1 id="10不需要严格遵守-3nf通过业务字段冗余来减少表的关联">10、不需要严格遵守 3NF，通过业务字段冗余来减少表的关联</h1>
+
+<p>什么是数据库三范式（3NF）</p>
+
+<ul>
+  <li>第一范式：对属性的原子性，要求属性具有原子性，不可再分解；</li>
+  <li>第二范式：对记录的唯一性，要求记录有唯一标识，即实体的唯一性，即不存在部分依赖；</li>
+  <li>第三方式：对字段的冗余性，要求任何字段不能由其他字段派生出来，它要求字段没有冗余，即不存在传递依赖；</li>
+</ul>
+
+<p>系统设计中，对一范式的要求基本没有讲究过。比较在意的是设计能否保证上服务的<strong>高性能</strong>。为了提高性能，冗余一些数据也是正常的事。</p>
+
+<p>从数据原型出发，分析业务数据的读写情况，从而决定是表字段的大小。能减少表的关联尽量少到表的关联。</p>
+
+<h1 id="11避免使用-mysql-保留字">11、避免使用 mysql 保留字</h1>
+
+<p>这是一个基本的常识，做开发的应该都知道保留字段避免使用。 会被用的估计是不小心用到了但不知道你这个保留字。</p>
+
+<h1 id="12不搞外键关联一般都在代码维护">12、不搞外键关联，一般都在代码维护</h1>
+
+<p>外键，也叫  FOREIGN KEY ，它是用于将两个表连接在一起的键。FOREIGN KEY 是一个表中的一个字段（或字段集合），它引用另一个表中的  PRIMARY KEY。它是用来保证数据的一致性和完整性的。</p>
+
+<p>不搞外键，一般在可以在业务层面上搞定的就行了。这应该是一个编程规范。</p>
+
+<p>外键破坏了数据库的扩展性，当以后要分库分表时，就很难办了。</p>
+
+<h1 id="13一般都选择-innobd-存储引擎">13、一般都选择 InnoBD 存储引擎</h1>
+
+<p>用什么引擎这是DBA的事了。现在 mysql 默认的都是 InnoDB。应该不会有人在这个样上去搞事情了。</p>
+
+<p><a href="http://blog.xyecho.com/mysql-innodb-engine/">mysql InnoDB 引擎</a></p>
+
+<h1 id="14选择合适统一的字符集">14、选择合适统一的字符集</h1>
+
+<p>字符集一定要定好，特别我们用到很多的中文。有一些情况是，开发人员会在业务代码层面去改变这个字符集。这个也应该被禁止掉。 在工作经历中，发生过事故。mysql 链接发生重连后，就回到原来的字符集了。可能会出乱码的情况。</p>
+
+<p>用python 开发时，也同样被中文的字符集问题搞晕了很多次。</p>
+
+<p>数据库库、表、开发程序等都需要统一字符集，通常中英文环境用<code class="language-plaintext highlighter-rouge">utf8</code>。</p>
+
+<p>MySQL支持的字符集有 utf8、utf8mb4、GBK、latin1 等。</p>
+
+<ul>
+  <li>utf8：支持中英文混合场景，国际通过，3个字节长度</li>
+  <li>utf8mb4:   完全兼容utf8，4个字节长度，一般存储<strong>emoji表情</strong>需要用到它。</li>
+  <li>GBK ：支持中文，但是不支持国际通用字符集，2个字节长度</li>
+  <li>latin1：MySQL默认字符集，1个字节长度</li>
+</ul>
+
+<h1 id="15如果你的数据库字段枚举类型的需要在comment-注释清楚">15、如果你的数据库字段枚举类型的，需要在comment 注释清楚</h1>
+
+<p>comment 注释清楚所有字段，这是方便以后的维护。更进一步讲，增加新字段时，要写清楚对应的业务版本。</p>
+
+<p>字段是枚举类型，就更应该写清楚了。</p>
+
+<h1 id="16-时间的类型选择">16、 时间的类型选择</h1>
+
+<p>对于MySQL来说，主要有 date、datetime、time、timestamp 和 year。</p>
+
+<ul>
+  <li>date ：表示的日期值, 格式<code class="language-plaintext highlighter-rouge">yyyy-mm-dd</code>,范围<code class="language-plaintext highlighter-rouge">1000-01-01 到 9999-12-31</code>，3字节</li>
+  <li>time ：表示的时间值，格式 <code class="language-plaintext highlighter-rouge">hh:mm:ss</code>，范围<code class="language-plaintext highlighter-rouge">-838:59:59 到 838:59:59</code>，3字节</li>
+  <li>datetime：表示的日期时间值，格式<code class="language-plaintext highlighter-rouge">yyyy-mm-dd hh:mm:ss</code>，范围<code class="language-plaintext highlighter-rouge">1000-01-01 00:00:00到</code>9999-12-31 23:59:59```,8字节，跟时区无关</li>
+  <li>timestamp：表示的时间戳值，格式为<code class="language-plaintext highlighter-rouge">yyyymmddhhmmss</code>，范围<code class="language-plaintext highlighter-rouge">1970-01-01 00:00:01到2038-01-19 03:14:07</code>，4字节，跟时区有关</li>
+  <li>year：年份值，格式为<code class="language-plaintext highlighter-rouge">yyyy</code>。范围<code class="language-plaintext highlighter-rouge">1901到2155</code>，1字节</li>
+</ul>
+
+<p>推荐优先使用 datetime 类型来保存日期和时间，因为存储范围更大，且跟时区无关。</p>
+
+<p><strong>要注意的是 timestamp 的单位是秒不是毫秒。</strong></p>
+
+<h1 id="17不建议-stored-procedure-包括存储过程触发器">17、不建议 Stored procedure (包括存储过程，触发器)</h1>
+
+<p>对于MYSQL来说，存储过程、触发器等还不是很成熟， 并没有完善的出错记录处理，不建议使用。</p>
+
+<p>尽量在业务代码中完成这一些逻辑。</p>
+
+<h1 id="181n-关系的设计">18、1:n 关系的设计</h1>
+
+<p>日常开发中，1对多的关系应该是非常常见的。比如一个班级有多个学生，一个部门有多个员工等等。这种的建表原则就是：在从表（N的这一方）创建一个字段，以字段作为外键指向主表（1的这一方）的主键。</p>
+
+<p>有时候两张表存在N:N关系时，我们应该消除这种关系。通过增加第三张表，把N:N修改为两个 1:N。比如图书和读者，是一个典型的多对多的关系。一本书可以被多个读者借，一个读者又可以借多本书。我们就可以设计一个借书表，包含图书表的主键，以及读者的主键，以及借还标记等字段。</p>
+
+<h1 id="19大字段">19、大字段</h1>
+
+<p>字段太大了，不要存入 mysql中。可以选择另外的存储。 如图片，文体，可以通过放到 CDN 上。然后保存 对应的链接到 mysql 表中。</p>
+
+<h1 id="20考虑是否需要分库分表">20、考虑是否需要分库分表</h1>
+
+<p>分库分表是在业务发一定量时要做的事情。 我们在早期的系统设计时就要依据业务需求量做出评估。如果后期有这个需要，在设计是就是充分考虑进去。</p>
+
+<p>一个不利于分库分表的就不要做，如外键。用什么维度去分也要考虑清楚。</p>
+
+<ul>
+  <li>分库：就是一个数据库分成多个数据库，部署到不同机器。</li>
+  <li>分表：就是一个数据库表分成多个表。</li>
+</ul>
+
+<p>分库分表主要有水平拆分、垂直拆分的说法，拆分策略有 range范围、hash取模。而分库分表主要有这些问题：</p>
+
+<ul>
+  <li>事务问题</li>
+  <li>跨库关联</li>
+  <li>排序问题</li>
+  <li>分页问题</li>
+  <li>分布式ID</li>
+</ul>
+
+<h1 id="21-sql-编写的一些优化经验">21、 sql 编写的一些优化经验</h1>
+
+<p>1）不要用 <code class="language-plaintext highlighter-rouge">select * </code> , 而是要指定具体的字段。这样不被业务的代码需要的字段就没有必要被读出。随着业务的发展可能会有新增字段，导致业务代码的不可控。</p>
+
+<p>2）如是业务上已要求结果只有一条，加了 <code class="language-plaintext highlighter-rouge">limit 1</code>。业务上对数据有惟一的要求，一定要通过严格的条件过滤出来。 优先通过 SQL 语言过滤，再考虑业务代码过滤。</p>
+
+<p>3）应尽量避免在 where 子句中使用 or 来连接条件。or 会破坏索引，但select 时要时刻注意索引是否有效，要评估效率。</p>
+
+<p>4）注意优化 limit 深分页问题。<a href="https://github.com/zhangyachen/zhangyachen.github.io/issues/117">mysql 证明为什么用limit时，offset很大会影响性能</a></p>
+
+<p>5）使用 where 条件限定要查询的数据，避免返回多余的行。同 2。</p>
+
+<p>6）尽量避免在索引列上使用 mysql 的内置函数，在where上使用索引，可能会破坏索引，破坏索引。</p>
+
+<p>7）应尽量避免在  where 子句中对字段进行表达式操作。尽量把运算好之后的结果做为 where 的条件。</p>
+
+<p>8）应尽量避免在 where  子句中使用<code class="language-plaintext highlighter-rouge">!=</code>或<code class="language-plaintext highlighter-rouge">&lt;&gt;</code>操作符。破坏索引，破坏索引。</p>
+
+<p>9）使用联合索引时，注意索引列的顺序，一般遵循最左匹配原则。</p>
+
+<p>10） 对查询进行优化，应考虑在 where 及 order by 涉及的列上建立索引。</p>
+
+<p>11）如果插入数据过多，考虑批量插入。无论是插入或查询，都要根据业务情况，考虑批量，分批处理。可能因为极端条件导致性能问题。</p>
+
+<p>12）在适当的时候，使用覆盖索引。<a href="https://zhuanlan.zhihu.com/p/339666157">什么是覆盖索引</a></p>
+
+<p>13）使用explain 分析你SQL的计划。</p>
+
+<hr />
+<p>参考资料：</p>
+
+<p>1、<a href="https://mp.weixin.qq.com/s/OlP0FVnLO_xw7jlahIVOMA">21 个 MySQL 表设计的经验准则</a></p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

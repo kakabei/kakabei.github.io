@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>非阻塞模式 select</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/select">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/select">非阻塞模式 select</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2014-10-15
+     • Category: 
+        
+        <a href="/categories//#Linux-ref" >Linux</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#network-ref" >Network</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>select()函数主要是建立在fd_set类型的基础上的。fd_set是一组文件描述字(fd)的集合，它用一位来表示一个fd，对于fd_set类型通过下面四个宏来
+操作：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fd_set</span> <span class="n">set</span><span class="p">;</span>
+<span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
+<span class="n">FD_SET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
+<span class="n">FD_CLR</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
+<span class="n">FD_ISSET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>过去，一个fd_set通常只能包含&lt;32的fd（文件描述字），因为fd_set其实只用了一个32位矢量来表示fd；现在,UNIX系统通常会在头文件&lt;sys/select.h&gt;中定义常量FD_SETSIZE，它是数据类型fd_set的描述字数量，其值通常是1024，这样就能表示&lt;1024的fd。
+select函数的接口比较简单：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">select</span><span class="p">(</span><span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">readset</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">writeset</span><span class="p">,</span>
+
+<span class="n">fd_set</span><span class="o">*</span> <span class="n">exceptset</span><span class="p">,</span> <span class="k">struct</span> <span class="n">tim</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>功能：
+测试指定的fd可读？可写？有异常条件待处理？</p>
+
+<p>参数：</p>
+
+<p>nfds
+需要检查的文件描述字个数（即检查到fd_set的第几位），数值应该比三组fd_set中所含的最大fd值更大，一般设为三组fd_set中所含的最大fd值加1（如在readset,writeset,exceptset中所含最大的fd为5，则nfds=6，因为fd是从0开始的）。设这个值是为提高效率，使函数不必检查fd_set的所有1024位。</p>
+
+<p>readset
+用来检查可读性的一组文件描述字。</p>
+
+<p>writeset
+用来检查可写性的一组文件描述字。</p>
+
+<p>exceptset
+用来检查是否有异常条件出现的文件描述字。(注：错误不包括在异常条件之内)</p>
+
+<p>timeout
+有三种可能：</p>
+
+<ol>
+  <li>timeout=NULL（阻塞：直到有一个fd位被置为1函数才返回）</li>
+  <li>timeout所指向的结构设为非零时间（等待固定时间：有一个fd位被置为1或者时间耗尽，函数均返回）</li>
+  <li>timeout所指向的结构，时间设为0（非阻塞：函数检查完每个fd后立即返回）</li>
+</ol>
+
+<p>测试单个文件描述符可读性的例子：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">isready</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+	<span class="n">fd_set</span> <span class="n">fds</span><span class="p">;</span>
+	<span class="k">struct</span> <span class="n">tim</span> <span class="n">tv</span><span class="p">;</span>
+	
+	<span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
+	<span class="n">FD_SET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
+
+	<span class="n">tv</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="n">tv</span><span class="p">.</span><span class="n">tv_usec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">rc</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">fd</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tv</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>   <span class="c1">//error</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>   
+
+	<span class="k">return</span> <span class="n">FD_ISSET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>这段代码将指定测试Socket的描述字的可读可写性，因为Socket使用的也是fd</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uint32 SocketWait(TSocket *s,bool rd,bool wr,uint32 timems)   
+{
+
+	fd_set rfds,wfds;
+	struct tim tv;
+
+
+	FD_ZERO(&amp;rfds);
+	FD_ZERO(&amp;wfds);
+
+	if (rd)	//TRUE
+		FD_SET(*s,&amp;rfds);   //添加要测试的描述字
+
+	if (wr)     //FALSE
+		FD_SET(*s,&amp;wfds);
+
+	tv.tv_sec=timems / 1000;     //second
+	tv.tv_usec=timems % 1000;     //ms
+
+	for (;;) //如果errno==EINTR，反复测试缓冲区的可读性
+	{
+		//测试在规定的时间内套接口接收缓冲区中是否有数据可读  //0－－超时，-1－－出错
+		switch(select((*s)+1,&amp;rfds,&amp;wfds,NULL,(timems==TIME_INFINITE?NULL:&amp;tv)))
+		{
+		case 0:
+			return 0;
+	
+		case (-1):
+			if (SocketError()==EINTR)
+				break;
+			return 0; //有错但不是EINTR
+
+		default:
+			if (FD_ISSET(*s,&amp;rfds)) //如果s是fds中的一员返回非0，否则返回0
+				return 1;
+
+			if (FD_ISSET(*s,&amp;wfds))
+				return 2;
+
+			return 0;
+		};
+	}
+
+}
+</code></pre></div></div>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

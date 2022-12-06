@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>lua 异常与错误</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/lua-error">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/lua-error">lua 异常与错误</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2017-03-16
+     • Category: 
+        
+        <a href="/categories//#编程语言-ref" >编程语言</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#lua-ref" >Lua</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<h3 id="assert">assert</h3>
+
+<p>Lua 提供了专门的内置函数 assert 来完成错误的检测的功能。</p>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">print</span> <span class="s2">"enter a number:"</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nb">assert</span><span class="p">(</span><span class="nb">io.read</span><span class="p">(</span><span class="s2">"*number"</span><span class="p">),</span> <span class="s2">"invalid input"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>assert 首先检查第一个参数是否返回错误，如果不返回错误 assert 简单的返回，否则assert 以第二个参数抛出错误信息。第二个参数是可选的。</p>
+
+<p>当函数遇到异常有两个基本的动作：返回错误代码或者抛出错误。这两种方式选择
+哪一种没有固定的规则，但有一般的原则：容易避免的异常应该抛出错误否则返回错误
+代码。</p>
+
+<h3 id="异常和错误处理">异常和错误处理</h3>
+
+<p>在 Lua 中需要处理错误，需要使用 pcall 函数封装你的代码。
+用法如下：</p>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span> <span class="k">then</span>
+	<span class="c1">-- no errors while running `foo'</span>
+<span class="o">...</span>
+<span class="k">else</span>
+<span class="c1">-- `foo' raised an error: take appropriate actions</span>
+<span class="o">...</span>
+<span class="k">end</span>
+
+</code></pre></div></div>
+<p>foo 为检测的函数。</p>
+
+<p>用做匿名函数则是：</p>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">if</span> <span class="nb">pcall</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span> <span class="o">...</span> <span class="k">end</span><span class="p">)</span> <span class="k">then</span> <span class="o">...</span>
+<span class="k">else</span> <span class="o">...</span>
+
+</code></pre></div></div>
+<p>pcall 在保护模式下调用他的第一个参数并运行，因此可以捕获所有的异常和错误。
+如果没有异常和错误，pcall 返回 true 和调用返回的任何值；否则返回 nil 加错误信息。</p>
+
+<h4 id="错误信息和回跟踪tracebacks">错误信息和回跟踪（Tracebacks）</h4>
+
+<p>通常在错误发生时，希望落得更多的调试信息，而不只是发生错误的位置。但pcall返回时，它已经销毁了调用桟的部分内容。Lua提供了xpcall函数，xpcall接收第二个参数——一个错误处理函数，当错误发生时，Lua会在调用桟展看（unwind）前调用错误处理函数，于是就可以在这个函数中使用debug库来获取关于错误的额外信息了。</p>
+
+<p>debug库提供了两个通用的错误处理函数:</p>
+<ul>
+  <li>debug.debug：提供一个Lua提示符，让用户来价差错误的原因</li>
+  <li>debug.traceback：根据调用桟来构建一个扩展的错误消息。</li>
+</ul>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">xpcall</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="nb">error</span><span class="p">(</span><span class="s1">'error..'</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span> <span class="nb">print</span><span class="p">(</span><span class="nb">debug.traceback</span><span class="p">())</span> <span class="k">end</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
+</code></pre></div></div>
+
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

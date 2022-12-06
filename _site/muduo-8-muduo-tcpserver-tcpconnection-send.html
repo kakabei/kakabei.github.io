@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>muduo笔记  第八章 TcpConnection class 发送数据</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/muduo-8-muduo-tcpserver-tcpconnection-send">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/muduo-8-muduo-tcpserver-tcpconnection-send">muduo笔记  第八章 TcpConnection class 发送数据</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2018-01-06
+     • Category: 
+        
+        <a href="/categories//#muduo-ref" >Muduo</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#系统编程-ref" >系统编程</a>
+        
+            <a href="/tags//#muduo-ref" >Muduo</a>
+        
+            <a href="/tags//#技术阅读笔记-ref" >技术阅读笔记</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>TcpConnection class 可谓 是 muduo 最 核心 也是 最 复杂 的 class，</p>
+
+<p>TcpConnection 是 muduo 里唯一默认使用shared_ ptr来管理的class， 也是唯一继承enable_shared_from_this 的class，这源于其模糊的生命期。</p>
+
+<p>注意TcpConnection表示的是“ 一次TCP连接”， 它是不可再生 的， 一旦连接断开，这个 TcpConnection 对象就没啥用了。 另外TcpConnection没有发起连接的功能，其构造函数的参数是已经建立好连接的 socket fd（无论是TcpServer被动接受还是TcpClient主动发起），因此 其初始状态是kConnecting。</p>
+
+<p>TcpConnection 状态的变化。</p>
+
+<p><img src="/assets/muduo/8-muduo-tcpserver-close-connection.png" alt="" /></p>
+
+<p>发送数据比接收数据更难，因为发送数据是主动的，接收读取数据是被动的。
+由于muduo采用leveltrigger，因此我们只在需要时才关注writable事件，否则就会造成busyloop。</p>
+
+<p>sendInLoop()会先尝试直接发送数据，如果一次发送完毕就不会启用WriteCallback；如果只发送了部分数据，则把剩余的数据放入outputBuffer_，并开始关注writable事件，以后在handlerWrite()中发送剩余的数据。如果当前outputBuffer_已经有待发送的数据，那么就不能先尝试发送了，因为这会造成数据乱序。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">/// 处理写事件的回调。 同样， 没有while() 能一次写完吗？</span>
+<span class="c1">/// ---</span>
+<span class="c1">/// 这里，是在由于sendInLoop发送数据一次没有发送完，把余下的数据写入</span>
+<span class="c1">/// outputBuffer_ 中，然再设置channel定事件，回调到这个来了。</span>
+
+<span class="kt">void</span> <span class="n">TcpConnection</span><span class="o">::</span><span class="n">handleWrite</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">loop_</span><span class="o">-&gt;</span><span class="n">assertInLoopThread</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">channel_</span><span class="o">-&gt;</span><span class="n">isWriting</span><span class="p">())</span>
+  <span class="p">{</span>
+    <span class="kt">ssize_t</span> <span class="n">n</span> <span class="o">=</span> <span class="n">sockets</span><span class="o">::</span><span class="n">write</span><span class="p">(</span><span class="n">channel_</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">(),</span>
+                               <span class="n">outputBuffer_</span><span class="p">.</span><span class="n">peek</span><span class="p">(),</span>
+                               <span class="n">outputBuffer_</span><span class="p">.</span><span class="n">readableBytes</span><span class="p">());</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">outputBuffer_</span><span class="p">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">outputBuffer_</span><span class="p">.</span><span class="n">readableBytes</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// 写完了</span>
+      <span class="p">{</span>
+         <span class="c1">//如果写完了就关闭写事件， 没写完不关闭，则写事件会一直被触发</span>
+        <span class="n">channel_</span><span class="o">-&gt;</span><span class="n">disableWriting</span><span class="p">();</span> 
+        <span class="k">if</span> <span class="p">(</span><span class="n">writeCompleteCallback_</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="n">loop_</span><span class="o">-&gt;</span><span class="n">queueInLoop</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="n">writeCompleteCallback_</span><span class="p">,</span> <span class="n">shared_from_this</span><span class="p">()));</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">state_</span> <span class="o">==</span> <span class="n">kDisconnecting</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="n">shutdownInLoop</span><span class="p">();</span> <span class="c1">// 正在关闭中</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+      <span class="n">LOG_SYSERR</span> <span class="o">&lt;&lt;</span> <span class="s">"TcpConnection::handleWrite"</span><span class="p">;</span>
+      <span class="c1">/// 另外如果这时连接正在关闭（L161）， 则调用shutdownInLoop()，继续执行关闭过程。</span>
+      <span class="c1">/// 这里不需要处理错误，因为一旦发生错误，handleRead()会读到0字节，继而关闭连接。</span>
+
+      <span class="c1">// if (state_ == kDisconnecting)</span>
+      <span class="c1">// {</span>
+      <span class="c1">//   shutdownInLoop();</span>
+      <span class="c1">// }</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="n">LOG_TRACE</span> <span class="o">&lt;&lt;</span> <span class="s">"Connection fd = "</span> <span class="o">&lt;&lt;</span> <span class="n">channel_</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">()</span>
+              <span class="o">&lt;&lt;</span> <span class="s">" is down, no more writing"</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>当socket变得可写时，Channel会调用TcpConnection::handleWrite()，这里我们继续发送outputBuffer_中的数据。</p>
+
+<p>一旦发送完毕，立刻停止观察writable事件（L160），避免busyloop。另外如果这时连接正在关闭（L161），则调用shutdownInLoop()，继续执行关闭过程。</p>
+
+<p>这里不需要处理错误，因为一旦发生错误，handleRead()会读到0字节，继而关闭连接。</p>
+
+<p>注意sendInLoop()和handleWrite()都只调用了一次write(2)而不会反复调用直至它返回EAGAIN，原因是如果第一次write(2)没有能够发送完全部数据的话，第二次调用write(2)几乎肯定会返回EAGAIN。</p>
+
+<p>读者可以很容易用下面的Python代码来验证这一点。因此muduo决定节省一次系统调用，这么做不影响程序的正确性，却能降低延迟。</p>
+
+<hr />
+<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
+
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

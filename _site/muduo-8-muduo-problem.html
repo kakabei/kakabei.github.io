@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>muduo笔记  muduo 在网上看到一些疑问</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/muduo-8-muduo-problem">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/muduo-8-muduo-problem">muduo笔记  muduo 在网上看到一些疑问</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2018-01-06
+     • Category: 
+        
+        <a href="/categories//#muduo-ref" >Muduo</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#系统编程-ref" >系统编程</a>
+        
+            <a href="/tags//#muduo-ref" >Muduo</a>
+        
+            <a href="/tags//#技术阅读笔记-ref" >技术阅读笔记</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>大致看完muduo关于网络这一部分了， 其他的都是一些基本库。在base这个目录下。</p>
+
+<p>也在网上看看别对muduo的一些评价和疑问。也可学习到很多，毕竟有一些问题自己没注意到。</p>
+
+<p><a href="https://www.zhihu.com/topic/20013250/hot">知乎上muduo的一些问题</a></p>
+
+<p><a href="https://www.zhihu.com/question/59576980/answer/166730296">muduo中，本来可以直接调用的函数，为什么要扔到 EventLoop 中呢？</a></p>
+
+<p><a href="https://www.zhihu.com/question/24311085">muduo库的很多返回值为空的函数的最后一行都有类似 (void) n的一句， 为什么要这样做？</a></p>
+
+<p>你在linux多线程编程中1.12说，member data 的mutex 不能保护析构，TcpClient 的析构函数使用 MutexLock 没有问题吗？</p>
+
+<p><a href="https://www.zhihu.com/question/31459750/answer/52061391">多线程编程中什么情况下需要加 volatile？</a></p>
+
+<p><a href="https://www.zhihu.com/question/279734963/answer/409009408">类初始化时 this 指针何时生成，在构造函数中如何确保 this 指针有效？</a></p>
+
+<p>[对象池的一个 race condition]https://zhuanlan.zhihu.com/p/30522095</p>
+
+<p>这就是一个，看代码时就是没能注意到。</p>
+
+<hr />
+<p><a href="https://www.zhihu.com/question/24590359">muduo库在实际项目中使用的人多吗？</a></p>
+
+<p>这个是关于一些muduo的讨论，很有意思。可能用于生产环境的人真的不多吧。但muduo的思想对于学习网络库还是很有借鉴的作用。像360的<a href="https://github.com/Qihoo360/evpp">evpp</a>就是参考了muduo。</p>
+
+<p>长时间在源码代中，特别还看陈硕的书。很容易眼障， 看不出不好的地方。像这里提到了水木网友的文章。不知道原文章的出处<a href="https://pastebin.com/8S7CjdSb">https://pastebin.com/8S7CjdSb</a>。同时要看一下下面回复的一些讨论。每个人的观点不可能一样的。各有所爱吧。</p>
+
+<p><a href="https://www.zhihu.com/question/25016042/answer/29798924?group_id=783954989#comment-59736874">当应用程序调用Send之后怎么判断对方是否成功接收?</a>
+这个地方关于在tcp中, send/recv能否正确写好的问题。 对muduo的一些看法，也是超出了我的见识啊。又学习了。对于TCP的理解还是深到那个地步啊。看那个水手应该是个牛人。</p>
+
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

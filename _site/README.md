@@ -1,7 +1,13 @@
+dongyado's blog
+=====
 
-carlos's Page(blog.xyecho.com)
-=================
+visit with : http://dongyadoit.com
 
-you can visit [blog.xyecho.com](http://blog.xyecho.com).
+### 
+- notes of development
+- some thoughts.
 
-link from [hustcat](https://github.com/hustcat/hustcat.github.io).
+### 
+- Based on jekyll and github pages.
+
+If you like the theme of this blog, just use it.

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>linux 进程间通信-XSI IPC</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/linux-process-communication-ipc">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/linux-process-communication-ipc">linux 进程间通信-XSI IPC</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2014-10-12
+     • Category: 
+        
+        <a href="/categories//#Linux-ref" >Linux</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#系统编程-ref" >系统编程</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<h3 id="一-什么是xsi-ipc">一 什么是XSI IPC</h3>
+<p>有三种 IPC我们称作XSI IPC，即消息队列、信号量以及共享存储器（共享内存），它们之间有很多相似之处。</p>
+
+<h3 id="二-标识符和键">二 标识符和键</h3>
+<p>每个内核中的 IPC结构（消息队列、信号量或共享内存）都用一个非负整数的标识符加以引用。无论何时创建IPC结构（调用 msgget、semget 或shmget）,都应指定一个关键字（key），关键字的数据类型由系统规定为 key_t，通常在头文件&lt;sys/types.h&gt;中被规定为长整型。关键字由内核变换成标识符。
+  key的取法有两种：ftok和IPC_PRIVATE，（网上看到的）</p>
+
+<h3 id="三-两个进程服务和客户使用同一个ipc结构的方法">三 两个进程（服务和客户）使用同一个IPC结构的方法</h3>
+<p>(1) 服务器进程可以指定键IPC_PRIVATE创建一个新的IPC结构，将返回的标识符存放在某处（如一个文件）以便和客户进程取用。也可用父子进程的方式传递。
+(2) 在一个公用头文件 中定义 一个客户进程和服务器进程都认可的键。然后服务器进程指定此键创建一个新的IPC结构。
+(3) 客户进程和服务器进程认同一个路径和项目ID（项目ID是０～２５５间的字符值），接着调用函数ftok将这两个值变换一个键。然后使用此键。</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#inlcude &lt;sys/ipc.h&gt;
+</span><span class="n">key_t</span> <span class="nf">ftok</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="kt">int</span> <span class="n">id</span><span class="p">);</span>
+</code></pre></div></div>
+<p>path 参数必须引用一个现存文件，当产键时，保使用id参数的低8位。如果使用同一项目ID，那么对于不同文件 的两个路径可能产相同的键。</p>
+
+<h3 id="四-权限结构">四 权限结构</h3>
+<p>XSI IPC为每一个IPC结构设置了一个 ipc _ perm结构。该结构规定了许可权和所有者。主要成员有：</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">ipc_perm</span> <span class="p">{</span>
+<span class="n">uid_t</span> <span class="n">uid</span> <span class="p">;</span>  <span class="cm">/* owner's effective user id */</span>
+<span class="n">gid_t</span> <span class="n">gid</span> <span class="p">;</span>  <span class="cm">/* owner's effective group id */</span>
+<span class="n">uid_t</span> <span class="n">cuid</span><span class="p">;</span>  <span class="cm">/* creator's effective user id */</span>
+<span class="n">gid_t</span> <span class="n">cgid</span> <span class="p">;</span> <span class="cm">/* creator's effective group id */</span>
+<span class="n">mode_t</span> <span class="n">mode</span><span class="p">;</span> <span class="cm">/* access modes */</span>
+<span class="n">ulong</span> <span class="n">seq</span> <span class="p">;</span>  <span class="cm">/* slot usage sequence number */</span>
+<span class="n">key_t</span> <span class="n">key</span><span class="p">;</span>   <span class="cm">/* key */</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>详细的见&lt;sys/ipc.h&gt;在linux的源码中可以找到。
+在创建IPC结构时，对所有字段都赋初值。以后，可以调用msgctl、semctl或shmctl修改uid、gid和mode字段。为了改变这些值，调用进程必须是IPC结构的创建者或超级用户。</p>
+
+<h3 id="五-linux中与ipc相关的命令包括ipcsipcrm释放ipc">五 Linux中，与IPC相关的命令包括：ipcs、ipcrm（释放IPC）</h3>
+<p>IPCS命令是Linux下显示进程间通信设施状态的工具。我们知道，系统进行进程间通信（IPC）的时候，可用的方式包括信号量、共享内存、消息队列、管道、信号（signal）、套接字等形式。使用IPCS可以查看共享内存、信号量、消息队列的状态。
+例如在CentOS6.0上执行ipcs
+具体的用法总结如下：</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#1、显示所有的IPC设施</span>
+ ipcs <span class="nt">-a</span>
+<span class="c">#2、显示所有的消息队列Message Queue</span>
+ ipcs <span class="nt">-q</span>
+<span class="c">#3、显示所有的信号量</span>
+ ipcs <span class="nt">-s</span>
+<span class="c">#4、显示所有的共享内存</span>
+ ipcs <span class="nt">-m</span>
+<span class="c">#5、显示IPC设施的详细信息</span>
+ ipcs <span class="nt">-q</span> <span class="nt">-i</span> <span class="nb">id</span>
+<span class="c">#id 对应shmid、semid、msgid等。-q对应设施的类型（队列），查看信号量详细情况使用-s，查看共享内存使用-m。</span>
+<span class="c">#6、显示IPC设施的限制大小</span>
+ ipcs <span class="nt">-m</span> <span class="nt">-l</span>
+<span class="c">#-m对应设施类型，可选参数包括-q、-m、-s。</span>
+<span class="c">#7、显示IPC设施的权限关系</span>
+ ipcs <span class="nt">-c</span>
+ ipcs <span class="nt">-m</span> <span class="nt">-c</span>
+ ipcs <span class="nt">-q</span> <span class="nt">-c</span>
+ ipcs <span class="nt">-s</span> <span class="nt">-c</span>
+<span class="c">#8、显示最近访问过IPC设施的进程ID。</span>
+ ipcs <span class="nt">-p</span>
+ ipcs <span class="nt">-m</span> <span class="nt">-p</span>
+ ipcs <span class="nt">-q</span> <span class="nt">-p</span>
+<span class="c">#9、显示IPC设施的最后操作时间</span>
+ ipcs <span class="nt">-t</span>
+ ipcs <span class="nt">-q</span> <span class="nt">-t</span>
+ ipcs <span class="nt">-m</span> <span class="nt">-t</span>
+ ipcs <span class="nt">-s</span> <span class="nt">-t</span>
+<span class="c">#10、显示IPC设施的当前状态</span>
+ ipcs <span class="nt">-u</span>
+</code></pre></div></div>
+<p>Linux上的ipcs命令，不支持UNIX上的-b、-o指令，同样UNIX中不支持-l、-u指令，所以在编写跨平台的脚本时，需要注意这个问题。</p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

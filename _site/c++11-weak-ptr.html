@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>c++11 智能指针 weak_ptr</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/c++11-weak-ptr">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/c++11-weak-ptr">c++11 智能指针 weak_ptr</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2017-06-13
+     • Category: 
+        
+        <a href="/categories//#c++-ref" >C++</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#c++-ref" >C++</a>
+        
+            <a href="/tags//#技术笔记-ref" >技术笔记</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<h1 id="weak_ptr-概念">weak_ptr 概念</h1>
+<p><code class="language-plaintext highlighter-rouge">weak_ptr</code>  从名字上看是具“弱”共享的特点，它指向一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 管理的对象。</p>
+
+<p>1、一个对象被多个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 所指，引用计数会增加。</p>
+
+<p>2、<code class="language-plaintext highlighter-rouge">weak_ptr</code> 指向一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 所指向的对象时，该对象的引用计数不会增加 。这个是 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 最重要的区别。</p>
+
+<p>3、当 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 全部被释放时，对应的对象会被释放。即便还有 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 指向该对象，该对象的内存仍然会被释放。</p>
+
+<p>4、使用时需添加头文件 <code class="language-plaintext highlighter-rouge">&lt;memory&gt;</code>。</p>
+
+<h1 id="weak_ptr--基本使用">weak_ptr  基本使用</h1>
+
+<p><code class="language-plaintext highlighter-rouge">weak_ptr</code>  不用直接的指到普通的指针上，而要通过 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 管理的对象。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  
+<span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">);</span> <span class="c1">// 一个shared_ptr对象 </span>
+
+<span class="n">weak_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">wptr</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> <span class="c1">//用 ptr 初始化wptr，wptr 弱共享 ptr。</span>
+
+<span class="c1">// wptr 只是指向 ptr 所指的对象，ptr 的引用计数没有改变。</span>
+</code></pre></div></div>
+
+<h1 id="lock-函数">lock 函数</h1>
+
+<p><code class="language-plaintext highlighter-rouge">lock</code> 函数用到检测 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 所指的对象是否仍然存在。 如果 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 所指的 <code class="language-plaintext highlighter-rouge">shared_prt</code> 引用计数为0，返回一个空的 <code class="language-plaintext highlighter-rouge">shared_ptr</code>，否则，返回一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 对象。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">);</span> 
+
+<span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">wptr</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> 
+
+<span class="k">if</span><span class="p">(</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">np</span> <span class="o">=</span> <span class="n">wptr</span><span class="p">.</span><span class="n">lock</span><span class="p">()){</span> <span class="c1">// 是否为空</span>
+
+	<span class="c1">// todo </span>
+<span class="p">}</span><span class="n">elses</span><span class="p">{</span>
+    <span class="c1">// todo </span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>参考资料：</p>
+
+<p>1、腾讯云开发者社区：<a href="https://cloud.tencent.com/developer/article/1784372">C++(STL):04—智能指针之weak_ptr</a></p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

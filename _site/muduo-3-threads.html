@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>muduo笔记 第三章 多线程服务器的适用场合与常用编程模型</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/muduo-3-threads">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/muduo-3-threads">muduo笔记 第三章 多线程服务器的适用场合与常用编程模型</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2018-01-04
+     • Category: 
+        
+        <a href="/categories//#muduo-ref" >Muduo</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#技术阅读笔记-ref" >技术阅读笔记</a>
+        
+            <a href="/tags//#系统编程-ref" >系统编程</a>
+        
+            <a href="/tags//#muduo-ref" >Muduo</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>“网络应用程序” 的基本功能可以简单归纳为”收到数据，算一算，再发出去”。</p>
+
+<h4 id="单线程服务器的常用编程模型">单线程服务器的常用编程模型</h4>
+
+<p>在高性能的网络程序中，使用得最为广泛的是“non-blocking IO＋IO multiplexing”这种模型，即Reactor模式。</p>
+
+<ul>
+  <li>lighttpd，单线程服务器。（Nginx与之类似，每个工作进程有一个event loop。）</li>
+  <li>libevent，libev。</li>
+  <li>ACE，Poco C++ libraries。</li>
+  <li>Java NIO，包括Apache Mina和Netty。</li>
+  <li>POE（Perl）。</li>
+  <li>Twisted（Python）。</li>
+</ul>
+
+<p>在”non-blocking IO＋IO multiplexing”这种模型中，程序的基本结构是一个事件循环（event loop），以事件驱动（event-driven）和事件回调的方式实现业务逻辑：</p>
+
+<p><img src="/assets/muduo/3-threads.png" alt="" /></p>
+
+<p><strong>gethostbyname(3)是阻塞的，对陌生域名解析的耗时可长达数秒。</strong></p>
+
+<p>基于事件驱动的编程模型也有其本质的缺点，它要求事件回调函数必须是非阻塞的。对于涉及网络IO的请求响应式协议，它容易割裂业务逻辑，使其散布于多个回调函数之中，相对不容易理解和维护。现代的语言有一些应对方法（例如coroutine 协程），但是本书只关注C++这种传统语言，因此就不展开讨论了。<strong>[后继可以看看协程方面技术和GO的]</strong></p>
+
+<h4 id="多线程服务器的常用编程模型">多线程服务器的常用编程模型</h4>
+
+<h5 id="1-one-loop-per-thread">1 One loop per thread</h5>
+
+<p>此种模型下，程序里的每个IO线程有一个event loop（或者叫Reactor），用于处理读写和定时事件（无论周期性的还是单次的）。</p>
+
+<p>这种方式的好处是：</p>
+
+<ul>
+  <li>线程数目基本固定，可以在程序启动的时候设置，不会频繁创建与销毁。</li>
+  <li>可以很方便地在线程间调配负载。</li>
+  <li>IO事件发生的线程是固定的，同一个TCP连接不必考虑事件并发。</li>
+</ul>
+
+<h5 id="2-线程池">2 线程池</h5>
+
+<h5 id="3-推荐的服务模式">3 推荐的服务模式</h5>
+
+<p>推荐的C++多线程服务端编程模式为：one (event) loop per thread+ thread pool。</p>
+
+<h5 id="4-进程间通信只用tcp">4 进程间通信只用TCP</h5>
+
+<p>Linux下进程间通信（IPC）的方式数不胜数，有：匿名管道（pipe）、具名管道（FIFO）、POSIX消息队列、共享内存、信号（signals），Sockets。其实贵精不贵多，认真用熟其中几种就可以。之所以选择socket是因为它可以跨主机，具有伸缩性。另外：</p>
+
+<p>1.程序上意外退出， 不会组系统留下垃圾，程序重启之后比较容易地恢复。</p>
+
+<p>2.port是独占，可以防止程序重复启动，避免造成意料之外的结果。</p>
+
+<p>3.当一个进程崩溃了，操作系统会关闭连接，另一个进程可立刻感知。，可快速处理。（有心跳的情况）</p>
+
+<p>4.还可以跨语言。</p>
+
+<p>5.会涉及用字节流方式通信。会有marshal/unmarshal的开销。</p>
+
+<p>6.用tcp的好处。容易定位分布式系统中的服务之前的依赖关系，<code class="language-plaintext highlighter-rouge">netstat -tpna | grep :port</code> 二通过接收和发送队列的长度也较容易定位网络 或程序故障。</p>
+
+<p>在正常运行的时候，netstat打印的Recv-Q和Send-Q都应该接近0，或者在0附近摆动。</p>
+
+<p>如果Recv-Q保持不变或持续增加，则通常意味着服务进程的处理速度变慢，可能发生了死锁或阻塞。</p>
+
+<p>如果Send-Q保持不变或持续增加，有可能是对方服务器太忙、来不及处理，也有可能是网络中间某个路由器或交换机故障造成丢包，甚至对方服务器掉线，</p>
+
+<p>这些因素都可能表现为数据发送不出去。通过持续监控Recv-Q和Send-Q就能及早预警性能或可用性故障。以下是服务端线程阻塞造成Recv-Q和客户端Send-Q激增的例子。</p>
+
+<h4 id="多线程服务的适用应用">多线程服务的适用应用</h4>
+
+<p>开发服务端程序的一个基本任务是处理并发连接，现在服务端网络编程处理并发连接主要有两种方式：</p>
+
+<p>当”线程”很廉价时，一台机器上可以创建远高于CPU数目的”线程”。这时一个线程只处理一个TCP连接（甚至半个），通常使用阻塞IO（至少看起来如此）。例如，Python gevent、Go goroutine、</p>
+
+<p>Erlang actor。这里的”线程”由语言的runtime自行调度，与操作系统线程不是一回事。（也就是说协程做并发是可以用阻塞IO的）</p>
+
+<p>当线程很宝贵时，一台机器上只能创建与CPU数目相当的线程。这时一个线程要处理多个TCP连接上的IO，通常使用非阻塞IO和IO multiplexing。例如，libevent、muduo、Netty。这是原生线程，能被操作系统的任务调度器看见。</p>
+
+<h4 id="必须用单线程的场合">必须用单线程的场合</h4>
+
+<p>有两种场合必须使用单线程：</p>
+
+<ul>
+  <li>程序可能会fork</li>
+  <li>限制程序的CPU占用率</li>
+</ul>
+
+<h5 id="单线程程序的优缺点">单线程程序的优缺点：</h5>
+
+<p>单线程程序的优势：简单。程序的结构一般可是一个基于IO multiplexing的event loop。或者直接用阻塞IO。event loop也有一个明显的缺点：非抢占的。</p>
+
+<p>多线程没有什么绝对意义上的性能优势。 这句话是说，如果用很少的CPU负载就能让IO跑满，或者用很少的IO流量就能让CPU跑满，那么多线程没啥用处。</p>
+
+<p>多线程的适用场景是：提高响应速度，让IO和”计算”相互重叠，降低latency。虽然多线程不能提高绝对性能，但能提高平均响应性能。</p>
+
+<h4 id="线程的分类">线程的分类</h4>
+
+<p>一个多线程服务程序中的线程大致可分为3类：</p>
+
+<p>1.IO线程，这类线程的主循环是IO multiplexing，阻塞地等在select/poll/epoll_wait系统调用上。这类线程也处理定时事件。当然它的功能不止IO，有些简单计算也可以放入其中，比如消息的编码或解码。</p>
+
+<p>2.计算线程，这类线程的主循环是blockingqueue，阻塞地等在conditionvariable上。这类线程一般位于thread pool中。这种线程通常不涉及IO，一般要避免任何阻塞操作。</p>
+
+<p>3.第三方库所用的线程，比如logging，又比如database connection。</p>
+
+<h4 id="linux-能同时启动多少个线程">Linux 能同时启动多少个线程</h4>
+
+<hr />
+<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

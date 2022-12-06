@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>go 的竞争检测</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/go-check-race">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/go-check-race">go 的竞争检测</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2018-04-11
+     • Category: 
+        
+        <a href="/categories//#编程语言-ref" >编程语言</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags//#go-ref" >Go</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p><code class="language-plaintext highlighter-rouge">go run -race</code> 或者 <code class="language-plaintext highlighter-rouge">go build -race</code> 来进行竞争检测。</p>
+
+<p>golang语言内部大概的实现就是同时开启多个goroutine执行同一个命令，并且纪录每个变量的状态。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span><span class="p">(</span>
+    <span class="s">"time"</span>
+    <span class="s">"fmt"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="m">1</span>
+    <span class="k">go</span> <span class="k">func</span><span class="p">(){</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="m">2</span>
+    <span class="p">}()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="m">3</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"a is "</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+
+    <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">2</span> <span class="o">*</span> <span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">)</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>这个程序可以看出变量a出现了竞争。</p>
+
+<p>在windows下执行</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go run: <span class="nt">-race</span> and <span class="nt">-msan</span> are only supported on linux/amd64, freebsd/amd64, darwin
+/amd64 and windows/amd64
+</code></pre></div></div>
+
+<p>在linux下执行</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="n">is</span>  <span class="m">3</span>
+<span class="o">==================</span>
+<span class="n">WARNING</span><span class="o">:</span> <span class="n">DATA</span> <span class="n">RACE</span>
+<span class="n">Write</span> <span class="n">at</span> <span class="m">0x00c4200140a8</span> <span class="n">by</span> <span class="n">goroutine</span> <span class="m">6</span><span class="o">:</span>
+  <span class="n">main</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">func1</span><span class="p">()</span>
+      <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="n">race</span><span class="o">.</span><span class="k">go</span><span class="o">:</span><span class="m">11</span> <span class="o">+</span><span class="m">0x3b</span>
+
+<span class="n">Previous</span> <span class="n">write</span> <span class="n">at</span> <span class="m">0x00c4200140a8</span> <span class="n">by</span> <span class="n">main</span> <span class="n">goroutine</span><span class="o">:</span>
+  <span class="n">main</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+      <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="n">race</span><span class="o">.</span><span class="k">go</span><span class="o">:</span><span class="m">13</span> <span class="o">+</span><span class="m">0x8e</span>
+
+<span class="n">Goroutine</span> <span class="m">6</span> <span class="p">(</span><span class="n">running</span><span class="p">)</span> <span class="n">created</span> <span class="n">at</span><span class="o">:</span>
+  <span class="n">main</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+      <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="n">race</span><span class="o">.</span><span class="k">go</span><span class="o">:</span><span class="m">10</span> <span class="o">+</span><span class="m">0x7d</span>
+<span class="o">==================</span>
+<span class="n">Found</span> <span class="m">1</span> <span class="n">data</span> <span class="n">race</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">exit</span> <span class="n">status</span> <span class="m">66</span>
+</code></pre></div></div>
+<p><strong>13行 出现变量竞争。</strong></p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.jpg" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	<!--
+	
+	    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	
+    -->
+
+
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>
