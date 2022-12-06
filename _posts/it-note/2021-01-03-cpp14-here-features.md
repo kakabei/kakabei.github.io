@@ -18,18 +18,14 @@ C++14 新特性主要体现在三个领域：Lambda 函数、constexpr 和类型
 
 C++14 的 Lambda 函数可以使用推导类型声明。如：
 
-```c++ 14
-
+```c++
 auto lambda = [](auto a, auto b) {return a + b;};
-
 ```
 
 而 C++ 11 的 Lambda 函数使用的是具体的类型声明，如
 
 ```c++
-
 auto lambda = [](int a, int b) {return a + b;};
-
 ```
 
 # constexpr

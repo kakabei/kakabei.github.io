@@ -15,8 +15,11 @@ github_site_repo: kakabei/kakabei.github.io
 highlighter: rouge
 markdown: kramdown
 kramdown:
+    input: GFM
     syntax_highlighter: rouge
-    extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
+    #extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
+    extensions: [ "fenced_code_blocks", "hard_wrap","autolink", "tables", "smart","strikethrough", "superscript", "with_toc_data", "highlight", "prettify","no_intra_emphasis"]
+
 
 sass:
     style: :compressed

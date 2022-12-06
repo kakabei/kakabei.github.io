@@ -20,6 +20,11 @@ layout: default
         <li class="list-item">
             <span class="list-date" >{{ page.date | date: "%Y-%m-%d" }}</span> <a href="{{ page.url }}">{{ page.title }}</a>
         </li>
+        
+        <p class="list-item">	  
+          {{ post.excerpt | remove: '<p>' | remove: '</p>' }} &raquo;
+          <a href="{{ post.url }}">read more...</a>
+          </p>
     {% endfor %}
 </ul>
 

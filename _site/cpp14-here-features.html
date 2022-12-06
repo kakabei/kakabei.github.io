@@ -114,14 +114,14 @@
     2021-01-04
      • Category: 
         
-        <a href="/categories//#c++-ref" >C++</a>
+        <a href="/categories/#c++-ref" >C++</a>
         
     
      • Tag: 
         
-            <a href="/tags//#c++-ref" >C++</a>
+            <a href="/tags/#c++-ref" >C++</a>
         
-            <a href="/tags//#技术笔记-ref" >技术笔记</a>
+            <a href="/tags/#技术笔记-ref" >技术笔记</a>
         
     
 </div>
@@ -141,17 +141,12 @@
 
 <p>C++14 的 Lambda 函数可以使用推导类型声明。如：</p>
 
-<p>```c++ 14</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">lambda</span> <span class="o">=</span> <span class="p">[](</span><span class="k">auto</span> <span class="n">a</span><span class="p">,</span> <span class="k">auto</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;};</span>
+</code></pre></div></div>
 
-<p>auto lambda = <a href="auto a, auto b"></a> {return a + b;};</p>
+<p>而 C++ 11 的 Lambda 函数使用的是具体的类型声明，如</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-而 C++ 11 的 Lambda 函数使用的是具体的类型声明，如
-
-```c++
-
-auto lambda = [](int a, int b) {return a + b;};
-
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">lambda</span> <span class="o">=</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;};</span>
 </code></pre></div></div>
 
 <h1 id="constexpr">constexpr</h1>

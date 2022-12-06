@@ -221,10 +221,22 @@ em {
                 margin-left: 2em;
             }
         }
+        /*
         img {
             margin: 10px 0 10px 0;
             max-width: 100%;
             display: block;
+
+        }*/
+        
+        img{ 
+            margin: 10px 0 10px 0;
+            max-width: 98%;
+            display: block;
+            
+            -webkit-box-shadow:rgb(67, 62, 62) 1px 1px 4px;
+            -moz-box-shadow:rgb(67, 62, 62) 1px 1px 4px;
+            box-shadow:rgb(67, 62, 62) 1px 1px 4px;
         }
     }
 
