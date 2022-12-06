@@ -8,16 +8,30 @@ author_footer: false
 
 ## Information
 
-fangsh, ShenZhen China
+* **fangsh**, ShenZhen China
 
 * Tech stack: linux redis, mysql, libevent, skynet, nginx, c\c++, python, go, lua
 
 * Reading, Life, Tech
 
+## 对自己的要求
+
+1、做时间的朋友，与万物和谐相处。
+
+2、动脑不动心，动情不动怒。
+
+3、追求合适，可以不完美；道阻且长，行则将至。
+
+4、做能力圈内的事，寻找方法论或思考模型，不断拓展能力圈。
+
+5、慎独，暗屋之内人性的魔鬼在苏醒。
+
+
 ## Contact me
 
-Email ：1447675994@qq.com
+email ：1447675994@qq.com
 
-github: https://github.com/kakabei
+github : [https://github.com/kakabei](https://github.com/kakabei)
 
 
+ 
