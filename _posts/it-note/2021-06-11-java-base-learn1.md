@@ -2,7 +2,7 @@
 layout: post
 title: java 基本重点知识
 date: 2021-07-15 16:12:15
-categories: 编程语言
+categories: java
 tags: java
 excerpt: java 基本重点知识
 ---
