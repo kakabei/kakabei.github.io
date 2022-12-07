@@ -14,6 +14,11 @@ author_footer: false
 
 * Reading, Life, Tech
 
+## Companies I have worked for
+
+![](/images/kingsoft-logo-2022-12-07_21-03-30.png){:width="110" height="50"}|![](/images/cmge-logo-2022-12-07_21-03-30.png){:width="110" height="50"}|![](/images/mokylin-logo-2022-12-07_21-03-43.png){:width="110" height="50"}|![](/images/jd-logo-2022-12-07_21-04-24.png){:width="110" height="50"}
+
+
 ##  My principle
 
 1、做时间的朋友，与万物和谐相处。

@@ -30,7 +30,7 @@ auto lambda = [](int a, int b) {return a + b;};
 
 # constexpr
 
-c++11 关于constexpr 的特性可以看： [c++11  constexpr](http://blog.xyecho.com/c++11-constexpr/)
+c++11 关于 constexpr 的特性可以看： [c++11  constexpr](http://blog.xyecho.com/c++11-constexpr/)
 
 在 C++11 中，使用 constexpr 声明的函数可以在编译时执行，生成一个值，用在需要常量表达式的地方，比如作为初始化模板的整形参数。C++11 的 constexpr 函数只能包含一个表达式，C++14 放松了这些限制，支持诸如 if 和 switch 等条件语句，支持循环，其中包括基于区间（range）的 for 循环。
 
