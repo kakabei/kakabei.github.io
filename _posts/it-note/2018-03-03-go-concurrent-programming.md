@@ -36,7 +36,7 @@ Go 语言标准库提供的所有系统调用操作 (当然也包括所有同步
 
 goroutine 是 Go 语言中的轻量级线程实现，由Go运行时(runtime)管理。
 
-在一个函数调用前加上go关键字，这次调用就会在一个新的goroutine中并发执行。
+在一个函数调用前加上go关键字，这次调用就会在一个新的 goroutine 中并发执行。
 
 如：
 
@@ -56,7 +56,7 @@ func main() {
 }
 ```
 
-Go 程序从初始化 main package 并执行 main() 函数开始，当 main() 函数返回时，程序退出， 且程序并不等待其他goroutine(非主goroutine)结束。把这个例子什么也不会输出。
+Go 程序从初始化 main package 并执行 main() 函数开始，当 main() 函数返回时，程序退出， 且程序并不等待其他 goroutine (非主 goroutine )结束。把这个例子什么也不会输出。
 
 # 四、并发通信
 
@@ -99,13 +99,13 @@ func main() {
 }
 ```
 
-这种方式是引进了锁的方式来完成通信，这个试比较晦涩，如C++ 相同的方式， 并没有什么太大的优势。 
+这种方式是引进了锁的方式来完成通信，这个试比较晦涩，如 C++ 相同的方式， 并没有什么太大的优势。 
 
 Go 语言提供的是另一种以消息机制的通信模型，被称为 channel。
 
 # 五、channel
 
-channel 是 Go 语言在语言级别提供的 goroutine 间的通信方式。 我们可以使用channel在两个或 多个goroutine之间传递消息。
+channel 是 Go 语言在语言级别提供的 goroutine 间的通信方式。 我们可以使用 channel 在两个或 多个 goroutine 之间传递消息。
 
 channel 是**进程内**的通信方式，因此通过 channel 传递对象的过程和调用函数时的参数传递行为比较一致，比如也可以传递指针等。
 
@@ -166,12 +166,12 @@ ch := make(chan int)
 ```go
 ch <- value
 ```
-向channel写入数据通常会导致程序阻塞。直到有其他goroutine从这个channel中读取数据。
+向channel写入数据通常会导致程序阻塞。直到有其他 goroutine 从这个 channel 中读取数据。
 
 ```go
 value := <-ch
 ```
-如果channel之前没有写入数据，那么从channel中读取数据也会导致程序阻塞，直到channel 中被写入数据为止。
+如果 channel 之前没有写入数据，那么从 channel 中读取数据也会导致程序阻塞，直到 channel 中被写入数据为止。
 
 ## 5.2 select
 
@@ -195,7 +195,7 @@ select {
 
 当我们需要持续传输大量数据时，channel 就要喧上缓存。
 
-创建一个带缓冲的channel:
+创建一个带缓冲的 channel:
 
 ```go
  c := make(chan int, 1024)
@@ -204,7 +204,7 @@ select {
 
 ## 5.4 超时机制
 
-在并发编程的通信过程中，最需要处理的就是超时问题。即向 channel 写数据时发现 channel已满，或者从 channel 试图读取数据时发现 channel 为空。如果不正确处理这些情况，很可能会导致整个goroutine锁死。
+在并发编程的通信过程中，最需要处理的就是超时问题。即向 channel 写数据时发现 channel已满，或者从 channel 试图读取数据时发现 channel 为空。如果不正确处理这些情况，很可能会导致整个 goroutine 锁死。
 
 Go 语言没有提供直接的超时处理机制，但我们可以利用 select 机制。select 的特点是只要其中一个 cas e已经完成，程序就会继续往下执行，而不会考虑其他 case 的情况。    
 
@@ -233,33 +233,33 @@ select {
 
 ## 5.6 单向 channel
 
-顾名思义，单向channel只能用于发送或者接收数据。
+顾名思义，单向 channel 只能用于发送或者接收数据。
 
-单向channel变量的声明非常简单，如下:
+单向 channel 变量的声明非常简单，如下:
 
 ```go
 var ch1 chan int        // ch1是一个正常的channel，不是单向的 
 var ch2 chan<- float64  // ch2是单向channel，只用于写float64数据
 var ch3 <-chan int      // ch3是单向channel，只用于读取int数据
 ```
-基于 ch4，我们通过类型转换初始化了两个单向 channel:单向读的 ch5 和单向写的 ch6。
+基于 ch4，我们通过类型转换初始化了两个单向 channel: 单向读的 ch5 和单向写的 ch6。
 
 单向 channel 也是起到这样的一种契约作用。
 
 ## 5.7 关闭 channel
 
-关闭channel非常简单，直接使用Go语言内置的close()函数即可。
+关闭 channel 非常简单，直接使用Go语言内置的close()函数即可。
 
 ```go
 close(ch)
 ```
 
-如何判断一个channel是否已经被关 闭?我们可以在读取的时候使用多重返回值的方式:
+如何判断一个 channel 是否已经被关 闭?我们可以在读取的时候使用多重返回值的方式:
 
 ```go 
  x, ok := <-ch
 ```
-这个用法与 map 中的按键获取 value 的过程比较类似，只需要看第二个 bool 返回值即可，如果返回值是false则表示ch已经被关闭。
+这个用法与 map 中的按键获取 value 的过程比较类似，只需要看第二个 bool 返回值即可，如果返回值是 false 则表示 ch 已经被关闭。
 
 # 六、多核并行化
 
@@ -279,7 +279,7 @@ runtime.GOMAXPROCS(16)
 
 # 八、同步
 
-Go 语言的设计者虽然对channel有极高的期望，但也提供了妥善的资源锁方案。
+Go 语言的设计者虽然对 channel 有极高的期望，但也提供了妥善的资源锁方案。
 
 ## 8.1  同步锁
 
@@ -287,4 +287,4 @@ Go语言包中的 sync 包提供了两种锁类型: sync.Mutex 和 sync.RWMutex�
 
 ## 8.2 全局唯一性操作
 
-于从全局的角度只需要运行一次的代码，比如全局初始化操作，Go语言提供了一个 Once 类型来保证全局的唯一性操作。
+于从全局的角度只需要运行一次的代码，比如全局初始化操作，Go 语言提供了一个 Once 类型来保证全局的唯一性操作。
