@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>git 撤销修改</title>
+    <title>hive 常用命令记录</title>
 
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
@@ -12,7 +12,7 @@
     
     
 
-    <link rel="canonical" href="http://localhost:4000/git-undo-changes">
+    <link rel="canonical" href="http://localhost:4000/hive-note">
     <link rel="icon" type="image/png" href="/images/logo.png">
 
     <!-- Custom CSS -->
@@ -31,7 +31,7 @@
 
   <div class="site-title">
     
-    <h4 class="entry-title"><a href="/git-undo-changes">git 撤销修改</a></h4>
+    <h4 class="entry-title"><a href="/hive-note">hive 常用命令记录</a></h4>
     
   </div>
 
@@ -111,17 +111,15 @@
       <div class="content">
         <div class="articles">
             <div class="article-meta">
-    2017-05-21
+    2020-01-15
      • Category: 
         
-        <a href="/categories/#tools-ref" >tools</a>
+        <a href="/categories/#db-ref" >db</a>
         
     
      • Tag: 
         
-            <a href="/tags/#git-ref" >git</a>
-        
-            <a href="/tags/#工作经验-ref" >工作经验</a>
+            <a href="/tags/#hive-ref" >hive</a>
         
     
 </div>
@@ -131,27 +129,50 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<h1 id="一未使用-git-add-缓存代码">一、未使用 git add 缓存代码</h1>
+	  		<h4 id="lag-和-lead-函数">LAG 和 LEAD 函数</h4>
 
-<p>撤销指定文件： <code class="language-plaintext highlighter-rouge">git checkout -- filepathname</code></p>
+<p><strong>LAG</strong></p>
 
-<p>撤销所有的文件修改可以使用： <code class="language-plaintext highlighter-rouge">git checkout .</code></p>
+<p>LAG(col,n,DEFAULT) 用于统计窗口内往上第n行值</p>
 
-<p>对新建文件无效</p>
+<p>参数1为列名，参数2为往上第n行（可选，默认为1），参数3为默认值（当往上第n行为NULL时候，取默认值，如不指定，则为NULL）</p>
 
-<h1 id="二已经使用了-git-add-缓存了代码">二、已经使用了  git add 缓存了代码</h1>
+<p><strong>LEAD</strong></p>
 
-<p>撤销指定文件:  <code class="language-plaintext highlighter-rouge">git reset HEAD filepathname</code></p>
+<p>与LAG相反</p>
 
-<p>撤销所有的文件修改可以使用：  <code class="language-plaintext highlighter-rouge">git reset HEAD .</code></p>
+<p>LEAD(col,n,DEFAULT) 用于统计窗口内往下第n行值</p>
 
-<p>清除 git  对于文件修改的缓存。相当于撤销 git add 命令所在的工作。</p>
+<p>参数1为列名，参数2为往下第n行（可选，默认为1），参数3为默认值（当往下第n行为NULL时候，取默认值，如不指定，则为NULL）</p>
 
-<h1 id="三已经用-git-commit-提交了代码">三、已经用 git commit  提交了代码</h1>
+<p><a href="https://blog.csdn.net/kent7306/article/details/50441967"><strong>Hive 分析函数lead、lag实例应用</strong></a></p>
 
-<p>来回退到上一次commit的状态： <code class="language-plaintext highlighter-rouge">git reset --hard HEAD^ </code></p>
+<h3 id="关联表join">关联表（join）</h3>
 
-<p>此命令可以用来回退到任意版本：<code class="language-plaintext highlighter-rouge">git reset --hard  commitid</code></p>
+<p>在hive中，关联有4种方式：</p>
+
+<p>内关联：<code class="language-plaintext highlighter-rouge">join on</code></p>
+
+<p>左外关联：<code class="language-plaintext highlighter-rouge">left join on</code></p>
+
+<p>右外关联：<code class="language-plaintext highlighter-rouge">right join on</code></p>
+
+<p>全外关联：<code class="language-plaintext highlighter-rouge">full join on </code></p>
+
+<h3 id="hive-没有update-方法-只能insert">Hive 没有update 方法， 只能insert</h3>
+
+<h3 id="清除表中数据">清除表中数据</h3>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">db</span><span class="p">.</span><span class="k">table</span>  <span class="k">DROP</span> <span class="k">PARTITION</span> <span class="p">(</span><span class="n">dt</span><span class="o">=</span><span class="s1">'2019-12-31'</span><span class="p">);</span>
+
+<span class="c1">--添加多个字段</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="n">bron_lpss_lpss_order_info_cur</span> <span class="k">add</span> <span class="n">columns</span>
+<span class="p">(</span>
+    <span class="n">order_source</span> <span class="n">string</span> <span class="k">comment</span> <span class="s1">'订单来源'</span><span class="p">,</span>
+    <span class="n">mid</span> <span class="n">string</span> <span class="k">comment</span> <span class="s1">'新会员id'</span><span class="p">,</span>
+    <span class="n">bank_name</span> <span class="n">string</span> <span class="k">comment</span> <span class="s1">'银行行名'</span>
+<span class="p">);</span>
+</code></pre></div></div>
 
   		
 	  </article>
