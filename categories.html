@@ -10,19 +10,19 @@ group: navigation
       {% assign categories_list = site.categories | sort %}
       {% if categories_list.first[0] == null %}
         {% for category in categories_list %}
-            <li>
+            <!-- <li> -->
                 <a href="{{ site.BASE_PATH }}/{{ site.categories_path }}#{{ category | replace:' ','-' }}-ref" data-toggle="tab">
                   {{ category }} <span class="badge pull-right">({{ site.categories[category].size }})</span>
                </a>
-            </li>
+            <!-- </li>  -->
         {% endfor %}
       {% else %}
         {% for category in categories_list %}
-            <li>
+           <!--  <li> -->
                 <a href="{{ site.BASE_PATH }}/{{ site.categories_path }}#{{ category[0] | replace:' ','-' }}-ref" data-toggle="tab">
                     {{ category[0] }} <span class="badge pull-right">({{ category[1].size }})</span>
-                </a>
-            </li>
+                </a>  
+           <!--  </li> -->
         {% endfor %}
       {% endif %}
       {% assign categories_list = nil %}

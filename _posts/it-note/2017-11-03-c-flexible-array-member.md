@@ -3,7 +3,7 @@ layout: post
 title: c 柔性数组
 date: 2017-11-03 16:12:15
 categories: c++  
-tags: c++ c 技术笔记
+tags: c++ 技术笔记
 excerpt: 柔性数组,这种代码结构产生于对动态结构体的需求,在工作中可以被灵活的运用
 ---
 

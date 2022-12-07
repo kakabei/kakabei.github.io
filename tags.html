@@ -10,19 +10,19 @@ group: navigation
       {% assign tags_list = site.tags | sort %}
       {% if tags_list.first[0] == null %}
         {% for tag in tags_list %}
-            <li>
+          <!--  <li> -->
                 <a href="{{ site.BASE_PATH }}/{{ site.tags_path }}#{{ tag[0] }}-ref" data-toggle="tab">
                   {{ tag }} <span class="badge pull-right">({{ site.tags[tag].size }})</span>
                </a>
-            </li>
+           <!-- </li>-->
         {% endfor %}
       {% else %}
         {% for tag in tags_list %}
-            <li>
+          <!--  <li> -->
                 <a href="{{ site.BASE_PATH }}/{{ site.tags_path }}#{{ tag[0] }}-ref" data-toggle="tab">
                     {{ tag[0] }} <span class="badge pull-right">({{ tag[1].size }})</span>
                 </a>
-            </li>
+          <!--  </li> -->
         {% endfor %}
       {% endif %}
       {% assign tags_list = nil %}
