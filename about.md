@@ -18,6 +18,7 @@ author_footer: false
 
 ![](/images/kingsoft-logo-2022-12-07_21-03-30.png){:width="110" height="50"}|![](/images/cmge-logo-2022-12-07_21-03-30.png){:width="110" height="50"}|![](/images/mokylin-logo-2022-12-07_21-03-43.png){:width="110" height="50"}|![](/images/jd-logo-2022-12-07_21-04-24.png){:width="110" height="50"}
 
+## Projects I've worked on
 ### 1、Kingsoft
 
 - 金山企业安全私有云 
@@ -65,6 +66,12 @@ author_footer: false
 email ：1447675994@qq.com
 
 github : [https://github.com/kakabei](https://github.com/kakabei)
+
+Welcome to join our Wechat Group：
+
+![](/images/WeChat-2022-12-08_15-31-46.png){:width="210" height="210"}
+
+
 
 
  

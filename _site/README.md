@@ -36,7 +36,6 @@ you can visit [blog.xyecho.com](http://blog.xyecho.com).
 
 ## 读书
 
-
 - [《被讨厌的勇气》 by 岸见一郎、古贺史健](http://blog.xyecho.com/被讨厌的勇气)
 - [《人性的弱点》 by 戴尔·卡耐基](http://blog.xyecho.com/人性的弱点)
 - [《卡片笔记写作法》 by 申克·阿伦斯](http://blog.xyecho.com/卡片笔记写作法)
