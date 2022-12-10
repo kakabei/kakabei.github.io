@@ -71,7 +71,9 @@ Welcome to join our Wechat Group：
 
 ![](/images/WeChat-2022-12-08_15-31-46.png){:width="210" height="210"}
 
+（Remark : where are you from)
 
 
 
- 
+
+  

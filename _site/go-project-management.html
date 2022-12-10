@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>go 笔记 工程管理</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/go-project-management">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/go-project-management">go 笔记 工程管理</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2018-03-05
+     • Category: 
+        
+        <a href="/categories/#go-ref" >go</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags/#go-ref" >go</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>介绍 Go 语言所引入的工程管理思想、工具和规范：</p>
+
+<ul>
+  <li>代码风格</li>
+  <li>文档风格和管理</li>
+  <li>单元测试与性能测试方法</li>
+  <li>项目工程结构</li>
+  <li>打包分发</li>
+</ul>
+
+<h1 id="一go-命令行工具">一、go 命令行工具</h1>
+
+<p>查看版本:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> go version
+go version go1.19.3 darwin/amd64
+</code></pre></div></div>
+
+<p>查看帮助：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> go <span class="nb">help
+</span>Go is a tool <span class="k">for </span>managing Go <span class="nb">source </span>code.
+
+Usage:
+
+	go &lt;<span class="nb">command</span><span class="o">&gt;</span> <span class="o">[</span>arguments]
+
+The commands are:
+
+	bug         start a bug report
+	build       compile packages and dependencies
+	clean       remove object files and cached files
+	doc         show documentation <span class="k">for </span>package or symbol
+	<span class="nb">env         </span>print Go environment information
+	fix         update packages to use new APIs
+	<span class="nb">fmt         </span>gofmt <span class="o">(</span>reformat<span class="o">)</span> package sources
+	generate    generate Go files by processing <span class="nb">source
+	</span>get         add dependencies to current module and <span class="nb">install </span>them
+	<span class="nb">install     </span>compile and <span class="nb">install </span>packages and dependencies
+	list        list packages or modules
+	mod         module maintenance
+	work        workspace maintenance
+	run         compile and run Go program
+	<span class="nb">test        test </span>packages
+	tool        run specified go tool
+	version     print Go version
+	vet         report likely mistakes <span class="k">in </span>packages
+
+Use <span class="s2">"go help &lt;command&gt;"</span> <span class="k">for </span>more information about a command.
+
+Additional <span class="nb">help </span>topics:
+
+	buildconstraint build constraints
+	buildmode       build modes
+	c               calling between Go and C
+	cache           build and <span class="nb">test </span>caching
+	environment     environment variables
+	filetype        file types
+	go.mod          the go.mod file
+	gopath          GOPATH environment variable
+	gopath-get      legacy GOPATH go get
+	goproxy         module proxy protocol
+	importpath      import path syntax
+	modules         modules, module versions, and more
+	module-get      module-aware go get
+	module-auth     module authentication using go.sum
+	packages        package lists and patterns
+	private         configuration <span class="k">for </span>downloading non-public code
+	testflag        testing flags
+	testfunc        testing functions
+	vcs             controlling version control with GOVCS
+
+Use <span class="s2">"go help &lt;topic&gt;"</span> <span class="k">for </span>more information about that topic.
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">Go tool</code> 可以完成以下几类工作：</p>
+
+<ul>
+  <li>代码格式化</li>
+  <li>代码质量分析和修复</li>
+  <li>工程构建</li>
+  <li>代码文档的提取和展示</li>
+  <li>依赖包管理</li>
+  <li>执行其他的包含指令，比如6g等</li>
+</ul>
+
+<h1 id="二代码风格">二、代码风格</h1>
+
+<p>Go 语言很可能是第一个将代码风格强制统一的语言。</p>
+
+<p>Go 语言的编码规范，主要分两类：1） 由Go编译器进行强制的编码规范。2） 由 <code class="language-plaintext highlighter-rouge">Go tool</code> 推行的非强制性编码风格建议。</p>
+
+<h2 id="21-强制性编码规范">2.1 强制性编码规范</h2>
+
+<h3 id="命名">命名</h3>
+
+<p>命名规则涉及变量、常量、全局函数、结构、接口、方法等的命名。Go 语言从语法层面进行了以下限定:任何需要对外暴露的名字必须以大写字母开头，不需要对外暴露的则应该以小写 字母开头。</p>
+
+<h3 id="排列">排列</h3>
+
+<p>Go 语言甚至对代码的排列方式也进行了语法级别的检查，约定了代码块中花括号的明确摆放位置。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 错误写法</span>
+<span class="k">func</span> <span class="n">Foo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)(</span><span class="n">ret</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span>
+    <span class="p">{</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">a</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">b</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">// 正确写法</span>
+<span class="k">func</span> <span class="n">Foo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)(</span><span class="n">ret</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="p">{</span> 
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">a</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> 
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">b</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="22-非强制性编码风格建议">2.2 非强制性编码风格建议</h2>
+
+<p>用 <code class="language-plaintext highlighter-rouge">go tool</code> 命令看格式化工具的用法。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go <span class="nb">help fmt
+</span>usage: go <span class="nb">fmt</span> <span class="o">[</span><span class="nt">-n</span><span class="o">]</span> <span class="o">[</span><span class="nt">-x</span><span class="o">]</span> <span class="o">[</span>packages]
+
+Fmt runs the <span class="nb">command</span> <span class="s1">'gofmt -l -w'</span> on the packages named
+by the import paths. It prints the names of the files that are modified.
+
+For more about gofmt, see <span class="s1">'go doc cmd/gofmt'</span><span class="nb">.</span>
+For more about specifying packages, see <span class="s1">'go help packages'</span><span class="nb">.</span>
+
+The <span class="nt">-n</span> flag prints commands that would be executed.
+The <span class="nt">-x</span> flag prints commands as they are executed.
+
+The <span class="nt">-mod</span> flag<span class="s1">'s value sets which module download mode
+to use: readonly or vendor. See '</span>go <span class="nb">help </span>modules<span class="s1">' for more.
+
+To run gofmt with specific options, run gofmt itself.
+
+See also: go fix, go vet.
+</span></code></pre></div></div>
+<p>代码风格很差的代码：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span> <span class="k">import</span> <span class="s">"fmt"</span>
+<span class="k">func</span> <span class="n">Foo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)(</span><span class="n">ret</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">){</span> <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="p">{</span>
+<span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="no">nil</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span> <span class="k">return</span> <span class="n">b</span><span class="p">,</span> <span class="no">nil</span>
+<span class="p">}</span>
+<span class="k">return</span> <span class="m">0</span><span class="p">,</span> <span class="no">nil</span>
+<span class="p">}</span>
+<span class="k">func</span>
+<span class="n">main</span><span class="p">()</span> <span class="p">{</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">Foo</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Hello, 世界"</span><span class="p">,</span> <span class="n">i</span><span class="p">)}</span>
+</code></pre></div></div>
+<p>执行命令之后</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">$</span> <span class="k">go</span> <span class="n">fmt</span> <span class="n">hello</span><span class="o">.</span><span class="k">go</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">func</span> <span class="n">Foo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ret</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="no">nil</span> 
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">b</span><span class="p">,</span> <span class="no">nil</span> 
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="m">0</span><span class="p">,</span> <span class="no">nil</span> 
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">Foo</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Hello, 世界"</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="三远程-import-支持">三、远程 import 支持</h1>
+
+<p>Go 语言不仅允许我们导入本地包，还支持在语言级别调用远程的包。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+<span class="k">import</span> <span class="p">(</span> 
+    <span class="s">"fmt"</span>
+    <span class="s">"github.com/myteam/exp/crc32"</span>
+<span class="p">)</span>
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">"github.com/myteam/exp/crc32"</code> 就是远程的包</p>
+
+<p>然后，在执行<code class="language-plaintext highlighter-rouge">go build</code>或者<code class="language-plaintext highlighter-rouge">go install</code>之前，只需要加这么一句:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go get github.com/myteam/exp/crc32
+</code></pre></div></div>
+
+<h1 id="四工程组织">四、工程组织</h1>
+
+<h2 id="41-gopath">4.1 GOPATH</h2>
+
+<p>假设现在本地硬盘上有3个Go代码工程，分别为<code class="language-plaintext highlighter-rouge">~/work/go-proj1</code>、<code class="language-plaintext highlighter-rouge">~/work2/goproj2</code>和 <code class="language-plaintext highlighter-rouge">~/work3/work4/go-proj3</code>，那么<code class="language-plaintext highlighter-rouge">GOPATH</code> 可以设置为如下内容:</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">GOPATH</span><span class="o">=</span>~/work/go-proj1:~/work2/goproj2:~/work3/work4/go-proj3
+
+</code></pre></div></div>
+
+<p>经过这样的设置后，你可以在任意位置对以上的3个工程进行构建。</p>
+
+<h2 id="42-目录结构">4.2 目录结构</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;calcproj&gt; 
+    ├─README
+    ├─AUTHORS 
+        ├─&lt;bin&gt;
+            ├─calc 
+    ├─&lt;pkg&gt;
+        └─&lt;linux_amd64&gt; 
+            └─simplemath.a
+    ├─&lt;src&gt; 
+        ├─&lt;calc&gt;
+            └─calc.go
+        ├─&lt;simplemath&gt;
+            ├─add.go 
+            ├─add_test.go 
+            ├─sqrt.go
+            ├─sqrt_test.go
+</code></pre></div></div>
+<p>Go 语言工程不需要任何工程文件，一个比较完整的工程会在根目录处放置这样几个文本文件。</p>
+
+<ul>
+  <li>README : 简单介绍本项目目标和关键的注意事项，通常第一次使用时应该先阅读本文档。</li>
+  <li>LICENSE : 本工程采用的分发协议，所有开源项目通常都有这个文件。</li>
+</ul>
+
+<h1 id="五-单元测试">五、 单元测试</h1>
+
+<p>Go 本身提供了一套轻量级的测试框架。符合规则的测试代码会在运行测试时被自动识别并执行。单元测试源文件的命名规则如下:在需要测试的包下面创建以“<code class="language-plaintext highlighter-rouge">_test</code>”结尾的 go 文件，形如 : <code class="language-plaintext highlighter-rouge">[^.]*_test.go</code>。</p>
+
+<p>Go 的单元测试函数分为两类 : 功能测试函数和性能测试函数，分别为以 <code class="language-plaintext highlighter-rouge">Test</code> 和 <code class="language-plaintext highlighter-rouge">Benchmark</code> 为函数名前缀并以 <code class="language-plaintext highlighter-rouge">*testing.T</code> 为单一参数的函数。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">TestAdd1</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span> 
+	<span class="n">r</span> <span class="o">:=</span> <span class="n">Add</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">r</span> <span class="o">!=</span> <span class="m">2</span> <span class="p">{</span> <span class="c">// 这里本该是3，故意改成2测试错误场景 </span>
+		<span class="n">t</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s">"Add(1, 2) failed. Got %d, expected 3."</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>执行 <code class="language-plaintext highlighter-rouge">go test</code> 命令。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">BenchmarkAdd1</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">B</span><span class="p">)</span> <span class="p">{</span> 
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">b</span><span class="o">.</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">Add</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span> 
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>执行 <code class="language-plaintext highlighter-rouge">go -test.bench</code> 命令。</p>
+
+<h1 id="六打包分发">六、打包分发</h1>
+
+<p>GO 以二进制方式分发Go包并不是很现实。最合适的库分发方式是直接打包源代码包并进行分发，由使用者自行编译。</p>
+
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>
