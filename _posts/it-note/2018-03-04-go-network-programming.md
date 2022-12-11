@@ -4,7 +4,7 @@ title: go 笔记 网络编程
 date: 2018-03-04 07:21:12
 categories:  go 
 tags: go
-excerpt: go 网络编程,最主要就是 tcp 和 http
+excerpt: go 标准库里提供的 net 包，支持基于 IP 层、TCP/UDP 等网络操作
 ---
 
 Go 语言标准库里提供的 net 包，支持基于 IP 层、TCP/UDP 层及更高层面(如 HTTP、FTP、SMTP )的网络操作，其中用于 IP 层的称为 Raw Socket。

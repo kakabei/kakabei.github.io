@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>go 笔记 链接符号</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/go-link-symbol">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/go-link-symbol">go 笔记 链接符号</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2018-03-07
+     • Category: 
+        
+        <a href="/categories/#go-ref" >go</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags/#go-ref" >go</a>
+        
+    
+</div>
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>链接符号关心的是如何将语言文法使用的符号转化为链接期使用的符号，在常规情况下，链接期使用的符号对我们不可见。</p>
+
+<p>C++ 支持函数重载，故此语言的“链接符号”构成极其复杂，需要包括</p>
+
+<ul>
+  <li>命令空间 <code class="language-plaintext highlighter-rouge">Namespace</code></li>
+  <li>类 <code class="language-plaintext highlighter-rouge">ClassType</code></li>
+  <li>方法 <code class="language-plaintext highlighter-rouge">Method</code></li>
+  <li>参数 <code class="language-plaintext highlighter-rouge">ArgType1, ArgType2,...</code></li>
+</ul>
+
+<p>不同编译器厂商生成“链接符号” 的规则并不统一，生成的二进制模块(.o 或 .so)是不兼容的。因此多数情况下，C++ 语言的模块间交互使用 C 的机制， 而不是自身的机制。</p>
+
+<p>Go 语言中，一般化的函数原型如下：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">Package</span>
+<span class="k">func</span> <span class="n">Method</span><span class="p">(</span><span class="n">arg1</span> <span class="n">ArgType1</span><span class="p">,</span> <span class="n">arg2</span> <span class="n">ArgType2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="p">(</span><span class="n">ret1</span> <span class="n">RetType1</span><span class="p">,</span> <span class="n">ret2</span> <span class="n">RetType2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">v</span> <span class="n">ClassType</span><span class="p">)</span> <span class="n">Method</span><span class="p">(</span><span class="n">arg1</span> <span class="n">ArgType1</span><span class="p">,</span> <span class="n">arg2</span> <span class="n">ArgType2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="p">(</span><span class="n">ret1</span> <span class="n">RetType1</span><span class="p">,</span> <span class="n">ret2</span> <span class="n">RetType2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">ClassType</span><span class="p">)</span> <span class="n">Method</span><span class="p">(</span><span class="n">arg1</span> <span class="n">ArgType1</span><span class="p">,</span> <span class="n">arg2</span> <span class="n">ArgType2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="p">(</span><span class="n">ret1</span> <span class="n">RetType1</span><span class="p">,</span> <span class="n">ret2</span> <span class="n">RetType2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> 
+<span class="c">// 这种可以认为是上一种情况的特例</span>
+</code></pre></div></div>
+
+<p>由于 Go 语言并无重载，故此语言的“链接符号”由如下信息构成:</p>
+
+<ul>
+  <li>Package Package 名可以是多层，例如 <code class="language-plaintext highlighter-rouge">A/B/C</code>。</li>
+  <li>ClassType  很特别的是，Go 语言中 <code class="language-plaintext highlighter-rouge">ClassType</code> 可以是指针，也可以不是。</li>
+  <li>Method</li>
+</ul>
+
+<p>其“链接符号”的组成规则如下:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Package.Method</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Package.ClassType·Method</code></li>
+</ul>
+
+<p>举个例子,假设在 <code class="language-plaintext highlighter-rouge">qbox.us/mockfs</code> 模块中。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">New</span><span class="p">(</span><span class="n">cfg</span> <span class="n">Config</span><span class="p">)</span> <span class="o">*</span><span class="n">MockFS</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span><span class="n">MockFS</span><span class="p">)</span> <span class="n">Mkdir</span><span class="p">(</span><span class="n">dir</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">code</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> 
+<span class="k">func</span> <span class="p">(</span><span class="n">fs</span> <span class="n">MockFS</span><span class="p">)</span> <span class="n">Foo</span><span class="p">(</span><span class="n">bar</span> <span class="n">Bar</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>它们的链接符号分别为:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>qbox.us/mockfs.New
+qbox.us/mockfs.*MockFS·Mkdir
+qbox.us/mockfs.MockFS·Foo
+</code></pre></div></div>
+
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+
+
+
+	<div class="article-author">
+    <div class="avatar">
+    <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

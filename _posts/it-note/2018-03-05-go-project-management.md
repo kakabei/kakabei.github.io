@@ -4,7 +4,7 @@ title: go 笔记 工程管理
 date: 2018-03-05 07:21:12
 categories:  go 
 tags: go
-excerpt: go 对项目一些管理方式
+excerpt: go 对项目一些管理方式、工程管理思想、工具和规范
 ---
 
 介绍 Go 语言所引入的工程管理思想、工具和规范：
