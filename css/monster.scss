@@ -398,6 +398,16 @@ em {
     } 
 }
 
+.pageNav{
+    font-weight:bold;
+    font-size:15px;
+}
+
+.pageNavInvalid{
+    font-weight:bold;
+    font-size:15px;
+    color:#D0D0D0;
+}
 
 @import "base";
 @import "syntax-highlighting";
