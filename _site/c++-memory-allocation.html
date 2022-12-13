@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>c++ 内存分配</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/c++-memory-allocation">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/c++-memory-allocation">c++ 内存分配</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2017-04-11
+     • Category: 
+        
+        <a href="/categories/#c++-ref" >c++</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags/#c++-ref" >c++</a>
+        
+    
+</div>
+
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>一共被分为5个区：</p>
+
+<p>1、 <strong>栈区</strong> （stack） 从高地址向低地址增长。由编译器自动管理分配。在执行函数时，函数内局部变量的存储单元都可以在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是分配的内存容量有限。</p>
+
+<p>2、<strong>堆区</strong> （heap）动态内存分配。程序在运行的时候用 malloc 或 new 申请任意多少的内存，程序员自己负责在何时用 free 或 delete 释放内存。动态内存的生存期由我们决定，使用非常灵活，但问题也最多，存在忘记释放导致内存泄漏。</p>
+
+<p>3、<strong>BSS</strong> 存放<strong>未初始化</strong>的全局和静态变量。（默认设为0）</p>
+
+<p>4、<strong>数据区</strong> （Data Segment） 存放已初始化的全局和静态变量， 常量数据（如字符串常量）。</p>
+
+<p>5、<strong>代码区（Code Segment）</strong> 也称Text Segment，存放可执行程序的机器码。</p>
+
+<p><img src="./assets/programming-language/cplusplus-memory-2022-12-13_21-49-22.png" alt="" /></p>
+
+<hr />
+<p>参考：</p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/344377490">深度阅读：深入 C++ 内存管理</a></p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+<span>
+	<a  href="/c++-function" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/c++-cass" class="pageNav"  >下一篇</a>
+</span>
+
+
+	<div class="article-author">
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+    <div class="avatar">
+        <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>
