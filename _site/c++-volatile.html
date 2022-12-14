@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>c++ volatile 确保不优化</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/c++-volatile">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/c++-volatile">c++ volatile 确保不优化</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2017-06-20
+     • Category: 
+        
+        <a href="/categories/#c++-ref" >c++</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags/#c++-ref" >c++</a>
+        
+            <a href="/tags/#技术笔记-ref" >技术笔记</a>
+        
+    
+</div>
+
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p><code class="language-plaintext highlighter-rouge">volatile</code> 变量的作用和使用场景如下：</p>
+
+<p>在多线程编程中，多个线程访问同一个变量，而且有可能修改变量，如果不加 <code class="language-plaintext highlighter-rouge">volatile</code>，编译器有可能做优化，在寄存器中保存变量，CPU 直接访问寄存器，从而优化变量访问速度，加上 <code class="language-plaintext highlighter-rouge">volatile</code> 修饰，CPU 会直接访问内存，不会做寄存器的优化。这一条称为保证内存的可见性。</p>
+
+<p>类似的情况在中断服务程序中访问变量，并行设备的硬件寄存器变量都是一个道理。</p>
+
+<p>另一个作用是禁止指令重排，也是针对编译器说的，保证缓存一致性。</p>
+
+<p><code class="language-plaintext highlighter-rouge">volatile</code> 保证了程序的正确性，损失了编译器的优化。</p>
+
+<p>能干什么? 告诉编译器不要在此内存上做任何优化。如果对内存有只写未读的等非常规操作，如</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">;</span> <span class="n">x</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>编译器会优化为</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span>
+</code></pre></div></div>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+<span>
+	<a  href="/c++-const" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/c++-inline" class="pageNav"  >下一篇</a>
+</span>
+
+
+	<div class="article-author">
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+    <div class="avatar">
+        <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>
