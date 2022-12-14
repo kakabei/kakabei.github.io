@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>c++ inline 内联函数</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/c++-inline">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/c++-inline">c++ inline 内联函数</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2017-06-21
+     • Category: 
+        
+        <a href="/categories/#c++-ref" >c++</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags/#c++-ref" >c++</a>
+        
+            <a href="/tags/#技术笔记-ref" >技术笔记</a>
+        
+    
+</div>
+
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>1、 <code class="language-plaintext highlighter-rouge">inline</code> 是一个关键字，可以用于定义内联函数。内联函数，像普通函数一样被调用，但是在调用时并不通过函数调用的机制而是直接在调用点处展开，这样可以大大减少由函数调用带来的开销，从而提高程序的运行效率。</p>
+
+<p>2、 类内定义成员函数默认是内联函数。在类内定义成员函数，可以不用在函数头部加 <code class="language-plaintext highlighter-rouge">inline</code> 关键字，因为编译器会自动将类内定义的函数（构造函数、析构函数、普通成员函数等）声明为内联函数。</p>
+
+<p>3、类外定义成员函数，若想定义为内联函数，需用关键字声明。当在类内声明函数，在类外定义函数时，如果想将该函数定义为内联函数，则可以在类内声明时不加 <code class="language-plaintext highlighter-rouge">inline</code> 关键字，而在类外定义函数时加上 <code class="language-plaintext highlighter-rouge">inline</code> 关键字。</p>
+
+<p>4、另外，可以在声明函数和定义函数的同时加上 <code class="language-plaintext highlighter-rouge">inline</code>；也可以只在函数声明时加 <code class="language-plaintext highlighter-rouge">inline</code>，而定义函数时不加 <code class="language-plaintext highlighter-rouge">inline</code>。只要确保在调用该函数之前把 <code class="language-plaintext highlighter-rouge">inline</code> 的信息告知编译器即可。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">var</span><span class="p">;</span>
+    <span class="n">A</span><span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span><span class="p">){</span> 
+      <span class="n">var</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="p">}</span>    
+    <span class="kt">void</span> <span class="n">fun</span><span class="p">(){</span> 
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">var</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>5、<code class="language-plaintext highlighter-rouge">inline</code> 作用及使用方法</p>
+
+<ul>
+  <li>内联函数不是在调用时发生控制转移关系，而是在编译阶段将函数体嵌入到每一个调用该函数的语句块中，编译器会将程序中出现内联函数的调用表达式用内联函数的函数体来替换。</li>
+  <li>普通函数是将程序执行转移到被调用函数所存放的内存地址，当函数执行完后，返回到执行此函数前的地方。转移操作需要保护现场，被调函数执行完后，再恢复现场，该过程需要较大的资源开销。</li>
+</ul>
+
+<p>6、 宏定义（<code class="language-plaintext highlighter-rouge">define</code>）和内联函数（<code class="language-plaintext highlighter-rouge">inline</code>）的区别</p>
+
+<ul>
+  <li>内联函数是在编译时展开，而宏在编译预处理时展开；在编译的时候，内联函数直接被嵌入到目标代码中去，而宏只是一个简单的文本替换。</li>
+  <li>内联函数是真正的函数，和普通函数调用的方法一样，在调用点处直接展开，避免了函数的参数压栈操作，减少了调用的开销。而宏定义编写较为复杂，常需要增加一些括号来避免歧义。</li>
+  <li>宏定义只进行文本替换，不会对参数的类型、语句能否正常编译等进行检查。而内联函数是真正的函数，会对参数的类型、函数体内的语句编写是否正确等进行检查。</li>
+</ul>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+<span>
+	<a  href="/c++-const" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/c-flexible-array-member" class="pageNav"  >下一篇</a>
+</span>
+
+
+	<div class="article-author">
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+    <div class="avatar">
+        <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>
