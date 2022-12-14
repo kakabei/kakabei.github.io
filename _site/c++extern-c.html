@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>c++11 扩展的 friend 语法</title>
+    <title>c++ extern c 作用</title>
 
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
@@ -12,7 +12,7 @@
     
     
 
-    <link rel="canonical" href="http://localhost:4000/c++11-friend">
+    <link rel="canonical" href="http://localhost:4000/c++extern-c">
     <link rel="icon" type="image/png" href="/images/logo.png">
 
     <!-- Custom CSS -->
@@ -31,7 +31,7 @@
 
   <div class="site-title">
     
-    <h4 class="entry-title"><a href="/c++11-friend">c++11 扩展的 friend 语法</a></h4>
+    <h4 class="entry-title"><a href="/c++extern-c">c++ extern c 作用</a></h4>
     
   </div>
 
@@ -111,7 +111,7 @@
       <div class="content">
         <div class="articles">
             <div class="article-meta">
-    2017-05-01
+    2017-06-26
      • Category: 
         
         <a href="/categories/#c++-ref" >c++</a>
@@ -120,6 +120,8 @@
      • Tag: 
         
             <a href="/tags/#c++-ref" >c++</a>
+        
+            <a href="/tags/#技术笔记-ref" >技术笔记</a>
         
     
 </div>
@@ -130,42 +132,11 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<p>扩展的friend语法</p>
+	  		<p>1、c++ 和 c 语言编译函数签名方式不一样， <code class="language-plaintext highlighter-rouge">extern</code> 关键字可以让两者保持统一，这样才能找到对应的函数。</p>
 
-<p>如：</p>
+<p>2、c 和 c++ 对同一个函数经过编译后生成的函数名是不同的，由于 c++ 支持函数重载，因此编译器编译函数的过程中会将函数的参数类型也加到编译后的代码中，而不仅仅是函数名；</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Poly</span><span class="p">;</span> 
-<span class="k">typedef</span> <span class="n">Poly</span> <span class="n">P</span><span class="p">;</span>
- <span class="k">class</span> <span class="nc">LiLei</span> <span class="p">{</span> 
-<span class="k">friend</span> <span class="k">class</span> <span class="nc">Poly</span><span class="p">;</span> <span class="c1">// C++ 98 通过, C++ 11 通过 </span>
-<span class="p">};</span>
-
- <span class="k">class</span> <span class="nc">Jim</span> <span class="p">{</span>
- <span class="k">friend</span> <span class="n">Poly</span><span class="p">;</span> <span class="c1">// C++ 98 失败, C++ 11 通过 </span>
-<span class="p">};</span> 
-
-<span class="k">class</span> <span class="nc">HanMeiMei</span> <span class="p">{</span>
- <span class="k">friend</span> <span class="n">P</span><span class="p">;</span>    <span class="c1">// C++ 98 失败, C++ 11 通过 </span>
-<span class="p">};</span>
-</code></pre></div></div>
-
-<p>// 编译 选项: g++ -std= c++ 11 2- 9- 1. cpp</p>
-
-<p>虽然 在 C++ 11中这是一个小的改进，却会带来一点应用的变化—程序员可以为类模板声明友元了。</p>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">P</span><span class="p">;</span> 
-<span class="k">template</span> <span class="o">&lt;</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">People</span> <span class="p">{</span> 
-<span class="k">friend</span> <span class="n">T</span><span class="p">;</span> 
-<span class="p">};</span> 
-<span class="n">People</span><span class="o">&lt;</span> <span class="n">P</span><span class="o">&gt;</span> <span class="n">PP</span><span class="p">;</span> <span class="c1">// 类型 P 在这里 是 People 类型 的 友 元 </span>
-<span class="n">People</span><span class="o">&lt;</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">Pi</span><span class="p">;</span> <span class="c1">// 对于 int 类型 模板 参数， 友 元 声明 被 忽略 </span>
-
-</code></pre></div></div>
-
-<p>// 编译 选项: g++ -std= c++ 11 2- 9- 2. cpp</p>
-
-<hr />
-<p>--《深入理解C++11：C++11新特性解析与应用》</p>
+<p>3、而 c 语言并不支持函数重载，因此编译C语言代码的函数时不会带上函数的参数类型，一般只包括函数名。如果在c++中调用一个使用c语言编写的模块中的某个函数，那么 c++ 是根据 c++ 的名称修饰方式来查找并链接这个函数，那么就会发生链接错误。</p>
 
   		
 	  </article>
@@ -174,9 +145,9 @@
 </div>
 
 <span>
-	<a  href="/c++-pointer" class="pageNav"  >上一篇</a>
+	<a  href="/c++struct-and-class" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/c++11-initializer-list" class="pageNav"  >下一篇</a>
+	<a  href="/c-flexible-array-member" class="pageNav"  >下一篇</a>
 </span>
 
 

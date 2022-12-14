@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  c++ volatile 确保不优化
-date: 2017-06-19 16:12:15
+date: 2017-06-20 16:12:15
 categories: c++  
 tags: c++  技术笔记
 excerpt: volatile 保证了程序的正确性，损失了编译器的优化。
