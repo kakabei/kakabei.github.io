@@ -130,9 +130,9 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<p>initializer_list是C++11的的一个新特性。</p>
+	  		<p>initializer_list 是 c++11 的的一个新特性 。</p>
 
-<p>c++11之前我们对vector的初始化是这样的：</p>
+<p>c++11 之前我们对 vector 的初始化是这样的：</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="n">vec</span><span class="p">;</span>
 <span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
@@ -141,16 +141,14 @@
 
 </code></pre></div></div>
 
-<p>C++11之后，可以用花括号直接经初始化。我们可以这样:</p>
+<p>C++11 之后，可以用花括号直接经初始化。我们可以这样:</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
 </code></pre></div></div>
 
-<p>这就是所谓的initializer list。</p>
+<p>这就是所谓的 initializer list。</p>
 
-<p>所以有initializer_list</p>
-
-<p>C++11允许构造函数和其他函数把初始化列表当做参数。</p>
+<p>所以有 initializer_list C++11 允许构造函数和其他函数把初始化列表当做参数。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 #include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
@@ -186,18 +184,18 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h6 id="用-initializer_list-的好处">用 initializer_list 的好处：</h6>
-<hr />
-<p>1.initializer_list不能修改，更符合参数的特点。</p>
+<h3 id="用-initializer_list-的好处">用 initializer_list 的好处：</h3>
 
-<p>vector有push_back函数，也就是说vector可以在函数里面修改，所以必然vector必须在heap上分配空间来存储数据。
-而initializer_list只有begin和end函数，函数内并不能修改它，所以编译器有机会在stack上存储initializer_list的数据来提高性能。</p>
+<p>1、initializer_list 不能修改，更符合参数的特点。</p>
 
-<p>2.initializer_list是指针语义</p>
+<p>vector 有 push_back 函数，也就是说 vector 可以在函数里面修改，所以必然 vector 必须在 heap 上分配空间来存储数据。
+而initializer_list 只有 begin 和 end 函数，函数内并不能修改它，所以编译器有机会在 stack 上存储 initializer_list 的数据来提高性能。</p>
 
-<p>vector是值语义，也就是说拷贝一个vector，那里面的元素也会被拷贝一次。而initializer_list是指针语义，里面的元素并不会被拷贝。是指向了同一个空间。</p>
+<p>2、initializer_list 是指针语义</p>
 
-<p>3.初始化列表还可以用于函数返回的情况。 返回一个初始化列表，通常会导致构造一个临时变量，比如：</p>
+<p>vector 是值语义，也就是说拷贝一个 vector，那里面的元素也会被拷贝一次。而 initializer_list 是指针语义，里面的元素并不会被拷贝，是指向了同一个空间。</p>
+
+<p>3、初始化列表还可以用于函数返回的情况。 返回一个初始化列表，通常会导致构造一个临时变量，比如：</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">vector</span><span class="o">&lt;</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">Func</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span> <span class="p">}</span>
 </code></pre></div></div>
@@ -215,7 +213,7 @@
 </code></pre></div></div>
 
 <hr />
-<p>--《深入理解C++11：C++11新特性解析与应用》</p>
+<p>1、《深入理解C++11：C++11新特性解析与应用》</p>
 
   		
 	  </article>

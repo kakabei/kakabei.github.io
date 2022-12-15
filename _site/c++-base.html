@@ -151,7 +151,7 @@
   <li>静态变量和全局变量的区别：静态变量用 <code class="language-plaintext highlighter-rouge">static</code> 告知编译器，自己仅仅在变量的作用范围内可见。</li>
 </ul>
 
-<p>如果在头文件中定义全局变量，当该头文件被多个文件 <code class="language-plaintext highlighter-rouge">include</code> 时，该头文件中的全局变量就会被定义多次，导致重复定义，因此不能再头文件中定义全局变量。</p>
+<p>如果在头文件中定义全局变量，当该头文件被多个文件 <code class="language-plaintext highlighter-rouge">include</code> 时，该头文件中的全局变量就会被定义多次，导致重复定义，因此不能在头文件中定义全局变量。</p>
 
 <p>这个重复定义是在链接时就报错误的。</p>
 
@@ -169,7 +169,7 @@
 
 <p>3、 可以将任何类型的表达式转化成 void 类型。</p>
 
-<p>4、 const_cast：强制去掉常量属性，不能用于去掉变量的常量性，只能用于去除指针或引用的常量性，将常量指针转化为非常量指针或者将常量引用转化为非常量引用（注意：表达式的类型和要转化的类型是相同的）。</p>
+<p>4、 <strong>const_cast</strong>：强制去掉常量属性，不能用于去掉变量的常量性，只能用于去除指针或引用的常量性，将常量指针转化为非常量指针或者将常量引用转化为非常量引用（注意：表达式的类型和要转化的类型是相同的）。</p>
 
 <p><strong>reinterpret_cast</strong>：改变指针或引用的类型、将指针或引用转换为一个足够长度的整型、将整型转化为指针或引用类型。</p>
 
@@ -328,7 +328,7 @@ hello world!
   <li><strong>多态</strong>：多态就是不同继承类的对象，对同一消息做出不同的响应，基类的指针指向或绑定到派生类的对象，使得基类指针呈现不同的表现方式。</li>
 </ul>
 
-<p>这篇讲多态和虚继承讲得非常透彻。 <a href="https://leetcode.cn/link/?target=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F65410057">https://zhuanlan.zhihu.com/p/65410057</a> </p>
+<p>这篇讲多态和虚继承讲得非常透彻。 <a href="https://zhuanlan.zhihu.com/p/65410057">https://zhuanlan.zhihu.com/p/65410057</a> </p>
 
 <h2 id="32-重载重写隐藏的区别">3.2 重载、重写、隐藏的区别</h2>
 
@@ -360,7 +360,7 @@ hello world!
 
 <p>如果对象类型是派生类，就调用派生类的函数；如果对象类型是基类，就调用基类的函数。</p>
 
-<p>实现方法：多态是通过虚函数实现的，虚函数的地址保存在虚函数表中，虚函数表的地址保存在含有虚函数的类的实例对象的内存空间中。</p>
+<p>实现方法：<strong>多态是通过虚函数实现的，虚函数的地址保存在虚函数表中，虚函数表的地址保存在含有虚函数的类的实例对象的内存空间中</strong>。</p>
 
 <p><strong>实现过程</strong>：</p>
 
@@ -375,7 +375,7 @@ hello world!
 
 <p>查找文件的位置：<code class="language-plaintext highlighter-rouge">include&lt;文件名&gt;</code> 在标准库头文件所在的目录中查找，如果没有，再到当前源文件所在目录下查找；#include”文件名” 在当前源文件所在目录中进行查找，如果没有；再到系统目录中查找。</p>
 
-<p>使用习惯：对于标准库中的头文件常用<code class="language-plaintext highlighter-rouge"> include&lt;文件名&gt;</code><code class="language-plaintext highlighter-rouge">，对于自己定义的头文件，常用 </code>#include”文件名”`</p>
+<p>使用习惯：对于标准库中的头文件常用<code class="language-plaintext highlighter-rouge"> include&lt;文件名&gt;</code>，对于自己定义的头文件，常用 <code class="language-plaintext highlighter-rouge">#include"文件名"</code></p>
 
 <hr />
 <p>from leetcode <a href="https://leetcode.cn/leetbook/detail/cmian-shi-tu-po/">C++ 面试突破 https://leetcode.cn/leetbook/detail/cmian-shi-tu-po/</a></p>
@@ -389,7 +389,7 @@ hello world!
 <span>
 	<a  href="/stl-set" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/c++-function" class="pageNav"  >下一篇</a>
+	<a  href="/c++-memory-allocation" class="pageNav"  >下一篇</a>
 </span>
 
 

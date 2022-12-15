@@ -138,7 +138,7 @@
 
 <h2 id="12-指针的大小">1.2 指针的大小</h2>
 
-<p>在 64 位计算机中，指针占 8 个字节空间。</p>
+<p>在 64 位计算机中，指针占 <strong>8 个字节</strong>空间。</p>
 
 <h2 id="13-悬空指针">1.3 悬空指针</h2>
 
@@ -249,15 +249,13 @@
 
 <p><strong>弱指针</strong>（weak_ptr）：指向 share_ptr 指向的对象，能够解决由shared_ptr带来的循环引用问题。</p>
 
-<p>关于智能指针，个人觉得讲的比较好的4个帖子</p>
+<p>见：</p>
 
-<p>1、<a href="https://www.cnblogs.com/yuanlibin/p/10002654.html">https://www.cnblogs.com/yuanlibin/p/10002654.html</a></p>
+<p>1、<a href="http://blog.xyecho.com/c++11-weak-ptr">c++11 智能指针 weak_ptr</a></p>
 
-<p>2、<a href="https://www.cnblogs.com/yuanlibin/p/10002654.html">https://www.cnblogs.com/diysoul/p/5930388.html</a></p>
+<p>2、 <a href="http://blog.xyecho.com/c++11-unique-ptr">c++11 智能指针 unique_ptr</a></p>
 
-<p>3、<a href="https://www.cnblogs.com/yuanlibin/p/10002654.html">https://www.cnblogs.com/diysoul/p/5930372.html</a></p>
-
-<p>4、<a href="https://www.cnblogs.com/yuanlibin/p/10002654.html">https://www.cnblogs.com/JCpeng/p/15031742.html</a></p>
+<p>3、 <a href="http://blog.xyecho.com/c++11-shared-ptr">c++11 智能指针 shared_ptr</a></p>
 
 <p>借助 <code class="language-plaintext highlighter-rouge">std::move()</code> 可以实现将一个 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 对象赋值给另一个 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 对象，其目的是实现所有权的转移。</p>
 
@@ -282,7 +280,17 @@ weak_ptr 用来表达临时所有权的概念，当某个对象只有存在时�
 <p>待完成</p>
 
 <hr />
-<p>from leetcode <a href="https://leetcode.cn/leetbook/detail/cmian-shi-tu-po/">C++ 面试突破 https://leetcode.cn/leetbook/detail/cmian-shi-tu-po/</a></p>
+<p>参考：</p>
+
+<p>1、 leetcode <a href="https://leetcode.cn/leetbook/detail/cmian-shi-tu-po/">C++ 面试突破 https://leetcode.cn/leetbook/detail/cmian-shi-tu-po/</a></p>
+
+<p>2、<a href="https://www.cnblogs.com/yuanlibin/p/10002654.html">https://www.cnblogs.com/yuanlibin/p/10002654.html</a></p>
+
+<p>3、<a href="https://www.cnblogs.com/yuanlibin/p/10002654.html">https://www.cnblogs.com/diysoul/p/5930388.html</a></p>
+
+<p>4、<a href="https://www.cnblogs.com/yuanlibin/p/10002654.html">https://www.cnblogs.com/diysoul/p/5930372.html</a></p>
+
+<p>5、<a href="https://www.cnblogs.com/yuanlibin/p/10002654.html">https://www.cnblogs.com/JCpeng/p/15031742.html</a></p>
 
   		
 	  </article>
