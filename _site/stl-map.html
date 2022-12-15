@@ -132,40 +132,44 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<p>1.map 内部自建一个红黑树（一种非严格意义上的平衡二叉树）。</p>
+	  		<p>1、map 内部自建一个红黑树（一种非严格意义上的平衡二叉树）。</p>
 
-<p>2.map会自动按key值排序（从小到大）。所以，map的key类型一定要支持&lt;操作符, 但这个是可以自定义的。</p>
+<p>2、map 会自动按 key 值排序（从小到大）。所以，map的key类型一定要支持 <code class="language-plaintext highlighter-rouge">&lt;</code>操作符, 但这个是可以自定义的。</p>
 
-<p>3.查找的复杂度基本是Log(n)。</p>
+<p>3、查找的复杂度基本是 <code class="language-plaintext highlighter-rouge">Log(n)</code>。</p>
 
 <h4 id="一-map-的插入">一 map 的插入</h4>
 
-<p>有三种 插入方式。</p>
+<p>有三种插入方式:</p>
+
 <ul>
-  <li>用insert函数插入pair数据。mapStudent.insert(pair&lt;int, string&gt;(1, “student_one”));</li>
-  <li>用insert函数插入value_type数据。mapStudent.insert(map&lt;int, string&gt;::value_type (2, “student_two”));</li>
-  <li>用数组的方式插入数据。mapStudent[3] = “student_three”;</li>
+  <li>用 <code class="language-plaintext highlighter-rouge">insert</code> 函数插入 <code class="language-plaintext highlighter-rouge">pair</code> 数据。<code class="language-plaintext highlighter-rouge">mapStudent.insert(pair&lt;int, string&gt;(1, "student_one"))</code>;</li>
+  <li>用 <code class="language-plaintext highlighter-rouge">insert</code> 函数插入 <code class="language-plaintext highlighter-rouge">value_type</code> 数据。<code class="language-plaintext highlighter-rouge">mapStudent.insert(map&lt;int, string&gt;::value_type (2, "student_two"))</code>;</li>
+  <li>用数组的方式插入数据。<code class="language-plaintext highlighter-rouge">mapStudent[3] = "student_three"</code>;</li>
 </ul>
 
-<p><strong>[注]</strong>
-当用第一种和第二种方式插入时，如果已经存在，会返回错误。</p>
+<p><strong>[注]</strong></p>
+
+<p>当用第一种和第二种方式插入时，如果已经存在，会返回错误。</p>
+
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pair</span><span class="o">&lt;</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="n">string</span><span class="o">&gt;::</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert_pair</span> <span class="o">=</span> <span class="n">mapStudent</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"student_one"</span><span class="p">));</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">insert_pair</span><span class="p">,</span><span class="n">second</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span>  <span class="c1">// 失败</span>
 </code></pre></div></div>
 
 <p>当用第三种方式插入时，如果已经存在，则直接覆盖掉。</p>
 
-<h4 id="二-map的查找">二 map的查找</h4>
+<h4 id="二-map-的查找">二 map 的查找</h4>
 
-<p>查找有两种方式</p>
+<p>查找有两种方式:</p>
+
 <ul>
-  <li>用count判定关键字是否出现。由于map的key不可能出现重复，所以，要么返回1 要么返回0。一个缺点是，无法找到位置。</li>
-  <li>用find函数定位数据出现的位置。返回一个迭代器。没有找到时返回一个等于end()的迭代器。</li>
+  <li>用 <code class="language-plaintext highlighter-rouge">count()</code> 判定关键字是否出现。由于 map 的 key 不可能出现重复，所以，要么返回 1 要么返回 0。一个缺点是，无法找到位置。</li>
+  <li>用 <code class="language-plaintext highlighter-rouge">find()</code> 函数定位数据出现的位置。返回一个迭代器。没有找到时返回一个等于 <code class="language-plaintext highlighter-rouge">end()</code>的迭代器。</li>
 </ul>
 
-<h4 id="三-map的删除">三 map的删除</h4>
+<h4 id="三-map-的删除">三 map 的删除</h4>
 
-<p>用erase访求可以删除 map中的元素。</p>
+<p>用 <code class="language-plaintext highlighter-rouge">erase()</code> 访求可以删除 map 中的元素。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">map</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>   <span class="c1">// 删除k元素，返回size_type是表示删除的个数。</span>
 <span class="n">map</span><span class="p">,</span><span class="n">erase</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>    <span class="c1">// 删除迭代器p所指的元素。p必须是真实存在的元素，不能等于end()。</span>
@@ -174,9 +178,9 @@
 
 <p><strong>[注]</strong></p>
 
-<p>map在遍历删除时，有一个地方要注意的。</p>
+<p>map 在遍历删除时，有一个地方要注意的。</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(;</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">mapStudent</span><span class="p">,</span><span class="n">end</span><span class="p">();)</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(;</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">mapStudent</span><span class="p">.</span><span class="n">end</span><span class="p">();)</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">second</span> <span class="o">==</span> <span class="s">"student_one"</span><span class="p">)</span>
     <span class="p">{</span> 
@@ -189,9 +193,11 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>mapStudent,erase(iter++); 中的iter++，不是erase(iter)， 然后iter++。因为iter指针被erase之后就失效了，不能再iter++; 也不能erase(++iter)这样就不是删iter原来指向的元素了。</p>
+<p><code class="language-plaintext highlighter-rouge">mapStudent.erase(iter++); </code>中的 <code class="language-plaintext highlighter-rouge">iter++</code>，不是 <code class="language-plaintext highlighter-rouge">erase(iter)</code>， 然后 <code class="language-plaintext highlighter-rouge">iter++</code>。因为<code class="language-plaintext highlighter-rouge">iter</code> 指针被 <code class="language-plaintext highlighter-rouge">erase</code> 之后就失效了，不能再 <code class="language-plaintext highlighter-rouge">iter++</code>; 也不能 <code class="language-plaintext highlighter-rouge">erase(++iter)</code>这样就不是删iter原来指向的元素了。</p>
 
-<h4 id="无序map-unodered_map">无序map unodered_map</h4>
+<p>而是 <code class="language-plaintext highlighter-rouge">iter++</code> 返回了自增前的迭代器的一个临时拷贝。然后这个临时迭代器指向的内容被删除了，但是 iter 本身已经自增到下一个位置了，不受影响。</p>
+
+<h4 id="四无序-map-unodered_map">四、无序 map unodered_map</h4>
 
 <p>1、 <code class="language-plaintext highlighter-rouge">unordered_map</code> 容器底层采用的是哈希表存储结构，该结构本身不具有对数据的排序功能，所以此容器内部不会自行对存储的键值对进行排序。</p>
 

@@ -4,34 +4,35 @@ title: stl string 笔记
 date: 2017-04-01 14:12:15
 categories: c++
 tags: stl  
-excerpt: stl string 杂记
+excerpt: stl string 工作中经常会用到的窗口
 ---
 
-1.`string.h` 和`cstring` 都不是string类的头文件，这两个头文件主要地定义C语言铅笔字符趾操作的一些方法 ，譬如`strlen()`、`strcpy()` 等。`string.h` 是C语言的头文件格式，而 `cstring` 是C++风格的头文件，但是和 `<string.h>` 是一样的，它的目的是为了和C语言兼容。
+1、`string.h` 和`cstring` 都不是string类的头文件，这两个头文件主要地定义C语言字符操作的一些方法 ，譬如`strlen()`、`strcpy()` 等。`string.h` 是C语言的头文件格式，而 `cstring` 是C++风格的头文件，但是和 `<string.h>` 是一样的，它的目的是为了和 C 语言兼容。
 
-2.string的一道面试题。编写一个类string的几个函数。（见后面）
+2、`string` 的一道面试题。编写一个类 `string` 的几个函数。（见后面）
 
-3.C++字符串和C字符串的转换
+3、C++ 字符串和 C 字符串的转换。
 
-C++提供了的由C++字符 串转换成对应的C字符串的方法是使用data()、c_str()和copy()来实现。
+C++ 提供了的由 C++字符串转换成对应的C字符串的方法是使用 `data()`、`c_str()`和 `copy()`来实现。
 
-其中，data()以字符数据 的形式返回 字符串内容，但并不添加 '\0'；c_str()返回一以'\0'结尾的字符数组；而copy()则把字符 串的内容复制或写入既有的c_string或字符数组内，需要注意是，c++字符串并以不'\0'结尾。
+其中，`data()` 以字符数据的形式返回字符串内容，但并不添加 `'\0'`；`c_str()` 返回一以`'\0'`结尾的字符数组；而 `copy()` 则把字符串的内容复制或写入既有的 `c_string` 或字符数组内，需要注意是，c++ 字符串并以不`'\0'`结尾。
 
-c_str()语句可以生成一个 const char *  指针，江脂向空字符 的数组。这个数组的数据 是临时的， 当有一个改变这数据的成员函数被调用后，其中的数据就会失效。因此要么现用现转换，要么把它的数据复制到用户自己可以管理 的内在中后再转换。
+`c_str()`语句可以生成一个 `const char *`  指针，指向空字符的数组。这个数组的数据是临时的， 当有一个改变这数据的成员函数被调用后，其中的数据就会失效。因此要么现用现转换，要么把它的数据复制到用户自己可以管理的内在中后再转换。
 
-4.string和int的类型转换
+4、`string` 和 `int` 的类型转换
 
-（1） int转string的方法。
+（1） `int` 转 `string` 的方法。
 
-可以用snprintf()。
+可以用 `snprintf()`。
+
 ```c
 int snprintf(char *str, size_t size, const char *format, ...)
 ```
-（2）string 转int的方法 
+（2）`string` 转 `int`的方法 
 
-可以用 strtol， strtoll，strtoul，或strtoull函数。
+可以用 `strtol`， `strtoll`，`strtoul`，或 `strtoull`函数。
 
-5.string 其他常用成员函数
+5、`string` 其他常用成员函数
 
 ```c
 int capacity() const ;             // 返回当前容量（即string 中不必增加内在即可存的元素个数）
@@ -42,14 +43,11 @@ int empty() const;                 // 当前字符串是否为空
 void resize(int len, char c) ;      // 把字符串当前大小为为len，并用字符c填充不足的部分。
 ```
 
-6、 string的size()和length()的结果是一样的。
+6、`string` 的`size()`和`length()`的结果是一样的。
 
-length是因为沿用C语言的习惯而保留下来的，string类最初只有length，引入STL之后，为了兼容又加入了size，它是作为STL容器的属性存在的，便于符合STL的接口规则，以便用于STL的算法。string类的size()/length()方法返回的是字节数，不管是否有汉字。
-
-
+`length` 是因为沿用 C 语言的习惯而保留下来的，`string` 类最初只有 `length`，引入 STL 之后，为了兼容又加入了 `size`，它是作为 STL 容器的属性存在的，便于符合 STL 的接口规则，以便用于 STL 的算法。`string` 类的 `size()/length()`方法返回的是字节数，不管是否有汉字。
  
 ```c++
-
 class String 
 { 
 public: 
@@ -121,7 +119,7 @@ String & String::operate =(const String &other)
    return *this; 
 }
 
-// 赋值函数 
+// 移动赋值函数 
 String & String::operate = (String &&other)
 {
     if (this != other)
@@ -132,7 +130,6 @@ String & String::operate = (String &&other)
     }
     return *this; 
 }
-
 ```
 
 

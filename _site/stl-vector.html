@@ -132,12 +132,14 @@
 	  	
 	  		<p>vector 是线性容器。</p>
 
-<p>它的元素是严格按照线性序列排序，存储在一连续的存储空间中。这也是意味着不仅可以用使用迭代器，还可以使用指针的偏移方式访问。
-vector的优点如下：</p>
+<p>它的元素是严格按照线性序列排序，存储在一连续的存储空间中。这也是意味着不仅可以用使用迭代器，还可以使用指针的偏移方式访问。</p>
+
+<p>vector的优点如下：</p>
+
 <ul>
   <li>可以使用下标访问个别的元素。</li>
   <li>迭代器可以按照不同的方式遍历容器</li>
-  <li>可以在窗口在末尾增加或删除元素。ss</li>
+  <li>可以在窗口在末尾增加或删除元素。</li>
 </ul>
 
 <p>1、虽然窗口在在自动处理容量的大小时会消耗更多的内存，但是容器能和数组一样的性能，而且能很好的地调整存储空间大小。</p>
@@ -146,34 +148,30 @@ vector的优点如下：</p>
 
 <p>3、在迭代器和引用的也不比list支持的好。</p>
 
-<p>4、容器的大小和窗口在的容量是有区别的，大小是元素的，容量是分配的内存大小。大小vector::size() ，容量是vector::capacity()</p>
+<p>4、容器的大小和窗口在的容量是有区别的，大小是元素的，容量是分配的内存大小。大小 <code class="language-plaintext highlighter-rouge">vector::size()</code> ，容量是<code class="language-plaintext highlighter-rouge">vector::capacity()</code></p>
 
 <p>5、可用 <code class="language-plaintext highlighter-rouge">for_echo()</code> 遍历。如：</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">for_echo</span><span class="p">(</span><span class="n">ivetor</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">ivector</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">print</span><span class="p">)</span> <span class="c1">// print是回调函数   void print(int n );</span>
-
 </code></pre></div></div>
 
-<p>6、<code class="language-plaintext highlighter-rouge">&lt;algorithm&gt;</code>中的sort函数，对象是vector。</p>
+<p>6、<code class="language-plaintext highlighter-rouge">&lt;algorithm&gt;</code>中的 <code class="language-plaintext highlighter-rouge">sort</code>函数，对象是 <code class="language-plaintext highlighter-rouge">vector</code>。</p>
 
-<p>7、vector 查找，<code class="language-plaintext highlighter-rouge">std::find(vector.begin(), vector.end(), 3);</code></p>
+<p>7、<code class="language-plaintext highlighter-rouge">vector</code> 查找，<code class="language-plaintext highlighter-rouge">std::find(vector.begin(), vector.end(), 3);</code></p>
 
-<p>8、vector 删除，有两种方式 erase()指定位置  或pop_back()最后一个。</p>
+<p>8、<code class="language-plaintext highlighter-rouge">vector</code> 删除，有两种方式 <code class="language-plaintext highlighter-rouge">erase()</code>指定位置 或<code class="language-plaintext highlighter-rouge">pop_back()</code>最后一个。</p>
 
-<p>9、当进行添加是，可以用 <code class="language-plaintext highlighter-rouge">insert()</code> 或 <code class="language-plaintext highlighter-rouge">push_bask()</code>，当容量不够时，会触发动态扩容，此时，它的性能会下降，所以，一般要先预估vector的大小，先 <code class="language-plaintext highlighter-rouge">vector::reserver()</code>。避免出现动态扩容。</p>
+<p>9、当进行添加是，可以用 <code class="language-plaintext highlighter-rouge">insert()</code> 或 <code class="language-plaintext highlighter-rouge">push_bask()</code>，当容量不够时，会触发动态扩容，此时，它的性能会下降，所以，一般要先预估 <code class="language-plaintext highlighter-rouge">vector</code> 的大小，先 <code class="language-plaintext highlighter-rouge">vector::reserver()</code>。避免出现动态扩容。</p>
 
-<p>10、使用“交换技巧”来修整 vector 过剩的空间/内存。<code class="language-plaintext highlighter-rouge">vector&lt;int&gt;(ivec).swap(ivec)</code>。<code class="language-plaintext highlighter-rouge">vector&lt;int&gt;(ivec)</code> 建立一个临时 的vector，它是ivec的一个拷贝。vector的拷贝构造函数只分配拷贝的元素所需要的大小。</p>
+<p>10、使用“交换技巧”来修整 <code class="language-plaintext highlighter-rouge">vector</code> 过剩的空间/内存。<code class="language-plaintext highlighter-rouge">vector&lt;int&gt;(ivec).swap(ivec)</code>。<code class="language-plaintext highlighter-rouge">vector&lt;int&gt;(ivec)</code> 建立一个临时的 <code class="language-plaintext highlighter-rouge">vector</code>，它是 <code class="language-plaintext highlighter-rouge">ivec</code> 的一个拷贝。<code class="language-plaintext highlighter-rouge">vector</code> 的拷贝构造函数只分配拷贝的元素所需要的大小。</p>
 
-<p>11、用swap方法强行释放vector所点内存.。这个地方应该怎么解释？</p>
+<p>11、用<code class="language-plaintext highlighter-rouge">swap</code> 方法强行释放 <code class="language-plaintext highlighter-rouge">vector</code> 所在内存。这个地方应该怎么解释？</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tmplate</span><span class="o">&lt;</span> <span class="n">class</span> <span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">clearVector</span><span class="p">(</span> <span class="n">vector</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">v</span> <span class="p">)</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tmplate</span><span class="o">&lt;</span> <span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">clearVector</span><span class="p">(</span> <span class="n">vector</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">v</span> <span class="p">)</span>
 <span class="p">{</span>
      <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">vtTemp</span><span class="p">;</span>
      <span class="n">vtTemp</span><span class="p">,</span><span class="n">swap</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
 <span class="p">}</span>
-
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="p">;</span> 
-<span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 
 </code></pre></div></div>
 <p>或  <code class="language-plaintext highlighter-rouge">vector&lt;int&gt;().swap(v)</code></p>
@@ -182,12 +180,11 @@ vector的优点如下：</p>
 
 <p>或 <code class="language-plaintext highlighter-rouge">{   std::vector&lt;int&gt; tmp = v; v.swap(tmp); }　　//大括号让tmp退出｛｝时自动析构。</code></p>
 
-<p>12、 关于vector删除的问题。有一些地方要注意。遍历一个vector找到对应的元素删除的正常做法。 对于容器的删除都要小心。</p>
+<p>12、 关于 <code class="language-plaintext highlighter-rouge">vector</code> 删除的问题。有一些地方要注意。遍历一个 <code class="language-plaintext highlighter-rouge">vector</code> 找到对应的元素删除的正常做法。 对于容器的删除都要小心。</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">vector</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">vector</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">vector</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">vector</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
 <span class="p">{</span>
-     <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span> <span class="o">==</span> <span class="mi">3</span> <span class="p">)</span>   <span class="n">vector</span><span class="p">.</span><span class="n">ease</span><span class="p">(</span><span class="n">iter</span><span class="p">);</span>
+     <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span> <span class="o">==</span> <span class="mi">3</span> <span class="p">)</span>  <span class="n">vector</span><span class="p">.</span><span class="n">ease</span><span class="p">(</span><span class="n">iter</span><span class="p">);</span>
 <span class="err">｝</span>
 
 </code></pre></div></div>
@@ -209,8 +206,7 @@ vector的优点如下：</p>
 
 <p>13、 c++11 新增的方法：</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="n">vector</span><span class="o">::</span><span class="n">cbegin</span><span class="p">();</span>  <span class="c1">// 返回的是const iterator </span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">::</span><span class="n">cbegin</span><span class="p">();</span>  <span class="c1">// 返回的是const iterator </span>
 <span class="n">vector</span><span class="o">::</span><span class="n">cend</span><span class="p">();</span>
 <span class="n">vector</span><span class="o">::</span><span class="n">crbegin</span><span class="p">();</span>
 <span class="n">vector</span><span class="o">::</span><span class="n">crend</span><span class="p">()</span><span class="o">:</span>
@@ -219,7 +215,6 @@ vector的优点如下：</p>
 <span class="n">vector</span><span class="o">::</span><span class="n">emplace</span><span class="p">();</span>  <span class="c1">// emplace函数的参数根据元素类型而变化，参数必须与元素类型的构造函数相匹配.     </span>
 <span class="n">vector</span><span class="o">::</span><span class="n">emplace_back</span><span class="p">();</span> 
 <span class="n">vector</span><span class="o">::</span><span class="n">shrink_to_fit</span><span class="p">();</span>  <span class="c1">// 减少vector的容量到合适的大小。</span>
-
 </code></pre></div></div>
 
 
