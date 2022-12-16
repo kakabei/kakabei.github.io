@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 15 Dec 2022 20:45:11 +0800</pubDate>
-    <lastBuildDate>Thu, 15 Dec 2022 20:45:11 +0800</lastBuildDate>
+    <pubDate>Fri, 16 Dec 2022 08:55:56 +0800</pubDate>
+    <lastBuildDate>Fri, 16 Dec 2022 08:55:56 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -776,7 +776,7 @@
 
 &lt;p&gt;字段长度一般设置为2的幂（也就是2的n 次方）。&lt;/p&gt;
 
-&lt;h1 id=&quot;5优先考虑逻辑删除而不是删除&quot;&gt;5、优先考虑逻辑删除，而不是删除&lt;/h1&gt;
+&lt;h1 id=&quot;5优先考虑逻辑删除而不是物理删除&quot;&gt;5、优先考虑逻辑删除，而不是物理删除&lt;/h1&gt;
 
 &lt;p&gt;一般不做数据删除，而是更新状态，把数据标志为已删除状态。&lt;/p&gt;
 
@@ -880,7 +880,7 @@
 
 &lt;ul&gt;
   &lt;li&gt;utf8：支持中英文混合场景，国际通过，3个字节长度&lt;/li&gt;
-  &lt;li&gt;utf8mb4:   完全兼容utf8，4个字节长度，一般存储&lt;strong&gt;emoji表情&lt;/strong&gt;需要用到它。&lt;/li&gt;
+  &lt;li&gt;utf8mb4:   完全兼容 utf8，4个字节长度，一般存储&lt;strong&gt;emoji表情&lt;/strong&gt;需要用到它。&lt;/li&gt;
   &lt;li&gt;GBK ：支持中文，但是不支持国际通用字符集，2个字节长度&lt;/li&gt;
   &lt;li&gt;latin1：MySQL默认字符集，1个字节长度&lt;/li&gt;
 &lt;/ul&gt;
@@ -909,7 +909,7 @@
 
 &lt;h1 id=&quot;17不建议-stored-procedure-包括存储过程触发器&quot;&gt;17、不建议 Stored procedure (包括存储过程，触发器)&lt;/h1&gt;
 
-&lt;p&gt;对于MYSQL来说，存储过程、触发器等还不是很成熟， 并没有完善的出错记录处理，不建议使用。&lt;/p&gt;
+&lt;p&gt;对于 MYSQL 来说，存储过程、触发器等还不是很成熟， 并没有完善的出错记录处理，不建议使用。&lt;/p&gt;
 
 &lt;p&gt;尽量在业务代码中完成这一些逻辑。&lt;/p&gt;
 
@@ -921,7 +921,7 @@
 
 &lt;h1 id=&quot;19大字段&quot;&gt;19、大字段&lt;/h1&gt;
 
-&lt;p&gt;字段太大了，不要存入 mysql中。可以选择另外的存储。 如图片，文体，可以通过放到 CDN 上。然后保存 对应的链接到 mysql 表中。&lt;/p&gt;
+&lt;p&gt;字段太大了，不要存入 mysql 中。可以选择另外的存储。 如图片，文体，可以通过放到 CDN 上。然后保存 对应的链接到 mysql 表中。&lt;/p&gt;
 
 &lt;h1 id=&quot;20考虑是否需要分库分表&quot;&gt;20、考虑是否需要分库分表&lt;/h1&gt;
 
@@ -950,7 +950,7 @@
 
 &lt;p&gt;2）如是业务上已要求结果只有一条，加了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;limit 1&lt;/code&gt;。业务上对数据有惟一的要求，一定要通过严格的条件过滤出来。 优先通过 SQL 语言过滤，再考虑业务代码过滤。&lt;/p&gt;
 
-&lt;p&gt;3）应尽量避免在 where 子句中使用 or 来连接条件。or 会破坏索引，但select 时要时刻注意索引是否有效，要评估效率。&lt;/p&gt;
+&lt;p&gt;3）应尽量避免在 where 子句中使用 or 来连接条件。or 会破坏索引，但 select 时要时刻注意索引是否有效，要评估效率。&lt;/p&gt;
 
 &lt;p&gt;4）注意优化 limit 深分页问题。&lt;a href=&quot;https://github.com/zhangyachen/zhangyachen.github.io/issues/117&quot;&gt;mysql 证明为什么用limit时，offset很大会影响性能&lt;/a&gt;&lt;/p&gt;
 

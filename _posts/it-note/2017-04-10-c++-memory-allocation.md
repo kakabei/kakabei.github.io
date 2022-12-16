@@ -106,3 +106,4 @@ if (a == nullptr) {
 1、[深度阅读：深入 C++ 内存管理](https://zhuanlan.zhihu.com/p/344377490)
 
 2、[C++ 自由存储区是否等价于堆？](https://cloud.tencent.com/developer/article/1155154)
+    

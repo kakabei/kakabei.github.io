@@ -20,7 +20,6 @@ mysql -D 所选择的数据库名 -h 主机名 -u 用户名 -p
 ## 1.2  退出
 ```shell 
 mysql> exit  ## 退出 
-
 ```
 
 ## 1.3 数据相关信息
@@ -55,7 +54,6 @@ use database_name;
 ## 2.1 表操作
 
 ```mysql 
-
 -- 显示 samp_db 下面所有的表名字
 show tables;                 
 
@@ -72,41 +70,36 @@ drop table table_name;
 truncate table table_name;   
 
 -- 修改表名
-alter table 和table_name  rename new_table_name;
+alter table table_name rename new_table_name;
 ```
 
-## 2.2  表创建
+## 2.2 表创建
 
 ```mysql 
-
 CREATE TABLE `UserInfo` (
-
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号ID',
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '用户名',
   `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `extendInfo` varchar(1024) NOT NULL DEFAULT '' COMMENT '扩展字段',
   PRIMARY KEY (`id`)
-
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
 ```
 
-
 表的一些属性说明：
--   `NULL`：数据列可包含 NULL 值；
--   `NOT NULL`：数据列不允许包含 NULL 值；
--   `DEFAULT`：默认值；
--   `PRIMARY KEY`：主键；
--   `AUTO_INCREMENT`：自动递增，适用于整数类型；
--   `UNSIGNED`：是指数值类型只能为正数；
--   `CHARACTER SET name`：指定一个字符集；
--   `COMMENT`：对表或者字段说明；
 
-## 2.3  列的操作
+- `NULL`：数据列可包含 NULL 值；
+- `NOT NULL`：数据列不允许包含 NULL 值；
+- `DEFAULT`：默认值；
+- `PRIMARY KEY`：主键；
+- `AUTO_INCREMENT`：自动递增，适用于整数类型；
+- `UNSIGNED`：是指数值类型只能为正数；
+- `CHARACTER SET name`：指定一个字符集；
+- `COMMENT`：对表或者字段说明；
+
+## 2.3 列的操作
 
 ```mysql 
-
 -- 添加列
 alter table 表名 add 列名 列数据类型 [after 插入位置];
 
@@ -154,7 +147,6 @@ insert into live (user_id, name) SELECT m.user_id, m.name FROM moot m where m.id
 
 -- 如不存在则插入，如存在则更新
 INSERT INTO `charger` (`id`,`type`,`create_at`,`update_at`) VALUES (3,2,'2017-05-18 11:06:17','2017-05-18 11:06:17') ON DUPLICATE KEY UPDATE `id`=VALUES(`id`), `type`=VALUES(`type`), `update_at`=VALUES(`update_at`);
-
 ```
 
 
@@ -163,7 +155,6 @@ INSERT INTO `charger` (`id`,`type`,`create_at`,`update_at`) VALUES (3,2,'2017-05
 现实开发实践中，业务上一般不允许删除。DBA 要把这个权限收回。
 
 ```mysql
-
 -- 清空表
 delete from  UserInfo
 -- 或
@@ -171,7 +162,6 @@ delete * from  UserInfo
 
 -- 删除指定的一行
 delete from  UserInfo  WHERE id = 111; 
-
 ```
 
 
@@ -186,7 +176,6 @@ select * from UserInfo order by  id asc;
 
 -- 降序
 select * from UserInfo order by id desc;
-
 ```
 
 
@@ -195,10 +184,8 @@ select * from UserInfo order by id desc;
 将具有相同值的行分组到汇总。
 
 ```mysql 
-
 -- 分组汇总不同性别的人数
 select male, count(id) from UserInfo group by male; 
-
 ```
 
 
@@ -207,7 +194,6 @@ select male, count(id) from UserInfo group by male;
 合并两个或多个 SELECT 语句的结果集。
 
 ```mysql 
-
 select name from Employees_ZH union select name from Employees_USA; 
 ```
 
@@ -216,10 +202,10 @@ select name from Employees_ZH union select name from Employees_USA;
 
 JOIN 子句用于根据两个或多个表之间的相关列组合来自两个或多个表的行。
 
--   `INNER JOIN` : 两个表都存在的行，才返回。
--   `LEFT JOIN`:  右表没有，左表有，也要返回。
--   `RIGHT JOIN`: 左表没有，右表有，也要返回。
--   `FULL JOIN`: 只要其中一个表中有，就返回行。 (MySQL 是不支持的，通过 `LEFT JOIN + UNION + RIGHT JOIN` 的方式 来实现)
+- `INNER JOIN` : 两个表都存在的行，才返回。
+- `LEFT JOIN`:  右表没有，左表有，也要返回。
+- `RIGHT JOIN`: 左表没有，右表有，也要返回。
+- `FULL JOIN`: 只要其中一个表中有，就返回行。 (MySQL 是不支持的，通过 `LEFT JOIN + UNION + RIGHT JOIN` 的方式 来实现)
 
 
 ## 2.9  FULL OUTER JOIN
@@ -274,17 +260,14 @@ SELECT MIN(列名称) FROM 表名称 WHERE 条件;
 ## 5.1  普通索引
 
 ```mysql 
-
 --  添加索引 普通索引(INDEX)
 ALTER TABLE `表名字` ADD INDEX 索引名字 ( `字段名字` )
-
 
 -- 直接创建索引
 CREATE INDEX index_user ON Userinfo(name)
 
 -- 修改表结构的方式添加索引
 ALTER TABLE table_name ADD INDEX index_name ON (column(length))
-
 
 -- 给 表中的 name 字段 添加普通索引
 ALTER TABLE `Userinfo` ADD INDEX index_name (name)
@@ -299,11 +282,8 @@ CREATE TABLE `user` (
     INDEX index_name (title(length))
 )
 
-
 -- 删除索引
 DROP INDEX index_name ON table
-
-
 ```
 
 ## 5.2  主键索引
@@ -373,12 +353,11 @@ mysql -h127.0.0.1 -uadmin -padmin123 -P3358 hgame  -e "CREATE TABLE UserInfo$i
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
 done
-
 ```
 
 
 ---
 
-1、 [https://github.com/jaywcjlove/mysql-tutorial/blob/master/docs/21-minutes-MySQL-basic-entry.md](https://github.com/jaywcjlove/mysql-tutorial/blob/master/docs/21-minutes-MySQL-basic-entry.md)
+1、[https://github.com/jaywcjlove/mysql-tutorial/blob/master/docs/21-minutes-MySQL-basic-entry.md](https://github.com/jaywcjlove/mysql-tutorial/blob/master/docs/21-minutes-MySQL-basic-entry.md)
 
 2、[https://www.w3school.com.cn/sql/index.asp](https://www.w3school.com.cn/sql/index.asp)
