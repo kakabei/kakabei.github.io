@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 20 Dec 2022 17:30:46 +0800</pubDate>
-    <lastBuildDate>Tue, 20 Dec 2022 17:30:46 +0800</lastBuildDate>
+    <pubDate>Tue, 20 Dec 2022 17:35:32 +0800</pubDate>
+    <lastBuildDate>Tue, 20 Dec 2022 17:35:32 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -657,256 +657,6 @@
         
         
         <category>总结</category>
-        
-      </item>
-    
-      <item>
-        <title>mysql 索引知识点总结</title>
-        <description>&lt;p&gt;索引的目的是提高查找效率，对数据表的值集合进行了排序，并按照一定数据结构进行了存储。&lt;/p&gt;
-
-&lt;h1 id=&quot;一索引&quot;&gt;一、索引&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;在关系数据库中，索引是一种单独的、物理的对数据库表中一列或多列的值进行排序的一种存储结构，它是某个表中一列或若干列值的集合和相应的指向表中物理标识这些值的数据页的逻辑指针清单。索引的作用相当于图书的目录，可以根据目录中的页码快速找到所需的内容。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;索引的目的是提高查找效率，对数据表的值集合进行了排序，并按照一定数据结构进行了存储。&lt;/p&gt;
-
-&lt;h1 id=&quot;二索引的数据结构&quot;&gt;二、索引的数据结构&lt;/h1&gt;
-
-&lt;p&gt;在 mysql 中，索引是在存储引擎层实现，不同的存储引擎有不同的实现方式。常见的&lt;strong&gt;有序数组&lt;/strong&gt;、&lt;strong&gt;Hash&lt;/strong&gt; 和&lt;strong&gt;搜索树&lt;/strong&gt;， Innodb 的引擎支持的 &lt;strong&gt;B+ 树&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;h2 id=&quot;有序数组&quot;&gt;有序数组&lt;/h2&gt;
-
-&lt;p&gt;数组是一种常见和重要的数据结构。有序数组是以 Key 的递增顺序保存数据在数组中。非常适合等值查询和范围查询。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/mysql-index-2022-12-16_09-15-00.png&quot; alt=&quot;&quot; /&gt;
-需要查询特定 ID 值的 name，用二分法就可以快速得到，时间复杂度是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(logn)&lt;/code&gt;。&lt;/p&gt;
-
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 二分查找递归实现方式  &lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;binary_search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-  
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;binary_search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;binary_search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;其缺点也很明显。其只适合静态数据，如遇到有数据新增插入，则就会需要数据移动（新申请空间、拷贝数据和释放空间等动作），这将非常消耗资源。&lt;/p&gt;
-
-&lt;h2 id=&quot;hash&quot;&gt;Hash&lt;/h2&gt;
-
-&lt;p&gt;哈希表是一种以键-值存储数据的结构，我们只需要输入键，就可以找到对应的值。哈希表适用于等值查询的场景，缺点是：对应范围查询则无能为力。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/db/mysql-index-2022-12-16_09-35-14.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;二叉搜索树&quot;&gt;二叉搜索树&lt;/h2&gt;
-
-&lt;p&gt;二叉搜索树，也称为二叉查找树、有序二叉树或排序二叉树，是指一颗空树或者具有以下性质的二叉树：&lt;/p&gt;
-
-&lt;p&gt;若任意节点的左子树不空，则左子树上所有节点的值均小于它的根节点的值；
-若任意节点的右子树不空，则右子树上所有节点的值均大于或等于它的根节点的值；
-任意节点的左、右子树也分别为二叉查找树；&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/db/mysql-index-2022-12-16_09-36-18.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;二叉搜索树相比于其它数据结构的优势在于查找、插入的时间复杂度较低，为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(logn)&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;为了维持 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(logn)&lt;/code&gt; 的查询复杂度，需要保持这棵树是平衡二叉树。&lt;/p&gt;
-
-&lt;p&gt;二叉搜索树的查找算法：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;若 b 是空树，则搜索失败，否则：&lt;/li&gt;
-  &lt;li&gt;若 x 等于 b 的根节点的值，则查找成功；否则：&lt;/li&gt;
-  &lt;li&gt;若 x 小于 b 的根节点的值，则搜索左子树；否则：&lt;/li&gt;
-  &lt;li&gt;查找右子树。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;相对于有序数组和 Hash，二叉搜索树在查找和插入两端的表现都非常不错。&lt;/p&gt;
-
-&lt;h2 id=&quot;b-树&quot;&gt;B+ 树&lt;/h2&gt;
-
-&lt;p&gt;Innodb 存储引擎支持 &lt;strong&gt;B+ 树索引&lt;/strong&gt;、&lt;strong&gt;全文索引&lt;/strong&gt;和&lt;strong&gt;哈希索引&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;B+ 树主要理解数据组织形式和查找算法即可。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/db/mysql-index-2022-12-16_09-40-31.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;B+树的 3 个优点:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;层级更低，IO 次数更少。&lt;/li&gt;
-  &lt;li&gt;每次都需要查询到叶子节点，查询性能稳定。&lt;/li&gt;
-  &lt;li&gt;叶子节点形成有序链表，范围查询方便。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;操作算法&quot;&gt;操作算法&lt;/h2&gt;
-
-&lt;h3 id=&quot;查找&quot;&gt;查找&lt;/h3&gt;
-
-&lt;p&gt;由根节点自顶向下遍历树，根据分离值在要查找的一边的指针；在节点内使用二分查找来确定位置。&lt;/p&gt;
-
-&lt;h3 id=&quot;插入&quot;&gt;插入&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/db/mysql-index-2022-12-16_09-55-08.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;删除&quot;&gt;删除&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/db/mysql-index-2022-12-16_10-07-33.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;填充因子（innodb_fill_factor）：索引构建期间填充的每个 B-tree 页面上的空间百分比，其余空间保留给未来索引增长。从插入和删除操作中可以看到填充因子的值会影响到数据页的 split 和 merge 的频率。将值设置小些，可以减少 split 和 merge 的频率，但是索引相对会占用更多的磁盘空间；反之，则会增加 split 和 merge 的频率，但是可以减少占用磁盘空间。Innodb 对于聚集索引默认会预留 1/16 的空间保证后续的插入和升级索引。&lt;/p&gt;
-
-&lt;h1 id=&quot;三innodb-b-树索引&quot;&gt;三、Innodb B+ 树索引&lt;/h1&gt;
-
-&lt;p&gt;从 Innodb 的角度了解如何使用 B+树 构建索引，索引如何工作和如何使用索引提升查找效率&lt;/p&gt;
-
-&lt;h2 id=&quot;聚集索引和非聚集索引&quot;&gt;聚集索引和非聚集索引&lt;/h2&gt;
-
-&lt;p&gt;数据库中的 B+树索引可以分为聚集索引和非聚集索引。聚集索引和非聚集索引的不同点在于叶子节点是否是完整行数据。&lt;/p&gt;
-
-&lt;p&gt;聚集索引就是按照每张表的主键构造一棵 B+树，叶子节点存放的是表的完整行记录。&lt;/p&gt;
-
-&lt;p&gt;非聚集索引的叶子节点不包含行记录的全部数据。&lt;/p&gt;
-
-&lt;p&gt;Innodb 存储引擎的非聚集索引的叶子节点的内容为主键索引。&lt;/p&gt;
-
-&lt;p&gt;若数据表没有主键聚集索引是怎么建立的？在没有主键时 Innodb 会给数据表的每条记录生成一个 6 个字节长度的 RowId 字段，会以此建立聚集索引。&lt;/p&gt;
-
-&lt;h2 id=&quot;select-语句查找记录的过程&quot;&gt;Select 语句查找记录的过程&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;create table t_ks_index (
-    ID int primary key,
-    k int NOT NULL DEFAULT 0,
-    s varchar(16) NOT NULL DEFAULT '',
-    index k(k)
-) engine=InnoDB DEFAULT CHARSET=utf8;
-
-insert into t_ks_index values(100, 1, 'aa'),(200, 2, 'bb'),(300, 3, 'cc'),(500, 5, 'ee'),(600,6,'ff'),(700,7,'gg');
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/db/mysql-index-2022-12-16_10-18-28.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;左边是以主键 ID 建立起的聚集索引，其叶子节点存储了完整的表记录信息；右边是以普通字段 K 建立的普通索引，其叶子节点的值是主键 ID。&lt;/p&gt;
-
-&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_ks_index&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;between&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;执行过程：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;在 K 索引树上找到 k=3 的记录，取得 ID=300；&lt;/li&gt;
-  &lt;li&gt;再到 ID 索引树上查找 ID=300 对应的 R3；&lt;/li&gt;
-  &lt;li&gt;在 k 索引树取下一个值 k=5，取得 ID=500；&lt;/li&gt;
-  &lt;li&gt;再回到 ID 索引树查到 ID=500 对应的 R4；&lt;/li&gt;
-  &lt;li&gt;在 k 索引树取下一个值 k=6，不满足条件，循环结束。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这个过程出现了&lt;strong&gt;回表&lt;/strong&gt;，即回到主键索引树搜索的过程。避免回表操作是提升 SQL 查询效率的常规思路及重要方法。&lt;/p&gt;
-
-&lt;h2 id=&quot;覆盖索引&quot;&gt;覆盖索引&lt;/h2&gt;
-
-&lt;p&gt;MySQL 只需要通过索引就可以查找和返回查询所需要的数据，而不必在使用索引处理数据之后再进行回表操作。&lt;/p&gt;
-
-&lt;p&gt;覆盖索引可以一次性完成查询工作，有效减少IO，提高查询效率。也就是说，查询的列和索引的列一致，可以使用覆盖索引，查询中应该尽量使用覆盖索引&lt;/p&gt;
-
-&lt;p&gt;索引 K 中包含了查询语句所需要的字段 ID 的值，无需再次回到主键索引树查找，也就是“覆盖”了我们的查询需求，我们称之为覆盖索引。覆盖索引可以减少树的搜索次数，显著提升查询性能。&lt;/p&gt;
-
-&lt;p&gt;如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;CREATE TABLE `employees` (
-  `emp_no` int(11) NOT NULL,
-  `birth_date` date NOT NULL,
-  `first_name` varchar(14) NOT NULL,
-  `last_name` varchar(16) NOT NULL,
-  `gender` enum('M','F') NOT NULL,
-  `hire_date` date NOT NULL,
-  PRIMARY KEY (`emp_no`),
-  KEY `i_first_name` (`first_name`),
-  KEY `i_hire_date` (`hire_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-insert into employees values(100,'1990-01-14' , 'Li', 'Lei','F', '2011-04-24'),(101,'1991-03-04' , 'Fang', 'Hui', 'M','2012-04-18');
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;两个 SQL 语句，&lt;/p&gt;
-
-&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- A &lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;explain&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hire_date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'1990-01-14'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;-- B &lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;explain&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hire_date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'1990-01-14'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/db/mysql-index-2022-12-16_13-09-07.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;explain 的结果可以看到 SQL 语句 A 的 extra 为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Using index condition&lt;/code&gt;。是索引下沉了。&lt;/p&gt;
-
-&lt;p&gt;B 使用了索引。索引中包含了查询语句所需要的字段 ID 的值，无需再次回到主键索引树查找，也就是“覆盖”了我们的查询需求，我们称之为覆盖索引。覆盖索引可以减少树的搜索次数，显著提升查询性能。&lt;/p&gt;
-
-&lt;h2 id=&quot;最左匹配&quot;&gt;最左匹配&lt;/h2&gt;
-
-&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- A &lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;explain&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;first_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'%Fa%'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;-- B&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;explain&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;first_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Fa%'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/db/mysql-index-2022-12-16_13-24-57.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;SQL 语句 A 使用了极端方式: first_name like ‘%Fa%’，前后都增加模糊匹配使得 SQL 语句无法使用到索引。&lt;/p&gt;
-
-&lt;p&gt;语句 B 就使用了索引。最左匹配可以是字符串索引的最左 N 个字符，也可以是联合索引的最左 M 的字段。合理规划、使用最左匹配可以减少索引，从而节约磁盘空间。&lt;/p&gt;
-
-&lt;h2 id=&quot;索引下推&quot;&gt;索引下推&lt;/h2&gt;
-
-&lt;p&gt;在 MySQL5.6 之前，通过使用非主键索引进行查询的时候，存储引擎通过索引查询数据，然后将结果返回给 MySQL server 层，在 server 层判断是否符合条件。&lt;/p&gt;
-
-&lt;p&gt;在 MySQL5.6 及以上版本，可以使用索引下推的特性。当存在索引的列做为判断条件时，MySQL server将这一部分判断条件传递给存储引擎，然后存储引擎会筛选出符合MySQL server传递条件的索引项，即在存储引擎层根据索引条件过滤掉不符合条件的索引项，然后回表查询得到结果，将结果返回给MySQL server。&lt;/p&gt;
-
-&lt;p&gt;可以看到，有了索引下推的优化，&lt;strong&gt;在满足一定的条件下，存储引擎层会在回表查询之前对数据进行过滤，可以减少存储引擎回表查询的次数&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;当 Extra 列的值为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Using index condition&lt;/code&gt;，则表示使用了索引下推。&lt;/p&gt;
-
-&lt;p&gt;如：
-&lt;img src=&quot;./assets/db/mysql-index-2022-12-16_13-34-38.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;四常见的索引失效场景&quot;&gt;四、常见的索引失效场景&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;查询条件使用函数在索引列上 。&lt;/li&gt;
-  &lt;li&gt;隐式转换导致索引失效。&lt;/li&gt;
-  &lt;li&gt;对索引列进行运算。&lt;/li&gt;
-  &lt;li&gt;使用like，like 查询是以%开头。&lt;/li&gt;
-  &lt;li&gt;不符合复合索引 “最左前缀”原则。&lt;/li&gt;
-  &lt;li&gt;用 or 分割开的条件，若 or 前的条件中的列有索引，而后面列中没有索引。&lt;/li&gt;
-  &lt;li&gt;使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NOT IN&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;&amp;gt;&lt;/code&gt; 操作。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;参考：&lt;/p&gt;
-
-&lt;p&gt;1、&lt;a href=&quot;https://mp.weixin.qq.com/s/QduIxKOykMmoZp13UGF1XQ&quot;&gt;MySQL 索引知识点总结&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;2、&lt;a href=&quot;https://segmentfault.com/a/1190000041499376&quot;&gt;MySQL索引下推，原来这么简单！&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 19 Oct 2022 00:12:15 +0800</pubDate>
-        <link>http://localhost:4000/mysql-index</link>
-        <guid isPermaLink="true">http://localhost:4000/mysql-index</guid>
-        
-        <category>mysql</category>
-        
-        
-        <category>db</category>
         
       </item>
     
@@ -1967,6 +1717,415 @@ insert into employees values(100,'1990-01-14' , 'Li', 'Lei','F', '2011-04-24'),(
         <pubDate>Mon, 10 Oct 2022 19:13:00 +0800</pubDate>
         <link>http://localhost:4000/%E4%BA%BA%E6%80%A7%E7%9A%84%E5%BC%B1%E7%82%B9</link>
         <guid isPermaLink="true">http://localhost:4000/%E4%BA%BA%E6%80%A7%E7%9A%84%E5%BC%B1%E7%82%B9</guid>
+        
+        <category>读书</category>
+        
+        
+        <category>reading</category>
+        
+      </item>
+    
+      <item>
+        <title>2022 年读书书单</title>
+        <description>&lt;h1 id=&quot;底层逻辑-by-吕白&quot;&gt;底层逻辑 by 吕白&lt;/h1&gt;
+
+&lt;p&gt;书名：《底层逻辑》&lt;/p&gt;
+
+&lt;p&gt;作者：吕白&lt;/p&gt;
+
+&lt;p&gt;状态：已读完&lt;/p&gt;
+
+&lt;p&gt;来源：微信读书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;本来是想读刘润《底层逻辑：看清这个世界的底牌》在微信读书中找到了书，也就随缘把它看完了。&lt;/p&gt;
+
+&lt;p&gt;这一本互联网相关的书。&lt;/p&gt;
+
+&lt;h1 id=&quot;原则-by-瑞达利欧&quot;&gt;原则 by 瑞·达利欧&lt;/h1&gt;
+
+&lt;p&gt;书名：《原则》 by 瑞·达利欧 已读完&lt;/p&gt;
+
+&lt;p&gt;作者：瑞·达利欧&lt;/p&gt;
+
+&lt;p&gt;状态：已读完&lt;/p&gt;
+
+&lt;p&gt;来源：微信读书、已买了纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;桥水基金创始人的书，2021年很热销的书，关于企业，关于职场。&lt;/p&gt;
+
+&lt;p&gt;但是，我看的不是很仔细。有一部是边写代码边听的。&lt;/p&gt;
+
+&lt;h1 id=&quot;一步一步学spring-boot--by-黄文毅&quot;&gt;一步一步学Spring Boot  by 黄文毅&lt;/h1&gt;
+
+&lt;p&gt;书名：《一步一步学Spring Boot：微服务项目实战 》&lt;/p&gt;
+
+&lt;p&gt;作者：黄文毅&lt;/p&gt;
+
+&lt;p&gt;状态：已读完&lt;/p&gt;
+
+&lt;p&gt;来源：微信读书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;公司要求技术转行，都转 java 开发。要求学习 Spring Boot。&lt;/p&gt;
+
+&lt;p&gt;这书很浅，没有什么太大的价值。&lt;/p&gt;
+
+&lt;h1 id=&quot;置身事内-by--兰小欢&quot;&gt;置身事内 by  兰小欢&lt;/h1&gt;
+
+&lt;p&gt;书名：《置身事内》&lt;/p&gt;
+
+&lt;p&gt;作者：兰小欢&lt;/p&gt;
+
+&lt;p&gt;状态：已读完&lt;/p&gt;
+
+&lt;p&gt;来源：微信读书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;这书很好，值的推荐。让我第一次了解了中国政府运作的一些情况，特别是政府对经济发展的思路；土地财政、地方政府和中央政府的博弈等。&lt;/p&gt;
+
+&lt;h1 id=&quot;麦肯锡结构化战略思维--by-周国元&quot;&gt;麦肯锡结构化战略思维  by 周国元&lt;/h1&gt;
+
+&lt;p&gt;书名：《麦肯锡结构化战略思维》&lt;/p&gt;
+
+&lt;p&gt;作者：周国元&lt;/p&gt;
+
+&lt;p&gt;状态：已读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;这本书是，在上家公司上班时，总监介绍的书，领导介绍还是要看一下的。最后发现这书还可以。值得推荐。对于在职场的一些技能表达和对新问题如何入手的一些方法论。&lt;/p&gt;
+
+&lt;p&gt;笔记： &lt;a href=&quot;http://blog.xyecho.com/%E9%BA%A6%E8%82%AF%E9%94%A1%E7%BB%93%E6%9E%84%E5%8C%96%E6%88%98%E7%95%A5%E6%80%9D%E7%BB%B4/&quot;&gt;《麦肯锡结构化战略思维》by 周国元&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;蛤蟆先生去看心理医生-by-罗伯特-戴博德&quot;&gt;蛤蟆先生去看心理医生 by 罗伯特 戴博德&lt;/h1&gt;
+
+&lt;p&gt;书名：《蛤蟆先生去看心理医生》&lt;/p&gt;
+
+&lt;p&gt;作者：罗伯特 戴博德&lt;/p&gt;
+
+&lt;p&gt;状态：已读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;这本书是妹妹介绍的。心理学方面的书，我一直对心理学有一定的兴趣。这两年比较推荐的一本书。最后几章把主要问题升级了，学习到了。&lt;/p&gt;
+
+&lt;h1 id=&quot;麦肯锡工作法--by-大岛祥誉&quot;&gt;麦肯锡工作法  by 大岛祥誉&lt;/h1&gt;
+
+&lt;p&gt;书名：《麦肯锡工作法》&lt;/p&gt;
+
+&lt;p&gt;作者：大岛祥誉&lt;/p&gt;
+
+&lt;p&gt;状态：未读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;妹妹送的书，主要讲职场上的一些方法和技能。日本人写的书，很多都比较难读。&lt;/p&gt;
+
+&lt;h1 id=&quot;java技术核心-by-凯-s霍斯特曼&quot;&gt;java技术核心 by 凯 S.霍斯特曼&lt;/h1&gt;
+
+&lt;p&gt;书名：《java技术核心》券1、券2&lt;/p&gt;
+
+&lt;p&gt;作者：凯 S.霍斯特曼&lt;/p&gt;
+
+&lt;p&gt;状态：未读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;java  经典书籍。因从上家离职，没有继续看 java 的。后面有机会可以继续看。&lt;/p&gt;
+
+&lt;h1 id=&quot;python深度学习-2018中文版&quot;&gt;Python深度学习 2018中文版&lt;/h1&gt;
+
+&lt;p&gt;书名：《_Python深度学习 2018中文版》&lt;/p&gt;
+
+&lt;p&gt;作者：&lt;/p&gt;
+
+&lt;p&gt;状态：未读&lt;/p&gt;
+
+&lt;p&gt;来源：电子书  pdf&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;人工智能、深度学习、python 方面的书，博士介绍的书，书也他发给我的。想先看数学基础后，再看了。&lt;/p&gt;
+
+&lt;h1 id=&quot;垃圾回收的算法与实现-by-中村成洋&quot;&gt;垃圾回收的算法与实现 by 中村成洋&lt;/h1&gt;
+
+&lt;p&gt;书名：《垃圾回收的算法与实现》&lt;/p&gt;
+
+&lt;p&gt;作者：中村成洋&lt;/p&gt;
+
+&lt;p&gt;状态：未读完&lt;/p&gt;
+
+&lt;p&gt;来源：电子书  pdf&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;垃圾回收算法，日本人写的书。同事介绍的，看了一半，书不错，应该要看完它。&lt;/p&gt;
+
+&lt;h1 id=&quot;制内市场-by-郑永年&quot;&gt;制内市场 by 郑永年&lt;/h1&gt;
+
+&lt;p&gt;书名：《制内市场》&lt;/p&gt;
+
+&lt;p&gt;作者：郑永年 、 黄彦杰 、 邱道隆&lt;/p&gt;
+
+&lt;p&gt;状态：未读完&lt;/p&gt;
+
+&lt;p&gt;来源：微信读书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;一本关于中国政治经济的书，比较有中国特色。老蒋介绍的。&lt;/p&gt;
+
+&lt;p&gt;[[制内市场 中国国家主导型政治经济学   by 郑永年 黄彦杰]]&lt;/p&gt;
+
+&lt;h1 id=&quot;红星照耀中国-by-埃德加斯诺埃&quot;&gt;红星照耀中国 by 埃德加·斯诺埃&lt;/h1&gt;
+
+&lt;p&gt;书名：《红星照耀中国》&lt;/p&gt;
+
+&lt;p&gt;作者：埃德加·斯诺埃&lt;/p&gt;
+
+&lt;p&gt;状态：未读&lt;/p&gt;
+
+&lt;p&gt;来源：微信读书&lt;/p&gt;
+
+&lt;p&gt;说明：老蒋介绍的书，关于中国近代。&lt;/p&gt;
+
+&lt;h1 id=&quot;孩子的品格--by-彭凯平&quot;&gt;孩子的品格  by 彭凯平&lt;/h1&gt;
+
+&lt;p&gt;书名：《孩子的品格》&lt;/p&gt;
+
+&lt;p&gt;作者：彭凯平 、闫伟&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;俞敏洪介绍的书，积极心理学方面的书。很不错，之前看心理方面的书大部分都比较消极。&lt;/p&gt;
+
+&lt;p&gt;要重读一下并做笔记。&lt;/p&gt;
+
+&lt;h1 id=&quot;后台开发核心技术与应用实践-by-徐晓鑫&quot;&gt;后台开发：核心技术与应用实践 by 徐晓鑫&lt;/h1&gt;
+
+&lt;p&gt;书名：《后台开发：核心技术与应用实践》&lt;/p&gt;
+
+&lt;p&gt;作者：徐晓鑫&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;应该是第三遍看了，后台开发的基础。&lt;/p&gt;
+
+&lt;h2 id=&quot;影响力-by-罗伯特西奥迪尼&quot;&gt;影响力 by 罗伯特·西奥迪尼&lt;/h2&gt;
+
+&lt;p&gt;书名：《影响力》&lt;/p&gt;
+
+&lt;p&gt;作者：罗伯特·西奥迪尼&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;经典书籍，可以重复读。&lt;/p&gt;
+
+&lt;h1 id=&quot;leetcode-c-面试突击--by-leetcode&quot;&gt;leetcode C++ 面试突击  by leetcode&lt;/h1&gt;
+
+&lt;p&gt;书名：《leetcode C++ 面试突击》&lt;/p&gt;
+
+&lt;p&gt;作者：leetcode&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：&lt;a href=&quot;https://leetcode.cn/leetbook/read/cpp-interview-highlights/oxy0e5/&quot;&gt;网站&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;面试八股文，回顾c++ 基础。&lt;/p&gt;
+
+&lt;p&gt;1、 &lt;a href=&quot;http://blog.xyecho.com/c++-base/&quot;&gt;c++ 基础知识&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2、&lt;a href=&quot;http://blog.xyecho.com/c++-cass/&quot;&gt;c++  类和对象&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;3、&lt;a href=&quot;http://blog.xyecho.com/c++-pointer/&quot;&gt;c++ 基础 指针相关&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;4、&lt;a href=&quot;http://blog.xyecho.com/c++-function/&quot;&gt;c++ 关键字库函数知识点&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;卡片笔记写作法-by-申克阿伦斯&quot;&gt;卡片笔记写作法 by 申克·阿伦斯&lt;/h1&gt;
+
+&lt;p&gt;书名：《卡片笔记写作法》&lt;/p&gt;
+
+&lt;p&gt;作者：申克·阿伦斯&lt;/p&gt;
+
+&lt;p&gt;状态：未读完&lt;/p&gt;
+
+&lt;p&gt;来源：微信读书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;工具提效方面的书，哥介绍的。方法很好，正在实践运用中。&lt;/p&gt;
+
+&lt;h1 id=&quot;一则关于用户导向设计师的-寓言-by-戴维崔弗斯&quot;&gt;一则关于用户导向设计师的 寓言 by 戴维·崔弗斯&lt;/h1&gt;
+
+&lt;p&gt;书名：《一则关于用户导向设计师的 寓言》&lt;/p&gt;
+
+&lt;p&gt;作者：戴维·崔弗斯&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：电子书 pdf&lt;/p&gt;
+
+&lt;p&gt;说明：微博上网友介绍的，关于用户体验的书。&lt;/p&gt;
+
+&lt;p&gt;blog : &lt;a href=&quot;http://blog.xyecho.com/一则关于用户导向设计师的寓言/&quot;&gt;《一则关于用户导向设计师的寓言》 by David Travis&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;大衰退-by-辜朝明&quot;&gt;大衰退 by 辜朝明&lt;/h1&gt;
+
+&lt;p&gt;书名：《大衰退–如何在金融风暴中幸存和发展》&lt;/p&gt;
+
+&lt;p&gt;作者：辜朝明&lt;/p&gt;
+
+&lt;p&gt;状态：未读完&lt;/p&gt;
+
+&lt;p&gt;来源：电子书 pdf&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;师弟介绍的书，因为这两年经济开始衰退了，所以想看看日本等国家以前是怎么做的。&lt;/p&gt;
+
+&lt;h1 id=&quot;改革历程-by--zzy&quot;&gt;改革历程 by  zzy&lt;/h1&gt;
+
+&lt;p&gt;书名：《改革历程》&lt;/p&gt;
+
+&lt;p&gt;作者：zzy&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：电子书 pdf&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;我国近代历史口述的，了解了当前的一些问题的历史原因。&lt;/p&gt;
+
+&lt;h1 id=&quot;觉者之言-by-三界智尊者&quot;&gt;觉者之言 by 三界智尊者&lt;/h1&gt;
+
+&lt;p&gt;书名：《觉者之言》&lt;/p&gt;
+
+&lt;p&gt;作者： 三界智尊者&lt;/p&gt;
+
+&lt;p&gt;状态：未读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;佛教入门指南。&lt;/p&gt;
+
+&lt;h1 id=&quot;人性的弱点&quot;&gt;人性的弱点&lt;/h1&gt;
+
+&lt;p&gt;书名：《人性的弱点》by 戴尔 卡耐基&lt;/p&gt;
+
+&lt;p&gt;作者：戴尔 卡耐基&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;一本为人处世的书。How to win frientds and influence people.  不知道为什么翻译成人性的弱点。&lt;/p&gt;
+
+&lt;p&gt;blog: &lt;a href=&quot;http://blog.xyecho.com/人性的弱点/&quot;&gt;人性的弱点 by 戴尔 卡耐基&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;沟通的方法 by 脱不花&lt;/p&gt;
+
+&lt;p&gt;书名：《沟通的方法》&lt;/p&gt;
+
+&lt;p&gt;作者：脱不花&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;主要介绍职场上一些沟通的方法，很不错。&lt;/p&gt;
+
+&lt;h1 id=&quot;被讨厌的勇气-by-岸见一郎古贺史健&quot;&gt;被讨厌的勇气 by 岸见一郎、古贺史健&lt;/h1&gt;
+
+&lt;p&gt;书名：《被讨厌的勇气》&lt;/p&gt;
+
+&lt;p&gt;作者：岸见一郎、古贺史健&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;阿德勒心理方面的书籍，人的一切烦恼来源于人际关系。&lt;/p&gt;
+
+&lt;h1 id=&quot;长安的荔枝--by-马伯庸&quot;&gt;长安的荔枝  by 马伯庸&lt;/h1&gt;
+
+&lt;p&gt;书名：《长安的荔枝》&lt;/p&gt;
+
+&lt;p&gt;作者：马伯庸&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：微信读书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;一骑红尘妃子笑，无人知是荔枝来。小说讲了大唐基层官史为了从岭南送荔枝付出的努力。&lt;/p&gt;
+
+&lt;p&gt;小说看起来一气呵成，酣畅淋漓，一个晚上就读完了。&lt;/p&gt;
+
+&lt;h1 id=&quot;redis-设计与实现-by-黄健宏&quot;&gt;redis 设计与实现 by 黄健宏&lt;/h1&gt;
+
+&lt;p&gt;书名：《redis 设计与实现》&lt;/p&gt;
+
+&lt;p&gt;作者： 黄健宏&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：纸质书&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;这书电子版本就已经读过了，今年再次复习就买了一本纸质书来读。&lt;/p&gt;
+
+&lt;h1 id=&quot;现代c-教程-by-欧长坤&quot;&gt;《现代c++ 教程》 by 欧长坤&lt;/h1&gt;
+
+&lt;p&gt;书名：《现代c++ 教程》&lt;/p&gt;
+
+&lt;p&gt;作者： 欧长坤&lt;/p&gt;
+
+&lt;p&gt;状态：读完&lt;/p&gt;
+
+&lt;p&gt;来源：&lt;a href=&quot;http://github.com/changkun/modern-cpp-tutorial&quot;&gt;pdf&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 07 Oct 2022 19:13:00 +0800</pubDate>
+        <link>http://localhost:4000/2022%E5%B9%B4%E8%AF%BB%E4%B9%A6%E4%B9%A6%E5%8D%95</link>
+        <guid isPermaLink="true">http://localhost:4000/2022%E5%B9%B4%E8%AF%BB%E4%B9%A6%E4%B9%A6%E5%8D%95</guid>
         
         <category>读书</category>
         
