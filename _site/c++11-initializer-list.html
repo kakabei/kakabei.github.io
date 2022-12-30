@@ -203,13 +203,13 @@
 <p>4.防止类型收窄</p>
 
 <p>用法很简单</p>
+
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span> 
 <span class="k">const</span> <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> 
 <span class="kt">char</span> <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>             <span class="c1">// 收窄， 但可以通过编译 </span>
 
 <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">};</span>           <span class="c1">// 收窄， 无法通过编译 </span>
 <span class="kt">char</span> <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">y</span><span class="p">};</span>           <span class="c1">// 可以通过编译</span>
-
 </code></pre></div></div>
 
 <hr />
