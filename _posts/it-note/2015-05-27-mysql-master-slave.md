@@ -13,7 +13,7 @@ mysql 主从同步有三个好处：
 
 1、水平扩展数据库的负载能力 。
 
-2、容错，高可用，（Failover / High Availability） 。
+2、容错，高可用。（Failover / High Availability） 。
 
 3、数据备份。
     
