@@ -55,6 +55,8 @@ author_footer: false
 
 5、慎独，暗屋之内人性的魔鬼在苏醒。
 
+6、生而平等是追求，生而不平等才是常态。
+
 
 ##  About this Site
 
