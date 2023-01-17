@@ -134,8 +134,9 @@
 
 <p>命名管道也被称为FIFO文件，是一种特殊的文件。由于linux所有的事物都可以被视为文件，所以对命名管道的使用也就变得与文件操作非常统一。</p>
 
-<p>（1）创建命名管道
- 用如下两个函数中的其中一个，可以创建命名管道。</p>
+<p>（1）创建命名管道</p>
+
+<p>用如下两个函数中的其中一个，可以创建命名管道。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
 #include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
@@ -145,8 +146,9 @@
 
 <p>filname是指文件名，而mode是指定文件的读写权限。mknod是比较老的函数，而使用mkfifo函数更加简单和规范，所以建议用mkfifo。</p>
 
-<p>（2）打开命名管道
-和打开其他文件一样，可以用open来打开。通常有四种方法：</p>
+<p>（2）打开命名管道</p>
+
+<p>和打开其他文件一样，可以用open来打开。通常有四种方法：</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">open</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="n">O_RDONLY</span><span class="p">);</span><span class="c1">//1</span>
 <span class="n">open</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="n">O_RDONLY</span> <span class="o">|</span> <span class="n">O_NONBLOCK</span><span class="p">);</span><span class="c1">//2</span>
@@ -155,16 +157,21 @@
 </code></pre></div></div>
 
 <p><strong>有两点要注意:</strong>
-a、就是程序不能以O_RDWR(读写)模式打开FIFO文件进行读写操作，而其行为也未明确定义，因为如一个管道以读/写方式打开，进程就会读回自己的输出，同时我们通常使用FIFO只是为了单向的数据传递。
-b、就是传递给open调用的是FIFO的路径，而不是正常的文件。（如：const char *fifo_name = “/tmp/my_fifo”; ）
-c、第二个参数中的选项O_NONBLOCK，选项O_NONBLOCK表示非阻塞，加上这个选项后，表示open调用是非阻塞的，如果没有这个选项，则表示open调用是阻塞的。</p>
+a、就是程序不能以O_RDWR(读写)模式打开FIFO文件进行读写操作，而其行为也未明确定义，因为如一个管道以读/写方式打开，进程就会读回自己的输出，同时我们通常使用FIFO只是为了单向的数据传递。</p>
+
+<p>b、就是传递给open调用的是FIFO的路径，而不是正常的文件。如：<code class="language-plaintext highlighter-rouge">const char *fifo_name = "/tmp/my_fifo"; </code></p>
+
+<p>c、第二个参数中的选项O_NONBLOCK，选项O_NONBLOCK表示非阻塞，加上这个选项后，表示open调用是非阻塞的，如果没有这个选项，则表示open调用是阻塞的。</p>
 
 <p>（3）阻塞问题
-对于以只读方式（O_RDONLY）打开的FIFO文件，如果open调用是阻塞的（即第二个参数为O_RDONLY），除非有一个进程以写方式打开同一个FIFO，否则它不会返回；如果open调用是非阻塞的的（即第二个参数为O_RDONLY | O_NONBLOCK），则即使没有其他进程以写方式打开同一个FIFO文件，open调用将成功并立即返回。
-对于以只写方式（O_WRONLY）打开的FIFO文件，如果open调用是阻塞的（即第二个参数为O_WRONLY），open调用将被阻塞，直到有一个进程以只读方式打开同一个FIFO文件为止；如果open调用是非阻塞的（即第二个参数为O_WRONLY | O_NONBLOCK），open总会立即返回，但如果没有其他进程以只读方式打开同一个FIFO文件，open调用将返回-1，并且FIFO也不会被打开。</p>
+对于以只读方式（ O_RDONLY ）打开的 FIFO 文件，如果 open 调用是阻塞的（即第二个参数为 O_RDONLY），除非有一个进程以写方式打开同一个FIFO，否则它不会返回；如果open调用是非阻塞的的（即第二个参数为 <code class="language-plaintext highlighter-rouge">O_RDONLY | O_NONBLOCK</code> ），则即使没有其他进程以写方式打开同一个FIFO文件，open调用将成功并立即返回。</p>
 
-<p>（4）使用FIFO实现进程间的通信
-管道的写入端从一个文件读出数据，然后写入写管道。管道的读取端从管道读出后写到文件中。</p>
+<p>对于以只写方式（ O_WRONLY ）打开的FIFO文件，如果open调用是阻塞的（即第二个参数为 O_WRONLY ），open调用将被阻塞，直到有一个进程以只读方式打开同一个FIFO文件为止；如果open调用是非阻塞的（即第二个参数为 <code class="language-plaintext highlighter-rouge">O_WRONLY | O_NONBLOCK</code> ），open
+总会立即返回，但如果没有其他进程以只读方式打开同一个 FIFO 文件，open 调用将返回- 1，并且 FIFO 也不会被打开。</p>
+
+<p>（4）使用 FIFO 实现进程间的通信</p>
+
+<p>管道的写入端从一个文件读出数据，然后写入写管道。管道的读取端从管道读出后写到文件中。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//写入端代码：fifowrite.c</span>
 <span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
@@ -285,8 +292,9 @@ c、第二个参数中的选项O_NONBLOCK，选项O_NONBLOCK表示非阻塞，�
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>（5）命名管道的安全问题 
-有一种情况是：一个FIFO文件，有多个进程同时向同一个FIFO文件写数据，而只有一个读FIFO进程在同一个FIFO文件中读取数据时，会发生数据块的相互交错。不同进程向一个FIFO读进程发送数据是很普通的情况。这个问题的解决方法，就是让写操作的原子化。系统规定：在一个以O_WRONLY（即阻塞方式）打开的FIFO中， 如果写入的数据长度小于等待PIPE_BUF，那么或者写入全部字节，或者一个字节都不写入。如果所有的写请求都是发往一个阻塞的FIFO的，并且每个写记请求的数据长度小于等于PIPE_BUF字节，系统就可以确保数据决不会交错在一起。</p>
+<p>（5）命名管道的安全问题</p>
+
+<p>有一种情况是：一个 FIFO 文件，有多个进程同时向同一个 FIFO 文件写数据，而只有一个读 FIFO 进程在同一个 FIFO 文件中读取数据时，会发生数据块的相互交错。不同进程向一个 FIFO 读进程发送数据是很普通的情况。这个问题的解决方法，就是让写操作的原子化。系统规定：在一个以 O_WRONLY（即阻塞方式）打开的 FIFO 中， 如果写入的数据长度小于等待 PIPE_BUF ，那么或者写入全部字节，或者一个字节都不写入。如果所有的写请求都是发往一个阻塞的 FIFO 的，并且每个写记请求的数据长度小于等于 PIPE_BUF 字节，系统就可以确保数据决不会交错在一起。</p>
 
 
   		

@@ -130,12 +130,12 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<h3 id="一-共享内存介绍">一 共享内存介绍</h3>
+	  		<h1 id="一-共享内存介绍">一 共享内存介绍</h1>
 
 <p>共享内存可以从字面上去理解，就把一片逻辑内存共享出来，让不同的进程去访问它，修改它。共享内存是在两个正在运行的进程之间共享和传递数据的一种非常有效的方式。不同进程之间共享的内存通常安排为同一段物理内存。进程可以将同一段共享内存连接到它们自己的地址空间中，所有进程都可以访问共享内存中的地址，就好像它们是由用C语言函数malloc分配的内存一样。而如果某个进程向共享内存写入数据，所做的改动将立即影响到可以访问同一段共享内存的任何其他进程。
 但有一点特别要注意：共享内存并未提供同步机制。也就是说，在第一个进程结束对共享内存的写操作之前，并无自动机制可以阻止第二个进程开始对它进行读取。所以我们通常需要用其他的机制来同步对共享内存的访问，例如信号量。</p>
 
-<h3 id="二-共享内存的使用">二 共享内存的使用</h3>
+<h1 id="二-共享内存的使用">二 共享内存的使用</h1>
 
 <p>(1)创建共享内存</p>
 
@@ -191,7 +191,7 @@ buf是一个结构指针，它指向共享内存模式和访问权限的结构�
 <span class="err">｝</span>
 </code></pre></div></div>
 
-<h3 id="三-例子">三 例子</h3>
+<h1 id="三-例子">三 例子</h1>
 
 <p>shmdata.h的源码:</p>
 
@@ -503,7 +503,7 @@ buf是一个结构指针，它指向共享内存模式和访问权限的结构�
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h3 id="五-父子进程共享内存的例子">五 父子进程共享内存的例子</h3>
+<h1 id="五-父子进程共享内存的例子">五 父子进程共享内存的例子</h1>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="c1">  </span><span class="cp">
 #include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="c1">  </span><span class="cp">
