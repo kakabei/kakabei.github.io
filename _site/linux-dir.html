@@ -130,9 +130,7 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<ol>
-  <li>设置用户ID和设置ID</li>
-</ol>
+	  		<h1 id="1-设置用户id和设置id">1. 设置用户ID和设置ID</h1>
 
 <p>(1)实际用户ID、实际组ID：  标识我们究竟是谁。这两个字段在登录时取自口令文件中的登录项。通常在一个登录会话间这些值并不改变，但是超级用户进程有方法改变它们。</p>
 
@@ -145,9 +143,7 @@
 
 <p>与此相类似，在文件模式字中可以调协另一位，它使用将此文件的进程的有效组ID设置为文件的组所有者ID（st_gid）。在文件模式籽中的这两位被称为设置用户ID（set-user-ID）位和设置组ID（set-group-ID）位。</p>
 
-<ol>
-  <li>access 函数</li>
-</ol>
+<h1 id="2-access-函数">2. access 函数</h1>
 
 <p>access 函数是按实际用户ID和实际组IDeas进行访问权限测试的。</p>
 
@@ -162,9 +158,7 @@
   <li>F_OK  测试文件是否存在</li>
 </ul>
 
-<ol>
-  <li>umask函数</li>
-</ol>
+<h1 id="3-umask-函数">3. umask 函数</h1>
 
 <p>umask函数为进程设置文件模式创建屏蔽字，并返回以前的值。</p>
 
@@ -172,9 +166,7 @@
 </span><span class="n">mode_t</span> <span class="nf">umask</span><span class="p">(</span><span class="n">mode_t</span> <span class="n">cmask</span><span class="p">);</span>
 </code></pre></div></div>
 
-<ol>
-  <li>chmod和fchmod函数</li>
-</ol>
+<h1 id="4-chmod和fchmod函数">4. chmod和fchmod函数</h1>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
 </span><span class="kt">int</span> <span class="nf">chmod</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span> <span class="p">,</span> <span class="n">mode_t</span> <span class="n">mode</span><span class="p">);</span>
