@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>linux 进程间通信-概述</title>
+    <title>复盘文档的主要要素</title>
 
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
@@ -12,7 +12,7 @@
     
     
 
-    <link rel="canonical" href="http://localhost:4000/linux-process-communication">
+    <link rel="canonical" href="http://localhost:4000/review-the-main-elements-of-document">
     <link rel="icon" type="image/png" href="/images/logo.png">
 
     <!-- Custom CSS -->
@@ -31,7 +31,7 @@
 
   <div class="site-title">
     
-    <h4 class="entry-title"><a href="/linux-process-communication">linux 进程间通信-概述</a></h4>
+    <h4 class="entry-title"><a href="/review-the-main-elements-of-document">复盘文档的主要要素</a></h4>
     
   </div>
 
@@ -111,15 +111,17 @@
       <div class="content">
         <div class="articles">
             <div class="article-meta">
-    2014-10-12
+    2023-02-10
      • Category: 
         
-        <a href="/categories/#Linux-ref" >Linux</a>
+        <a href="/categories/#总结-ref" >总结</a>
         
     
      • Tag: 
         
-            <a href="/tags/#系统编程-ref" >系统编程</a>
+            <a href="/tags/#工作经验-ref" >工作经验</a>
+        
+            <a href="/tags/#团队管理-ref" >团队管理</a>
         
     
 </div>
@@ -130,35 +132,17 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<h1 id="一-进程间通信有如下的目的">一 进程间通信有如下的目的</h1>
+	  		<p><strong>复盘文档应该包括以下要素</strong>：</p>
 
-<ol>
-  <li>
-    <p>数据传输，一个进程需要将它的数据发送给另一个进程，发送的数据量在一个字节到几M之间；</p>
-  </li>
-  <li>
-    <p>共享数据，多个进程想要操作共享数据，一个进程对数据的修改，其他进程应该立刻看到；</p>
-  </li>
-  <li>
-    <p>通知事件，一个进程需要向另一个或一组进程发送消息，通知它们发生了某件事情；</p>
-  </li>
-  <li>
-    <p>资源共享，多个进程之间共享同样的资源。为了做到这一点，需要内核提供锁和同步机制；</p>
-  </li>
-  <li>
-    <p>进程控制，有些进程希望完全控制另一个进程的执行（如Debug进程），此时控制进程希望能够拦截另一个进程的所有陷入和异常，并能够及时知道它的状态改变。</p>
-  </li>
-</ol>
+<p>1、事件的摘要。简短说明情况，什么时间什么业务什么原因出现什么情况，目前是什么状况。</p>
 
-<h1 id="二-linux进程间通信由以下几部分发展而来">二 Linux进程间通信由以下几部分发展而来：</h1>
+<p>2、具体事件。整个事件时间线，问题出现、问题发现、问题调查、问题解决。以时间线详细说明。</p>
 
-<p>早期UNIX进程间通信：包括管道、FIFO、信号。</p>
+<p>3、致该事件的主要原因，影响程度。</p>
 
-<p>基于<code class="language-plaintext highlighter-rouge">System V</code>的进程间通信：包括 System V 消息队列、System V 信号灯（Semaphore）、<code class="language-plaintext highlighter-rouge">System V</code>、 共享内存。</p>
+<p>4、 为什么没有及时发现，是否有系统演习，为什么没有覆盖到。</p>
 
-<p>基于Socket进程间通信。</p>
-
-<p>基于POSIX进程间通信：包括POSIX消息队列、POSIX信号灯、POSIX共享内存。</p>
+<p>5、可立即修复问题的具体措施，防止事件再次发生的具体措施，经验教训。</p>
 
   		
 	  </article>
@@ -167,9 +151,9 @@
 </div>
 
 <span>
-	<a  href="/%E5%8F%B2%E7%8E%89%E6%9F%B1%E8%87%AA%E8%BF%B0" class="pageNav"  >上一篇</a>
+	<a  href="/modern-cpp-tutorial" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/linux-process-communication-ipc" class="pageNav"  >下一篇</a>
+	<a   class="pageNavInvalid"  >下一篇</a>
 </span>
 
 
