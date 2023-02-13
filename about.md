@@ -16,8 +16,7 @@ author_footer: false
 
 ## Companies I have worked for
 
-![](/images/kingsoft-logo-2022-12-07_21-03-30.png){:width="110" height="50"}|![](/images/cmge-logo-2022-12-07_21-03-30.png){:width="110" height="50"}|![](/images/mokylin-logo-2022-12-07_21-03-43.png){:width="110" height="50"}|![](/images/jd-logo-2022-12-07_21-04-24.png){:width="110" height="50"}
-
+![](/images/companies-logo-2023-02-13-16-00-16.png){:width="450" height="50"}
 ## Projects I've worked on
 ### 1、Kingsoft
 
