@@ -1,14 +1,14 @@
 ---
 layout: post
 title: redis 安装部署
-date: 2015-02-03 11:08:12
+date: 2015-02-04 11:08:12
 categories: db
 tags: redis
 excerpt: redis install in centos
 ---
  
 
-Redis的安装相对来的不难，以下主要是centos系统做为环境。
+Redis的安装相对来的不难，以下主要是 centos 系统做为环境。
 
 1. 下载地址
 
@@ -30,12 +30,12 @@ $ cp redis.conf /etc/
 
 3. 文件说明
 
-make install 命令执行完成后，会在/usr/local/bin目录下生成本个可执行文件，分别是redis-server、redis-cli、redis-benchmark、redis-check-aof 、redis-check-dump，它们的作用如下：
+`make install` 命令执行完成后，会在 `/usr/local/bin` 目录下生成本个可执行文件，分别是 `redis-server`、`redis-cli`、`redis-benchmark`、`redis-check-aof` 、`redis-check-dump`，它们的作用如下：
 
 ```sh
-redis-server：Redis服务器的daemon启动程序
-redis-cli：Redis命令行操作工具。也可以用telnet根据其纯文本协议来操作
-redis-benchmark：Redis性能测试工具，测试Redis在当前系统下的读写性能
+redis-server：Redis 服务器的 daemon 启动程序
+redis-cli：Redis 命令行操作工具。也可以用 telnet 根据其纯文本协议来操作
+redis-benchmark：Redis 性能测试工具，测试 Redis 在当前系统下的读写性能
 redis-check-aof：数据修复
 redis-check-dump：检查导出工具
 ```

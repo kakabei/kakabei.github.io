@@ -111,7 +111,7 @@
       <div class="content">
         <div class="articles">
             <div class="article-meta">
-    2015-02-03
+    2015-02-05
      • Category: 
         
         <a href="/categories/#db-ref" >db</a>
@@ -130,29 +130,32 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<p>查看redis（安装在linux服务器上）的版本</p>
+	  		<p>查看 redis 的版本, linux 版本。</p>
 
-<p>查看redis的版本有两种方式：</p>
+<p>查看 redis 的版本有两种方式：</p>
 
-<p>方式一</p>
+<h3 id="方式一">方式一</h3>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>redis-server <span class="nt">--version</span> 
 或 
 redis-server <span class="nt">-v</span> 
 </code></pre></div></div>
 
-<p>得到的结果是：Redis server v=2.6.10 sha=00000000:0 malloc=jemalloc-3.2.0 bits=32</p>
+<p>得到的结果是：</p>
 
-<p>方式二</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Redis server <span class="nv">v</span><span class="o">=</span>2.6.10 <span class="nv">sha</span><span class="o">=</span>00000000:0 <span class="nv">malloc</span><span class="o">=</span>jemalloc-3.2.0 <span class="nv">bits</span><span class="o">=</span>32
+</code></pre></div></div>
+
+<h3 id="方式二">方式二</h3>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>redis-cli <span class="nt">--version</span> 
 或
 redis-cli <span class="nt">-v</span>
 </code></pre></div></div>
 
-<p>得到的结果是：redis-cli 2.6.10</p>
+<p>得到的结果是：<code class="language-plaintext highlighter-rouge">redis-cli 2.6.10</code></p>
 
-<p>严格上说：通过　redis-cli 得到的结果应该是redis-cli 的版本，但是 redis-cli 和redis-server　一般都是从同一套源码编译出的。所以应该是一样的。</p>
+<p>严格上说：通过　redis-cli 得到的结果应该是redis-cli 的版本，但是 redis-cli 和r edis-server　一般都是从同一套源码编译出的。所以应该是一样的。</p>
 
 
   		
@@ -164,7 +167,7 @@ redis-cli <span class="nt">-v</span>
 <span>
 	<a  href="/redis-install" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/redis-base-operating" class="pageNav"  >下一篇</a>
+	<a  href="/redis-config" class="pageNav"  >下一篇</a>
 </span>
 
 

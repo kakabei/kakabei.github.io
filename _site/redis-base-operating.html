@@ -111,7 +111,7 @@
       <div class="content">
         <div class="articles">
             <div class="article-meta">
-    2015-02-03
+    2015-02-07
      • Category: 
         
         <a href="/categories/#db-ref" >db</a>
@@ -152,7 +152,7 @@
 
 <p>4、集合</p>
 
-<p>Redis 的集合是字符串的无序集合。在Redis您可以添加，删除和测试文件是否存在，在成员O（1）的时间复杂度。</p>
+<p>Redis 的集合是字符串的无序集合。在Redis您可以添加，删除和测试文件是否存在，在成员 <code class="language-plaintext highlighter-rouge">O(1)</code> 的时间复杂度。</p>
 
 <p>集合中的元素最大数量为 232 - 1 （4294967295，可容纳超过4十亿元素）。</p>
 
@@ -200,15 +200,15 @@
 
 <h1 id="redis-持久化">Redis 持久化</h1>
 
-<p>1、Redis 提供了两种持久化的方式，分别是 RDB（Redis DataBase）和 AOF（Append Only File）。</p>
+<p>1、Redis 提供了两种持久化的方式，分别是 <strong>RDB</strong>（Redis DataBase）和 <strong>AOF</strong>（Append Only File）。</p>
 
-<p>2、RDB，简而言之，就是在不同的时间点，将redis存储的数据生成快照并存储到磁盘等介质上；</p>
+<p>2、RDB，简而言之，就是在不同的时间点，将 redis 存储的数据生成快照并存储到磁盘等介质上；</p>
 
-<p>3、AOF，则是换了一个角度来实现持久化，那就是将redis执行过的所有写指令记录下来.在下次 redis 重新启动时，只要把这些写指令从前到后再重复执行一遍，就可以实现数据恢复了。</p>
+<p>3、AOF，则是换了一个角度来实现持久化，那就是将 redis 执行过的所有写指令记录下来.在下次 redis 重新启动时，只要把这些写指令从前到后再重复执行一遍，就可以实现数据恢复了。</p>
 
 <p>4、其实 RDB 和 AOF 两种方式也可以同时使用，在这种情况下，如果 redis 重启的话，则会优先采用 AOF 方式来进行数据恢复，这是因为AOF方式的数据恢复完整度更高。</p>
 
-<p>5、如果你没有数据持久化的需求，也完全可以关闭 RDB 和 AOF 方式，这样的话，redis将变成一个纯内存数据库，就像memcache一样。</p>
+<p>5、如果你没有数据持久化的需求，也完全可以关闭 RDB 和 AOF 方式，这样的话，redis将变成一个纯内存数据库，就像 memcache 一样。</p>
 
 <p>6、两种方式是可以同时使用的。</p>
 
@@ -216,7 +216,7 @@
 
 <p>1、Redis 在进行数据持久化的过程中，会先将数据写入到一个临时文件中，待持久化过程都结束了，才会用这个临时文件替换上次持久化好的文件。正是这种特性，让我们可以随时来进行备份，因为快照文件总是完整可用的。</p>
 
-<p>2、对于 RDB 方式，redis会单独创建（fork）一个子进程来进行持久化，而主进程是不会进行任何IO操作的，这样就确保了redis极高的性能。如果需要进行大规模数据的恢复，且对于数据恢复的完整性不是非常敏感，那RDB方式要比 AOF 方式更加的高效。</p>
+<p>2、对于 RDB 方式，redis会单独创建（fork）一个子进程来进行持久化，而主进程是不会进行任何IO操作的，这样就确保了 redis 极高的性能。如果需要进行大规模数据的恢复，且对于数据恢复的完整性不是非常敏感，那RDB方式要比 AOF 方式更加的高效。</p>
 
 <h1 id="redis持久化---aof">Redis持久化 - AOF</h1>
 
@@ -224,7 +224,7 @@
 
 <p>2、通过配置 redis.conf 中的 appendonly yes 就可以打开 AOF 功能。如果有写操作（如SET等），redis 就会被追加到 AOF 文件的末尾。</p>
 
-<p>3、默认的 AOF 持久化策略是<strong>每秒钟 fsync 一次</strong>（ fsync 是指把缓存中的写指令记录到磁盘中）.</p>
+<p>3、默认的 AOF 持久化策略是 <strong>每秒钟 fsync 一次</strong>（ fsync 是指把缓存中的写指令记录到磁盘中）.</p>
 
 <p>4、因为在这种情况下，redis 仍然可以保持很好的处理性能，即使 redis 故障，也只会丢失最近1秒钟的数据。</p>
 
@@ -328,9 +328,9 @@
 </div>
 
 <span>
-	<a  href="/redis-version" class="pageNav"  >上一篇</a>
+	<a  href="/redis-config" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/redis-config" class="pageNav"  >下一篇</a>
+	<a  href="/mysql-commonly-used" class="pageNav"  >下一篇</a>
 </span>
 
 
