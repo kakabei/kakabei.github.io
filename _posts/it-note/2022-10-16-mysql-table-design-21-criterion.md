@@ -89,7 +89,7 @@ mysql 中， varchar 和 char 类型表示字符长度，而其他类型表示�
 
 对于索引的考量，是设计表一个重点。mysql 索引的相关的知识 
 
-[mysql 索引](http://blog.xyecho.com/mysql-index/)
+[mysql 索引](http://blog.xyecho.com/mysql-index)
 
 [MySQL 索引知识点总结](https://mp.weixin.qq.com/s/QduIxKOykMmoZp13UGF1XQ) 
 
