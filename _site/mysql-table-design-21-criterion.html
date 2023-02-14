@@ -187,14 +187,14 @@
 <p>如下：</p>
 
 <ul>
-  <li>id：主键，一个表必须得有主键，可以自增长。</li>
-  <li>create_time ：数据创建时间。</li>
-  <li>modifed_time: 修改时间，当数据被增量拉到数据集市时，这个字段是必段的。</li>
-  <li>version : 数据记录的版本号，用于乐观锁。</li>
-  <li>ext : 扩展字段，当有紧急情况时，可以先暂用它，而不会更新表结构。</li>
-  <li>remark ：数据记录备注。</li>
-  <li>modified_by :修改人， 非必须</li>
-  <li>creator ：创建人，非必须</li>
+  <li><code class="language-plaintext highlighter-rouge">id</code> ：主键，一个表必须得有主键，可以自增长。</li>
+  <li><code class="language-plaintext highlighter-rouge">create_time</code> ：数据创建时间。</li>
+  <li><code class="language-plaintext highlighter-rouge">modifed_time</code>: 修改时间，当数据被增量拉到数据集市时，这个字段是必段的。</li>
+  <li><code class="language-plaintext highlighter-rouge">version</code> : 数据记录的版本号，用于乐观锁。</li>
+  <li><code class="language-plaintext highlighter-rouge">ext</code> : 扩展字段，当有紧急情况时，可以先暂用它，而不会更新表结构。</li>
+  <li><code class="language-plaintext highlighter-rouge">remark</code> ：数据记录备注。</li>
+  <li><code class="language-plaintext highlighter-rouge">modified_by</code> :修改人， 非必须</li>
+  <li><code class="language-plaintext highlighter-rouge">creator</code> ：创建人，非必须</li>
 </ul>
 
 <h1 id="7一张表的字段不宜过多">7、一张表的字段不宜过多</h1>
@@ -224,7 +224,7 @@
 
 <ul>
   <li>索引也不要建得太多，一般单表索引个数不要超过<code class="language-plaintext highlighter-rouge">5</code>个。因为创建过多的索引，会降低写得速度。</li>
-  <li>区分度不高的字段，不能加索引。（还是要看业务的具体情况矶定。）</li>
+  <li>区分度不高的字段，不能加索引。（还是要看业务的具体情况而定。）</li>
   <li>索引创建完后，还是要注意避免索引失效的情况。</li>
   <li>索引过多的话，可以通过联合索引的话方式来优化。然后的话，索引还有一些规则，如<strong>覆盖索引</strong>，最左匹配原则等等。</li>
 </ul>
@@ -296,7 +296,7 @@
   <li>year：年份值，格式为<code class="language-plaintext highlighter-rouge">yyyy</code>。范围<code class="language-plaintext highlighter-rouge">1901到2155</code>，1字节</li>
 </ul>
 
-<p>推荐优先使用 datetime 类型来保存日期和时间，因为存储范围更大，且跟时区无关。</p>
+<p><strong>推荐优先使用 datetime 类型来保存日期和时间，因为存储范围更大，且跟时区无关。</strong></p>
 
 <p><strong>要注意的是 timestamp 的单位是秒不是毫秒。</strong></p>
 

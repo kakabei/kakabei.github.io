@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 13 Feb 2023 17:37:11 +0800</pubDate>
-    <lastBuildDate>Mon, 13 Feb 2023 17:37:11 +0800</lastBuildDate>
+    <pubDate>Tue, 14 Feb 2023 23:32:31 +0800</pubDate>
+    <lastBuildDate>Tue, 14 Feb 2023 23:32:31 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -855,14 +855,14 @@
 &lt;p&gt;如下：&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;id：主键，一个表必须得有主键，可以自增长。&lt;/li&gt;
-  &lt;li&gt;create_time ：数据创建时间。&lt;/li&gt;
-  &lt;li&gt;modifed_time: 修改时间，当数据被增量拉到数据集市时，这个字段是必段的。&lt;/li&gt;
-  &lt;li&gt;version : 数据记录的版本号，用于乐观锁。&lt;/li&gt;
-  &lt;li&gt;ext : 扩展字段，当有紧急情况时，可以先暂用它，而不会更新表结构。&lt;/li&gt;
-  &lt;li&gt;remark ：数据记录备注。&lt;/li&gt;
-  &lt;li&gt;modified_by :修改人， 非必须&lt;/li&gt;
-  &lt;li&gt;creator ：创建人，非必须&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;id&lt;/code&gt; ：主键，一个表必须得有主键，可以自增长。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;create_time&lt;/code&gt; ：数据创建时间。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;modifed_time&lt;/code&gt;: 修改时间，当数据被增量拉到数据集市时，这个字段是必段的。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;version&lt;/code&gt; : 数据记录的版本号，用于乐观锁。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ext&lt;/code&gt; : 扩展字段，当有紧急情况时，可以先暂用它，而不会更新表结构。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;remark&lt;/code&gt; ：数据记录备注。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;modified_by&lt;/code&gt; :修改人， 非必须&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;creator&lt;/code&gt; ：创建人，非必须&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;7一张表的字段不宜过多&quot;&gt;7、一张表的字段不宜过多&lt;/h1&gt;
@@ -892,7 +892,7 @@
 
 &lt;ul&gt;
   &lt;li&gt;索引也不要建得太多，一般单表索引个数不要超过&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt;个。因为创建过多的索引，会降低写得速度。&lt;/li&gt;
-  &lt;li&gt;区分度不高的字段，不能加索引。（还是要看业务的具体情况矶定。）&lt;/li&gt;
+  &lt;li&gt;区分度不高的字段，不能加索引。（还是要看业务的具体情况而定。）&lt;/li&gt;
   &lt;li&gt;索引创建完后，还是要注意避免索引失效的情况。&lt;/li&gt;
   &lt;li&gt;索引过多的话，可以通过联合索引的话方式来优化。然后的话，索引还有一些规则，如&lt;strong&gt;覆盖索引&lt;/strong&gt;，最左匹配原则等等。&lt;/li&gt;
 &lt;/ul&gt;
@@ -964,7 +964,7 @@
   &lt;li&gt;year：年份值，格式为&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yyyy&lt;/code&gt;。范围&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1901到2155&lt;/code&gt;，1字节&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;推荐优先使用 datetime 类型来保存日期和时间，因为存储范围更大，且跟时区无关。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;推荐优先使用 datetime 类型来保存日期和时间，因为存储范围更大，且跟时区无关。&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;要注意的是 timestamp 的单位是秒不是毫秒。&lt;/strong&gt;&lt;/p&gt;
 
