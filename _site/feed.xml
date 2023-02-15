@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 15 Feb 2023 22:57:11 +0800</pubDate>
-    <lastBuildDate>Wed, 15 Feb 2023 22:57:11 +0800</lastBuildDate>
+    <pubDate>Wed, 15 Feb 2023 23:01:42 +0800</pubDate>
+    <lastBuildDate>Wed, 15 Feb 2023 23:01:42 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -60,6 +60,56 @@
         <pubDate>Fri, 10 Feb 2023 18:12:15 +0800</pubDate>
         <link>http://localhost:4000/review-the-main-elements-of-document</link>
         <guid isPermaLink="true">http://localhost:4000/review-the-main-elements-of-document</guid>
+        
+        <category>工作经验</category>
+        
+        <category>团队管理</category>
+        
+        
+        <category>总结</category>
+        
+      </item>
+    
+      <item>
+        <title>沟通原则</title>
+        <description>&lt;p&gt;1、耐心听人把话说完。&lt;/p&gt;
+
+&lt;p&gt;2、不预设立场，明确搞得对方的立场和表达的结论。&lt;/p&gt;
+
+&lt;p&gt;3、解决问题，要站在对方的立场上考虑问题，同时一定要对方感觉到这一点。&lt;/p&gt;
+
+&lt;p&gt;4、不要试图去证明对方是错的。&lt;/p&gt;
+
+&lt;p&gt;5、用“我可能没有表达清楚” 而不是 “你不懂”。&lt;/p&gt;
+
+&lt;p&gt;6、多说对方爱听的话，如夸奖、鼓励，对方的兴趣，要真诚。&lt;/p&gt;
+
+&lt;p&gt;7、清晰，准确的表达自己的意图，观点。&lt;/p&gt;
+
+&lt;p&gt;8、沟通完成后，做备忘录，双方确认。&lt;/p&gt;
+
+&lt;p&gt;9、多做预案、多做练习。&lt;/p&gt;
+
+&lt;p&gt;10、 沟通中有任何问题，事后都要做及时复盘。&lt;/p&gt;
+
+&lt;p&gt;11、事情总有意外发生，事后复盘即可，不必太在意了。&lt;/p&gt;
+
+&lt;p&gt;12、共赢、合作是都是最优化方案，不占尽别人的所有，留有余地。&lt;/p&gt;
+
+&lt;p&gt;13、沟通是解决问题，不是制造问题。&lt;/p&gt;
+
+&lt;p&gt;14、先解决情绪，再解决问题。&lt;/p&gt;
+
+&lt;p&gt;15、重要的事与，晚点回复。回复要正式，先过脑子，打草稿，检查有没有错别字。&lt;/p&gt;
+
+&lt;p&gt;16、紧急事件：语音，电话，非紧急事件，微信留言； 复杂事件：发邮件，然后微信或电话提醒。&lt;/p&gt;
+
+&lt;p&gt;17、说错话、做错事，要马上道歉。&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 09 Jan 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/principles-of-communication</link>
+        <guid isPermaLink="true">http://localhost:4000/principles-of-communication</guid>
         
         <category>工作经验</category>
         
@@ -787,259 +837,6 @@
         <pubDate>Tue, 18 Oct 2022 00:12:15 +0800</pubDate>
         <link>http://localhost:4000/mysql-explain</link>
         <guid isPermaLink="true">http://localhost:4000/mysql-explain</guid>
-        
-        <category>mysql</category>
-        
-        
-        <category>db</category>
-        
-      </item>
-    
-      <item>
-        <title>mysql 表设计的21个经验准则</title>
-        <description>&lt;p&gt;微信公众号看到一篇文章总结了 mysql 工作中的21个设计经验准则。&lt;/p&gt;
-
-&lt;p&gt;from : &lt;a href=&quot;https://mp.weixin.qq.com/s/OlP0FVnLO_xw7jlahIVOMA&quot;&gt;21 个 MySQL 表设计的经验准则&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;1命名规范&quot;&gt;1、命名规范&lt;/h1&gt;
-
-&lt;p&gt;命名规范是指对数据库，表，字段，索引的规范。每个公司或团队都是自己的命名规范，这和代码命名是一致的。&lt;/p&gt;
-
-&lt;p&gt;一般要可读性高，让用者一看就知道是什么意义。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;表名、字段名必须使用小写字母或者数字，禁止使用数字开头，禁止使用拼音，并且一般不使用英文缩写。&lt;/li&gt;
-  &lt;li&gt;主键索引名为 pk_字段名 ；唯一索引名为 uk_ 字段名；普通索引名则为 idx_字段名。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;2选择合适的字段类型&quot;&gt;2、选择合适的字段类型&lt;/h1&gt;
-
-&lt;p&gt;设计表时，我们要选择合适的字段类型。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;尽可能选择存储空间小的字段类型，就好像数字类型的，从 tinyint、smallint、int、bigint 从左往右开始选择。&lt;/li&gt;
-  &lt;li&gt;小数类型如金额，则选择  &lt;strong&gt;decimal&lt;/strong&gt; ，禁止使用  float  和 double。&lt;/li&gt;
-  &lt;li&gt;如果存储的字符串长度几乎相等，使用  char  定长字符串类型。一般要要求业务定下最长字符。&lt;/li&gt;
-  &lt;li&gt;varchar 是可变长字符串，不预先分配存储空间，长度不要超过 5000。所有 varchar 字段的长度加起来，不能大于 65535。&lt;/li&gt;
-  &lt;li&gt;如果存储的值太大，建议字段类型修改为 text，同时抽出单独一张表，用主键与之对应。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;3主键设计要合理&quot;&gt;3、主键设计要合理&lt;/h1&gt;
-
-&lt;p&gt;主键最好是毫无意义的一串独立不重复的数字，比如 UUID，又或者 Auto_increment 自增的主键，或者是雪花算法生成的主键等等;&lt;/p&gt;
-
-&lt;p&gt;雪花算法： &lt;a href=&quot;https://zhuanlan.zhihu.com/p/433690272&quot;&gt;面试官：讲讲雪花算法，越详细越好&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;4选择合适的长度&quot;&gt;4、选择合适的长度&lt;/h1&gt;
-
-&lt;p&gt;mysql 中， varchar 和 char 类型表示字符长度，而其他类型表示的长度都表示字节长度。比如 char(10) 表示字符长度是10，而 bigint（4）表示显示长度是4个字节，但是因为 bigint 实际长度是8个字节，所以bigint（4）的实际长度就是8个字节。&lt;/p&gt;
-
-&lt;p&gt;字段长度一般设置为2的幂（也就是2的n 次方）。&lt;/p&gt;
-
-&lt;h1 id=&quot;5优先考虑逻辑删除而不是物理删除&quot;&gt;5、优先考虑逻辑删除，而不是物理删除&lt;/h1&gt;
-
-&lt;p&gt;一般不做数据删除，而是更新状态，把数据标志为已删除状态。&lt;/p&gt;
-
-&lt;p&gt;但是当业务已经下线，不在用了，且数据已经备份或者已经同步到了集市了，一般会考虑让 DBA 删除，减少数据库的压力。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;物理删除：把数据从硬盘中删除，可释放存储空间。&lt;/li&gt;
-  &lt;li&gt;逻辑删除：给数据添加一个字段，比如 is_deleted，以标记该数据已经逻辑删除。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;6每个表都需要添加几个通用字段&quot;&gt;6、每个表都需要添加几个通用字段&lt;/h1&gt;
-
-&lt;p&gt;数据库表，要存在一些字段，没有直接业务意义，但却很重要。如：主键、create_time, update_time, ext等。&lt;/p&gt;
-
-&lt;p&gt;如下：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;id&lt;/code&gt; ：主键，一个表必须得有主键，可以自增长。&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;create_time&lt;/code&gt; ：数据创建时间。&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;modifed_time&lt;/code&gt;: 修改时间，当数据被增量拉到数据集市时，这个字段是必段的。&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;version&lt;/code&gt; : 数据记录的版本号，用于乐观锁。&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ext&lt;/code&gt; : 扩展字段，当有紧急情况时，可以先暂用它，而不会更新表结构。&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;remark&lt;/code&gt; ：数据记录备注。&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;modified_by&lt;/code&gt; :修改人， 非必须&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;creator&lt;/code&gt; ：创建人，非必须&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;7一张表的字段不宜过多&quot;&gt;7、一张表的字段不宜过多&lt;/h1&gt;
-
-&lt;p&gt;表的字段不宜过多，过多可能会导致数据库性能问题。表的字段应该是多少，最好根据业务情况而定，可用用领域设计来划分业务范围。&lt;/p&gt;
-
-&lt;h1 id=&quot;8尽可能使用-not-null-定义字段&quot;&gt;8、尽可能使用 NOT NULL 定义字段&lt;/h1&gt;
-
-&lt;p&gt;创建表时，所有的字段应该都是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NOT NULL DEFAULT '' &lt;/code&gt;。非空且有默认值。这应该成为一种规范。&lt;/p&gt;
-
-&lt;p&gt;可以看：&lt;a href=&quot;http://blog.xyecho.com/mysql-commonly-used/&quot;&gt;mysql  常用语句&lt;/a&gt; 的表创建。&lt;/p&gt;
-
-&lt;p&gt;原因：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;NULL 值存储也需要额外的空间的，它也会导致比较运算更为复杂，使优化器难以优化SQL。&lt;/li&gt;
-  &lt;li&gt;NULL 值有可能会导致索引失效。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;9设计表时评估哪些字段需要加索引&quot;&gt;9、设计表时，评估哪些字段需要加索引&lt;/h1&gt;
-
-&lt;p&gt;对于索引的考量，是设计表一个重点。mysql 索引的相关的知识&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://blog.xyecho.com/mysql-index&quot;&gt;mysql 索引&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/QduIxKOykMmoZp13UGF1XQ&quot;&gt;MySQL 索引知识点总结&lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;索引也不要建得太多，一般单表索引个数不要超过&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt;个。因为创建过多的索引，会降低写得速度。&lt;/li&gt;
-  &lt;li&gt;区分度不高的字段，不能加索引。（还是要看业务的具体情况而定。）&lt;/li&gt;
-  &lt;li&gt;索引创建完后，还是要注意避免索引失效的情况。&lt;/li&gt;
-  &lt;li&gt;索引过多的话，可以通过联合索引的话方式来优化。然后的话，索引还有一些规则，如&lt;strong&gt;覆盖索引&lt;/strong&gt;，最左匹配原则等等。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;10不需要严格遵守-3nf通过业务字段冗余来减少表的关联&quot;&gt;10、不需要严格遵守 3NF，通过业务字段冗余来减少表的关联&lt;/h1&gt;
-
-&lt;p&gt;什么是数据库三范式（3NF）&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;第一范式：对属性的原子性，要求属性具有原子性，不可再分解；&lt;/li&gt;
-  &lt;li&gt;第二范式：对记录的唯一性，要求记录有唯一标识，即实体的唯一性，即不存在部分依赖；&lt;/li&gt;
-  &lt;li&gt;第三方式：对字段的冗余性，要求任何字段不能由其他字段派生出来，它要求字段没有冗余，即不存在传递依赖；&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;系统设计中，对一范式的要求基本没有讲究过。比较在意的是设计能否保证上服务的&lt;strong&gt;高性能&lt;/strong&gt;。为了提高性能，冗余一些数据也是正常的事。&lt;/p&gt;
-
-&lt;p&gt;从数据原型出发，分析业务数据的读写情况，从而决定是表字段的大小。能减少表的关联尽量少到表的关联。&lt;/p&gt;
-
-&lt;h1 id=&quot;11避免使用-mysql-保留字&quot;&gt;11、避免使用 mysql 保留字&lt;/h1&gt;
-
-&lt;p&gt;这是一个基本的常识，做开发的应该都知道保留字段避免使用。 会被用的估计是不小心用到了但不知道你这个保留字。&lt;/p&gt;
-
-&lt;h1 id=&quot;12不搞外键关联一般都在代码维护&quot;&gt;12、不搞外键关联，一般都在代码维护&lt;/h1&gt;
-
-&lt;p&gt;外键，也叫  FOREIGN KEY ，它是用于将两个表连接在一起的键。FOREIGN KEY 是一个表中的一个字段（或字段集合），它引用另一个表中的  PRIMARY KEY。它是用来保证数据的一致性和完整性的。&lt;/p&gt;
-
-&lt;p&gt;不搞外键，一般在可以在业务层面上搞定的就行了。这应该是一个编程规范。&lt;/p&gt;
-
-&lt;p&gt;外键破坏了数据库的扩展性，当以后要分库分表时，就很难办了。&lt;/p&gt;
-
-&lt;h1 id=&quot;13一般都选择-innobd-存储引擎&quot;&gt;13、一般都选择 InnoBD 存储引擎&lt;/h1&gt;
-
-&lt;p&gt;用什么引擎这是DBA的事了。现在 mysql 默认的都是 InnoDB。应该不会有人在这个样上去搞事情了。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://blog.xyecho.com/mysql-innodb-engine/&quot;&gt;mysql InnoDB 引擎&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;14选择合适统一的字符集&quot;&gt;14、选择合适统一的字符集&lt;/h1&gt;
-
-&lt;p&gt;字符集一定要定好，特别我们用到很多的中文。有一些情况是，开发人员会在业务代码层面去改变这个字符集。这个也应该被禁止掉。 在工作经历中，发生过事故。mysql 链接发生重连后，就回到原来的字符集了。可能会出乱码的情况。&lt;/p&gt;
-
-&lt;p&gt;用python 开发时，也同样被中文的字符集问题搞晕了很多次。&lt;/p&gt;
-
-&lt;p&gt;数据库库、表、开发程序等都需要统一字符集，通常中英文环境用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;utf8&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;MySQL支持的字符集有 utf8、utf8mb4、GBK、latin1 等。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;utf8：支持中英文混合场景，国际通过，3个字节长度&lt;/li&gt;
-  &lt;li&gt;utf8mb4:   完全兼容 utf8，4个字节长度，一般存储&lt;strong&gt;emoji表情&lt;/strong&gt;需要用到它。&lt;/li&gt;
-  &lt;li&gt;GBK ：支持中文，但是不支持国际通用字符集，2个字节长度&lt;/li&gt;
-  &lt;li&gt;latin1：MySQL默认字符集，1个字节长度&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;15如果你的数据库字段枚举类型的需要在comment-注释清楚&quot;&gt;15、如果你的数据库字段枚举类型的，需要在comment 注释清楚&lt;/h1&gt;
-
-&lt;p&gt;comment 注释清楚所有字段，这是方便以后的维护。更进一步讲，增加新字段时，要写清楚对应的业务版本。&lt;/p&gt;
-
-&lt;p&gt;字段是枚举类型，就更应该写清楚了。&lt;/p&gt;
-
-&lt;h1 id=&quot;16-时间的类型选择&quot;&gt;16、 时间的类型选择&lt;/h1&gt;
-
-&lt;p&gt;对于MySQL来说，主要有 date、datetime、time、timestamp 和 year。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;date ：表示的日期值, 格式&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yyyy-mm-dd&lt;/code&gt;,范围&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1000-01-01 到 9999-12-31&lt;/code&gt;，3字节&lt;/li&gt;
-  &lt;li&gt;time ：表示的时间值，格式 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hh:mm:ss&lt;/code&gt;，范围&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-838:59:59 到 838:59:59&lt;/code&gt;，3字节&lt;/li&gt;
-  &lt;li&gt;datetime：表示的日期时间值，格式&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yyyy-mm-dd hh:mm:ss&lt;/code&gt;，范围&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1000-01-01 00:00:00到&lt;/code&gt;9999-12-31 23:59:59```,8字节，跟时区无关&lt;/li&gt;
-  &lt;li&gt;timestamp：表示的时间戳值，格式为&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yyyymmddhhmmss&lt;/code&gt;，范围&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1970-01-01 00:00:01到2038-01-19 03:14:07&lt;/code&gt;，4字节，跟时区有关&lt;/li&gt;
-  &lt;li&gt;year：年份值，格式为&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yyyy&lt;/code&gt;。范围&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1901到2155&lt;/code&gt;，1字节&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;推荐优先使用 datetime 类型来保存日期和时间，因为存储范围更大，且跟时区无关。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;要注意的是 timestamp 的单位是秒不是毫秒。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;17不建议-stored-procedure-包括存储过程触发器&quot;&gt;17、不建议 Stored procedure (包括存储过程，触发器)&lt;/h1&gt;
-
-&lt;p&gt;对于 MYSQL 来说，存储过程、触发器等还不是很成熟， 并没有完善的出错记录处理，不建议使用。&lt;/p&gt;
-
-&lt;p&gt;尽量在业务代码中完成这一些逻辑。&lt;/p&gt;
-
-&lt;h1 id=&quot;181n-关系的设计&quot;&gt;18、1:n 关系的设计&lt;/h1&gt;
-
-&lt;p&gt;日常开发中，1对多的关系应该是非常常见的。比如一个班级有多个学生，一个部门有多个员工等等。这种的建表原则就是：在从表（N的这一方）创建一个字段，以字段作为外键指向主表（1的这一方）的主键。&lt;/p&gt;
-
-&lt;p&gt;有时候两张表存在N:N关系时，我们应该消除这种关系。通过增加第三张表，把N:N修改为两个 1:N。比如图书和读者，是一个典型的多对多的关系。一本书可以被多个读者借，一个读者又可以借多本书。我们就可以设计一个借书表，包含图书表的主键，以及读者的主键，以及借还标记等字段。&lt;/p&gt;
-
-&lt;h1 id=&quot;19大字段&quot;&gt;19、大字段&lt;/h1&gt;
-
-&lt;p&gt;字段太大了，不要存入 mysql 中。可以选择另外的存储。 如图片，文体，可以通过放到 CDN 上。然后保存 对应的链接到 mysql 表中。&lt;/p&gt;
-
-&lt;h1 id=&quot;20考虑是否需要分库分表&quot;&gt;20、考虑是否需要分库分表&lt;/h1&gt;
-
-&lt;p&gt;分库分表是在业务发一定量时要做的事情。 我们在早期的系统设计时就要依据业务需求量做出评估。如果后期有这个需要，在设计是就是充分考虑进去。&lt;/p&gt;
-
-&lt;p&gt;一个不利于分库分表的就不要做，如外键。用什么维度去分也要考虑清楚。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;分库：就是一个数据库分成多个数据库，部署到不同机器。&lt;/li&gt;
-  &lt;li&gt;分表：就是一个数据库表分成多个表。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;分库分表主要有水平拆分、垂直拆分的说法，拆分策略有 range范围、hash取模。而分库分表主要有这些问题：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;事务问题&lt;/li&gt;
-  &lt;li&gt;跨库关联&lt;/li&gt;
-  &lt;li&gt;排序问题&lt;/li&gt;
-  &lt;li&gt;分页问题&lt;/li&gt;
-  &lt;li&gt;分布式ID&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;21-sql-编写的一些优化经验&quot;&gt;21、 sql 编写的一些优化经验&lt;/h1&gt;
-
-&lt;p&gt;1）不要用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;select * &lt;/code&gt; , 而是要指定具体的字段。这样不被业务的代码需要的字段就没有必要被读出。随着业务的发展可能会有新增字段，导致业务代码的不可控。&lt;/p&gt;
-
-&lt;p&gt;2）如是业务上已要求结果只有一条，加了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;limit 1&lt;/code&gt;。业务上对数据有惟一的要求，一定要通过严格的条件过滤出来。 优先通过 SQL 语言过滤，再考虑业务代码过滤。&lt;/p&gt;
-
-&lt;p&gt;3）应尽量避免在 where 子句中使用 or 来连接条件。or 会破坏索引，但 select 时要时刻注意索引是否有效，要评估效率。&lt;/p&gt;
-
-&lt;p&gt;4）注意优化 limit 深分页问题。&lt;a href=&quot;https://github.com/zhangyachen/zhangyachen.github.io/issues/117&quot;&gt;mysql 证明为什么用limit时，offset很大会影响性能&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;5）使用 where 条件限定要查询的数据，避免返回多余的行。同 2。&lt;/p&gt;
-
-&lt;p&gt;6）尽量避免在索引列上使用 mysql 的内置函数，在where上使用索引，可能会破坏索引，破坏索引。&lt;/p&gt;
-
-&lt;p&gt;7）应尽量避免在  where 子句中对字段进行表达式操作。尽量把运算好之后的结果做为 where 的条件。&lt;/p&gt;
-
-&lt;p&gt;8）应尽量避免在 where  子句中使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;!=&lt;/code&gt;或&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;&amp;gt;&lt;/code&gt;操作符。破坏索引，破坏索引。&lt;/p&gt;
-
-&lt;p&gt;9）使用联合索引时，注意索引列的顺序，一般遵循最左匹配原则。&lt;/p&gt;
-
-&lt;p&gt;10） 对查询进行优化，应考虑在 where 及 order by 涉及的列上建立索引。&lt;/p&gt;
-
-&lt;p&gt;11）如果插入数据过多，考虑批量插入。无论是插入或查询，都要根据业务情况，考虑批量，分批处理。可能因为极端条件导致性能问题。&lt;/p&gt;
-
-&lt;p&gt;12）在适当的时候，使用覆盖索引。&lt;a href=&quot;https://zhuanlan.zhihu.com/p/339666157&quot;&gt;什么是覆盖索引&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;13）使用explain 分析你SQL的计划。&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;参考资料：&lt;/p&gt;
-
-&lt;p&gt;1、&lt;a href=&quot;https://mp.weixin.qq.com/s/OlP0FVnLO_xw7jlahIVOMA&quot;&gt;21 个 MySQL 表设计的经验准则&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Mon, 17 Oct 2022 00:12:15 +0800</pubDate>
-        <link>http://localhost:4000/mysql-table-design-21-criterion</link>
-        <guid isPermaLink="true">http://localhost:4000/mysql-table-design-21-criterion</guid>
         
         <category>mysql</category>
         
