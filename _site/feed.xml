@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 14 Feb 2023 23:37:40 +0800</pubDate>
-    <lastBuildDate>Tue, 14 Feb 2023 23:37:40 +0800</lastBuildDate>
+    <pubDate>Wed, 15 Feb 2023 22:57:11 +0800</pubDate>
+    <lastBuildDate>Wed, 15 Feb 2023 22:57:11 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -99,7 +99,7 @@
         <title>How to Make Good Code Reviews Better</title>
         <description>&lt;p&gt;from ：&lt;a href=&quot;https://levelup.gitconnected.com/how-to-make-good-code-reviews-better-172c5dc01d81&quot;&gt; How to Make Good Code Reviews Better&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;好的代码 review 更应该关注程序执行时可能出现的异常，而不是只是在找 Bug。代码 review 的策略应该：清晰专注的代码风格，找出可替代的方案，增强彼此的学习，分享开发者的主导权（share ownership），而不是做为一个盘查者。&lt;/p&gt;
+&lt;p&gt;好的代码 review 更应该关注程序执行时可能出现的异常，而不是只是在找代码中的Bug。代码 review 的策略应该是清晰专注的代码风格，找出可替代的方案，增强彼此的学习，分享开发者的主导权（share ownership），而不是做为一个盘查者。&lt;/p&gt;
 
 &lt;p&gt;代码 review 的反馈是建立团队贡献的一种主要方式。通过建设一个强大的团队，将促进一个高质量的产品，一个高质量的团队和一个高质量的生活。&lt;/p&gt;
 
@@ -107,7 +107,7 @@
 
 &lt;h1 id=&quot;1设置指标并实现它&quot;&gt;1、设置指标并实现它&lt;/h1&gt;
 
-&lt;p&gt;你收集的指标的平衡是比关键，太多了指标浪费时间，太少指标容易迷失在代码中，开始 review 之前，团队制定好代码 review 的有效性，并明确目标。好的 代码 review 应该是：&lt;/p&gt;
+&lt;p&gt;你收集的指标的平衡是比较关键，太多了指标浪费时间，太少指标容易迷失在代码中，开始 review 之前，团队制定好代码 review 的有效性，并明确目标。好的 代码 review 应该是：&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;功能优先&lt;/strong&gt;  代码应该业务需求的预期执行&lt;/li&gt;
@@ -538,7 +538,7 @@
         <title>团队能力的提升</title>
         <description>&lt;p&gt;无论是做为 leader 还是成员，都应该经常思考如何提升个人的能力，同时也应该思考如何提升团队能力。&lt;/p&gt;
 
-&lt;p&gt;团队的可以通过如下几方面：规范建设，意识建设、技术建设、团队建设。&lt;/p&gt;
+&lt;p&gt;团队的可以通过如下几方面：&lt;strong&gt;规范建设，意识建设、技术建设、团队建设&lt;/strong&gt;。&lt;/p&gt;
 
 &lt;h1 id=&quot;一-规范建设&quot;&gt;一、 规范建设&lt;/h1&gt;
 
@@ -603,11 +603,10 @@
 &lt;ul&gt;
   &lt;li&gt;项目进度反馈&lt;/li&gt;
   &lt;li&gt;业务上下游团队沟通、协同&lt;/li&gt;
-  &lt;li&gt;以业务完成为目标有效的沟通
-  
-    &lt;h1 id=&quot;三技术建设&quot;&gt;三、技术建设&lt;/h1&gt;
-  &lt;/li&gt;
+  &lt;li&gt;以业务完成为目标有效的沟通&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;h1 id=&quot;三技术建设&quot;&gt;三、技术建设&lt;/h1&gt;
 
 &lt;p&gt;1、定位清晰，认清自己。 是自己的能力，还是平台的能力。&lt;/p&gt;
 
@@ -657,15 +656,15 @@
         <title>关于团队的思考</title>
         <description>&lt;p&gt;把团队当做一个系统来思考。如何让这个系统高效稳定的运行，可以有力的支持业务的发展。&lt;/p&gt;
 
-&lt;p&gt;团队系统的关键点 ：结构、原则、流程、弹性、成果。&lt;/p&gt;
+&lt;p&gt;团队系统的关键点 ：&lt;strong&gt;结构、原则、流程、弹性、成果&lt;/strong&gt;。&lt;/p&gt;
 
 &lt;h1 id=&quot;一结构&quot;&gt;一、结构&lt;/h1&gt;
 
 &lt;p&gt;要从不同层面，不同角度去思考团队的结构。&lt;/p&gt;
 
-&lt;p&gt;1、&lt;strong&gt;团队梯度&lt;/strong&gt;  团队的成员技术能力、职位梯度如何；所以部门，公司的位置；对比其他团队有何优势、劣势。&lt;/p&gt;
+&lt;p&gt;1、&lt;strong&gt;团队梯度&lt;/strong&gt; 团队成员的职位梯度如何；所在部门，公司的位置；对比其他团队有何优势、劣势。&lt;/p&gt;
 
-&lt;p&gt;2、&lt;strong&gt;项目结构&lt;/strong&gt;  负责的项目处于公司战略的什么位置？哪一些是重点，优先级如何。&lt;/p&gt;
+&lt;p&gt;2、&lt;strong&gt;项目结构&lt;/strong&gt; 负责的项目处于公司战略的什么位置？哪一些是重点，项目的优先级如何。&lt;/p&gt;
 
 &lt;p&gt;3、&lt;strong&gt;能力结构&lt;/strong&gt; 团他成员的能力构成，前端，后端，测试等能力分布情况；人员负责项目情况；个人能力，职级，工作年限。&lt;/p&gt;
 

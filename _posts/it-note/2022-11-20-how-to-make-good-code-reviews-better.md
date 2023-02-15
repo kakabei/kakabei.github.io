@@ -10,7 +10,7 @@ excerpt: Good code reviews nurture teamwork, help developers grow, and improve a
 
 from ：[ How to Make Good Code Reviews Better](https://levelup.gitconnected.com/how-to-make-good-code-reviews-better-172c5dc01d81) 
 
-好的代码 review 更应该关注程序执行时可能出现的异常，而不是只是在找 Bug。代码 review 的策略应该：清晰专注的代码风格，找出可替代的方案，增强彼此的学习，分享开发者的主导权（share ownership），而不是做为一个盘查者。
+好的代码 review 更应该关注程序执行时可能出现的异常，而不是只是在找代码中的Bug。代码 review 的策略应该是清晰专注的代码风格，找出可替代的方案，增强彼此的学习，分享开发者的主导权（share ownership），而不是做为一个盘查者。
 
 代码 review 的反馈是建立团队贡献的一种主要方式。通过建设一个强大的团队，将促进一个高质量的产品，一个高质量的团队和一个高质量的生活。
 
@@ -18,7 +18,7 @@ from ：[ How to Make Good Code Reviews Better](https://levelup.gitconnected.com
 
 # 1、设置指标并实现它
 
-你收集的指标的平衡是比关键，太多了指标浪费时间，太少指标容易迷失在代码中，开始 review 之前，团队制定好代码 review 的有效性，并明确目标。好的 代码 review 应该是：
+你收集的指标的平衡是比较关键，太多了指标浪费时间，太少指标容易迷失在代码中，开始 review 之前，团队制定好代码 review 的有效性，并明确目标。好的 代码 review 应该是：
 
  - **功能优先**  代码应该业务需求的预期执行
  - **整洁和可维护性第二** 代码的高可读性
