@@ -3,7 +3,7 @@ layout: post
 title: mysql 表设计的21个经验准则
 date: 2022-10-16 16:12:15
 categories: db  
-tags: mysql 
+tags: mysql 工作经验
 excerpt: mysql 在工作中一些经验准则，这一些足够可以应付日常的业务开发了。
 ---
 
