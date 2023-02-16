@@ -103,14 +103,14 @@ CREATE TABLE `UserInfo` (
 -- 添加列
 alter table 表名 add 列名 列数据类型 [after 插入位置];
 
--- 在后添加 birthday 
+-- 在 age 后添加 birthday 
 alter table Userinfo add birthday varchar(100) not null default "" date after age;
 
 -- 修改列
 alter table 表名 change 列名称 列新名称 新数据类型;
 
 -- 将 name 列的数据类型改为 char(16): 
-alter table Userinf change name name char(16) not null;
+alter table Userinfo change name name char(16) not null;
 
 -- 删除列
 alter table 表名 drop 列名称;
@@ -132,7 +132,7 @@ select id, name from UserInfo where id = 111;
 
 
 ```mysql 
--- update语句设置字段值为另一个结果取出来的字段
+-- update 语句 根据条件更新对应的字段
 update UserInfo set name='南山肯德鸡'  where id = 111; 
 ```
 
@@ -144,11 +144,9 @@ insert into UserInfo(name, create_time，update_time) value ('夏有凉风'， '
 -- 从一个表的数据插入到另外一个表
 insert into live (user_id, name) SELECT m.user_id, m.name FROM moot m where m.id=111;
 
-
--- 如不存在则插入，如存在则更新
+-- 如不存在则插入，如存在则更新用 : INSERT INTO ON ... DUPLICATE KEY UPDATE
 INSERT INTO `charger` (`id`,`type`,`create_at`,`update_at`) VALUES (3,2,'2017-05-18 11:06:17','2017-05-18 11:06:17') ON DUPLICATE KEY UPDATE `id`=VALUES(`id`), `type`=VALUES(`type`), `update_at`=VALUES(`update_at`);
 ```
-
 
 ## 3.4  DELETE
 
@@ -164,20 +162,17 @@ delete * from  UserInfo
 delete from  UserInfo  WHERE id = 111; 
 ```
 
-
 ## 3.5  ORDER BY
 
-order by   用于按升序或降序对结果集进行排序。 默认按 asc 。  asc 升序排序, desc 降序排序。 
+order by  用于按升序或降序对结果集进行排序。 默认按 asc 。  asc 升序排序, desc 降序排序。 
 
 ```mysql 
-
 -- 升序
 select * from UserInfo order by  id asc; 
 
 -- 降序
 select * from UserInfo order by id desc;
 ```
-
 
 ## 3.6 GROUP BY
 
@@ -188,7 +183,6 @@ select * from UserInfo order by id desc;
 select male, count(id) from UserInfo group by male; 
 ```
 
-
 ## 3.7  UNION
 
 合并两个或多个 SELECT 语句的结果集。
@@ -196,7 +190,6 @@ select male, count(id) from UserInfo group by male;
 ```mysql 
 select name from Employees_ZH union select name from Employees_USA; 
 ```
-
 
 ## 3.8  JOIN
 

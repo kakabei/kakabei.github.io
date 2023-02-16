@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 15 Feb 2023 23:01:42 +0800</pubDate>
-    <lastBuildDate>Wed, 15 Feb 2023 23:01:42 +0800</lastBuildDate>
+    <pubDate>Thu, 16 Feb 2023 09:09:45 +0800</pubDate>
+    <lastBuildDate>Thu, 16 Feb 2023 09:09:45 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -772,7 +772,7 @@
     
       <item>
         <title>mysql explain 命令详解</title>
-        <description>&lt;p&gt;explain 命令主要是为了分析 SQL 执行的效率。 explain 显示了 mysql 如何使用索引来处理s elect 语句以及连接表，可以帮助选择更好的索引和写出更优化的查询语句。&lt;/p&gt;
+        <description>&lt;p&gt;explain 命令主要是为了分析 SQL 执行的效率。 explain 显示了 mysql 如何使用索引来处理 select 语句以及连接表，可以帮助选择更好的索引和写出更优化的查询语句。&lt;/p&gt;
 
 &lt;p&gt;使用方法： 在 SQL 语句前加上 explain  命令。&lt;/p&gt;
 
@@ -828,11 +828,11 @@
 &lt;hr /&gt;
 &lt;p&gt;参考资料：&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/358920539&quot;&gt;# MySQL _Explain_命令详解：type列详解及案例分析&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/358920539&quot;&gt;1、MySQL _Explain_命令详解：type列详解及案例分析&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/381852677&quot;&gt;# MySQL之EXPLAIN命令详解&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/381852677&quot;&gt;2、MySQL之EXPLAIN命令详解&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain-join-types&quot;&gt;# EXPLAIN Join Types&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain-join-types&quot;&gt;3、EXPLAIN Join Types&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Tue, 18 Oct 2022 00:12:15 +0800</pubDate>
         <link>http://localhost:4000/mysql-explain</link>

@@ -9,7 +9,7 @@ excerpt: 在工作中 explain 命令用于分析 sql 语句的性能效率。如
 
 
 	
-explain 命令主要是为了分析 SQL 执行的效率。 explain 显示了 mysql 如何使用索引来处理s elect 语句以及连接表，可以帮助选择更好的索引和写出更优化的查询语句。
+explain 命令主要是为了分析 SQL 执行的效率。 explain 显示了 mysql 如何使用索引来处理 select 语句以及连接表，可以帮助选择更好的索引和写出更优化的查询语句。
 
 使用方法： 在 SQL 语句前加上 explain  命令。 
 
@@ -61,8 +61,8 @@ explain 命令主要是为了分析 SQL 执行的效率。 explain 显示了 mys
 ---
 参考资料：
 
-[# MySQL _Explain_命令详解：type列详解及案例分析](https://zhuanlan.zhihu.com/p/358920539)
+[1、MySQL _Explain_命令详解：type列详解及案例分析](https://zhuanlan.zhihu.com/p/358920539)
 
-[# MySQL之EXPLAIN命令详解](https://zhuanlan.zhihu.com/p/381852677)
+[2、MySQL之EXPLAIN命令详解](https://zhuanlan.zhihu.com/p/381852677)
 
-[# EXPLAIN Join Types](https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain-join-types)
+[3、EXPLAIN Join Types](https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain-join-types)
