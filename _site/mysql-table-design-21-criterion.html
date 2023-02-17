@@ -231,6 +231,23 @@
   <li>索引过多的话，可以通过联合索引的话方式来优化。然后的话，索引还有一些规则，如<strong>覆盖索引</strong>，最左匹配原则等等。</li>
 </ul>
 
+<p><a href="https://cloud.tencent.com/developer/article/1774781">最左匹配原则</a></p>
+
+<p>最左匹配原则就是指在联合索引中，如果你的 SQL 语句中用到了联合索引中的最左边的索引，那么这条 SQL 语句就可以利用这个联合索引去进行匹配。例如某表现有索引(a,b,c)，现在你有如下语句：</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="k">where</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span> <span class="k">and</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span> <span class="k">and</span> <span class="k">c</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span>     <span class="c1">-- 这样可以利用到定义的索引（a,b,c）,用上a,b,c</span>
+
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="k">where</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span> <span class="k">and</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>    <span class="c1">-- 这样可以利用到定义的索引（a,b,c）,用上a,b</span>
+
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="k">where</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span> <span class="k">and</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>    <span class="c1">-- 这样可以利用到定义的索引（a,b,c）,用上a,c（mysql有查询优化器）</span>
+
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="k">where</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>     <span class="c1">-- 这样也可以利用到定义的索引（a,b,c）,用上a</span>
+
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="k">where</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span> <span class="k">and</span> <span class="k">c</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>     <span class="c1">-- 这样不可以利用到定义的索引（a,b,c）</span>
+
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="k">where</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span> <span class="k">and</span> <span class="k">c</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>     <span class="c1">-- 这样可以利用到定义的索引（a,b,c），但只用上a索引，b,c索引用不到</span>
+</code></pre></div></div>
+
 <h1 id="10不需要严格遵守-3nf通过业务字段冗余来减少表的关联">10、不需要严格遵守 3NF，通过业务字段冗余来减少表的关联</h1>
 
 <p>什么是数据库三范式（3NF）</p>
@@ -259,7 +276,7 @@
 
 <h1 id="13一般都选择-innobd-存储引擎">13、一般都选择 InnoBD 存储引擎</h1>
 
-<p>用什么引擎这是DBA的事了。现在 mysql 默认的都是 InnoDB。应该不会有人在这个样上去搞事情了。</p>
+<p>用什么引擎一般是 DBA 的定的。现在 mysql 默认的都是 InnoDB。应该不会有人在这个样上去搞事情了。</p>
 
 <p><a href="http://blog.xyecho.com/mysql-innodb-engine/">mysql InnoDB 引擎</a></p>
 
@@ -274,10 +291,10 @@
 <p>MySQL支持的字符集有 utf8、utf8mb4、GBK、latin1 等。</p>
 
 <ul>
-  <li>utf8：支持中英文混合场景，国际通过，3个字节长度</li>
-  <li>utf8mb4:   完全兼容 utf8，4个字节长度，一般存储<strong>emoji表情</strong>需要用到它。</li>
-  <li>GBK ：支持中文，但是不支持国际通用字符集，2个字节长度</li>
-  <li>latin1：MySQL默认字符集，1个字节长度</li>
+  <li>utf8：支持中英文混合场景，国际通过，3个字节长度。</li>
+  <li>utf8mb4:   完全兼容 utf8，4个字节长度，一般存储 <strong>emoji表情</strong> 需要用到它。</li>
+  <li>GBK ：支持中文，但是不支持国际通用字符集，2个字节长度。</li>
+  <li>latin1：MySQL默认字符集，1个字节长度。</li>
 </ul>
 
 <h1 id="15如果你的数据库字段枚举类型的需要在comment-注释清楚">15、如果你的数据库字段枚举类型的，需要在comment 注释清楚</h1>
@@ -288,14 +305,14 @@
 
 <h1 id="16-时间的类型选择">16、 时间的类型选择</h1>
 
-<p>对于MySQL来说，主要有 date、datetime、time、timestamp 和 year。</p>
+<p>对于 MySQL 来说，主要有 date、datetime、time、timestamp 和 year。</p>
 
 <ul>
   <li>date ：表示的日期值, 格式<code class="language-plaintext highlighter-rouge">yyyy-mm-dd</code>,范围<code class="language-plaintext highlighter-rouge">1000-01-01 到 9999-12-31</code>，3字节</li>
   <li>time ：表示的时间值，格式 <code class="language-plaintext highlighter-rouge">hh:mm:ss</code>，范围<code class="language-plaintext highlighter-rouge">-838:59:59 到 838:59:59</code>，3字节</li>
   <li>datetime：表示的日期时间值，格式<code class="language-plaintext highlighter-rouge">yyyy-mm-dd hh:mm:ss</code>，范围<code class="language-plaintext highlighter-rouge">1000-01-01 00:00:00到</code>9999-12-31 23:59:59```,8字节，跟时区无关</li>
   <li>timestamp：表示的时间戳值，格式为<code class="language-plaintext highlighter-rouge">yyyymmddhhmmss</code>，范围<code class="language-plaintext highlighter-rouge">1970-01-01 00:00:01到2038-01-19 03:14:07</code>，4字节，跟时区有关</li>
-  <li>year：年份值，格式为<code class="language-plaintext highlighter-rouge">yyyy</code>。范围<code class="language-plaintext highlighter-rouge">1901到2155</code>，1字节</li>
+  <li>year：年份值，格式为<code class="language-plaintext highlighter-rouge">yyyy</code>。范围<code class="language-plaintext highlighter-rouge">1901到2155</code>，1字节。</li>
 </ul>
 
 <p><strong>推荐优先使用 datetime 类型来保存日期和时间，因为存储范围更大，且跟时区无关。</strong></p>
@@ -329,7 +346,7 @@
   <li>分表：就是一个数据库表分成多个表。</li>
 </ul>
 
-<p>分库分表主要有水平拆分、垂直拆分的说法，拆分策略有 range范围、hash取模。而分库分表主要有这些问题：</p>
+<p>分库分表主要有水平拆分、垂直拆分的说法，拆分策略有 range 范围、hash 取模。而分库分表主要有这些问题：</p>
 
 <ul>
   <li>事务问题</li>
@@ -351,11 +368,11 @@
 
 <p>5）使用 where 条件限定要查询的数据，避免返回多余的行。同 2。</p>
 
-<p>6）尽量避免在索引列上使用 mysql 的内置函数，在where上使用索引，可能会破坏索引，破坏索引。</p>
+<p>6）尽量避免在索引列上使用 mysql 的内置函数，在 where 上使用索引，可能会破坏索引，破坏索引。</p>
 
 <p>7）应尽量避免在  where 子句中对字段进行表达式操作。尽量把运算好之后的结果做为 where 的条件。</p>
 
-<p>8）应尽量避免在 where  子句中使用<code class="language-plaintext highlighter-rouge">!=</code>或<code class="language-plaintext highlighter-rouge">&lt;&gt;</code>操作符。破坏索引，破坏索引。</p>
+<p>8）应尽量避免在 where  子句中使用 <code class="language-plaintext highlighter-rouge">!=</code> 或 <code class="language-plaintext highlighter-rouge">&lt;&gt;</code> 操作符。破坏索引，破坏索引。</p>
 
 <p>9）使用联合索引时，注意索引列的顺序，一般遵循最左匹配原则。</p>
 
@@ -365,7 +382,7 @@
 
 <p>12）在适当的时候，使用覆盖索引。<a href="https://zhuanlan.zhihu.com/p/339666157">什么是覆盖索引</a></p>
 
-<p>13）使用explain 分析你SQL的计划。</p>
+<p>13）使用 explain 分析你 SQL 的效率。</p>
 
 <hr />
 <p>参考资料：</p>
