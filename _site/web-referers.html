@@ -133,17 +133,18 @@
 	  <article class="entry-body">
 	  	
 	  		<p>在《增长黑客》这个本书上，看到一个例子。作者用curl 在网上抓取了一个网站上用户的头像。这个网站对于图片的静态链接没有做防盗链。
-以前有过这种开发。也疑惑过这种问题。
-今天就了解一下什么是防盗链吧。</p>
+以前有过这种开发。也疑惑过这种问题。</p>
 
-<p>防盗链的定义：
-此内容不在自己服务器上，而通过技术手段，绕过别人放广告有利益的最终页，直接在自己的有广告有利益的页面上向最终用户提供此内容。 常常是一些名不见经传的 小网站来盗取一些有实力的大网站的地址（比如一些音乐、图片、软件的下载地址）然后放置在自己的网站中，通过这种方法盗取大网站的空间和流量。</p>
+<h2 id="防盗链的定义">防盗链的定义</h2>
+
+<p>此内容不在自己服务器上，而通过技术手段，绕过别人放广告有利益的最终页，直接在自己的有广告有利益的页面上向最终用户提供此内容。 常常是一些名不见经传的 小网站来盗取一些有实力的大网站的地址（比如一些音乐、图片、软件的下载地址）然后放置在自己的网站中，通过这种方法盗取大网站的空间和流量。</p>
 
 <p>通俗的讲：就是你提供给自己的网站的静态链接。别人一样可能无条件用。图片，音频，文件，别人可以下载得到。</p>
 
-<p>这个技术的本质就在于http上。表头字体有一个叫referer的。这个字段的作用是：当浏览器访问web服务器时，一般会带上referer，告诉服务器我是从哪个页面链接过来的。所以，我们可用检测这个链接是不是我们自己的服务器上的，如果不是，那可能就是别人来盗链接的了，就应该阻止掉。</p>
+<p>这个技术的本质就在于 http 上。表头字体有一个叫 <strong>referer</strong> 的。这个字段的作用是：当浏览器访问web服务器时，一般会带上<code class="language-plaintext highlighter-rouge">referer</code>，告诉服务器我是从哪个页面链接过来的。所以，我们可用检测这个链接是不是我们自己的服务器上的，如果不是，那可能就是别人来盗链接的了，就应该阻止掉。</p>
 
-<h4 id="nginx防盗链的配置">nginx防盗链的配置</h4>
+<h2 id="nginx-防盗链的配置">nginx 防盗链的配置</h2>
+
 <p>1、nginx针对文件类型的防盗链配置方法：</p>
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>　　location ~<span class="k">*</span> <span class="se">\.</span><span class="o">(</span>gif|jpg|png|swf|flv|bmp<span class="o">)</span><span class="nv">$ </span><span class="o">{</span>
 　　valid_referers none blocked <span class="k">*</span>.php100.com php100.com<span class="p">;</span>
@@ -154,7 +155,7 @@
 　　<span class="o">}</span>
 </code></pre></div></div>
 
-<p>这种方法是在server或者location段中加入：valid_referers none blocked，其中none表示空的来路，也就是直接访问，比如直接在浏览器打开一个文件，blocked表示被防火墙标记过的来路，*.php100.com表示所有子域名。</p>
+<p>这种方法是在 server 或者 location 段中加入：<strong>valid_referers none blocked</strong>，其中 none 表示空的来路，也就是直接访问，比如直接在浏览器打开一个文件，blocked 表示被防火墙标记过的来路，*.php100.com表示所有子域名。</p>
 
 <p>2、nginx针对文件目录的防盗链配置方法：</p>
 
@@ -169,7 +170,13 @@
 　　<span class="o">}</span>
 </code></pre></div></div>
 
-<p>如果不是用nginx，就要自己去解析表头然后做出判断。</p>
+<p>如果不是用 nginx，就要自己去解析表头然后做出判断。</p>
+
+<h2 id="最后">最后</h2>
+
+<p>用 <code class="language-plaintext highlighter-rouge">referer</code> 进行拦截只是比较简单的一种，还是可以被伪造。对于不是很重要的资源，用 <code class="language-plaintext highlighter-rouge">referer</code> 的方式倒是没有太大的问题。</p>
+
+<p>但如果是比较重要的资源，那么最好要做登录鉴权系统管理。</p>
 
 
   		
