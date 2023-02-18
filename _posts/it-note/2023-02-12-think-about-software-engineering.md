@@ -3,7 +3,7 @@ layout: post
 title: 软件工程文化的思考
 date: 2023-02-12 10:12:15
 categories: 总结   
-tags:  工作经验 团队管理
+tags:  工作经验 团队管理 
 excerpt: Think about  Software Engineering 
 ---
 

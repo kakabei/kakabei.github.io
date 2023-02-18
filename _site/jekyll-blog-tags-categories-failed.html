@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>软件工程文化的思考</title>
+    <title>jekyll blog 的 tags categories 跳转失败</title>
 
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
@@ -12,7 +12,7 @@
     
     
 
-    <link rel="canonical" href="http://localhost:4000/think-about-software-engineering">
+    <link rel="canonical" href="http://localhost:4000/jekyll-blog-tags-categories-failed">
     <link rel="icon" type="image/png" href="/images/logo.png">
 
     <!-- Custom CSS -->
@@ -31,7 +31,7 @@
 
   <div class="site-title">
     
-    <h4 class="entry-title"><a href="/think-about-software-engineering">软件工程文化的思考</a></h4>
+    <h4 class="entry-title"><a href="/jekyll-blog-tags-categories-failed">jekyll blog 的 tags categories 跳转失败</a></h4>
     
   </div>
 
@@ -111,17 +111,17 @@
       <div class="content">
         <div class="articles">
             <div class="article-meta">
-    2023-02-12
+    2023-02-17
      • Category: 
         
-        <a href="/categories#总结-ref" >总结</a>
+        <a href="/categories#tools-ref" >tools</a>
         
     
      • Tag: 
         
-            <a href="/tags#工作经验-ref" >工作经验</a>
+            <a href="/tags#bug-ref" >bug</a>
         
-            <a href="/tags#团队管理-ref" >团队管理</a>
+            <a href="/tags#工作提效-ref" >工作提效</a>
         
     
 </div>
@@ -132,23 +132,29 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<p>1、编程是指写代码的直接行为。</p>
+	  		<p>博客的 tags 和 categories 跳转全部失败了。有点奇怪，之前没有发现这个有什么问题，估计改动了其他的什么功能导致了这个问题吧。</p>
 
-<p>2、软件工程用构建和维护代码的工具和流程， 保持代码的长期价值。因为涉及到流程，所以软件工程更多的团队行为。</p>
+<h1 id="问题描述">问题描述</h1>
 
-<p>3、软件工程的最佳实践： 可持续、规模化。</p>
+<p>点击文章中的 category 和 tag 都无法正常跳转，出现如下图情况。</p>
 
-<p>4、团队的协作，沟通是手段，业务产出才是目的。</p>
+<p><img src="/assets/tools/jeklly-2023-02-18-12-17-17.png" alt="" /></p>
 
-<p>5、协同和评审是依赖团队保证自己在正确路上。</p>
+<p>出的错误：</p>
 
-<p>6、团队可以让我们获得集体智慧。</p>
+<p><img src="/assets/tools/jeklly-2023-02-18-11-58-25.png" alt="" /></p>
 
-<p>7、团队应该有一个安全环境或容错空间，让新人有信心提出问题。</p>
+<h1 id="解决">解决</h1>
 
-<p>8、沟通时，要分清对方是意图、事实、情绪，还是期待。</p>
+<p>感觉是拼接的 url 出现了问题。记得之前在URL后加了<code class="language-plaintext highlighter-rouge">/</code> 导致无法正常显示出来。 估计也是这个问题，</p>
 
-<p>9、导师的三个能力： 一、熟悉团队流程和系统的经验； 二、向其他人解释事情的能力； 三、评估对方需要多少帮助的能力，主动询问帮助，不要过度唠叨。</p>
+<p>把 <code class="language-plaintext highlighter-rouge">http://blog.xyecho.com/categories/#c++-ref</code>  改成 <code class="language-plaintext highlighter-rouge">http://blog.xyecho.com/categories#c++-ref</code> 也可以正常显示了。</p>
+
+<p>但在本地却没有发现这个问题，应该是本地服务对 URL 没有做严格的匹配吧。</p>
+
+<p>代码发动如下：</p>
+
+<p><img src="/assets/tools/jeklly-2023-02-18-12-47-48.png" alt="" /></p>
 
   		
 	  </article>
@@ -157,9 +163,9 @@
 </div>
 
 <span>
-	<a  href="/review-the-main-elements-of-document" class="pageNav"  >上一篇</a>
+	<a  href="/think-about-software-engineering" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/jekyll-blog-tags-categories-failed" class="pageNav"  >下一篇</a>
+	<a   class="pageNavInvalid"  >下一篇</a>
 </span>
 
 
