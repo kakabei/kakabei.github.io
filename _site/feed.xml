@@ -3,10 +3,10 @@
   <channel>
     <title>xyecho - Reading, Life, Tech</title>
     <description>读书，生活，技术</description>
-    <link>http://blog.xyecho.com/</link>
-    <atom:link href="http://blog.xyecho.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 18 Feb 2023 12:23:09 +0800</pubDate>
-    <lastBuildDate>Sat, 18 Feb 2023 12:23:09 +0800</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Sat, 18 Feb 2023 12:27:32 +0800</pubDate>
+    <lastBuildDate>Sat, 18 Feb 2023 12:27:32 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -30,8 +30,8 @@
 &lt;p&gt;9、导师的三个能力： 一、熟悉团队流程和系统的经验； 二、向其他人解释事情的能力； 三、评估对方需要多少帮助的能力，主动询问帮助，不要过度唠叨。&lt;/p&gt;
 </description>
         <pubDate>Sun, 12 Feb 2023 18:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/think-about-software-engineering</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/think-about-software-engineering</guid>
+        <link>http://localhost:4000/think-about-software-engineering</link>
+        <guid isPermaLink="true">http://localhost:4000/think-about-software-engineering</guid>
         
         <category>工作经验</category>
         
@@ -58,8 +58,8 @@
 
 </description>
         <pubDate>Fri, 10 Feb 2023 18:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/review-the-main-elements-of-document</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/review-the-main-elements-of-document</guid>
+        <link>http://localhost:4000/review-the-main-elements-of-document</link>
+        <guid isPermaLink="true">http://localhost:4000/review-the-main-elements-of-document</guid>
         
         <category>工作经验</category>
         
@@ -108,8 +108,8 @@
 
 </description>
         <pubDate>Mon, 09 Jan 2023 18:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/principles-of-communication</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/principles-of-communication</guid>
+        <link>http://localhost:4000/principles-of-communication</link>
+        <guid isPermaLink="true">http://localhost:4000/principles-of-communication</guid>
         
         <category>工作经验</category>
         
@@ -133,8 +133,8 @@
 &lt;p&gt;&lt;img src=&quot;/assets/programming-language/modern-cpp-tutorial-2022-11-24_16-29-18.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 24 Nov 2022 00:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/modern-cpp-tutorial</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/modern-cpp-tutorial</guid>
+        <link>http://localhost:4000/modern-cpp-tutorial</link>
+        <guid isPermaLink="true">http://localhost:4000/modern-cpp-tutorial</guid>
         
         <category>读书</category>
         
@@ -227,8 +227,8 @@
 &lt;p&gt;1、&lt;a href=&quot;http://blog.xyecho.com/ali-code-review/&quot;&gt;阿里技术:Code Review&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 21 Nov 2022 00:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/how-to-make-good-code-reviews-better</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/how-to-make-good-code-reviews-better</guid>
+        <link>http://localhost:4000/how-to-make-good-code-reviews-better</link>
+        <guid isPermaLink="true">http://localhost:4000/how-to-make-good-code-reviews-better</guid>
         
         <category>工作经验</category>
         
@@ -293,8 +293,8 @@
 &lt;p&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/AejIOMNxsI_Ru5G0W8AeTg&quot;&gt;# 七个建议让 Code Review 高效又高质&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Sat, 12 Nov 2022 00:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/ali-code-review</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/ali-code-review</guid>
+        <link>http://localhost:4000/ali-code-review</link>
+        <guid isPermaLink="true">http://localhost:4000/ali-code-review</guid>
         
         <category>工作经验</category>
         
@@ -574,8 +574,8 @@
 
 </description>
         <pubDate>Tue, 08 Nov 2022 19:13:00 +0800</pubDate>
-        <link>http://blog.xyecho.com/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94</guid>
+        <link>http://localhost:4000/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94</link>
+        <guid isPermaLink="true">http://localhost:4000/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94</guid>
         
         <category>读书</category>
         
@@ -690,8 +690,8 @@
 
 </description>
         <pubDate>Sat, 22 Oct 2022 00:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/summary-improve-team-ability</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/summary-improve-team-ability</guid>
+        <link>http://localhost:4000/summary-improve-team-ability</link>
+        <guid isPermaLink="true">http://localhost:4000/summary-improve-team-ability</guid>
         
         <category>工作经验</category>
         
@@ -758,8 +758,8 @@
 
 </description>
         <pubDate>Fri, 21 Oct 2022 00:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/summary-thinking-team</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/summary-thinking-team</guid>
+        <link>http://localhost:4000/summary-thinking-team</link>
+        <guid isPermaLink="true">http://localhost:4000/summary-thinking-team</guid>
         
         <category>工作经验</category>
         
@@ -836,8 +836,8 @@
 &lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain-join-types&quot;&gt;3、EXPLAIN Join Types&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Tue, 18 Oct 2022 00:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/mysql-explain</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/mysql-explain</guid>
+        <link>http://localhost:4000/mysql-explain</link>
+        <guid isPermaLink="true">http://localhost:4000/mysql-explain</guid>
         
         <category>mysql</category>
         
