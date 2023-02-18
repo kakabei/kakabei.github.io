@@ -114,12 +114,12 @@
     2017-04-03
      • Category: 
         
-        <a href="/categories/#c++-ref" >c++</a>
+        <a href="/categories#c++-ref" >c++</a>
         
     
      • Tag: 
         
-            <a href="/tags/#c++-ref" >c++</a>
+            <a href="/tags#c++-ref" >c++</a>
         
     
 </div>
@@ -151,7 +151,7 @@
   <li>静态变量和全局变量的区别：静态变量用 <code class="language-plaintext highlighter-rouge">static</code> 告知编译器，自己仅仅在变量的作用范围内可见。</li>
 </ul>
 
-<p>如果在头文件中定义全局变量，当该头文件被多个文件 <code class="language-plaintext highlighter-rouge">include</code> 时，该头文件中的全局变量就会被定义多次，导致重复定义，因此不能在头文件中定义全局变量。</p>
+<p><strong>如果在头文件中定义全局变量，当该头文件被多个文件 <code class="language-plaintext highlighter-rouge">include</code> 时，该头文件中的全局变量就会被定义多次，导致重复定义，因此不能在头文件中定义全局变量。</strong></p>
 
 <p>这个重复定义是在链接时就报错误的。</p>
 
@@ -244,7 +244,7 @@
 
 </code></pre></div></div>
 
-<p>用来捕获上下文或者作用域中变量到lamda表达式函数体中使用，［=］意思是全部按值捕获变量，[&amp;]全部按引用捕获变量。</p>
+<p>用来捕获上下文或者作用域中变量到lamda表达式函数体中使用，<strong>［=］意思是全部按值捕获变量，[&amp;]全部按引用捕获变量。</strong></p>
 
 <h2 id="24-范围for语句">2.4 范围 <code class="language-plaintext highlighter-rouge">for</code> 语句</h2>
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 表达式：</span>
@@ -316,7 +316,40 @@ hello world!
 
 </code></pre></div></div>
 
-<h2 id="26-其他-constexprfinaloverridemove">2.6 其他 <code class="language-plaintext highlighter-rouge">constexpr</code>, <code class="language-plaintext highlighter-rouge">final</code>, <code class="language-plaintext highlighter-rouge">override</code>，<code class="language-plaintext highlighter-rouge">move()</code>,</h2>
+<h2 id="26-final-不能让继承">2.6  <code class="language-plaintext highlighter-rouge">final</code> 不能让继承</h2>
+
+<p>final 作用于类名之后，表示这个类不能被继承。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span> <span class="k">final</span> <span class="p">{</span>
+
+<span class="p">};</span> 
+
+<span class="k">class</span> <span class="nc">B</span> <span class="o">:</span><span class="k">public</span> <span class="n">A</span> <span class="p">{</span> <span class="c1">// error </span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>final 作用于一个类的虚函数之后，表示这个方法不能被子类重写。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span> <span class="p">{</span>
+	<span class="n">A</span><span class="p">()</span> 
+
+	<span class="k">virtual</span> <span class="kt">void</span> <span class="n">Say</span><span class="p">()</span> <span class="k">final</span>  <span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"A say hello "</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+		<span class="k">return</span> <span class="p">;</span> 
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">B</span> <span class="o">:</span> <span class="k">public</span> <span class="k">class</span> <span class="p">{</span>
+
+	<span class="kt">void</span> <span class="n">Say</span> <span class="p">(){</span> <span class="c1">// error </span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"B say hello "</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="p">;</span>  
+	<span class="p">}</span>
+<span class="p">}</span> 
+</code></pre></div></div>
+<h2 id="27-override-强制重写函数">2.7  <code class="language-plaintext highlighter-rouge">override</code> 强制重写函数</h2>
+
+<p>在类中的虚函数声明 <code class="language-plaintext highlighter-rouge">override</code> 以防止派生类忘记重写该函数。如果派生类没有重写这个函数，编译时就会报错。</p>
 
 <h1 id="三-面向对象">三 面向对象</h1>
 
