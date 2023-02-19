@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 18 Feb 2023 12:58:37 +0800</pubDate>
-    <lastBuildDate>Sat, 18 Feb 2023 12:58:37 +0800</lastBuildDate>
+    <pubDate>Sun, 19 Feb 2023 23:49:45 +0800</pubDate>
+    <lastBuildDate>Sun, 19 Feb 2023 23:49:45 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -99,6 +99,45 @@
         <pubDate>Fri, 10 Feb 2023 18:12:15 +0800</pubDate>
         <link>http://localhost:4000/review-the-main-elements-of-document</link>
         <guid isPermaLink="true">http://localhost:4000/review-the-main-elements-of-document</guid>
+        
+        <category>工作经验</category>
+        
+        <category>团队管理</category>
+        
+        
+        <category>总结</category>
+        
+      </item>
+    
+      <item>
+        <title>说话的方式</title>
+        <description>&lt;p&gt;汇报或者表达时要按以下主要步骤:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;结论 –&amp;gt; 原因 –&amp;gt; 措施 –&amp;gt;建议&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;1、先把结论简单说一下&lt;/p&gt;
+
+&lt;p&gt;2、然后解释原因&lt;/p&gt;
+
+&lt;p&gt;3、并给出措施和建议。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;节奏:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;把握好沟通的节奏，如果没有办法把握整体的节奏，则把握好自己的节奏。&lt;/p&gt;
+
+&lt;p&gt;好好倾听，别人不对，也要好好倾听，不要随便打断别人节奏。&lt;/p&gt;
+
+&lt;p&gt;如果被别人打断了， 就停下来，让他先说，他说完之后，再按自己的节奏说。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;如何很好的回答别人的提问？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;如果自己的观点已经不在对方的眼界认识之内，停止阐明观点。怎么说也没有用。&lt;/p&gt;
+
+&lt;p&gt;如果对方的观点，难以理解，可能已经不在眼界认识之内，不要急于否定，反驳。好好听，好好记。&lt;/p&gt;
+</description>
+        <pubDate>Tue, 10 Jan 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/the-way-you-say</link>
+        <guid isPermaLink="true">http://localhost:4000/the-way-you-say</guid>
         
         <category>工作经验</category>
         
@@ -731,74 +770,6 @@
         <pubDate>Sat, 22 Oct 2022 00:12:15 +0800</pubDate>
         <link>http://localhost:4000/summary-improve-team-ability</link>
         <guid isPermaLink="true">http://localhost:4000/summary-improve-team-ability</guid>
-        
-        <category>工作经验</category>
-        
-        <category>团队管理</category>
-        
-        
-        <category>总结</category>
-        
-      </item>
-    
-      <item>
-        <title>关于团队的思考</title>
-        <description>&lt;p&gt;把团队当做一个系统来思考。如何让这个系统高效稳定的运行，可以有力的支持业务的发展。&lt;/p&gt;
-
-&lt;p&gt;团队系统的关键点 ：&lt;strong&gt;结构、原则、流程、弹性、成果&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;h1 id=&quot;一结构&quot;&gt;一、结构&lt;/h1&gt;
-
-&lt;p&gt;要从不同层面，不同角度去思考团队的结构。&lt;/p&gt;
-
-&lt;p&gt;1、&lt;strong&gt;团队梯度&lt;/strong&gt; 团队成员的职位梯度如何；所在部门，公司的位置；对比其他团队有何优势、劣势。&lt;/p&gt;
-
-&lt;p&gt;2、&lt;strong&gt;项目结构&lt;/strong&gt; 负责的项目处于公司战略的什么位置？哪一些是重点，项目的优先级如何。&lt;/p&gt;
-
-&lt;p&gt;3、&lt;strong&gt;能力结构&lt;/strong&gt; 团他成员的能力构成，前端，后端，测试等能力分布情况；人员负责项目情况；个人能力，职级，工作年限。&lt;/p&gt;
-
-&lt;p&gt;4、&lt;strong&gt;价值构成&lt;/strong&gt; 团队的业务价值，技术价值，成员人个价值。&lt;/p&gt;
-
-&lt;h1 id=&quot;二原则&quot;&gt;二、原则&lt;/h1&gt;
-
-&lt;p&gt;团队的原则是团队成员做事规范。&lt;/p&gt;
-
-&lt;p&gt;1、&lt;strong&gt;开发规范&lt;/strong&gt;  研发流程规范，系统设计、代码review、测试跟进，上线确认、盘点复盘，后期优化。&lt;/p&gt;
-
-&lt;p&gt;2、&lt;strong&gt;运维规范&lt;/strong&gt; 业务交付规范，系统体检，系统review，数据上报分析，定时反馈沟通，及时响应问题，轮岗制度。&lt;/p&gt;
-
-&lt;p&gt;3、&lt;strong&gt;意识建设&lt;/strong&gt;  自我驱动意识，服务意识，项目准备度意识，及时响应意识，团队协同意识，战略意识、大局观。&lt;/p&gt;
-
-&lt;p&gt;4、&lt;strong&gt;技术建设&lt;/strong&gt;  技术视野，专业深度，技术影响力。&lt;/p&gt;
-
-&lt;h1 id=&quot;三流程&quot;&gt;三、流程&lt;/h1&gt;
-
-&lt;p&gt;1、 &lt;strong&gt;研发体系流程&lt;/strong&gt; 需求对齐；背景了解；系统设计；文档记录；系统开发；代码review；测试跟进；数据埋点监控；发布注意事项，上线确认；观察系统健康度；盘点复盘；项目技术分享，&lt;/p&gt;
-
-&lt;p&gt;2、&lt;strong&gt;业务体系流程&lt;/strong&gt;  了解业务背景，在公司战略中的位置，业务部门和负责人，相关的KPI； 关注交付时间点、是否有 death line ；业务迭代频率；&lt;/p&gt;
-
-&lt;h1 id=&quot;四弹性&quot;&gt;四、弹性&lt;/h1&gt;
-
-&lt;p&gt;1、&lt;strong&gt;人员单点&lt;/strong&gt;   每一个关键位置上要有可替代性（接班人）。&lt;/p&gt;
-
-&lt;p&gt;2、&lt;strong&gt;灵活调动&lt;/strong&gt;  成员要了解团队负责的所有项目，必要紧急时可随时支援。&lt;/p&gt;
-
-&lt;p&gt;3、&lt;strong&gt;稳定性&lt;/strong&gt;  人员的稳定性，是团队持续战斗力的关键。&lt;/p&gt;
-
-&lt;p&gt;4、&lt;strong&gt;时间弹性&lt;/strong&gt;  以业务结果为导向，成员合理安排自己安排时间，注意团队节奏与协同。&lt;/p&gt;
-
-&lt;h1 id=&quot;五成果&quot;&gt;五、成果&lt;/h1&gt;
-
-&lt;p&gt;1、&lt;strong&gt;业务价值&lt;/strong&gt; 业务对公司的价值，对社会的价值，是团队最终的成果和利益的体现。&lt;/p&gt;
-
-&lt;p&gt;2、&lt;strong&gt;项目赋能&lt;/strong&gt; 对其他业务的赋能可以减少成本。&lt;/p&gt;
-
-&lt;p&gt;3、&lt;strong&gt;技术分享&lt;/strong&gt; 项目能力和技术的分享同时也是个人能力成长与展示。&lt;/p&gt;
-
-</description>
-        <pubDate>Fri, 21 Oct 2022 00:12:15 +0800</pubDate>
-        <link>http://localhost:4000/summary-thinking-team</link>
-        <guid isPermaLink="true">http://localhost:4000/summary-thinking-team</guid>
         
         <category>工作经验</category>
         
