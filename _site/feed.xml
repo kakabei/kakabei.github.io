@@ -5,9 +5,105 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 19 Feb 2023 23:49:45 +0800</pubDate>
-    <lastBuildDate>Sun, 19 Feb 2023 23:49:45 +0800</lastBuildDate>
+    <pubDate>Mon, 20 Feb 2023 20:29:39 +0800</pubDate>
+    <lastBuildDate>Mon, 20 Feb 2023 20:29:39 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
+    
+      <item>
+        <title>chatGPT 注册</title>
+        <description>&lt;p&gt;之前用的是别人的代理的服务。 想想还是自己搞一个比较好。 现在网上 chatGPT 注册的方式资料很多。自己也照别人的试了一下。&lt;/p&gt;
+
+&lt;p&gt;注册所需要的准备东西：&lt;/p&gt;
+
+&lt;p&gt;1、可以科学上网，因为 chatGPT 在中国大陆和中国香港都是不可用的。所以需要切换到其他国家的IP。&lt;/p&gt;
+
+&lt;p&gt;2、一个有效的邮件，我用的是 google 的 mail。&lt;/p&gt;
+
+&lt;p&gt;3、一个可以接收验证码的手机号。国内的手机号不能用。可以通过注册国外的虚拟电话来完成这一步。&lt;/p&gt;
+
+&lt;h1 id=&quot;科学上网&quot;&gt;科学上网&lt;/h1&gt;
+
+&lt;p&gt;关于科学上网这个一步略过了，我自己是购买了相关的服务了, 要注意的要开启全局模式。&lt;/p&gt;
+
+&lt;h1 id=&quot;注册-openai&quot;&gt;注册 openAI&lt;/h1&gt;
+
+&lt;p&gt;网址：&lt;a href=&quot;https://chat.openai.com/auth/login&quot;&gt;https://chat.openai.com/auth/login&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;进去之后，左右两边是登录和注册。 如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20-18-40-44.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;进入之后，填写自己的邮箱。在邮箱中激活自己的帐号。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20-18-48-50.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;通过自己邮箱激活帐号之后，会要求你输入手机号。这里就需要你的国外的虚拟手机号了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20-18-55-06.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;虚拟手机号&quot;&gt;虚拟手机号&lt;/h1&gt;
+
+&lt;p&gt;虚拟手机号网上推荐的是通过 sms-activate 注册一个临时的手机号。  &lt;a href=&quot;https://sms-activate.org/cn&quot;&gt;https://sms-activate.org/cn&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;在 sms-activate上 可以买其他的国家的临时手机号。 不是很贵，都在1美元以下。可以玩充值1美元。充值可以选择支付宝或微信。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20-16-16-30.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-2023-02-20-19-09-41.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后，在搜索框搜索 openAI，选择地区虚拟手机号，购买后就会一个虚拟手机号。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20-19-09-41.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;把手机号写入面的 chatGPT 的页面。注意要选对国家。&lt;/p&gt;
+
+&lt;p&gt;发送验证码之后，在 sms-activate 可以收到验证码。如图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20-16-10-17.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这是一个临时手机号，有效时长20分钟。&lt;/p&gt;
+
+&lt;p&gt;20分钟内如果没有收到验证码，可以点右侧的叉号，退订，费用还会返还。可重新选择其他国家的手机号。&lt;/p&gt;
+
+&lt;h1 id=&quot;chatgpt&quot;&gt;chatGPT&lt;/h1&gt;
+
+&lt;p&gt;回到 chatGPT 页面完成所有流程。 就可以在下面的输入框聊天了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20-19-16-24.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20-19-54-17.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20-20-04-21.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;体验&quot;&gt;体验&lt;/h1&gt;
+
+&lt;p&gt;第一感觉不是很酷的，理解语言和回复都有很好的体验。对中文的理解也准确。回复的内容质量也很高。&lt;/p&gt;
+
+&lt;p&gt;估计以后很多文字工作者可能真的被替代掉了。&lt;/p&gt;
+
+&lt;p&gt;码农可能也要失业了。&lt;/p&gt;
+
+&lt;p&gt;不好的地方：&lt;/p&gt;
+
+&lt;p&gt;1、回复比较慢。有时候要等上10秒左右。也可能和科学上网有关，也可能它真的需要埋单。&lt;/p&gt;
+
+&lt;p&gt;2、我输入错误的中文，它直接返回了错误。 经常出现请求失败的情况。 如：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20_20-11-06.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 19 Feb 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/chatGPT-signup</link>
+        <guid isPermaLink="true">http://localhost:4000/chatGPT-signup</guid>
+        
+        <category>chatGPT</category>
+        
+        <category>人工智能</category>
+        
+        
+        <category>学习备忘</category>
+        
+      </item>
     
       <item>
         <title>jekyll blog 的 tags categories 跳转失败</title>
@@ -659,124 +755,6 @@
         
         
         <category>reading</category>
-        
-      </item>
-    
-      <item>
-        <title>团队能力的提升</title>
-        <description>&lt;p&gt;无论是做为 leader 还是成员，都应该经常思考如何提升个人的能力，同时也应该思考如何提升团队能力。&lt;/p&gt;
-
-&lt;p&gt;团队的可以通过如下几方面：&lt;strong&gt;规范建设，意识建设、技术建设、团队建设&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;h1 id=&quot;一-规范建设&quot;&gt;一、 规范建设&lt;/h1&gt;
-
-&lt;p&gt;1、系统框架原则&lt;/p&gt;
-
-&lt;p&gt;2、设计原则 &lt;a href=&quot;http://blog.xyecho.com/server-system-design-idea/&quot;&gt;系统设计方案注意事项&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;3、开发指南&lt;/p&gt;
-
-&lt;p&gt;4、运维文档&lt;/p&gt;
-
-&lt;p&gt;5、review 规范&lt;/p&gt;
-
-&lt;p&gt;6、发布上线规范&lt;/p&gt;
-
-&lt;p&gt;7、复盘规范&lt;/p&gt;
-
-&lt;p&gt;8、故障预案&lt;/p&gt;
-
-&lt;h1 id=&quot;二意识建设&quot;&gt;二、意识建设&lt;/h1&gt;
-
-&lt;p&gt;1、价值观&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;目标：质量、效率、体验、风险&lt;/li&gt;
-  &lt;li&gt;行动：认真、细致、高要求、及时响应&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;2、服务意识&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;业务意识：和业务方保持良好地沟通；技术通过业务实现价值；以业务结果为导向。&lt;/li&gt;
-  &lt;li&gt;系统意识：不要局限于功能模块，要有上层的系统的整体思维。&lt;/li&gt;
-  &lt;li&gt;运营意识：系统开发交付后，并没有结束，线上健康稳定的运营也同样重要。&lt;/li&gt;
-  &lt;li&gt;团队技术意识：技术能力的范围不应限制于自身，应该扩大到团队，公司，业界等。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;3、紧迫感&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;关注并及时处理告警&lt;/li&gt;
-  &lt;li&gt;快速给结果、清晰准确反馈&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;4、准备度&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;技术累积&lt;/li&gt;
-  &lt;li&gt;拓展业界视野&lt;/li&gt;
-  &lt;li&gt;业务参与度&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;5、技术意识&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;分清是自己技术，还是平台能力&lt;/li&gt;
-  &lt;li&gt;分清是业务能力，技术能力&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;6、沟通意识&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;项目进度反馈&lt;/li&gt;
-  &lt;li&gt;业务上下游团队沟通、协同&lt;/li&gt;
-  &lt;li&gt;以业务完成为目标有效的沟通&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;三技术建设&quot;&gt;三、技术建设&lt;/h1&gt;
-
-&lt;p&gt;1、定位清晰，认清自己。 是自己的能力，还是平台的能力。&lt;/p&gt;
-
-&lt;p&gt;2、技术职责：业务开发；平台、共同组件开发；系统优化；技术迭代；技术选型；成果分享。&lt;/p&gt;
-
-&lt;p&gt;3、技术制度：团队同共决策制度； 周报，值日制度； 设计和代码review制度，系统检验制度。&lt;/p&gt;
-
-&lt;p&gt;4、定期复盘、总结分享。&lt;/p&gt;
-
-&lt;p&gt;5、技术赋能；专利撰写；技术影响力；业界视野。&lt;/p&gt;
-
-&lt;p&gt;6、技术架构升级优化。&lt;/p&gt;
-
-&lt;h1 id=&quot;四团队建设&quot;&gt;四、团队建设&lt;/h1&gt;
-
-&lt;p&gt;1、团队定期沟通：坦诚、正向驱动、帮助成长； 自我评价； 微信邮件互动；进度反馈；&lt;/p&gt;
-
-&lt;p&gt;2、团队周会：轮岗主持；工作总结；  技术分享； 事件宣导；业务体验；&lt;/p&gt;
-
-&lt;p&gt;3、团队活动： 表达会、脑暴会、技术沙龙、外部团建&lt;/p&gt;
-
-&lt;p&gt;4、融入团队：定期关怀：聚餐、聊天、游戏、活动；提升凝聚力、信任感、仪式感、技术氛围；&lt;/p&gt;
-
-&lt;p&gt;5、团队复盘：定时回顾团队产出、投入、成本、风险、质量和效率。&lt;/p&gt;
-
-&lt;p&gt;6、降本增效，开发团队工具箱；能用工具则不用人工。&lt;/p&gt;
-
-&lt;p&gt;7、技术和业务两个维度的考核&lt;/p&gt;
-
-&lt;p&gt;8、梯队建设、人员培养。&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 22 Oct 2022 00:12:15 +0800</pubDate>
-        <link>http://localhost:4000/summary-improve-team-ability</link>
-        <guid isPermaLink="true">http://localhost:4000/summary-improve-team-ability</guid>
-        
-        <category>工作经验</category>
-        
-        <category>团队管理</category>
-        
-        
-        <category>总结</category>
         
       </item>
     

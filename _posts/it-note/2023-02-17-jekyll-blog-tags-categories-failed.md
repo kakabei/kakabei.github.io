@@ -4,7 +4,7 @@ title: jekyll blog 的 tags categories 跳转失败
 date: 2023-02-17 10:12:15
 categories: tools  
 tags:   bug 工作提效
-excerpt: Think about  Software Engineering 
+excerpt: Jekyll bolg 的问题，更新特征 A，导致问题很久的地方出现问题B，真的很难被发现
 ---
 
 博客的 tags 和 categories 跳转全部失败了。有点奇怪，之前没有发现这个有什么问题，估计改动了其他的什么功能导致了这个问题吧。
