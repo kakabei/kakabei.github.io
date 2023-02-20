@@ -5,12 +5,12 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 20 Feb 2023 20:29:39 +0800</pubDate>
-    <lastBuildDate>Mon, 20 Feb 2023 20:29:39 +0800</lastBuildDate>
+    <pubDate>Mon, 20 Feb 2023 20:46:16 +0800</pubDate>
+    <lastBuildDate>Mon, 20 Feb 2023 20:46:16 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
-        <title>chatGPT 注册</title>
+        <title>chatGPT 注册方法</title>
         <description>&lt;p&gt;之前用的是别人的代理的服务。 想想还是自己搞一个比较好。 现在网上 chatGPT 注册的方式资料很多。自己也照别人的试了一下。&lt;/p&gt;
 
 &lt;p&gt;注册所需要的准备东西：&lt;/p&gt;
