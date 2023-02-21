@@ -87,6 +87,10 @@ excerpt: chatGPT 的学习之旅从这里开始了，注册一个chatGPT，体�
 
 ![](/assets/chatGPT/chatGPT-signup-2023-02-20_20-11-06.png)
 
+3、估计是服务负载过高了。如：
+
+![](/assets/chatGPT/chatGPT-signup-2023-02-21-16-36-37.png)
+
 
 
 

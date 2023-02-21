@@ -134,13 +134,13 @@
 	  	
 	  		<p><code class="language-plaintext highlighter-rouge">volatile</code> 变量的作用和使用场景如下：</p>
 
-<p>在多线程编程中，多个线程访问同一个变量，而且有可能修改变量，如果不加 <code class="language-plaintext highlighter-rouge">volatile</code>，编译器有可能做优化，在寄存器中保存变量，CPU 直接访问寄存器，从而优化变量访问速度，加上 <code class="language-plaintext highlighter-rouge">volatile</code> 修饰，CPU 会直接访问内存，不会做寄存器的优化。这一条称为保证内存的可见性。</p>
+<p>在多线程编程中，多个线程访问同一个变量，而且有可能修改变量，如果不加 <code class="language-plaintext highlighter-rouge">volatile</code>，编译器有可能做优化，在寄存器中保存变量，CPU 直接访问寄存器，从而优化变量访问速度，加上 <code class="language-plaintext highlighter-rouge">volatile</code> 修饰，<strong>CPU 会直接访问内存，不会做寄存器的优化</strong>。这一条称为保证内存的可见性。</p>
 
 <p>类似的情况在中断服务程序中访问变量，并行设备的硬件寄存器变量都是一个道理。</p>
 
 <p>另一个作用是禁止指令重排，也是针对编译器说的，保证缓存一致性。</p>
 
-<p><code class="language-plaintext highlighter-rouge">volatile</code> 保证了程序的正确性，损失了编译器的优化。</p>
+<p><strong><code class="language-plaintext highlighter-rouge">volatile</code> 保证了程序的正确性，损失了编译器的优化</strong>。</p>
 
 <p>能干什么? 告诉编译器不要在此内存上做任何优化。如果对内存有只写未读的等非常规操作，如</p>
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">;</span> <span class="n">x</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span>

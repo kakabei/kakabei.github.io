@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 21 Feb 2023 09:35:32 +0800</pubDate>
-    <lastBuildDate>Tue, 21 Feb 2023 09:35:32 +0800</lastBuildDate>
+    <pubDate>Tue, 21 Feb 2023 19:36:16 +0800</pubDate>
+    <lastBuildDate>Tue, 21 Feb 2023 19:36:16 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -90,6 +90,10 @@
 &lt;p&gt;2、我输入错误的中文，它直接返回了错误。 经常出现请求失败的情况。 如：&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-20_20-11-06.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;3、估计是服务负载过高了。如：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/chatGPT/chatGPT-signup-2023-02-21-16-36-37.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 </description>
         <pubDate>Sun, 19 Feb 2023 18:12:15 +0800</pubDate>
