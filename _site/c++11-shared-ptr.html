@@ -144,7 +144,7 @@
 
 <h1 id="shared_ptr-用法">shared_ptr 用法</h1>
 
-<p><code class="language-plaintext highlighter-rouge">shared_ptr</code> 是一个模板。创建智能指针时，必须提供指针所指的类型。可以通过构造函数、<code class="language-plaintext highlighter-rouge">std::make_shared&lt;T&gt;</code>辅助函数和<code class="language-plaintext highlighter-rouge">reset</code>方法来初始化 <code class="language-plaintext highlighter-rouge">shared_ptr</code>。</p>
+<p><code class="language-plaintext highlighter-rouge">shared_ptr</code> 是一个模板。创建智能指针时，必须提供指针所指的类型。可以通过构造函数、<code class="language-plaintext highlighter-rouge">std::make_shared&lt;T&gt;</code>辅助函数 和<code class="language-plaintext highlighter-rouge">reset</code>方法来初始化 <code class="language-plaintext highlighter-rouge">shared_ptr</code>。</p>
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">;</span> <span class="c1">//指向 string</span>
 
 <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">list</span><span class="o">&lt;</span><span class="n">string</span> <span class="o">&gt;&gt;</span> <span class="n">p2</span><span class="p">;</span><span class="c1">//指向 string 的 list</span>
@@ -152,14 +152,14 @@
 	<span class="o">*</span><span class="n">p1</span><span class="o">=</span><span class="s">"h1"</span><span class="p">;</span>
 </code></pre></div></div>
 
+<p>用 <code class="language-plaintext highlighter-rouge">make_shared</code> 的方式：</p>
+
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//指向 string 的 shared_ptr </span>
 <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"name"</span><span class="p">);</span> 
 
 <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">);</span> 
 
-</code></pre></div></div>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+<span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">();</span>
 </code></pre></div></div>
 
 <h1 id="shared_ptr-拷贝赋值与引用计数">shared_ptr 拷贝、赋值与引用计数</h1>
@@ -170,7 +170,7 @@
 
 <p>3、当给让 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 指向另一个对象或者 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 销毁时，原对象的计数器就会递减。</p>
 
-<p>4、<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的计数器为0，就会自动释放该对象的内存。</p>
+<p>4、<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的计数器为 0，就会自动释放该对象的内存。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">);</span> <span class="c1">// ptr 指向一个引用者 </span>
 
@@ -186,11 +186,11 @@
 
 <h1 id="shared_ptr-作用域">shared_ptr 作用域</h1>
 
-<p><code class="language-plaintext highlighter-rouge">shared_ptr</code> 会随着作用域结束而减1 。但如果这个指针被函数返回，则计数不会减1 。</p>
+<p><code class="language-plaintext highlighter-rouge">shared_ptr</code> 会随着作用域结束而减1。但如果这个指针被函数返回，则计数不会减1 。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">create</span><span class="p">(</span><span class="n">T</span> <span class="n">info</span><span class="p">)</span>
 <span class="p">{</span>
-	<span class="k">return</span> <span class="n">make_share</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">);</span> <span class="c1">// 返回一个share_ptr类型的智能指针</span>
+	<span class="k">return</span> <span class="n">make_share</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">);</span> <span class="c1">// 返回一个 share_ptr 类型的智能指针</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -213,7 +213,7 @@
 
 <p>1、<code class="language-plaintext highlighter-rouge">new</code> 完对象后，可以用 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 指向它。</p>
 
-<p>2、智能指针的构造函数是 explicit。必须使用直接初始化形式来初始化一个智能指针。如下面例子</p>
+<p>2、智能指针的构造函数是 <code class="language-plaintext highlighter-rouge">explicit</code> 。必须使用<strong>直接初始化形式</strong>来初始化一个智能指针(如下面例子)。</p>
 
 <p>3、函数想返回创建后的内存指针时， 可以通过 <code class="language-plaintext highlighter-rouge">share_ptr</code> 方式返回。</p>
 
@@ -269,10 +269,9 @@
 
 <p>1、get 函数返回一个内置指针（普通指针），指向智能指针所管理的对象。</p>
 
-<p>2、对 get 函数返回 不要再用回智能指针， 可能会造成对象计数被减到0 而内存对象被释放。</p>
+<p>2、对 get 函数返回不要再用回智能指针， 可能会造成对象计数被减到0 而内存对象被释放。</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">(</span><span class="k">new</span> <span class="nf">User</span><span class="p">(</span><span class="err">“</span><span class="n">Boss</span><span class="err">”</span><span class="p">));</span> <span class="c1">// 引用计数变为1</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">(</span><span class="k">new</span> <span class="nf">User</span><span class="p">(</span><span class="err">“</span><span class="n">Boss</span><span class="err">”</span><span class="p">));</span> <span class="c1">// 引用计数变为1</span>
 
 <span class="n">User</span> <span class="o">*</span><span class="n">q</span><span class="o">=</span><span class="n">ptr</span><span class="p">.</span><span class="n">get</span><span class="p">();</span> <span class="c1">//OK 使用 q 需要注意，不要让它管理的指针被释放</span>
 
@@ -280,15 +279,15 @@
 	<span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="p">(</span><span class="n">q</span><span class="p">);</span> <span class="c1">// 用 q 初始化一个智能指针对象</span>
 <span class="p">}</span> <span class="c1">//语句块结束之后，智能指针对象释放它所指的内存空间</span>
 
-<span class="kt">int</span> <span class="n">foo</span><span class="o">=*</span><span class="n">p</span><span class="p">;</span><span class="c1">//ERROR ，p所指的内存已经被释放了</span>
+<span class="kt">int</span> <span class="n">foo</span><span class="o">=*</span><span class="n">p</span><span class="p">;</span><span class="c1">// ERROR ，p所指的内存已经被释放了</span>
 
 </code></pre></div></div>
 
 <h1 id="reset-和-unique-函数">reset 和 unique 函数</h1>
 
-<p>1、reset 函数会将shared_prt类原先所指的内存对象引用计数减1，并且指向于一块新的内。</p>
+<p>1、<code class="language-plaintext highlighter-rouge">reset</code> 函数会将 <code class="language-plaintext highlighter-rouge">shared_prt</code> 类原先所指的内存对象引用计数减1，并且指向于一块新的内。</p>
 
-<p>2、unqie 函数检查自己是否为当前对象的唯一智能指针。</p>
+<p>2、<code class="language-plaintext highlighter-rouge">unique</code> 函数检查自己是否为当前对象的唯一智能指针。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">;</span>
 

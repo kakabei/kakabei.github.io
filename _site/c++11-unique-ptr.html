@@ -136,7 +136,7 @@
 
 <p>c++ 11  新增三个智能指针， <code class="language-plaintext highlighter-rouge">unique_ptr</code>、<code class="language-plaintext highlighter-rouge">shared_ptr</code> 以及 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 来实现 <strong>堆内存的自动回收</strong>。</p>
 
-<p>1、<code class="language-plaintext highlighter-rouge">unique_ptr</code>  从名字上看，有“惟一”的特点。即指向的对象内存只能有一个引用。</p>
+<p>1、<code class="language-plaintext highlighter-rouge">unique_ptr</code>  从名字上看，有“惟一”的特点。即指向的对象内存只能有一个引用， <strong>是一个独占式智能指针</strong>。</p>
 
 <p>2、<code class="language-plaintext highlighter-rouge">unique_ptr</code> 与 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 的区别是： 可以有多个<code class="language-plaintext highlighter-rouge">shared_ptr</code> 所指向同一个对象。而 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 所指向的对象只能有一个<code class="language-plaintext highlighter-rouge">unique_ptr</code>指针，当<code class="language-plaintext highlighter-rouge">unique_ptr</code>被销毁时，它所指向的对象也被销毁。</p>
 
@@ -144,13 +144,13 @@
 
 <h1 id="unique_ptr-的使用">unique_ptr 的使用</h1>
 
-<p><code class="language-plaintext highlighter-rouge">unique_ptr</code> 指针需要绑定到一个new返回的指针上，并且不能直接将new的结果用赋值运算符“=”赋值给unique_ptr</p>
+<p><code class="language-plaintext highlighter-rouge">unique_ptr</code> 指针需要绑定到一个 new 返回的指针上，并且不能直接将 new 的结果用赋值运算符 “=” 赋值给 <code class="language-plaintext highlighter-rouge">unique_ptr</code></p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">;</span><span class="c1">// OK </span>
 
 <span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr2</span><span class="p">(</span><span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="s">"Boss"</span><span class="p">));</span> <span class="c1">// OK </span>
 
-<span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr3</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="s">"World"</span><span class="p">);</span> <span class="c1">// ERROR </span>
+<span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr3</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="s">"World"</span><span class="p">);</span> <span class="c1">// ERROR 初始化不能赋值</span>
 </code></pre></div></div>
 
 <h1 id="unique_ptr-拷贝赋值">unique_ptr 拷贝、赋值</h1>
@@ -166,13 +166,28 @@
 <span class="n">p3</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span> <span class="c1">// ERROR</span>
 </code></pre></div></div>
 
-<p>两个 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 不可以同时指向同一个内存对象，但是可以将一个即将销毁的 <code class="language-plaintext highlighter-rouge">unqie_ptr</code> 指针拷贝或赋值给另一个 <code class="language-plaintext highlighter-rouge">unqie_ptr</code> 函数的参数传递和返回值就是一个很好的例子。</p>
+<p>两个 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 不可以同时指向同一个内存对象，但是可以将一个即将销毁的 <code class="language-plaintext highlighter-rouge">unqie_ptr</code> 指针拷贝或赋值给另一个 <code class="language-plaintext highlighter-rouge">unqie_ptr</code>。 也可以用 <code class="language-plaintext highlighter-rouge">std::move</code>。 如：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">up1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">42</span><span class="p">));</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">up2</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">21</span><span class="p">));</span>
+
+    <span class="c1">// 销毁 up1 对象，然后将 up2 对象的所有权转移给 up1</span>
+    <span class="n">up1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">up2</span><span class="p">);</span>
+
+    <span class="c1">// 销毁 up1 对象，然后将 up2 对象的所有权转移给 up1</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">up3</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">up2</span><span class="p">));</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h1 id="release-函数">release 函数</h1>
 
-<ul>
-  <li>虽然unique_ptr之间不能拷贝与赋值。但是可以使用release和reset函数来将指针的所有权从一个（非const）unique_ptr转移给另一个unique</li>
-</ul>
+<p>虽然 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 之间不能拷贝与赋值。但是可以使用 <code class="language-plaintext highlighter-rouge">release</code> 和 <code class="language-plaintext highlighter-rouge">reset</code> 函数来将指针的所有权从一个（非const）<code class="language-plaintext highlighter-rouge">unique_ptr</code> 转移给另一个 <code class="language-plaintext highlighter-rouge">unique_ptr</code>。</p>
 
 <p>1、对当前的 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 所指的内存置空，对这块内存的所有权消失。并不会去释放对象内存。</p>
 
@@ -180,22 +195,31 @@
 
 <p>3、调用 <code class="language-plaintext highlighter-rouge">release</code> 函数之后要将返回值传递给另一个 <code class="language-plaintext highlighter-rouge">unqiue_ptr</code> ，不然会内存泄露。</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ptr1 将自己所指的内存空间置空，并且返回该内存空间。之后对该内存空间的操作权消失，从而 ptr2 得到该内存的权限</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">up1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">42</span><span class="p">));</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">up2</span><span class="p">;</span>
 
-<span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr1</span><span class="p">(</span><span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="s">"gitHub"</span><span class="p">));</span>
+    <span class="c1">// 释放 up1 对象的所有权，返回指向资源的指针</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">up1</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
 
-<span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr2</span><span class="p">(</span><span class="n">ptr1</span><span class="p">.</span><span class="n">release</span><span class="p">());</span> 
+    <span class="c1">// 将指向资源的指针转移给 up2 对象</span>
+    <span class="n">up2</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
 
-<span class="c1">// ptr1.release(); // 内存泄露</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">up2</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// 输出：42</span>
 
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <h1 id="reset-函数">reset 函数</h1>
 
 <p><code class="language-plaintext highlighter-rouge">reset</code> 用来重置当前 <code class="language-plaintext highlighter-rouge">unqie_ptr</code>  指针。重置之后接手另一块内存或者一直处于空状态。</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr1</span><span class="p">(</span><span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="s">"gitHub"</span><span class="p">));</span> 
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr1</span><span class="p">(</span><span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="s">"gitHub"</span><span class="p">));</span> 
 <span class="n">ptr1</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span> <span class="c1">// 将 ptr1 置空，处于空状态 </span>
 
 <span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ptr1</span><span class="p">(</span><span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="s">"gitHub"</span><span class="p">));</span> 
@@ -220,7 +244,7 @@
 
 <p>标准库提供了一个可以管理new分配的数组的unique_ptr版本</p>
 
-<p>可以对比一下 <code class="language-plaintext highlighter-rouge">shared_ptr</code>  。 [[c++11 智能指针 shared_ptr]] 的 <strong>shared_prt 与动态数组的使用</strong></p>
+<p>可以对比一下 <code class="language-plaintext highlighter-rouge">shared_ptr</code>  。<a href="http://blog.xyecho.com/c++11-shared-ptr">c++11 智能指针 shared_ptr</a> 的 <strong>shared_prt 与动态数组的使用</strong></p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">[]</span><span class="o">&gt;</span> <span class="n">arr</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="mi">3</span><span class="p">]{</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span> <span class="p">});</span> <span class="c1">// OK 定义一个指向int型数组的智能指针对象 </span>
 											<span class="c1">// unique_ptr&lt;int[]&gt; arr2(new int[3]);</span>

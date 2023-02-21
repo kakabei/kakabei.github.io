@@ -141,7 +141,7 @@
 
 </code></pre></div></div>
 
-<p>C++11 之后，可以用花括号直接经初始化。我们可以这样:</p>
+<p>C++11 之后，可以用<strong>花括号直接经初始化</strong>。我们可以这样:</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
 </code></pre></div></div>
@@ -156,21 +156,20 @@
 <span class="k">class</span> <span class="nc">MyHome</span>
 <span class="p">{</span>
 <span class="nl">public:</span>
-	<span class="n">MyHome</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">vec</span><span class="p">)</span>
-	 <span class="p">{</span>
-		<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">item</span> <span class="o">:</span> <span class="n">vec</span><span class="p">)</span>
-		<span class="p">{</span>
+    <span class="n">MyHome</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">vec</span><span class="p">){</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">item</span> <span class="o">:</span> <span class="n">vec</span><span class="p">){</span>
             <span class="n">m_Vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
-	<span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
-	<span class="p">{</span>
-		<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">item</span> <span class="o">:</span> <span class="n">m_Vec</span><span class="p">)</span>
-		<span class="p">{</span>
+	<span class="kt">void</span> <span class="n">print</span><span class="p">(){</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">item</span> <span class="o">:</span> <span class="n">m_Vec</span><span class="p">){</span>
         	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">item</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
     	<span class="p">}</span>
     <span class="p">}</span>
+
 <span class="nl">private:</span>
     <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">m_Vec</span><span class="p">;</span>
 <span class="p">};</span>
@@ -195,9 +194,9 @@
 
 <p>vector 是值语义，也就是说拷贝一个 vector，那里面的元素也会被拷贝一次。而 initializer_list 是指针语义，里面的元素并不会被拷贝，是指向了同一个空间。</p>
 
-<p>3、初始化列表还可以用于函数返回的情况。 返回一个初始化列表，通常会导致构造一个临时变量，比如：</p>
+<p>3、初始化列表还可以用于函数返回的情况。 返回一个初始化列表，通常会导致<strong>构造一个临时变量</strong>，比如：</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">vector</span><span class="o">&lt;</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">Func</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span> <span class="p">}</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">Func</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span> <span class="p">}</span>
 </code></pre></div></div>
 
 <p>4.防止类型收窄</p>

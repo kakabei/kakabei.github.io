@@ -20,7 +20,7 @@ vec.push_back(3);
 
 ```
 
-C++11 之后，可以用花括号直接经初始化。我们可以这样:
+C++11 之后，可以用**花括号直接经初始化**。我们可以这样:
 
 ```c++
 std::vector vec = { 1, 2, 3};
@@ -37,21 +37,20 @@ std::vector vec = { 1, 2, 3};
 class MyHome
 {
 public:
-	MyHome(const std::initializer_list<int> &vec)
-	 {
-		for (auto item : vec)
-		{
+    MyHome(const std::initializer_list<int> &vec){
+
+        for (auto item : vec){
             m_Vec.push_back(item);
         }
     }
 
-	void print()
-	{
-		for (auto item : m_Vec)
-		{
+	void print(){
+
+		for (auto item : m_Vec){
         	std::cout << item << " ";
     	}
     }
+
 private:
     std::vector<int> m_Vec;
 };
@@ -77,10 +76,10 @@ vector 有 push_back 函数，也就是说 vector 可以在函数里面修改，
 vector 是值语义，也就是说拷贝一个 vector，那里面的元素也会被拷贝一次。而 initializer_list 是指针语义，里面的元素并不会被拷贝，是指向了同一个空间。
 
 
-3、初始化列表还可以用于函数返回的情况。 返回一个初始化列表，通常会导致构造一个临时变量，比如：
+3、初始化列表还可以用于函数返回的情况。 返回一个初始化列表，通常会导致**构造一个临时变量**，比如：
  
- ```c++
- vector< int> Func() { return {1, 3}; }
+```c++
+vector<int> Func() { return {1, 3}; }
 ```
 
 4.防止类型收窄
