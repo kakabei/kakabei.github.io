@@ -161,7 +161,7 @@
 
 <p><strong>引用是变量的别名，由于右值没有地址，没法被修改，所以左值引用无法指向右值。</strong></p>
 
-<p>但是，const左值引用是可以指向右值的：</p>
+<p>但是，<code class="language-plaintext highlighter-rouge">const</code> 左值引用是可以指向右值的：</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">ref_a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>  <span class="c1">// 编译通过</span>
 </code></pre></div></div>
@@ -189,7 +189,7 @@
 <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">;</span> <span class="c1">// 打印结果：5</span>
 </code></pre></div></div>
 
-<p>std::move  并没有把一个变量里的内容移动到另一个变量，<strong>唯一的功能是把左值强制转化为右值，单纯的std::move(xxx)不会有性能提升</strong>。</p>
+<p><code class="language-plaintext highlighter-rouge">std::move </code> 并没有把一个变量里的内容移动到另一个变量，<strong>唯一的功能是把左值强制转化为右值，单纯的std::move(xxx)不会有性能提升</strong>。</p>
 
 <h2 id="左值引用右值引用本身是左值">左值引用、右值引用本身是左值</h2>
 
@@ -203,8 +203,8 @@
 <span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
 
     <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">// a是个左值</span>
-    <span class="kt">int</span> <span class="o">&amp;</span><span class="n">ref_a_left</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="c1">// ref_a_left是个左值引用</span>
-    <span class="kt">int</span> <span class="o">&amp;&amp;</span><span class="n">ref_a_right</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// ref_a_right是个右值引用</span>
+    <span class="kt">int</span> <span class="o">&amp;</span><span class="n">ref_a_left</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="c1">// ref_a_left 是个左值引用</span>
+    <span class="kt">int</span> <span class="o">&amp;&amp;</span><span class="n">ref_a_right</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// ref_a_right 是个右值引用</span>
  
 	<span class="n">change</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>                    <span class="c1">// 编译不过，a是左值，change参数要求右值</span>
     <span class="n">change</span><span class="p">(</span><span class="n">ref_a_left</span><span class="p">);</span>           <span class="c1">// 编译不过，左值引用ref_a_left本身也是个左值</span>
@@ -224,15 +224,15 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>从表达式<code class="language-plaintext highlighter-rouge">int &amp;&amp;ref = std::move(a)</code> 可以看出来，move返回 的<code class="language-plaintext highlighter-rouge">int &amp;&amp;</code>是个右值。<strong>右值引用既可以是左值也可以是右值， 作为函数返回值的 &amp;&amp; 是右值，直接声明出来的 &amp;&amp; 是左值</strong>。</p>
+<p>从表达式<code class="language-plaintext highlighter-rouge">int &amp;&amp;ref = std::move(a)</code> 可以看出来，move返回的<code class="language-plaintext highlighter-rouge">int &amp;&amp;</code>是个右值。<strong>右值引用既可以是左值也可以是右值， 作为函数返回值的 &amp;&amp; 是右值，直接声明出来的 &amp;&amp; 是左值</strong>。</p>
 
 <p>最后，从上述分析中我们得到如下结论：</p>
 
-<ol>
-  <li><strong>从性能上讲，左右值引用没有区别，传参使用左右值引用都可以避免拷贝。</strong></li>
-  <li><strong>右值引用可以直接指向右值，也可以通过std::move指向左值；而左值引用只能指向左值(const左值引用也能指向左值)。</strong></li>
-  <li><strong>作为函数形参时，右值引用更灵活。虽然const左值引用也可以做到左右值都接受，但它无法修改，有一定局限性。</strong></li>
-</ol>
+<p>1、从性能上讲，左右值引用没有区别，传参使用左右值引用都可以避免拷贝。</p>
+
+<p>2、右值引用可以直接指向右值，也可以通过<code class="language-plaintext highlighter-rouge">std::move</code>指向左值；而左值引用只能指向左值(const左值引用也能指向左值)。</p>
+
+<p>3、作为函数形参时，右值引用更灵活。虽然 const 左值引用也可以做到左右值都接受，但它无法修改，有一定局限性。</p>
 
 <h1 id="三右值引用和-stdmove-的应用场景">三、右值引用和 std::move 的应用场景</h1>
 
@@ -276,15 +276,15 @@
 <span class="p">};</span>
 </code></pre></div></div>
 
-<p>该类的拷贝构造函数、赋值运算符重载函数已经通过使用左值引用传参来避免一次多余拷贝了，但是内部实现要深拷贝，无法避免。 这时，有人提出一个想法：是不是可以提供一个<code class="language-plaintext highlighter-rouge">移动构造函数</code>，把被拷贝者的数据移动过来，被拷贝者后边就不要了，这样就可以避免深拷贝了，</p>
+<p>该类的拷贝构造函数、赋值运算符重载函数已经通过使用左值引用传参来避免一次多余拷贝了，但是内部实现要深拷贝无法避免。 这时，有人提出一个想法：是不是可以提供一个<code class="language-plaintext highlighter-rouge">移动构造函数</code>，把被拷贝者的数据移动过来，被拷贝者后边就不要了，这样就可以避免深拷贝了，</p>
 
-<p>在STL的很多容器中，都实现了以<strong>右值引用为参数</strong>的<code class="language-plaintext highlighter-rouge">移动构造函数</code>和<code class="language-plaintext highlighter-rouge">移动赋值重载函数</code>，或者其他函数，最常见的如std::vector的<code class="language-plaintext highlighter-rouge">push_back</code>和<code class="language-plaintext highlighter-rouge">emplace_back</code>。参数为左值引用意味着拷贝，为右值引用意味着移动。</p>
+<p>在STL的很多容器中，都实现了以<strong>右值引用为参数</strong>的<code class="language-plaintext highlighter-rouge">移动构造函数</code>和<code class="language-plaintext highlighter-rouge">移动赋值重载函数</code>，或者其他函数，最常见的如 <code class="language-plaintext highlighter-rouge">std::vector</code> 的<code class="language-plaintext highlighter-rouge">push_back</code>和<code class="language-plaintext highlighter-rouge">emplace_back</code>。参数为左值引用意味着拷贝，为右值引用意味着移动。</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Array</span> <span class="p">{</span>
 <span class="nl">public:</span>
     <span class="p">......</span>
  
-    <span class="c1">// 优雅</span>
+    <span class="c1">// 优雅 移动拷贝</span>
     <span class="n">Array</span><span class="p">(</span><span class="n">Array</span><span class="o">&amp;&amp;</span> <span class="n">temp_array</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">data_</span> <span class="o">=</span> <span class="n">temp_array</span><span class="p">.</span><span class="n">data_</span><span class="p">;</span>
         <span class="n">size_</span> <span class="o">=</span> <span class="n">temp_array</span><span class="p">.</span><span class="n">size_</span><span class="p">;</span>
@@ -321,8 +321,8 @@
     <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span>
      
     <span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">str1</span><span class="p">);</span> <span class="c1">// 传统方法，copy</span>
-    <span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">str1</span><span class="p">));</span> <span class="c1">// 调用移动语义的push_back方法，避免拷贝，str1会失去原有值，变成空字符串</span>
-    <span class="n">vec</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">str1</span><span class="p">));</span> <span class="c1">// emplace_back效果相同，str1会失去原有值</span>
+    <span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">str1</span><span class="p">));</span> <span class="c1">// 调用移动语义的 push_back 方法，避免拷贝，str1 会失去原有值，变成空字符串</span>
+    <span class="n">vec</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">str1</span><span class="p">));</span> <span class="c1">// emplace_back 效果相同，str1 会失去原有值</span>
     <span class="n">vec</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="s">"axcsddcas"</span><span class="p">);</span> <span class="c1">// 当然可以直接接右值</span>
 <span class="p">}</span>
  
@@ -333,27 +333,26 @@
 <span class="kt">void</span> <span class="n">emplace_back</span> <span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>在vector和string这个场景，加个<code class="language-plaintext highlighter-rouge">std::move</code>会调用到移动语义函数，避免了深拷贝。</p>
+<p>在 vector 和 string 这个场景，加个<code class="language-plaintext highlighter-rouge">std::move</code>会调用到移动语义函数，避免了深拷贝。</p>
 
-<p>除非设计不允许移动，STL类大都支持移动语义函数，即<code class="language-plaintext highlighter-rouge">可移动的</code>。 另外，编译器会<strong>默认</strong>在用户自定义的<code class="language-plaintext highlighter-rouge">class</code>和<code class="language-plaintext highlighter-rouge">struct</code>中生成移动语义函数，但前提是用户没有主动定义该类的<code class="language-plaintext highlighter-rouge">拷贝构造</code>等函数(具体规则自行百度哈)。 **因此，可移动对象在<需要拷贝且被拷贝者之后不再被需要>的场景，建议使用**`std::move`**触发移动语义，提升性能。**</需要拷贝且被拷贝者之后不再被需要></p>
+<p>除非设计不允许移动，STL类大都支持移动语义函数，即<code class="language-plaintext highlighter-rouge">可移动的</code>。 另外，编译器会<strong>默认</strong>在用户自定义的<code class="language-plaintext highlighter-rouge">class</code>和<code class="language-plaintext highlighter-rouge">struct</code>中生成移动语义函数，但前提是用户没有主动定义该类的<code class="language-plaintext highlighter-rouge">拷贝构造</code>等函数。 **因此，可移动对象在<需要拷贝且被拷贝者之后不再被需要>的场景，建议使用**`std::move`**触发移动语义，提升性能。**</需要拷贝且被拷贝者之后不再被需要></p>
 
 <p>还有些STL类是<code class="language-plaintext highlighter-rouge">move-only</code>的，比如<code class="language-plaintext highlighter-rouge">unique_ptr</code>，这种类只有移动构造函数，因此只能移动(转移内部对象所有权，或者叫浅拷贝)，不能拷贝(深拷贝):</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">ptr_a</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span><span class="p">();</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">ptr_b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ptr_a</span><span class="p">);</span> <span class="c1">// unique_ptr只有‘移动赋值重载函数‘，参数是&amp;&amp; ，只能接右值，因此必须用std::move转换类型</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">ptr_b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ptr_a</span><span class="p">);</span> <span class="c1">// unique_ptr只有‘移动赋值重载函数‘，参数是 &amp;&amp; ，只能接右值，因此必须用std::move转换类型</span>
 
 <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">ptr_b</span> <span class="o">=</span> <span class="n">ptr_a</span><span class="p">;</span> <span class="c1">// 编译不通过</span>
 </code></pre></div></div>
-
 <h1 id="四-完美转发-stdforward">四、 完美转发 std::forward</h1>
 
 <p>和<code class="language-plaintext highlighter-rouge">std::move</code>一样，它的兄弟<code class="language-plaintext highlighter-rouge">std::forward</code>也充满了迷惑性，虽然名字含义是转发，但他并不会做转发，同样也是做类型转换.</p>
 
-<p>与move相比，forward更强大，move只能转出来右值，forward都可以。</p>
+<p>与 <code class="language-plaintext highlighter-rouge">std::move</code> 相比，<code class="language-plaintext highlighter-rouge">std::forward</code>更强大，<code class="language-plaintext highlighter-rouge">std::move</code> 只能转出来右值，<code class="language-plaintext highlighter-rouge">std::forward</code>都可以。</p>
 
 <blockquote>
-  <p><code class="language-plaintext highlighter-rouge">std::forward&lt;T&gt;(u)</code>有两个参数：T与 u。 a. 当T为左值引用类型时，u将被转换为T类型的左值； b. 否则u将被转换为T类型右值。</p>
+  <p><code class="language-plaintext highlighter-rouge">std::forward&lt;T&gt;(u)</code>有两个参数：T 与 u。 a) 当T为左值引用类型时，u将被转换为T类型的左值；  b) 否则u将被转换为T类型右值。</p>
 </blockquote>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
@@ -365,10 +364,10 @@
     <span class="n">ref_l</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
  
-<span class="c1">// change的入参是右值引用</span>
+<span class="c1">// change 的入参是右值引用</span>
 <span class="c1">// 有名字的右值引用是 左值，因此ref_r是左值</span>
 <span class="kt">void</span> <span class="n">change</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;&amp;</span> <span class="n">ref_r</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">change2</span><span class="p">(</span><span class="n">ref_r</span><span class="p">);</span>  <span class="c1">// 错误，change2的入参是右值引用，需要接右值，ref_r是左值，编译失败</span>
+    <span class="n">change2</span><span class="p">(</span><span class="n">ref_r</span><span class="p">);</span>  <span class="c1">// 错误，change2 的入参是右值引用，需要接右值，ref_r是左值，编译失败</span>
      
     <span class="n">change2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ref_r</span><span class="p">));</span> <span class="c1">// ok，std::move把左值转为右值，编译通过</span>
     <span class="n">change2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="kt">int</span> <span class="o">&amp;&amp;&gt;</span><span class="p">(</span><span class="n">ref_r</span><span class="p">));</span>  <span class="c1">// ok，std::forward的T是右值引用类型(int &amp;&amp;)，符合条件b，因此u(ref_r)会被转换为右值，编译通过</span>
