@@ -155,7 +155,7 @@
 
 <h1 id="一-变量">一、 变量</h1>
 
-<p>Go 语言的变量声明方式与C和C++语言有明显的不同。对于纯粹的变量声明，Go语言引入了 关键字var，而类型信息放在变量名之后。</p>
+<p>Go 语言的变量声明方式与 C 和 C++ 语言有明显的不同。对于纯粹的变量声明，G o语言引入了关键字 var，而类型信息放在变量名之后。</p>
 
 <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">var</span> <span class="n">v1</span> <span class="kt">int</span>
@@ -176,7 +176,7 @@
 
 <ul>
   <li>变量声明语句不需要使用分号作为结束符。</li>
-  <li>var关键字的另一种用法是可以将若干个需要声明的变量放置在一起，免得程序员需要重复 写var关键字</li>
+  <li>var 关键字的另一种用法是可以将若干个需要声明的变量放置在一起，免得程序员需要重复 写 var 关键字。</li>
 </ul>
 
 <h2 id="变量初始化">变量初始化</h2>
@@ -220,7 +220,7 @@
 <h2 id="常量定义">常量定义</h2>
 
 <p>通过const关键字，你可以给字面常量指定一个友好的名字:</p>
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="n">Pi</span>  <span class="kt">float64</span>  <span class="o">=</span> <span class="m">3.14159265358979323846</span>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="n">Pi</span> <span class="kt">float64</span>  <span class="o">=</span> <span class="m">3.14159265358979323846</span>
 
 <span class="k">const</span> <span class="p">(</span>
     <span class="n">size</span> <span class="kt">int64</span> <span class="o">=</span> <span class="m">1024</span> 
@@ -277,7 +277,7 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>同 Go 语言的其他符号(symbol)一样，以大写字母开头的常量在包外可见。以上例子中 numberOfDays 为包内私有，其他符号则可被其他包访问。</p>
+<p>同 Go 语言的其他符号(symbol)一样，以<strong>大写字母开头的常量在包外可见</strong>。以上例子中 numberOfDays 为包内私有，其他符号则可被其他包访问。</p>
 
 <h1 id="三类型">三、类型</h1>
 
@@ -368,7 +368,7 @@
 
 <p>实部与虚部:</p>
 
-<p>对于一个复数 <code class="language-plaintext highlighter-rouge">z = complex(x, y)</code>，就可以通过 Go 语言内置函数<code class="language-plaintext highlighter-rouge">real(z)</code>获得该复数的实 部，也就是 x，通过imag(z)获得该复数的虚部，也就是 y 。</p>
+<p>对于一个复数 <code class="language-plaintext highlighter-rouge">z = complex(x, y)</code>，就可以通过 Go 语言内置函数<code class="language-plaintext highlighter-rouge">real(z)</code>获得该复数的实部，也就是 x，通过 <code class="language-plaintext highlighter-rouge">imag(z)</code> 获得该复数的虚部，也就是 y 。</p>
 
 <h2 id="字符串">字符串</h2>
 
@@ -400,21 +400,21 @@
 <span class="p">[</span><span class="m">2</span><span class="p">][</span><span class="m">2</span><span class="p">][</span><span class="m">2</span><span class="p">]</span> <span class="kt">float64</span>             <span class="c">// 等同于[2]([2]([2]float64))</span>
 </code></pre></div></div>
 
-<p>组长度在定义后就不可更改，在声明时长度可以为一个常量或者一个常量 表达式(常量表达式是指在编译期即可计算结果的表达式)。数组的长度是该数组类型的一个内 置常量，可以用 Go 语言的内置函数len()来获取。</p>
+<p>组长度在定义后就不可更改，在声明时长度可以为一个常量或者一个常量表达式(常量表达式是指在编译期即可计算结果的表达式)。数组的长度是该数组类型的一个内 置常量，可以用 Go 语言的内置函数 <code class="language-plaintext highlighter-rouge">len()</code> 来获取。</p>
 
 <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arrLength</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p><strong>元素访问</strong></p>
 
-<p>可以使用数组下标来访问数组中的元素。与C语言相同，数组下标从0开始，len(array)-1 则表示最后一个元素的下标。下面的示例遍历整型数组并逐个打印元素内容:</p>
+<p>可以使用数组下标来访问数组中的元素。与 C 语言相同，数组下标从 0 开始，<code class="language-plaintext highlighter-rouge">len(array)-1</code> 则表示最后一个元素的下标。下面的示例遍历整型数组并逐个打印元素内容:</p>
 
 <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
     <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Element"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s">"of array is "</span><span class="p">,</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Go 语言还提供了一个关键字 range，用于便捷地遍历容器中的元素。当然，数组也是range 的支持范围。上面的遍历过程可以简化为如下的写法:</p>
+<p>Go 语言还提供了一个关键字 <code class="language-plaintext highlighter-rouge">range</code>，用于便捷地遍历容器中的元素。当然，数组也是 <code class="language-plaintext highlighter-rouge">range</code> 的支持范围。上面的遍历过程可以简化为如下的写法:</p>
 
 <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">array</span> <span class="p">{</span>
    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Array element ["</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s">"]="</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
@@ -423,7 +423,7 @@
 
 <p><strong>值类型</strong></p>
 
-<p>在 Go 语言中数组是一个值类型(value type)。所有的值类型变量在赋值。和作为参数传递时都将产生一次复制动作。如果将数组作为函数的参数类型，则在函数调用时该 参数将发生数据复制。因此，在函数体中无法修改传入的数组的内容，因为函数内操作的只是所 传入数组的一个副本。</p>
+<p>在 Go 语言中数组是一个值类型(value type)。所有的值类型变量在赋值和作为参数传递时都将产生一次复制动作。如果将数组作为函数的参数类型，则在函数调用时该参数将发生数据复制。因此，在函数体中无法修改传入的数组的内容，因为函数内操作的只是所传入数组的一个副本。</p>
 
 <h2 id="切片-slice">切片 slice</h2>
 
@@ -480,7 +480,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>使用range关键字可以让遍历代码显得更整洁。range表达式有两个返回值，第一个是索引，第二个是元素的值:</p>
+<p>使用 <code class="language-plaintext highlighter-rouge">range</code> 关键字可以让遍历代码显得更整洁。range表达式有两个返回值，第一个是索引，第二个是元素的值:</p>
 
 <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">mySlice</span> <span class="p">{</span> 
     <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"mySlice["</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s">"] ="</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
@@ -537,13 +537,13 @@
 
 <p>4、之所以不直接比较去运算符，有两方面，一是 slice 的元素是间接引用，一个 slice 甚至可以包含自身。二是 slice 在不同的时间可能包含不同元素，底层数据的元素可能会被修改。</p>
 
-<p>5、测试一个slice是否是空的， <code class="language-plaintext highlighter-rouge">len(s) == 0</code>, 不应该用<code class="language-plaintext highlighter-rouge">s==nil</code> 来判断。</p>
+<p>5、测试一个 slice 是否是空的， <code class="language-plaintext highlighter-rouge">len(s) == 0</code>, 不应该用<code class="language-plaintext highlighter-rouge">s==nil</code> 来判断。</p>
 
 <p>6、<code class="language-plaintext highlighter-rouge">x[m:n]</code> 切处操作对于字符串则生成一个新字符串，如果x是<code class="language-plaintext highlighter-rouge">[]byte</code>的话则生成一个新<code class="language-plaintext highlighter-rouge">[]byte</code>。</p>
 
 <h2 id="map">map</h2>
 
-<p>map是一堆键值对的未排序集合，底层是用哈希表做的。</p>
+<p>map是一堆键值对的未排序集合，底层是用<strong>哈希表</strong>做的。</p>
 
 <p>变量声明：</p>
 
@@ -576,13 +576,13 @@
 
 <p>其他：</p>
 
-<p>1、不能对map的元素进行取址操作</p>
+<p>1、不能对 map 的元素进行取址操作</p>
 <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">_</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ages</span><span class="p">[</span><span class="s">"bob"</span><span class="p">]</span> <span class="c">// compile error :cannot take address of map `elemnet</span>
 </code></pre></div></div>
 
-<p>2、随着map的元素的增多，可能会重新进行分配空间。</p>
+<p>2、随着 map 的元素的增多，可能会重新进行分配空间。</p>
 
-<p>3、和clice一样，map之间不能进行相等的比较，唯一的例外是和nil进行比较。要判断两个是否包含相同的key和value。要循环一个一个来。</p>
+<p>3、和 clice一样，map之间不能进行相等的比较，唯一的例外是和 nil 进行比较。要判断两个是否包含相同的 key 和 value。要循环一个一个来。</p>
 
 <h2 id="结构体">结构体</h2>
 
@@ -597,13 +597,13 @@
 
 <p>1、结构体成员的输入顺序也有重要的意义。 如果要交换 Name 和 Address 出现的顺序，那么就是定义不同的结构类型。</p>
 
-<p>2、如果结构体成员名字是以大写字母开头的，那么成员就是导出的，这是GO语言导出决定的。一个结构体可能同时包含导出和未导出的成员。</p>
+<p>2、如果结构体成员名字是以大写字母开头的，那么成员就是导出的，这是 GO 语言导出决定的。一个结构体可能同时包含导出和未导出的成员。</p>
 
 <p>3、一个命名为 S 的结构体类型不能含有 S 类型的成员。因为一个聚合的值不能包含它自身。但是 S 类型的结构可以包含<code class="language-plaintext highlighter-rouge">*S</code>指针类型成员。</p>
 
 <p>4、结构体的零值是每个成员都是零值。</p>
 
-<p>5、结构体没有任何成员的是空结构体，写作<code class="language-plaintext highlighter-rouge">struct{}</code>`。它的大小为 0,不包含任何信息。</p>
+<p>5、结构体没有任何成员的是空结构体，写作<code class="language-plaintext highlighter-rouge">struct{}</code>。它的大小为 0,不包含任何信息。</p>
 
 <p>6、如果考虑效率的话，较大的结构体通常会用指针的方式传入和返回。</p>
 
@@ -710,7 +710,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>如果参数列表中若干个相邻的参数类型的相同，比如上面例子中的a和b，则可以在参数列表中省略前面变量的类型声明，如果返回值列表中多个返回值的类型相同，也可以用同样的方式合并。</p>
+<p>如果参数列表中若干个相邻的参数类型的相同，比如上面例子中的 a 和 b，则可以在参数列表中省略前面变量的类型声明，如果返回值列表中多个返回值的类型相同，也可以用同样的方式合并。</p>
 
 <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span>  <span class="n">Add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="n">_int_</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span> 
    <span class="c">// ...</span>
