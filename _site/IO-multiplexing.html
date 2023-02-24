@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>I/O 复用</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/IO-multiplexing">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/IO-multiplexing">I/O 复用</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2014-10-17
+     • Category: 
+        
+        <a href="/categories#tcp-ref" >tcp</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags#network-ref" >network</a>
+        
+            <a href="/tags#tcp-ref" >tcp</a>
+        
+    
+</div>
+
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p><code class="language-plaintext highlighter-rouge">I/O</code> 复用是一种高效的网络编程方式，用于在一个线程中同时处理多个文件描述符的读写事件，避免了每个文件描述符都需要一个独立的线程或进程来处理的情况。常见的I/O复用方式有 <code class="language-plaintext highlighter-rouge">select</code>、<code class="language-plaintext highlighter-rouge">poll</code>、<code class="language-plaintext highlighter-rouge">epoll</code>等。</p>
+
+<p>在使用I/O复用时，首先需要将需要监听的文件描述符添加到 <code class="language-plaintext highlighter-rouge">I/O</code> 复用的数据结构中，然后调用相应的 <code class="language-plaintext highlighter-rouge">I/O</code> 复用函数进行监听。</p>
+
+<p>当其中任意一个文件描述符有读写事件发生时，<code class="language-plaintext highlighter-rouge">I/O</code> 复用函数会返回并告知应用程序哪些文件描述符有事件发生，应用程序就可以对这些文件描述符进行相应的处理。</p>
+
+<p><code class="language-plaintext highlighter-rouge">I/O</code> 复用可以提高程序的并发性和效率，同时可以减少线程或进程的数量，降低系统开销。但需要注意的是，在使用 <code class="language-plaintext highlighter-rouge">I/O</code> 复用时需要特别注意错误处理和异常情况的处理，否则可能会导致程序异常退出或死锁等问题。</p>
+
+<h1 id="selectpollepoll-三者的区别">select、poll、epoll 三者的区别</h1>
+
+<p><code class="language-plaintext highlighter-rouge">select</code>、<code class="language-plaintext highlighter-rouge">poll</code>、<code class="language-plaintext highlighter-rouge">epoll</code> 都是 <code class="language-plaintext highlighter-rouge">I/O</code> 多路复用机制的实现方式，它们的目的都是为了在单线程/进程中同时监听多个文件描述符的可读/可写状态，从而提高 <code class="language-plaintext highlighter-rouge">I/O </code>效率。它们之间的区别如下：</p>
+
+<p><code class="language-plaintext highlighter-rouge">select</code>：是传统的 <code class="language-plaintext highlighter-rouge">I/O</code> 多路复用技术，使用 <code class="language-plaintext highlighter-rouge">fd_set</code> 来存储文件描述符集合，存在以下问题：</p>
+
+<ul>
+  <li>集合大小有限制，一般是 1024，需要修改宏扩大；</li>
+  <li>每次调用 select 都需要重新初始化 fd_set，效率较低；</li>
+  <li>select 在工作时需要将 fd_set 从用户态复制到内核态，每次调用都需要两次复制，带来额外的系统调用开销。</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">poll</code>：是基于 <code class="language-plaintext highlighter-rouge">select</code> 的改进，使用 <code class="language-plaintext highlighter-rouge">pollfd</code> 结构体来存储文件描述符集合，解决了 <code class="language-plaintext highlighter-rouge">select</code> 的一些问题，但仍存在以下问题：</p>
+
+<ul>
+  <li>集合大小仍然有限制，需要手动管理数组大小；</li>
+  <li>需要遍历整个 pollfd 数组，效率较低；</li>
+  <li>每次调用 poll 都需要将 pollfd 数组从用户态复制到内核态，仍然需要两次复制。</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">epoll</code>：是最新的 <code class="language-plaintext highlighter-rouge">I/O</code> 多路复用技术，引入了内核事件表，将文件描述符加入内核事件表中，当文件描述符状态改变时，会将改变的文件描述符加入就绪队列中，实现了一次遍历、一次复制的高效处理。</p>
+
+<p><code class="language-plaintext highlighter-rouge">epoll</code> 提供了三种工作方式，分别是<strong>边缘触发（ET</strong>）、<strong>水平触发（LT）</strong>、<strong>一次性触发（ONESHOT）</strong>，其中边缘触发是 <code class="language-plaintext highlighter-rouge">epoll</code> 的最大特点，可以减少 <code class="language-plaintext highlighter-rouge">I/O</code> 事件的重复通知，提高效率。</p>
+
+<p>总的来说，epoll 相较于 select 和 poll，具有更高的效率和更大的扩展性，是现代化的 I/O 多路复用机制。</p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+<span>
+	<a  href="/tcp-base-code" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/%E5%A4%A7%E8%B4%A5%E5%B1%80" class="pageNav"  >下一篇</a>
+</span>
+
+
+	<div class="article-author">
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+    <div class="avatar">
+        <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

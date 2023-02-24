@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>xyecho - Reading, Life, Tech</title>
+    <title>xyecho - just my notes</title>
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 23 Feb 2023 19:53:06 +0800</pubDate>
-    <lastBuildDate>Thu, 23 Feb 2023 19:53:06 +0800</lastBuildDate>
+    <pubDate>Fri, 24 Feb 2023 10:34:10 +0800</pubDate>
+    <lastBuildDate>Fri, 24 Feb 2023 10:34:10 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>

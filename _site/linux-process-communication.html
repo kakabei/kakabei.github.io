@@ -150,15 +150,29 @@
   </li>
 </ol>
 
-<h1 id="二-linux进程间通信由以下几部分发展而来">二 Linux进程间通信由以下几部分发展而来：</h1>
+<h1 id="二-linux-进程间通信由以下几部分发展而来">二 Linux 进程间通信由以下几部分发展而来：</h1>
 
 <p>早期UNIX进程间通信：包括管道、FIFO、信号。</p>
 
-<p>基于<code class="language-plaintext highlighter-rouge">System V</code>的进程间通信：包括 System V 消息队列、System V 信号灯（Semaphore）、<code class="language-plaintext highlighter-rouge">System V</code>、 共享内存。</p>
+<p>基于<code class="language-plaintext highlighter-rouge">System V</code>的进程间通信：包括 <code class="language-plaintext highlighter-rouge">System V 消息队列</code>、<code class="language-plaintext highlighter-rouge">System V 信号灯</code>（Semaphore）、<code class="language-plaintext highlighter-rouge">System V</code>、 共享内存。</p>
 
-<p>基于Socket进程间通信。</p>
+<p>基于 Socket 进程间通信。</p>
 
-<p>基于POSIX进程间通信：包括POSIX消息队列、POSIX信号灯、POSIX共享内存。</p>
+<p>基于 POSIX 进程间通信：包括 POSIX 消息队列、POSI 信号灯、POSIX 共享内存。</p>
+
+<h1 id="三-linux-中的进程可以通过多种方式进行通信其中最常见的方式有以下几种">三 Linux 中的进程可以通过多种方式进行通信，其中最常见的方式有以下几种：</h1>
+
+<p>1、 <strong>管道（Pipe）</strong>：管道是一种单向通信方式，可以用于在两个进程之间传递数据。管道分为匿名管道和命名管道两种类型，<strong>匿名管道</strong>只能用于父子进程之间的通信，而命名管道可以用于任意两个进程之间的通信。</p>
+
+<p>2、<strong>信号（Signal）</strong>：进程可以向其他进程发送信号，用于通知该进程发生了某些事件。常见的信号有 SIGINT（中断信号，通常是用户按下 Ctrl+C 发送给进程）、SIGKILL（强制终止信号，无法被忽略）等。</p>
+
+<p>3、<strong>共享内存（Shared Memory）</strong>：共享内存是一种高效的进程间通信方式，可以让多个进程共享同一块内存区域。这样就可以避免在进程之间传递大量数据的开销。</p>
+
+<p>4、<strong>信号量（Semaphore）</strong>：信号量是一种计数器，用于多个进程之间对共享资源的访问。通过对信号量进行加锁和解锁操作，可以实现对共享资源的互斥访问。</p>
+
+<p>5、<strong>消息队列（Message Queue）</strong>：消息队列是一种进程间通信机制，可以用于在多个进程之间传递消息。每个消息都有一个类型和一个数据体，接收进程可以按照类型来获取需要的消息。</p>
+
+<p>6、<strong>套接字（Socket）</strong>：套接字是一种网络编程中常用的通信方式，可以用于在不同的主机之间进行进程间通信。套接字通常用于实现客户端和服务器之间的通信。</p>
 
   		
 	  </article>

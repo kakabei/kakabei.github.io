@@ -130,57 +130,80 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<p>select()函数主要是建立在fd_set类型的基础上的。fd_set是一组文件描述字(fd)的集合，它用一位来表示一个fd，对于fd_set类型通过下面四个宏来
-操作：</p>
+	  		<p><code class="language-plaintext highlighter-rouge">select()</code> 函数主要是建立在 <code class="language-plaintext highlighter-rouge">fd_set</code> 类型的基础上的。<code class="language-plaintext highlighter-rouge">fd_set</code> 是一组文件描述字(fd)的集合， 用于描述一组文件描述符，定义如下：</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fd_set</span> <span class="n">set</span><span class="p">;</span>
-<span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
-<span class="n">FD_SET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
-<span class="n">FD_CLR</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
-<span class="n">FD_ISSET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="k">struct</span> <span class="n">fd_set</span> <span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span>  <span class="n">fd_count</span><span class="p">;</span>  <span class="c1">// 文件描述符的数量</span>
+    <span class="kt">int</span>           <span class="n">fd_array</span><span class="p">[</span><span class="n">FD_SETSIZE</span><span class="p">];</span> <span class="c1">// 文件描述符的数组</span>
+<span class="p">}</span> <span class="n">fd_set</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>过去，一个fd_set通常只能包含&lt;32的fd（文件描述字），因为fd_set其实只用了一个32位矢量来表示fd；现在,UNIX系统通常会在头文件&lt;sys/select.h&gt;中定义常量FD_SETSIZE，它是数据类型fd_set的描述字数量，其值通常是1024，这样就能表示&lt;1024的fd。
-select函数的接口比较简单：</p>
+<p>其中，<code class="language-plaintext highlighter-rouge">fd_count</code> 表示文件描述符的数量，<code class="language-plaintext highlighter-rouge">fd_array</code> 是一个存储文件描述符的数组，其大小为 <code class="language-plaintext highlighter-rouge">FD_SETSIZE</code>，一般是 1024。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">select</span><span class="p">(</span><span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">readset</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">writeset</span><span class="p">,</span>
+<p><code class="language-plaintext highlighter-rouge">fd_array</code> 数组中的每个元素对应一个文件描述符，如果该文件描述符对应的位被设置，则该元素的值为非零，否则为零。</p>
 
-<span class="n">fd_set</span><span class="o">*</span> <span class="n">exceptset</span><span class="p">,</span> <span class="k">struct</span> <span class="n">tim</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
+<p>由于 <code class="language-plaintext highlighter-rouge">fd_set</code> 结构体中只记录了文件描述符的数量和状态，因此需要配合其他函数来进行实际的 I/O 多路复用操作。</p>
+
+<h1 id="fd_set-的四个操作方法"><code class="language-plaintext highlighter-rouge">fd_set</code> 的四个操作方法</h1>
+
+<p>fd_set 类型通过以下四个宏来进行操作：</p>
+
+<ul>
+  <li><strong>FD_ZERO(fd_set *fdset)</strong>：将 <code class="language-plaintext highlighter-rouge">fd_set</code> 中的所有位都清零。</li>
+  <li><strong>FD_SET(int fd, fd_set *fdset)</strong>：将 <code class="language-plaintext highlighter-rouge">fd_set</code> 中的第 fd 位（即文件描述符为 fd 的位置）设置为1。</li>
+  <li><strong>FD_CLR(int fd, fd_set *fdset)</strong>：将 <code class="language-plaintext highlighter-rouge">fd_set</code> 中的第 fd 位（即文件描述符为 fd 的位置）设置为0。</li>
+  <li><strong>FD_ISSET(int fd, fd_set *fdset)</strong>：判断 <code class="language-plaintext highlighter-rouge">fd_set</code> 中的第 fd 位是否被设置为1，若是则返回非0值，否则返回0。</li>
+</ul>
+
+<h1 id="select-函数"><code class="language-plaintext highlighter-rouge">select</code> 函数</h1>
+
+<p><code class="language-plaintext highlighter-rouge">select()</code> 函数的定义通常位于头文件 sys/select.h 中。</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/select.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">select</span><span class="p">(</span><span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">readfds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">writefds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">exceptfds</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">timeval</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>功能：
-测试指定的fd可读？可写？有异常条件待处理？</p>
+<p>其中，nfds 为要监视的文件描述符（即 <code class="language-plaintext highlighter-rouge">fd_set</code> 中最大的文件描述符值加 1），<code class="language-plaintext highlighter-rouge">readfds</code>、<code class="language-plaintext highlighter-rouge">writefds</code> 和 <code class="language-plaintext highlighter-rouge">exceptfds</code> 分别为待监视的可读、可写和异常情况的文件描述符集合，timeout 为超时时间。</p>
 
-<p>参数：</p>
+<p>函数返回值为准备就绪的文件描述符数量，如果超时时间内没有任何文件描述符就绪，返回 0；如果发生错误，返回 -1 并设置 errno 变量来指示具体错误。</p>
 
-<p>nfds
-需要检查的文件描述字个数（即检查到fd_set的第几位），数值应该比三组fd_set中所含的最大fd值更大，一般设为三组fd_set中所含的最大fd值加1（如在readset,writeset,exceptset中所含最大的fd为5，则nfds=6，因为fd是从0开始的）。设这个值是为提高效率，使函数不必检查fd_set的所有1024位。</p>
+<p>Linux 的 select 函数实现是基于内核中的文件描述符表（file descriptor table）和等待队列（wait queue）。</p>
 
-<p>readset
-用来检查可读性的一组文件描述字。</p>
+<p>文件描述符表是一个数组，每个元素代表一个文件描述符，它的值是一个指向该文件描述符的结构体的指针，结构体包含文件描述符类型、文件状态和操作函数等信息。</p>
 
-<p>writeset
-用来检查可写性的一组文件描述字。</p>
+<p>等待队列是一个链表，每个节点代表一个等待事件的进程。当某个进程调用select时，内核会将该进程加入到等待队列中，然后阻塞该进程，直到有数据到来或超时等情况发生时再唤醒该进程。</p>
 
-<p>exceptset
-用来检查是否有异常条件出现的文件描述字。(注：错误不包括在异常条件之内)</p>
+<h2 id="具体实现流程如下">具体实现流程如下：</h2>
 
-<p>timeout
-有三种可能：</p>
+<p>1、调用 <code class="language-plaintext highlighter-rouge">select</code> 函数时，将需要监听的文件描述符集合 <code class="language-plaintext highlighter-rouge">fd_set</code> 传入内核。</p>
 
-<ol>
-  <li>timeout=NULL（阻塞：直到有一个fd位被置为1函数才返回）</li>
-  <li>timeout所指向的结构设为非零时间（等待固定时间：有一个fd位被置为1或者时间耗尽，函数均返回）</li>
-  <li>timeout所指向的结构，时间设为0（非阻塞：函数检查完每个fd后立即返回）</li>
-</ol>
+<p>2、内核将 <code class="language-plaintext highlighter-rouge">fd_set</code> 转换成对应的内部数据结构 <code class="language-plaintext highlighter-rouge">fd_set_struct</code> ，并将 <code class="language-plaintext highlighter-rouge">fd_set_struct</code> 传给 <code class="language-plaintext highlighter-rouge">do_select</code> 函数处理。</p>
+
+<p>3、<code class="language-plaintext highlighter-rouge">do_select</code> 函数遍历所有的待监听文件描述符，检查是否有可读、可写或异常事件，并将检查结果记录在 <code class="language-plaintext highlighter-rouge">fd_set_struct</code> 中。</p>
+
+<p>4、如果在检查时有任何一个文件描述符的状态发生了改变，<code class="language-plaintext highlighter-rouge">do_select</code> 函数将该进程从等待队列中唤醒。</p>
+
+<p>5、如果超时时间到达或者被其他信号中断，<code class="language-plaintext highlighter-rouge">do_select</code> 函数也将该进程从等待队列中唤醒。</p>
+
+<p>返回结果给用户进程，进程通过检查 <code class="language-plaintext highlighter-rouge">fd_set_struct</code> 中的结果，判断哪些文件描述符发生了可读、可写或异常事件。</p>
+
+<p>具体可以看文章:<a href="https://www.cnblogs.com/LoyenWang/p/12622904.html">https://www.cnblogs.com/LoyenWang/p/12622904.html</a></p>
+
+<h1 id="timeout-的-三种可能">timeout 的 三种可能：</h1>
+
+<p>1、 <code class="language-plaintext highlighter-rouge">timeout=NULL</code>（阻塞：直到有一个fd位被置为1函数才返回）</p>
+
+<p>2、 timeout 所指向的结构设为非零时间（等待固定时间：有一个fd位被置为1或者时间耗尽，函数均返回）</p>
+
+<p>3、 timeout 所指向的结构，时间设为0（非阻塞：函数检查完每个fd后立即返回）</p>
 
 <p>测试单个文件描述符可读性的例子：</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">isready</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">)</span>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">isready</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
 	<span class="n">fd_set</span> <span class="n">fds</span><span class="p">;</span>
-	<span class="k">struct</span> <span class="n">tim</span> <span class="n">tv</span><span class="p">;</span>
+	<span class="k">struct</span> <span class="nc">tim</span> <span class="n">tv</span><span class="p">;</span>
 	
 	<span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
 	<span class="n">FD_SET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
@@ -194,52 +217,151 @@ select函数的接口比较简单：</p>
 	<span class="k">return</span> <span class="n">FD_ISSET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>这段代码将指定测试Socket的描述字的可读可写性，因为Socket使用的也是fd</p>
+<p>这段代码将指定测试 socket 的描述字的可读可写性，因为socket使用的也是fd。</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uint32 SocketWait(TSocket *s,bool rd,bool wr,uint32 timems)   
-{
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">uint32</span> <span class="nf">SocketWait</span><span class="p">(</span><span class="n">TSocket</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="kt">bool</span> <span class="n">rd</span><span class="p">,</span><span class="kt">bool</span> <span class="n">wr</span><span class="p">,</span><span class="n">uint32</span> <span class="n">timems</span><span class="p">)</span>   
+<span class="p">{</span>
 
-	fd_set rfds,wfds;
-	struct tim tv;
+	<span class="n">fd_set</span> <span class="n">rfds</span><span class="p">,</span><span class="n">wfds</span><span class="p">;</span>
+	<span class="k">struct</span> <span class="nc">tim</span> <span class="n">tv</span><span class="p">;</span>
 
 
-	FD_ZERO(&amp;rfds);
-	FD_ZERO(&amp;wfds);
+	<span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+	<span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">wfds</span><span class="p">);</span>
 
-	if (rd)	//TRUE
-		FD_SET(*s,&amp;rfds);   //添加要测试的描述字
+	<span class="k">if</span> <span class="p">(</span><span class="n">rd</span><span class="p">)</span>	<span class="c1">//TRUE</span>
+		<span class="n">FD_SET</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>   <span class="c1">//添加要测试的描述字</span>
 
-	if (wr)     //FALSE
-		FD_SET(*s,&amp;wfds);
+	<span class="k">if</span> <span class="p">(</span><span class="n">wr</span><span class="p">)</span>     <span class="c1">//FALSE</span>
+		<span class="n">FD_SET</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="o">&amp;</span><span class="n">wfds</span><span class="p">);</span>
 
-	tv.tv_sec=timems / 1000;     //second
-	tv.tv_usec=timems % 1000;     //ms
+	<span class="n">tv</span><span class="p">.</span><span class="n">tv_sec</span><span class="o">=</span><span class="n">timems</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">;</span>     <span class="c1">//second</span>
+	<span class="n">tv</span><span class="p">.</span><span class="n">tv_usec</span><span class="o">=</span><span class="n">timems</span> <span class="o">%</span> <span class="mi">1000</span><span class="p">;</span>     <span class="c1">//ms</span>
 
-	for (;;) //如果errno==EINTR，反复测试缓冲区的可读性
-	{
-		//测试在规定的时间内套接口接收缓冲区中是否有数据可读  //0－－超时，-1－－出错
-		switch(select((*s)+1,&amp;rfds,&amp;wfds,NULL,(timems==TIME_INFINITE?NULL:&amp;tv)))
-		{
-		case 0:
-			return 0;
+	<span class="k">for</span> <span class="p">(;;)</span> <span class="c1">//如果errno==EINTR，反复测试缓冲区的可读性</span>
+	<span class="p">{</span>
+		<span class="c1">//测试在规定的时间内套接口接收缓冲区中是否有数据可读  //0－－超时，-1－－出错</span>
+		<span class="k">switch</span><span class="p">(</span><span class="n">select</span><span class="p">((</span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">,</span><span class="o">&amp;</span><span class="n">wfds</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,(</span><span class="n">timems</span><span class="o">==</span><span class="n">TIME_INFINITE</span><span class="o">?</span><span class="nb">NULL</span><span class="o">:&amp;</span><span class="n">tv</span><span class="p">)))</span>
+		<span class="p">{</span>
+		<span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 	
-		case (-1):
-			if (SocketError()==EINTR)
-				break;
-			return 0; //有错但不是EINTR
+		<span class="k">case</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">SocketError</span><span class="p">()</span><span class="o">==</span><span class="n">EINTR</span><span class="p">)</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//有错但不是EINTR</span>
 
-		default:
-			if (FD_ISSET(*s,&amp;rfds)) //如果s是fds中的一员返回非0，否则返回0
-				return 1;
+		<span class="nl">default:</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">))</span> <span class="c1">//如果s是fds中的一员返回非0，否则返回0</span>
+				<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 
-			if (FD_ISSET(*s,&amp;wfds))
-				return 2;
+			<span class="k">if</span> <span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="o">&amp;</span><span class="n">wfds</span><span class="p">))</span>
+				<span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
 
-			return 0;
-		};
-	}
+			<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="p">};</span>
+	<span class="p">}</span>
 
-}
+<span class="p">}</span>
+</code></pre></div></div>
+<p>select 的例子：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstdlib&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/socket.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;arpa/inet.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;netinet/in.h&gt;</span><span class="cp">
+</span>
+<span class="cp">#define MAXLINE 1024
+#define LISTENQ 5
+#define SERV_PORT 8000
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">listenfd</span><span class="p">,</span> <span class="n">connfd</span><span class="p">,</span> <span class="n">sockfd</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxfd</span><span class="p">,</span> <span class="n">maxi</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">nready</span><span class="p">,</span> <span class="n">client</span><span class="p">[</span><span class="n">FD_SETSIZE</span><span class="p">];</span>
+    <span class="kt">ssize_t</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">fd_set</span> <span class="n">rset</span><span class="p">,</span> <span class="n">allset</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">MAXLINE</span><span class="p">];</span>
+    <span class="n">socklen_t</span> <span class="n">clilen</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="nc">sockaddr_in</span> <span class="n">cliaddr</span><span class="p">,</span> <span class="n">servaddr</span><span class="p">;</span>
+    
+    <span class="n">listenfd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">servaddr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">servaddr</span><span class="p">));</span>
+    <span class="n">servaddr</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>
+    <span class="n">servaddr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span> <span class="o">=</span> <span class="n">htonl</span><span class="p">(</span><span class="n">INADDR_ANY</span><span class="p">);</span>
+    <span class="n">servaddr</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span><span class="p">(</span><span class="n">SERV_PORT</span><span class="p">);</span>
+    <span class="n">bind</span><span class="p">(</span><span class="n">listenfd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">servaddr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">servaddr</span><span class="p">));</span>
+    <span class="n">listen</span><span class="p">(</span><span class="n">listenfd</span><span class="p">,</span> <span class="n">LISTENQ</span><span class="p">);</span>
+    
+    <span class="n">maxfd</span> <span class="o">=</span> <span class="n">listenfd</span><span class="p">;</span>
+    <span class="n">maxi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">FD_SETSIZE</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">client</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">allset</span><span class="p">);</span>
+    <span class="n">FD_SET</span><span class="p">(</span><span class="n">listenfd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">allset</span><span class="p">);</span>
+    
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rset</span> <span class="o">=</span> <span class="n">allset</span><span class="p">;</span>
+        <span class="n">nready</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">maxfd</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rset</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="n">listenfd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rset</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">clilen</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cliaddr</span><span class="p">);</span>
+            <span class="n">connfd</span> <span class="o">=</span> <span class="n">accept</span><span class="p">(</span><span class="n">listenfd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">cliaddr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">clilen</span><span class="p">);</span>
+            
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">FD_SETSIZE</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">client</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">client</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">connfd</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">FD_SETSIZE</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"too many clients"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+                <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            
+            <span class="n">FD_SET</span><span class="p">(</span><span class="n">connfd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">allset</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">connfd</span> <span class="o">&gt;</span> <span class="n">maxfd</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">maxfd</span> <span class="o">=</span> <span class="n">connfd</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="n">maxi</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">maxi</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">nready</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">maxi</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">sockfd</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            
+            <span class="k">if</span> <span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rset</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">((</span><span class="n">n</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">MAXLINE</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">close</span><span class="p">(</span><span class="n">sockfd</span><span class="p">);</span>
+                    <span class="n">FD_CLR</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">allset</span><span class="p">);</span>
+                    <span class="n">client</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">write</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+                <span class="p">}</span>
+                
+                <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">nready</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
 </code></pre></div></div>
 
   		
