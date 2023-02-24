@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 24 Feb 2023 10:34:10 +0800</pubDate>
-    <lastBuildDate>Fri, 24 Feb 2023 10:34:10 +0800</lastBuildDate>
+    <pubDate>Fri, 24 Feb 2023 12:56:32 +0800</pubDate>
+    <lastBuildDate>Fri, 24 Feb 2023 12:56:32 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -303,6 +303,280 @@
       </item>
     
       <item>
+        <title>c++11 thread 库</title>
+        <description>&lt;p&gt;C++11 标准引入了对线程的支持，这些支持主要包括以下内容：&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;std::thread&lt;/strong&gt; 类：C++11中引入了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::thread&lt;/code&gt; 类，它提供了一个可执行的线程对象，使得程序可以创建和管理线程。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;std::mutex&lt;/strong&gt; 类：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::mutex &lt;/code&gt;类提供了一种基本的互斥机制，允许程序员通过对共享资源的访问进行同步。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;std::condition_variable&lt;/strong&gt; 类：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::condition_variable&lt;/code&gt; 类提供了一种机制，使得线程能够等待某个条件成立，从而避免了线程轮询等待的问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;std::future&lt;/strong&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 类：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 类提供了一种异步编程的方式，允许程序员将任务提交到线程池中，并且可以得到返回值。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;std::atomic&lt;/strong&gt; 类：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::atomic &lt;/code&gt;类提供了一种基本的原子操作，用于在多线程环境下保证共享变量的原子性操作。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Thread-local storage&lt;/strong&gt;：C++11 标准中引入了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 关键字，用于指定变量在每个线程中是唯一的。&lt;/p&gt;
+
+&lt;h1 id=&quot;stdthread&quot;&gt;std::thread&lt;/h1&gt;
+
+&lt;p&gt;创建两个线程，一个线程输出奇数，另一个线程输出偶数：&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;printOddNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Odd number: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;printEvenNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Even number: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printOddNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printEvenNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在主函数中，我们创建了两个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; std::thread &lt;/code&gt;对象 t1 和 t2，并将 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;printOddNumbers()&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;printEvenNumbers()&lt;/code&gt; 作为线程函数传递给它们。然后调用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;join()&lt;/code&gt; 函数等待线程的结束。运行程序后，输出如下：&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Odd number: 1
+Odd number: 3
+Odd number: 5
+Odd number: 7
+Odd number: 9
+Even number: 2
+Even number: 4
+Even number: 6
+Even number: 8
+Even number: 10
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;stdthread-1&quot;&gt;std::thread&lt;/h1&gt;
+
+&lt;p&gt;定义了一个全局变量 counter，并使用两个线程分别对其进行加和减的操作：&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;printOddNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Odd number: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;printEvenNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Even number: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printOddNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printEvenNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::mutex&lt;/code&gt; 的作用是对全局变量 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;counter&lt;/code&gt; 进行互斥访问，避免了两个线程同时对其进行修改导致的数据竞争问题。其中，在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;add&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sub&lt;/code&gt; 函数中，使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::mutex&lt;/code&gt; 的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lock()&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unlock()&lt;/code&gt; 方法来对互斥量进行加锁和解锁，从而确保了两个线程之间的数据访问互斥性。&lt;/p&gt;
+
+&lt;h1 id=&quot;stdcondition_variable&quot;&gt;std::condition_variable&lt;/h1&gt;
+
+&lt;p&gt;用于线程间的条件变量等待和通知。它是配合 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::unique_lock&lt;/code&gt; 使用的，用于线程间共享数据的同步。&lt;/p&gt;
+
+&lt;p&gt;下面是一个简单的示例程序，使用 std::condition_variable 实现两个线程间的同步：&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;mutex&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;condition_variable&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mutex&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mtx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;condition_variable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ready&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;consumer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unique_lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mutex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mtx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ready&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Consumer: data = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;producer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this_thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chrono&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seconds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;42&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ready&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;notify_one&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumer_thread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consumer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;producer_thread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;producer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;consumer_thread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;producer_thread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer()&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer()&lt;/code&gt; 分别运行在两个线程中。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer()&lt;/code&gt; 中使用 s&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;td::unique_lock&lt;/code&gt; 对 mtx 进行加锁，并在 while 循环中等待条件变量 ready 的值为 true，以防止在数据未准备好时访问 data。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer()&lt;/code&gt; 中首先等待 1 秒钟以模拟数据的准备过程，然后修改 data 的值为 42，并将 ready 的值设置为 true，最后通过调用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cv.notify_one()&lt;/code&gt; 通知等待中的线程可以开始访问数据了。&lt;/p&gt;
+
+&lt;p&gt;最后在主线程中调用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;join()&lt;/code&gt; 等待两个线程结束。&lt;/p&gt;
+
+&lt;h1 id=&quot;stdfuture&quot;&gt;std::future&lt;/h1&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 是 C++11 中提供的用于线程间通信的工具，其中 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 是一个对象，它可以在某个线程中设置一个值，并让另一个线程等待该值的产生，而 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 则是用来获取这个值的。&lt;/p&gt;
+
+&lt;p&gt;下面是一个简单的例子，用于演示如何使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt;：&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;future&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;printValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Value: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fut&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_future&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;th1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;th2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([](&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this_thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chrono&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seconds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;th1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;th2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;创建了一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 对象 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prom&lt;/code&gt;，并通过它获取了一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 对象 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fut&lt;/code&gt;。接着，我们创建了两个线程 th1 和 th2，其中 th1 等待 fut 的值的产生，并在产生后将其打印出来；而 th2 则会等待 2 秒钟后，将值 10 设置到 prom 中，使得 th1 可以获取这个值并打印出来。&lt;/p&gt;
+
+&lt;p&gt;需要注意的是，在将 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 对象 prom 传递给线程 th2 的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lambda&lt;/code&gt; 表达式时，我们必须使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::ref()&lt;/code&gt; 函数将其包装成一个引用，否则编译器将无法正确地处理它。&lt;/p&gt;
+
+&lt;h1 id=&quot;stdatomic&quot;&gt;std::atomic&lt;/h1&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::atomic&lt;/code&gt; 是 C++11 引入的一个用于原子操作的库，可以保证操作的原子性，避免多线程环境下的数据竞争。&lt;/p&gt;
+
+&lt;p&gt;以下是一个使用 std::atomic 的简单示例，假设有两个线程同时对共享变量进行加一操作：&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;atomic&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;atomic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 定义原子变量&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;increment_counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 对原子变量进行加一操作&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;increment_counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;increment_counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Counter value: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 输出共享变量的值&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;定义了一个名为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;counter&lt;/code&gt; 的原子变量，两个线程并行执行 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;increment_counter()&lt;/code&gt; 函数，对 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;counter&lt;/code&gt; 进行 10000 次加一操作。由于使用了&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; std::atomic&lt;/code&gt;，这个操作是原子的，不会发生数据竞争，保证了线程安全。最终输出 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;counter&lt;/code&gt; 的值。&lt;/p&gt;
+
+&lt;h1 id=&quot;thread-local-storage&quot;&gt;Thread-local storage&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Thread-local storage（TLS）&lt;/strong&gt;是指每个线程都有自己独立的存储空间，这些存储空间可以用来存储线程私有的数据，不同线程之间的数据互不干扰。TLS 是多线程编程中非常重要的一个概念，可以帮助开发者在多线程环境下更加高效地使用全局变量。&lt;/p&gt;
+
+&lt;p&gt;C++11中引入了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 关键字，它可以用来修饰全局变量、静态变量和局部静态变量。使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 修饰的变量只有在声明它的线程中可见，其他线程无法访问到该变量，也就是说，每个线程都有自己的变量副本。&lt;/p&gt;
+
+&lt;p&gt;以下是一个使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 修饰的全局变量的例子：&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;thread_local&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Thread &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this_thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;们定义了一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 的全局变量x，并在 foo 函数中对其进行修改和打印。接着创建了两个线程 t1 和 t2，并分别执行 foo 函数，最后调用 join 函数等待线程执行结束。&lt;/p&gt;
+
+&lt;p&gt;由于 x 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 变量，因此在每个线程中都有自己的副本，两个线程对 x 的修改互不干扰。运行结果可能类似于：&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Thread 139861759004416: 1
+Thread 139861750611712: 1
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;每个线程都有自己的x变量副本，并且只能访问到自己的副本。这样可以避免不同线程之间对同一全局变量的竞争和冲突，从而提高程序的稳定性和并发性能。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 26 Nov 2022 00:12:15 +0800</pubDate>
+        <link>http://localhost:4000/c++11-thread</link>
+        <guid isPermaLink="true">http://localhost:4000/c++11-thread</guid>
+        
+        <category>c++</category>
+        
+        <category>技术笔记</category>
+        
+        
+        <category>c++</category>
+        
+      </item>
+    
+      <item>
         <title>《现代 C++ 教程》 by 欧长坤</title>
         <description>&lt;p&gt;介绍 C++11/14/17 的一些新特性。&lt;/p&gt;
 
@@ -484,285 +758,6 @@
         
         
         <category>总结</category>
-        
-      </item>
-    
-      <item>
-        <title>《被讨厌的勇气》 by 岸见一郎、古贺史健</title>
-        <description>&lt;p&gt;以对话的方式来引导他们自己寻找答案，把道理讲明白。可能这就是心理学家比较喜欢的方式吧。&lt;/p&gt;
-
-&lt;p&gt;书中是以“哲人”和“青年”对话的方式，讲叙着阿德勒心理学的观点。其实自己可能比书的青年人还要糟糕，这一些年看了一些心理学的书，每每都会联想到自己的过去， 很多时候就会不自觉地代入进去了，影响到自己当下的生活。所以很多时候也就有意的避开心理学相关的书籍。&lt;/p&gt;
-
-&lt;p&gt;心理学三大巨头：阿德勒，弗洛伊德，荣格。觉得阿德勒应该比较适合当下的社会的大数多人吧。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reading/the-courage-to-be-hated-2022-11-10_09-43-12.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;目的论&quot;&gt;目的论&lt;/h1&gt;
-
-&lt;p&gt;弗洛伊德强调的是”原因论“。即为了达到现在的目的，从过去的经历中找”原因“。而阿德勒主张是”目的论“，人不应该去想过去的”原因“，而是应该想现在的”目的“。即现在应该如何去看过去，重点在现在。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;strong&gt;阿德勒心理学明确否定心理创伤&lt;/strong&gt;。决定我们自身的不是过去的经历，而是我们自己赋予经历的意义。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;就是决定我们的不是“&lt;strong&gt;经历自身&lt;/strong&gt;”，而是我们&lt;strong&gt;怎么看待经历的态度&lt;/strong&gt;。深深的认同这个观点，就是破除了自己过往的一切不幸。无论是原生家庭，还是童年阴影之类的的心理创伤。&lt;/p&gt;
-
-&lt;p&gt;我们给过去经历“赋予了什么样的意义”，就是直接决定了我们的现在的生活方式。&lt;/p&gt;
-
-&lt;p&gt;生活中，很多时候我们的表现都是习惯用“原因论”的方式，如：我们很多时候解释“愤怒”，是因为对方之前做了什么什么。换一个角度看，是我们是在过去寻找原因支持着现在的“愤怒”。如果我们以“目的论”看的话，可能我们就不会“愤怒”了。 因为我们“愤怒”只是一种表达沟通的方式而已，换一种方式也是可以的。&lt;/p&gt;
-
-&lt;p&gt;所以，我们彻底的切断过去的一切对现在影响，而是应该活在当下，以正确的态度看待过往。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;重要的不是被给予了什么，而是如何去利用被给予的东西。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;过往给到了什么，已经是无法改变了，重点是我们如何正确的看待（利用）过往（被给予的东西）。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;我们需要的不是更换而是&lt;strong&gt;更新&lt;/strong&gt;。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;被给予的过往，原生家庭，儿童过历，我们已经无法更换。但我们需要的是更新对这一些的看法和态度。&lt;/p&gt;
-
-&lt;p&gt;我们的不幸，皆是自己的“选择”。 在人生的某人阶段的“不幸”，这既不是因为我们生在了不幸的环境中，也是因为我们陷入了不幸的境地中，而是&lt;strong&gt;我们认为“不幸”对你自身而言是一种“善”&lt;/strong&gt;。一种对自己的“善”，没有勇气，逃避当前的事情。&lt;/p&gt;
-
-&lt;p&gt;人的性格或秉性是可以改变（更新）的。 阿德勒心理学用“生活方式”一词来说明性格秉性。而“生活方式”是我们赋予意义的方式汇集起来的概念。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reading/the-courage-to-be-hated-2022-11-08_00-25-24.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;所以，&lt;strong&gt;是我们自己主动选择了自己的生活方式&lt;/strong&gt;。 即性格是我们自己主动选择的，而且是可以更新。&lt;/p&gt;
-
-&lt;p&gt;很多人之后无法改变，是因为自己下了“不改变”的决心。在不断地下着不改变自己生活方式的决心。即使有各种不满，但还是认为保持现状更加轻松、更能安心。默认安于现状。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;要想改变生活方式需要很大的“勇气”。面对变化产生的“不安”与不变带来的“不满”，很多人选择了后者。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;如果要改变对世界或自己的看法（生活方式）就必须改变与世界的沟通试，甚至改变自己的行为方式。&lt;strong&gt;你依然是“你”，只要重新选择生活方式就可以了。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;无论之前的人生发过什么，都对今后的人生如何度过没有影响。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h1 id=&quot;烦恼皆源于人际关系&quot;&gt;烦恼皆源于人际关系&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;对自己没有自信，对一切都持悲观态度；还有就是太过固执； 非常注重别人的看法，而且总是活在对别人的怀疑之中；不能活得自然，总觉得像是在演戏。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;普遍人的自卑都是这样的。太害怕被他人讨厌，害怕在人际关系中受伤。我们的“目的”是“避免在与他人的关系中受伤”。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;人的一切烦恼皆源于人际关系&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;自卑感，就是自己觉得自己没有价值，或者只有一点价值的感觉。困扰我们的自卑感不是“客观性的事实”而是“主观性的解释”。&lt;/p&gt;
-
-&lt;p&gt;主观性有一个好处，即我们可以自己更新。所以， 我们可以去重新选择生活的方式。 从而改变我们的性格、价值观、世界观。&lt;/p&gt;
-
-&lt;p&gt;阿德勒承认自卑感人人都有。自卑感，源于我们自己的不完美，本身并不是什么坏事。只要通过自己的努力和成长来弥补缺陷，才能把自卑感转成优越感。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reading/the-courage-to-be-hated-2022-11-08_14-43-34.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;无论是追求优越性还是自卑感，都不是病态，而是一种能够促进健康、正常的努力和成长的刺激。&lt;/p&gt;
-
-&lt;p&gt;可现实中，很多时候人的自卑感越强，人就会变越消极。这其实已经转成了自卑情绪。关键在于自己没有勇气去改变生活的方式。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;strong&gt;自卑情结&lt;/strong&gt;一词原本表示的是一种复杂面反常的心理状态，跟自卑感没有关系。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;自卑情结是指把自己的自卑感当作某种借口使用的状态。常常口头使用的模型是：“因为有A所以才做不到B”。如：我因为学历低所以我无法成功。&lt;/p&gt;
-
-&lt;p&gt;最健全的姿态应该是想要通过努力和成长去弥补欠缺部分，如刻苦学习、勤奋训练、努力工作等。
-没有这种勇气的人就会陷入自卑情绪。&lt;/p&gt;
-
-&lt;p&gt;“我因为学历低所以我无法成功。”还可以进一步的想“如果有高学历自己也很容易成功。”&lt;/p&gt;
-
-&lt;p&gt;这个时候自卑情结就会发展成另外一种特殊的心理状态：&lt;strong&gt;优越情结&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;表现得好像自己很优秀，继而沉浸在一种虚假的优越感之中。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reading/the-courage-to-be-hated-2022-11-08_14-44-05.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;例如：骄傲于自我功绩的人，沉迷于过去荣光整天只谈自己曾经的辉煌业绩的人。 这些都可以称之为优越情结。&lt;/p&gt;
-
-&lt;p&gt;想借助不幸来显示自己的“特别”，以自己的不幸为武器来支配对方。在我们的文化中，弱势其实非常强大而且具有特权。这也是一种优越情结。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;人生不是与他人的比赛。不与他人竞争，与自己的理想状态比较，只要自己不断前进即可。健全的自卑感不是来自与别人的比较，而是来自与“理想的自己”的比较。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;人的价值在于不断超越自我。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;如果在人际关系中存在“竞争”，那人的就不可能摆脱人际带来的烦恼，也就不可能摆脱不幸。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reading/the-courage-to-be-hated-2022-11-09_10-32-12.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;竞争可能不知不觉就会把他人乃至整个世界都看成“敌人”。同时也可能会把他人的幸福看成自己的失败。人就把自己困死在人际关系中了。&lt;/p&gt;
-
-&lt;p&gt;为什么会把别人看成是“敌人”而不能认为是“伙伴”呢？那是因为勇气受挫的你&lt;strong&gt;在逃避“人生的课题”&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;人生有三大课题：交友、工作、爱&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;这三大课题称为&lt;strong&gt;人生课题&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;人在想要作为社会性的存在生存下去的时候，就会遇到不得不面对的人际关系，这就是人生课题。&lt;/p&gt;
-
-&lt;p&gt;人是任性而自私的动物，会逃避人生课题或者逃避人际关系。&lt;strong&gt;阿德勒把这种企图设立种种借口来回避人生课题的情况叫作“人生谎言”。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;阿德勒心理不是改变他人的心理学，而是追求自我改变的心理学。&lt;strong&gt;否定寻求他人的认可的心理学&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;我们并不是为了满足别人的期待而活着。所以，我们没必要去满足别人的期待。&lt;/p&gt;
-
-&lt;p&gt;倘若自己都不为自己活出自己的人生，那还有谁会为自己而活呢？&lt;/p&gt;
-
-&lt;p&gt;相反，一味的寻求别人的认可，在意别人的评价，那最终舍弃真正的自我，活在别人的人生中。&lt;/p&gt;
-
-&lt;p&gt;不活在别人的关系中，是否意味着自己就成了一个任性自私的人呢？&lt;/p&gt;
-
-&lt;p&gt;当然不是，阿德勒心理学主张“课题分离”这一方法论来实际操作人生课题。&lt;/p&gt;
-
-&lt;h1 id=&quot;课题分离&quot;&gt;课题分离&lt;/h1&gt;
-
-&lt;p&gt;&lt;strong&gt;课题分离，就是把自己的人生课题和别人的人生课题分开来&lt;/strong&gt;。 辨别究竟是谁的课题的方法非常简单，就是考虑一下“&lt;strong&gt;某种选择所带来的结果最终要由谁来承担&lt;/strong&gt;”。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;一切人际关系矛盾都起因于对另人的课题妄加干涉或者自己的课题被别人妄加干涉&lt;/strong&gt;导致的。所以，不干涉他人的课题，烦恼也就飞走。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;能够改变自己的只有自己。可以把马带到水边，但不能强迫其喝水。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;选择自己认为最好的道理，别人如何评价你的选择，那是别人的课题，你根本无法左右。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reading/the-courage-to-be-hated-2022-11-09_11-24-56.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;课题分离并不是人际关系的最终目标，而是开始。而人际关系的终极目标是&lt;strong&gt;共同体感觉&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;构筑良好的人际关系也需要保持一定的距离。如果距离太近，贴在一起，那就无法与对方正面对话。&lt;/p&gt;
-
-&lt;p&gt;人际关系中经常会受“回报”思想的束缚，即我为你做了这些，所以你就应该给予相应回报。这种思想与课题分离相悖，我们既不可以寻求回报，也不可以受其束缚。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;对认可的追求，扼杀了自由&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;在意别人的视线、看着别人的脸色生活、为了满足别人的期望而活着，这或许的确能够成为一种人生路标，但这却是极其不自由的生活方式。&lt;/p&gt;
-
-&lt;p&gt;选择了不自由生活方式的大人看着自由活在当下的年轻人就会批判其“享乐主义”。当然，这其实是为了让自己接受不自由生活而捏造的一种人生谎言。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;自由就是被别人讨厌&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;毫不在意别人的评价、不害怕被别人讨厌、不追示被他人认可，如果不付出以上这些代价，那就无法贯彻自己的生活方式。&lt;/p&gt;
-
-&lt;p&gt;“不想被人讨厌”也许是我的课题； 但是“是否讨厌我” 却是别人的课题。&lt;/p&gt;
-
-&lt;h1 id=&quot;要有被讨厌的勇气&quot;&gt;要有被讨厌的勇气&lt;/h1&gt;
-
-&lt;p&gt;课题分离不是为了疏远他人，而是为了解开错综复杂的人际关系之线。分离课题是人际关系的出发点。 分离课题之后再进行&lt;strong&gt;缔结&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;人际关系的终极目标：&lt;strong&gt;共同体感觉&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;就是&lt;strong&gt;把他人看作伙伴并能够从中感到“自己有位置”的状态，就叫共同体感觉&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;一切烦恼皆源于人际关系。不幸之源也在于人际关系。反过来说，幸福之源也在于人际关系。&lt;/p&gt;
-
-&lt;p&gt;共同体感觉是幸福的人际关系的最重要的指标。&lt;/p&gt;
-
-&lt;p&gt;共同体感觉叫作“ social interest ”，也就是“对社会的关心”。社会的最小单位是“你和我”。所以理解阿德勒的共同体感觉可以以“我和你”这起点，把对自己的执著变成对他们的关心。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;人际关系的起点是“课题分离”，终点是“共同体感觉”。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;不能进行“课题分离”、一味拘泥于认可欲求的人也是极其以自我为中心的人。&lt;/p&gt;
-
-&lt;p&gt;一味在意“他人怎么看”的生活方式正是只关心“我”的自我中心式的生活方式。&lt;/p&gt;
-
-&lt;p&gt;分离课题是如何带来良好的关系的？&lt;/p&gt;
-
-&lt;p&gt;阿德勒提倡把所有的人际关系看作是“&lt;strong&gt;横向关系&lt;/strong&gt;”，反对一切“纵向关系”。&lt;/p&gt;
-
-&lt;p&gt;横向关系可以理解成一种水平关系，平等关系，“虽不同但平等”的关系； 
-纵向关系可以理解成一种上下级关系，高低关系，如对他人的评价。对他他的批评和表扬。&lt;/p&gt;
-
-&lt;p&gt;而自卑感原本就是从纵向关系中产生的一种意识。如果人与人之前都是“虽不同但平等”的横向关系，那就是根本不会产生自卑情结。&lt;/p&gt;
-
-&lt;p&gt;但这可能不太现实，社会的阶级是存在的。那就一定会有高低贵贱之分，所以纵向关系一定是存在的。但这是别人的课题，不是我们的课题。&lt;/p&gt;
-
-&lt;p&gt;也是因为把人际关系看成纵向关系、把对方看得比自己低，所以才会去干涉别人的课题，干涉就是操纵。&lt;/p&gt;
-
-&lt;p&gt;如果是横向关系，那应该是“援助”。&lt;/p&gt;
-
-&lt;p&gt;“援助”的大前提就是是课题分离和横向关系。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;阿德勒心理学把这种基于横向关系的援助称为“鼓励”。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;有鼓励才有勇气&lt;/strong&gt;。人害怕面对课题并不是因为没有能力。这不是能力问题，而是勇气问题。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;有价值才有勇气&lt;/strong&gt;。人只有在能够感觉自己有价值的时候才要吧获得勇气。只有在可以体会支“我对共同体有用”的时候才能够感觉到自己的价值。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;存在着就有勇气&lt;/strong&gt;。对于一些情况，我们仅仅因为存在于这里，就已经对他人有价值了，也勇气了。&lt;/p&gt;
-
-&lt;p&gt;对别人寄予关心，建立横向关系，使用鼓励法，这些都能够带给自己“我对别人有用”这一实际感受，继而就能增加生活的勇气。这也就慢慢的改了生活的方式。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reading/the-courage-to-be-hated-2022-11-09_17-11-08.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;活在当下&quot;&gt;活在当下&lt;/h1&gt;
-
-&lt;p&gt;&lt;strong&gt;认真的人生应该“活在当下”&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;把对自己的执著转换成对他人的关心，建立起共同体的感觉，需要从三点做起：自我接纳、他者依赖、他者贡献。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reading/the-courage-to-be-hated-2022-11-09_21-41-56.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;自我接纳&lt;/strong&gt; 不是自我肯定。自我肯定是明明做不到但还是暗示自己说“我能行” 或者“我很强”，这很可能导致优越情结。是对自己撒谎的生活方式。&lt;/p&gt;
-
-&lt;p&gt;自我接纳是，活在当下，当下是什么样的就是什么样的。要有甘于平凡的勇气。&lt;/p&gt;
-
-&lt;p&gt;如：对得了60分的自己说：“这次只是运气不好，真正的自己能得100分”，这是自我肯定； 与此相对的，在诚实地接受60分的自己的基础上努力思考“如何才能接近100分”，这是自我接纳。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;我们并不缺乏能力，只是缺少“勇气”。一切都是“勇气”的问题。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;如尼布尔的祈祷认识文：“&lt;strong&gt;上帝，请赐予我平静，去接受我无法改变的； 给予我勇气，去改变我能改变的；赐我智慧，分辨这两者的区别。&lt;/strong&gt;”&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;他者依赖&lt;/strong&gt;  是指人际的基础应该是“信赖”，在相信他人的时候不附加任何条件。只有我们选择无条件的信赖，才可以构筑更加深厚的关系。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;他者贡献&lt;/strong&gt; 并不是舍弃“我”而为他们效劳，而是为了能够体会到“我”的价值采取的一种手段。&lt;/p&gt;
-
-&lt;p&gt;我们应该思考的不是他们为我做了什么，而我能为他人做什么，并积极地加以实践。只要拥有了这种奉献精神，眼前的现实就会带有截然不同的色彩。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;阿德勒的心理学所提的目标：1）自立； 2）与社会和谐共处。
-支撑这种行业的心理方面的目标： 1）“我有能力”的意识 ；2）“人人都是我的伙伴”的意识。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;“自立”与“我有能务的意识”是关于自我接纳的话课，另一方面，“与社会和谐共处”和“人人都是我的伙伴的意识”则与他者信赖和他者贡献有关。&lt;/p&gt;
-
-&lt;p&gt;对人而言，最大的不幸就是不喜欢自己。&lt;/p&gt;
-
-&lt;p&gt;廉价的优越性追求：引起他人的关注、脱离“普通状态”，成为“特别的存在”。这是一种不健全的态度。&lt;/p&gt;
-
-&lt;p&gt;我们要有甘于平凡的勇气。我们根本没有必要炫耀自己的优越性。接纳自己，没有必要成为“特别是的存在”。&lt;/p&gt;
-
-&lt;p&gt;人生最大的谎言就是不活在“此时此刻”。纠结过去、关注未来，把微弱而模糊的光打向人生整体，自认为看到了些什么。你之前就一直忽略“此时此刻”，只关注根本不存在的过去和未来。对自己的人生和无可替代的刹那撒了下了一个大大的谎言。&lt;/p&gt;
-
-&lt;p&gt;人生是连续的刹那。最重要的是此时此刻。如果把强烈的聚光灯对准“此时此刻”，那就会既看不到过去也看不到未来。&lt;/p&gt;
-
-&lt;p&gt;起决定作用的既不是昨天也不是明天，而是“此时此刻”。&lt;/p&gt;
-
-&lt;h1 id=&quot;体会&quot;&gt;体会&lt;/h1&gt;
-
-&lt;p&gt;人很容易画地为牢。困于自己的认知，困于自己的过去，困于自己的未来，因于人际关系。&lt;/p&gt;
-
-&lt;p&gt;这些年也认为斩断了自己的过往，现在看来并没有，而只是以一种极不好的态度去回避过往。&lt;/p&gt;
-
-&lt;p&gt;也一直想努力地完善自己的性格与行为，但却是越来越失望。觉得这不太可能做到，过往的历经太过沉重，很多东西已经无法改变。&lt;/p&gt;
-
-&lt;p&gt;阿德勒心理学这一次算是为自己开启了一扇门，很多东西是无法改变的，我们能做的是更新对这一些东西的态度和看法。生活需要勇气，被讨厌的勇气，被误解的勇气。不论是被讨厌还是被误解，这都是别人的课题，不是自己的课题。而这个勇气是生活的动力。&lt;/p&gt;
-
-&lt;p&gt;活在此时此该的自己，感觉是真正的自我。一种自信从身内散发出来，围绕全身，自带光环。&lt;/p&gt;
-
-</description>
-        <pubDate>Tue, 08 Nov 2022 19:13:00 +0800</pubDate>
-        <link>http://localhost:4000/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94</link>
-        <guid isPermaLink="true">http://localhost:4000/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94</guid>
-        
-        <category>读书</category>
-        
-        
-        <category>reading</category>
         
       </item>
     
