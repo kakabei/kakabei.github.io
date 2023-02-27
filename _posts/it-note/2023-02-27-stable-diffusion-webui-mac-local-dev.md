@@ -1,17 +1,17 @@
 ---
 layout: post
 title: stable diffusion webui 的本地部署 mac 环境
-date: 2023-02-26 10:12:15
+date: 2023-02-27 10:12:15
 categories: 学习备忘  
 tags: stable-diffusion 人工智能
 excerpt: Mac 本地环境部署 stable diffusion webui 使用体验并不是很好
 ---
 
-stable diffusion webui 的 github 地址：[https://github.com/AUTOMATIC1111/stable-diffusion-webui.git](https://github.com/AUTOMATIC1111/stable-diffusion-webui.git)。我没有去深究这个地址是不是官方的。 
+`stable diffusion webui` 的 github 地址：[https://github.com/AUTOMATIC1111/stable-diffusion-webui.git](https://github.com/AUTOMATIC1111/stable-diffusion-webui.git)。我没有去深究这个地址是不是官方的。 
 
-安装 stable diffusion webui 的 方法并不难，只是在 Mac 环境上可能有一些坑。
+安装 `stable diffusion webui` 的 方法并不难，只是在 Mac 环境上可能有一些坑。
 
-按上面的 READMEmd 的 **Installation and Running** 要求的环境有：
+按上面的 `README.md` 的 **Installation and Running** 要求的环境有：
 
 - [python 3.10]([https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg](https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg)) 最好就用这个版本，其他版本估计要报很多错误了。 
 - git. 下载 github 用的。 `git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git`.
@@ -55,7 +55,7 @@ export COMMANDLINE_ARGS="--skip-torch-cuda-test --upcast-sampling --no-half-vae 
 
 Mac 环境是安装好，但是在这样的环境下进行 AI 绘图有一些难受。生成一张图大于1个小时左右，训练模型就久了吧。 
 
-最好还是要在台式机上，要有好的 GPU才行。 其实有一些遗忘的，以前遇到了再补充进来。
+最好还是要在台式机上，要有好的 GPU 才行。 其实有一些遗忘的，以前遇到了再补充进来。
 
 
 

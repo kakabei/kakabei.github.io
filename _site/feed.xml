@@ -5,17 +5,17 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 28 Feb 2023 00:09:19 +0800</pubDate>
-    <lastBuildDate>Tue, 28 Feb 2023 00:09:19 +0800</lastBuildDate>
+    <pubDate>Tue, 28 Feb 2023 00:13:13 +0800</pubDate>
+    <lastBuildDate>Tue, 28 Feb 2023 00:13:13 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
         <title>stable diffusion webui 的本地部署 mac 环境</title>
-        <description>&lt;p&gt;stable diffusion webui 的 github 地址：&lt;a href=&quot;https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&quot;&gt;https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&lt;/a&gt;。我没有去深究这个地址是不是官方的。&lt;/p&gt;
+        <description>&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stable diffusion webui&lt;/code&gt; 的 github 地址：&lt;a href=&quot;https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&quot;&gt;https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&lt;/a&gt;。我没有去深究这个地址是不是官方的。&lt;/p&gt;
 
-&lt;p&gt;安装 stable diffusion webui 的 方法并不难，只是在 Mac 环境上可能有一些坑。&lt;/p&gt;
+&lt;p&gt;安装 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stable diffusion webui&lt;/code&gt; 的 方法并不难，只是在 Mac 环境上可能有一些坑。&lt;/p&gt;
 
-&lt;p&gt;按上面的 READMEmd 的 &lt;strong&gt;Installation and Running&lt;/strong&gt; 要求的环境有：&lt;/p&gt;
+&lt;p&gt;按上面的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;README.md&lt;/code&gt; 的 &lt;strong&gt;Installation and Running&lt;/strong&gt; 要求的环境有：&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;[https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg](https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg)&quot;&gt;python 3.10&lt;/a&gt; 最好就用这个版本，其他版本估计要报很多错误了。&lt;/li&gt;
@@ -59,10 +59,10 @@
 
 &lt;p&gt;Mac 环境是安装好，但是在这样的环境下进行 AI 绘图有一些难受。生成一张图大于1个小时左右，训练模型就久了吧。&lt;/p&gt;
 
-&lt;p&gt;最好还是要在台式机上，要有好的 GPU才行。 其实有一些遗忘的，以前遇到了再补充进来。&lt;/p&gt;
+&lt;p&gt;最好还是要在台式机上，要有好的 GPU 才行。 其实有一些遗忘的，以前遇到了再补充进来。&lt;/p&gt;
 
 </description>
-        <pubDate>Sun, 26 Feb 2023 18:12:15 +0800</pubDate>
+        <pubDate>Mon, 27 Feb 2023 18:12:15 +0800</pubDate>
         <link>http://localhost:4000/stable-diffusion-webui-mac-local-dev</link>
         <guid isPermaLink="true">http://localhost:4000/stable-diffusion-webui-mac-local-dev</guid>
         
