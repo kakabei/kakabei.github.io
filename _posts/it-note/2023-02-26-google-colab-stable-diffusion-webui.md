@@ -1,6 +1,6 @@
 ---
 layout: post
-title: google colab stable diffusion AI
+title: google colab stable diffusion webui
 date: 2023-02-26 10:12:15
 categories: 学习备忘  
 tags: stable-diffusion 人工智能

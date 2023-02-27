@@ -5,12 +5,12 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 27 Feb 2023 23:12:33 +0800</pubDate>
-    <lastBuildDate>Mon, 27 Feb 2023 23:12:33 +0800</lastBuildDate>
+    <pubDate>Mon, 27 Feb 2023 23:18:11 +0800</pubDate>
+    <lastBuildDate>Mon, 27 Feb 2023 23:18:11 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
-        <title>google colab stable diffusion AI</title>
+        <title>google colab stable diffusion webui</title>
         <description>&lt;p&gt;在群里看到有人分享 AI 绘图。 问了一下，是 stable diffusion 。了解了一下，发现很牛。就学习了一下怎么画。&lt;/p&gt;
 
 &lt;p&gt;stable diffusion 给图很吃GPU。 发现Google 有提供免费的 GUP 服务可以用。 当然是有使用限制的。&lt;/p&gt;
@@ -82,8 +82,8 @@
 
 </description>
         <pubDate>Sun, 26 Feb 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/google-colab-stable-diffusion-AI</link>
-        <guid isPermaLink="true">http://localhost:4000/google-colab-stable-diffusion-AI</guid>
+        <link>http://localhost:4000/google-colab-stable-diffusion-webui</link>
+        <guid isPermaLink="true">http://localhost:4000/google-colab-stable-diffusion-webui</guid>
         
         <category>stable-diffusion</category>
         
