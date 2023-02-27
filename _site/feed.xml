@@ -5,9 +5,75 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 27 Feb 2023 23:18:11 +0800</pubDate>
-    <lastBuildDate>Mon, 27 Feb 2023 23:18:11 +0800</lastBuildDate>
+    <pubDate>Tue, 28 Feb 2023 00:09:19 +0800</pubDate>
+    <lastBuildDate>Tue, 28 Feb 2023 00:09:19 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
+    
+      <item>
+        <title>stable diffusion webui 的本地部署 mac 环境</title>
+        <description>&lt;p&gt;stable diffusion webui 的 github 地址：&lt;a href=&quot;https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&quot;&gt;https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&lt;/a&gt;。我没有去深究这个地址是不是官方的。&lt;/p&gt;
+
+&lt;p&gt;安装 stable diffusion webui 的 方法并不难，只是在 Mac 环境上可能有一些坑。&lt;/p&gt;
+
+&lt;p&gt;按上面的 READMEmd 的 &lt;strong&gt;Installation and Running&lt;/strong&gt; 要求的环境有：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;[https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg](https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg)&quot;&gt;python 3.10&lt;/a&gt; 最好就用这个版本，其他版本估计要报很多错误了。&lt;/li&gt;
+  &lt;li&gt;git. 下载 github 用的。 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://repo.anaconda.com/archive/Anaconda3-5.3.1-MacOSX-x86_64.sh&quot;&gt;Anaconda3-5.3.1-MacOSX-x86_64.sh&lt;/a&gt; 我 mac 本地有 python 2.7 的版本还有，所以安装了  Anaconda。如果不用就去把 py2.7 升级到上面的 py3.10&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;anaconda&quot;&gt;Anaconda&lt;/h1&gt;
+
+&lt;p&gt;进入Anaconda 环境的方法是：&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; ~/anaconda3/bin/activate 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;注意前面有一点 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.&lt;/code&gt;。进入之后，前面有 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(base)&lt;/code&gt;  如图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/stable-diffusion-webui-2023-02-27-23-48-14.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;stable-diffusion-webui&quot;&gt;stable diffusion webui&lt;/h1&gt;
+
+&lt;p&gt;进入 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stable-diffusion-webui&lt;/code&gt; 目录之后，可以执行 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webui.sh&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;脚本会安装一些必要的依赖。 可能有一点慢。最好是有“梯子”，不然可能会有一些依赖包没有办法下载点。&lt;/p&gt;
+
+&lt;p&gt;目录中有一个脚本 &lt;strong&gt;webui-macos-env.sh&lt;/strong&gt;  运行的过程中会出现一些错误是由于 Mac 环境引起的。 要在这里配置参数。我添加后参数之后的样子：&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;COMMANDLINE_ARGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;--skip-torch-cuda-test --upcast-sampling --no-half-vae --use-cpu interrogate --precision full --no-half --disable-nan-check&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;执行后 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webui.sh&lt;/code&gt; 之后出现一个 URL: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://127.0.0.1:7860&lt;/code&gt;  如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/stable-diffusion-webui-2023-02-27-23-56-56.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在浏览器访问它即可。&lt;/p&gt;
+
+&lt;p&gt;另： 上面出现的一些错误应该下载一些模型失败的。可以暂时忽略掉。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/stable-diffusion-webui-2023-02-28-00-00-17.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;最后&quot;&gt;最后&lt;/h1&gt;
+
+&lt;p&gt;Mac 环境是安装好，但是在这样的环境下进行 AI 绘图有一些难受。生成一张图大于1个小时左右，训练模型就久了吧。&lt;/p&gt;
+
+&lt;p&gt;最好还是要在台式机上，要有好的 GPU才行。 其实有一些遗忘的，以前遇到了再补充进来。&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 26 Feb 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/stable-diffusion-webui-mac-local-dev</link>
+        <guid isPermaLink="true">http://localhost:4000/stable-diffusion-webui-mac-local-dev</guid>
+        
+        <category>stable-diffusion</category>
+        
+        <category>人工智能</category>
+        
+        
+        <category>学习备忘</category>
+        
+      </item>
     
       <item>
         <title>google colab stable diffusion webui</title>
@@ -683,100 +749,6 @@ Thread 139861750611712: 1
         
         
         <category>c++</category>
-        
-      </item>
-    
-      <item>
-        <title>How to Make Good Code Reviews Better</title>
-        <description>&lt;p&gt;from ：&lt;a href=&quot;https://levelup.gitconnected.com/how-to-make-good-code-reviews-better-172c5dc01d81&quot;&gt; How to Make Good Code Reviews Better&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;好的代码 review 更应该关注程序执行时可能出现的异常，而不是只是在找代码中的Bug。代码 review 的策略应该是清晰专注的代码风格，找出可替代的方案，增强彼此的学习，分享开发者的主导权（share ownership），而不是做为一个盘查者。&lt;/p&gt;
-
-&lt;p&gt;代码 review 的反馈是建立团队贡献的一种主要方式。通过建设一个强大的团队，将促进一个高质量的产品，一个高质量的团队和一个高质量的生活。&lt;/p&gt;
-
-&lt;p&gt;关于代码 review 有以下几方面可以做：&lt;/p&gt;
-
-&lt;h1 id=&quot;1设置指标并实现它&quot;&gt;1、设置指标并实现它&lt;/h1&gt;
-
-&lt;p&gt;你收集的指标的平衡是比较关键，太多了指标浪费时间，太少指标容易迷失在代码中，开始 review 之前，团队制定好代码 review 的有效性，并明确目标。好的 代码 review 应该是：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;功能优先&lt;/strong&gt;  代码应该业务需求的预期执行&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;整洁和可维护性第二&lt;/strong&gt; 代码的高可读性&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;优化第三&lt;/strong&gt; 在生产环境按预期执行。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这一些目标，要确保 review 期间和之后要有改进和跟踪。&lt;/p&gt;
-
-&lt;p&gt;记住，目标应该展示代码改进的量化情况。“修复更多bug”并不是一个不会增加任何价值的有形目标。&lt;/p&gt;
-
-&lt;h1 id=&quot;2批评是观点而不是人&quot;&gt;2、批评是观点而不是人&lt;/h1&gt;
-
-&lt;p&gt;为什么代码 review 的讨论有时候会失控充满情绪化？ 当们不是在讨论事，而在讨论人的时候，事情就发生变化了。&lt;/p&gt;
-
-&lt;p&gt;总是很容易说:“你，你真笨，代码为什么不实现并发?”&lt;/p&gt;
-
-&lt;p&gt;而是应该优雅、镇定和成熟地说：“我对你实现这段代码的方式很好奇。这段代码如何处理并发实际上。“&lt;/p&gt;
-
-&lt;p&gt;第一种方法中，你是在羞辱一个人，并给他进入开放式辩论的弹药。第二种方法中，我们只讨论代码。没有评判或指责，只是一个简单的澄清。&lt;/p&gt;
-
-&lt;p&gt;和对方进行有意义的沟通，稍微的礼貌是很有帮忙的。我们确认观点的纯粹性而不应该充满仇恨的欲望和个人观点。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Keep it professional, not personal.&lt;/strong&gt;   保持职业性，而不是私人化。&lt;/p&gt;
-
-&lt;h1 id=&quot;3问题一定要搞明白&quot;&gt;3、问题一定要搞明白&lt;/h1&gt;
-
-&lt;p&gt;如果你不熟悉这个应用（程序），就不要去review 代码。一定要自己先熟悉产品需求。&lt;/p&gt;
-
-&lt;p&gt;你要去查询所有你认为有关联的事件，而不用去考虑别人怎么想。要你问更深层次的问题的并确认明白解决方案的每一步。&lt;/p&gt;
-
-&lt;p&gt;代码 review 应该遵循相同的原则下进行思考：”这个改动影响面有多大？“&lt;/p&gt;
-
-&lt;p&gt;从更广的层面上，寻找任何重复的、非模块化或不遵守标准约定的代码。以及分析对代码架构的修改。&lt;/p&gt;
-
-&lt;p&gt;不要接受别人告诉你的表面价值，而是不断质疑，直到你对代码的了解和开发人员的一样多。&lt;/p&gt;
-
-&lt;h1 id=&quot;4不应该填鸭式灌输&quot;&gt;4、不应该填鸭式灌输&lt;/h1&gt;
-
-&lt;p&gt;当你代码 review 时，你也是一个导师。一个好的导师不应该填鸭式灌输。&lt;/p&gt;
-
-&lt;p&gt;这个观点有几个好处：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;代码 review 应该是一个学习和分享的过程。&lt;/li&gt;
-  &lt;li&gt;开发人员对代码拥有完全的主导权，而不是依赖你来帮助他们解决问题。&lt;/li&gt;
-  &lt;li&gt;这个过程也在培养下一批有才能的高级开发人员。&lt;/li&gt;
-  &lt;li&gt;一旦整个团队都以这种学习的态度。团队的整体能力都会在上升。开发者合理的利用”自我效应“，”自我效应“会激励开发人员统写出更简洁的代码。因为这可以展示他们引以为傲的知识。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;5review-代码别超过60分钟&quot;&gt;5、review 代码别超过60分钟。&lt;/h1&gt;
-
-&lt;p&gt;不要把代码 review 当成苦差事。如果你吸收知识的能力在每一分钟都在下降，那么你需要休息一下，重新调整你的思维，让它发挥最大的能力。&lt;/p&gt;
-
-&lt;p&gt;最好的代码 review 应该是短时间进行。&lt;/p&gt;
-
-&lt;p&gt;不要一次检查太多的代码行，这样不太可能发现缺陷。&lt;/p&gt;
-
-&lt;p&gt;多次进行 review 不仅可以改进代码库，还可以让您花时间来确定每个问题的最佳解决方案，而不是只考虑第一个了现的在脑海中的解决方案。&lt;/p&gt;
-
-&lt;p&gt;最后，让代码评审成为一件积极的事情。bug 在产品发布之前被发现，这可能会导致开发者的不满意。但其实这个 bug 是谁或如何引入的并不重要。唯一重要的是你和团队在创造更好的产品方面发挥了作用。&lt;/p&gt;
-
-&lt;p&gt;培养一种积极的文化将有助于使代码 review 成为一种协作的、集体所有的活动，在这种活动中，团队会欣赏(而不是害怕)代码评审。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、&lt;a href=&quot;http://blog.xyecho.com/ali-code-review/&quot;&gt;阿里技术:Code Review&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Mon, 21 Nov 2022 00:12:15 +0800</pubDate>
-        <link>http://localhost:4000/how-to-make-good-code-reviews-better</link>
-        <guid isPermaLink="true">http://localhost:4000/how-to-make-good-code-reviews-better</guid>
-        
-        <category>工作经验</category>
-        
-        <category>团队管理</category>
-        
-        
-        <category>总结</category>
         
       </item>
     

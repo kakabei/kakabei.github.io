@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>stable diffusion webui 的本地部署 mac 环境</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/stable-diffusion-webui-mac-local-dev">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/stable-diffusion-webui-mac-local-dev">stable diffusion webui 的本地部署 mac 环境</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2023-02-26
+     • Category: 
+        
+        <a href="/categories#学习备忘-ref" >学习备忘</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags#stable-diffusion-ref" >stable-diffusion</a>
+        
+            <a href="/tags#人工智能-ref" >人工智能</a>
+        
+    
+</div>
+
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>stable diffusion webui 的 github 地址：<a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui.git">https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</a>。我没有去深究这个地址是不是官方的。</p>
+
+<p>安装 stable diffusion webui 的 方法并不难，只是在 Mac 环境上可能有一些坑。</p>
+
+<p>按上面的 READMEmd 的 <strong>Installation and Running</strong> 要求的环境有：</p>
+
+<ul>
+  <li><a href="[https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg](https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg)">python 3.10</a> 最好就用这个版本，其他版本估计要报很多错误了。</li>
+  <li>git. 下载 github 用的。 <code class="language-plaintext highlighter-rouge">git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</code>.</li>
+  <li><a href="https://repo.anaconda.com/archive/Anaconda3-5.3.1-MacOSX-x86_64.sh">Anaconda3-5.3.1-MacOSX-x86_64.sh</a> 我 mac 本地有 python 2.7 的版本还有，所以安装了  Anaconda。如果不用就去把 py2.7 升级到上面的 py3.10</li>
+</ul>
+
+<h1 id="anaconda">Anaconda</h1>
+
+<p>进入Anaconda 环境的方法是：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> ~/anaconda3/bin/activate 
+</code></pre></div></div>
+
+<p>注意前面有一点 <code class="language-plaintext highlighter-rouge">.</code>。进入之后，前面有 <code class="language-plaintext highlighter-rouge">(base)</code>  如图：</p>
+
+<p><img src="/assets/stable-diffusion/stable-diffusion-webui-2023-02-27-23-48-14.png" alt="" /></p>
+
+<h1 id="stable-diffusion-webui">stable diffusion webui</h1>
+
+<p>进入 <code class="language-plaintext highlighter-rouge">stable-diffusion-webui</code> 目录之后，可以执行 <code class="language-plaintext highlighter-rouge">webui.sh</code>。</p>
+
+<p>脚本会安装一些必要的依赖。 可能有一点慢。最好是有“梯子”，不然可能会有一些依赖包没有办法下载点。</p>
+
+<p>目录中有一个脚本 <strong>webui-macos-env.sh</strong>  运行的过程中会出现一些错误是由于 Mac 环境引起的。 要在这里配置参数。我添加后参数之后的样子：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">COMMANDLINE_ARGS</span><span class="o">=</span><span class="s2">"--skip-torch-cuda-test --upcast-sampling --no-half-vae --use-cpu interrogate --precision full --no-half --disable-nan-check"</span>
+</code></pre></div></div>
+
+<p>执行后 <code class="language-plaintext highlighter-rouge">webui.sh</code> 之后出现一个 URL: <code class="language-plaintext highlighter-rouge">http://127.0.0.1:7860</code>  如下图：</p>
+
+<p><img src="/assets/stable-diffusion/stable-diffusion-webui-2023-02-27-23-56-56.png" alt="" /></p>
+
+<p>在浏览器访问它即可。</p>
+
+<p>另： 上面出现的一些错误应该下载一些模型失败的。可以暂时忽略掉。</p>
+
+<p><img src="/assets/stable-diffusion/stable-diffusion-webui-2023-02-28-00-00-17.png" alt="" /></p>
+
+<h1 id="最后">最后</h1>
+
+<p>Mac 环境是安装好，但是在这样的环境下进行 AI 绘图有一些难受。生成一张图大于1个小时左右，训练模型就久了吧。</p>
+
+<p>最好还是要在台式机上，要有好的 GPU才行。 其实有一些遗忘的，以前遇到了再补充进来。</p>
+
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+<span>
+	<a  href="/google-colab-stable-diffusion-webui" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a   class="pageNavInvalid"  >下一篇</a>
+</span>
+
+
+	<div class="article-author">
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+    <div class="avatar">
+        <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>
