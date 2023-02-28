@@ -2,8 +2,8 @@
 layout: post
 title: google colab stable diffusion webui
 date: 2023-02-26 10:12:15
-categories: 学习备忘  
-tags: stable-diffusion 人工智能
+categories: AI   
+tags: stable-diffusion 人工智能 学习备忘
 excerpt: 在 Google colab 中使用 stable diffusion 的方式
 ---
 在群里看到有人分享 AI 绘图。 问了一下，是 stable diffusion 。了解了一下，发现很牛。就学习了一下怎么画。 
@@ -49,6 +49,7 @@ stable diffusion 给图很吃GPU。 发现Google 有提供免费的 GUP 服务�
 右上角的 **连接** 就是连接 google 的服务器的。 google 分配的资源还可以：
 
 ![](/assets/stable-diffusion/colab-2023-02-28-08-55-44.png)
+
 
 依次点击主界面的左边的执行按钮，可以执行 python 代码。 如图：
 ![](/assets/stable-diffusion/colab-2023-02-27-22-51-00.png)

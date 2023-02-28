@@ -2,8 +2,8 @@
 layout: post
 title: Kafka 学习
 date: 2022-02-26 10:12:15
-categories: 学习备忘  
-tags: MQ kafka 
+categories: MQ  
+tags: MQ kafka 学习笔记
 excerpt: 工作中，我对 kafka 的学习与理解，整理成一个简单大致的概述
 ---
 

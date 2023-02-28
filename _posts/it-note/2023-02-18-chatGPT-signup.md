@@ -2,8 +2,8 @@
 layout: post
 title: chatGPT 注册方法
 date: 2023-02-19 10:12:15
-categories: 学习备忘  
-tags: chatGPT 人工智能
+categories: AI
+tags: chatGPT 人工智能 学习备忘
 excerpt: chatGPT 的学习之旅从这里开始了，注册一个chatGPT，体验一下人工智能的惊艳
 ---
 
