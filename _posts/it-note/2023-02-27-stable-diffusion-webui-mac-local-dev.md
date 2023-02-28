@@ -3,7 +3,7 @@ layout: post
 title: stable diffusion webui 的本地部署 mac 环境
 date: 2023-02-27 10:12:15
 categories: AI
-tags: stable-diffusion 人工智能 学习备忘 
+tags: stable-diffusion 人工智能 学习笔记
 excerpt: Mac 本地环境部署 stable diffusion webui 使用体验并不是很好
 ---
 

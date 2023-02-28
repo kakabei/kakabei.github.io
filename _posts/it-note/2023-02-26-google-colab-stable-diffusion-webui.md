@@ -3,7 +3,7 @@ layout: post
 title: google colab stable diffusion webui
 date: 2023-02-26 10:12:15
 categories: AI   
-tags: stable-diffusion 人工智能 学习备忘
+tags: stable-diffusion 人工智能 学习笔记
 excerpt: 在 Google colab 中使用 stable diffusion 的方式
 ---
 在群里看到有人分享 AI 绘图。 问了一下，是 stable diffusion 。了解了一下，发现很牛。就学习了一下怎么画。 
@@ -20,13 +20,13 @@ stable diffusion 给图很吃GPU。 发现Google 有提供免费的 GUP 服务�
 
 看到可以免费使用 GPU 就感觉很爽。 
 
-这么有关于 Colab 的介绍。 可以在浏览器中写和执行 python 。可以被用于 AI 的相关开发。 
+这么有关于 Colab 的介绍。 可以在浏览器中写和执行 python。可以被用于 AI 的相关开发。 
 
 #  stable diffusion
 
 如何在  colab 中使用 stable diffusion webui 呢？ 
 
-在文件中打开一个笔记本。方式： 文件-> 打开笔记本 -> 选择GItHub。
+在文件中打开一个笔记本。方式： 文件-> 打开笔记本 -> 选择 GitHub。
 
 在输入框中输入 ： [https://github.com/kakabei/stable_diffusion_chilloutmix_ipynb](https://github.com/kakabei/stable_diffusion_chilloutmix_ipynb)  点击搜索会展示出下面的三个项目，可以选择 `stable_diffusion_1_5_webui.ipynb`，  点击进去。
 

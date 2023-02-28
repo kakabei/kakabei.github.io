@@ -1,14 +1,14 @@
 ---
 layout: post
-title: Kafka 学习
+title: Kafka a kind of MQ
 date: 2022-02-26 10:12:15
 categories: MQ  
-tags: MQ kafka 学习笔记
+tags: kafka 学习笔记
 excerpt: 工作中，我对 kafka 的学习与理解，整理成一个简单大致的概述
 ---
 
 # MQ 
-微服务开发中，经常用到了一个比较重要的组件就是 `MQ`。比较流行的 MQ 有 `RabbitMQ`、`RocketMQ`、`Kafka` 等。
+微服务开发中，经常用到了一个比较重要的组件就是 `MQ`。比较流行的 MQ 有 `ActiveMQ`、`RabbitMQ`、`RocketMQ`、`Kafka` 等。
 
 在工作中有使用到 `MQ` 的场景，主要目的就是有：
 
@@ -99,6 +99,11 @@ excerpt: 工作中，我对 kafka 的学习与理解，整理成一个简单大�
 # 最后
 
 这个就是 `kafka` 最简单的理解了。先熟悉这大致的流程再一步一步深入的去学习里面的细节和原理。
+
+当然，kafka 也存在一些缺点：
+
+- 系统复杂性剖。 kafka 的引入是一个比较复杂的分布式中间件。管理、成本要求都比较高。 
+- 数据一致性问题。kafka 解决了自身的一致性问题，但是却可能给业务系统带来数据一致性问题，如：A系统把数据通过 kafka 发给给 B系统。A  B之间的数据可以不一致，出现丢失的情况。一般我的处理方式是兜底程序发现数据不一致时进行兜底处理。 
 
 --- 
 

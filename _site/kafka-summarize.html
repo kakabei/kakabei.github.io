@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Kafka 学习</title>
+    <title>Kafka a kind of MQ</title>
 
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
@@ -31,7 +31,7 @@
 
   <div class="site-title">
     
-    <h4 class="entry-title"><a href="/kafka-summarize">Kafka 学习</a></h4>
+    <h4 class="entry-title"><a href="/kafka-summarize">Kafka a kind of MQ</a></h4>
     
   </div>
 
@@ -119,8 +119,6 @@
     
      • Tag: 
         
-            <a href="/tags#MQ-ref" >MQ</a>
-        
             <a href="/tags#kafka-ref" >kafka</a>
         
             <a href="/tags#学习笔记-ref" >学习笔记</a>
@@ -135,7 +133,7 @@
 	  <article class="entry-body">
 	  	
 	  		<h1 id="mq">MQ</h1>
-<p>微服务开发中，经常用到了一个比较重要的组件就是 <code class="language-plaintext highlighter-rouge">MQ</code>。比较流行的 MQ 有 <code class="language-plaintext highlighter-rouge">RabbitMQ</code>、<code class="language-plaintext highlighter-rouge">RocketMQ</code>、<code class="language-plaintext highlighter-rouge">Kafka</code> 等。</p>
+<p>微服务开发中，经常用到了一个比较重要的组件就是 <code class="language-plaintext highlighter-rouge">MQ</code>。比较流行的 MQ 有 <code class="language-plaintext highlighter-rouge">ActiveMQ</code>、<code class="language-plaintext highlighter-rouge">RabbitMQ</code>、<code class="language-plaintext highlighter-rouge">RocketMQ</code>、<code class="language-plaintext highlighter-rouge">Kafka</code> 等。</p>
 
 <p>在工作中有使用到 <code class="language-plaintext highlighter-rouge">MQ</code> 的场景，主要目的就是有：</p>
 
@@ -231,6 +229,13 @@
 
 <p>这个就是 <code class="language-plaintext highlighter-rouge">kafka</code> 最简单的理解了。先熟悉这大致的流程再一步一步深入的去学习里面的细节和原理。</p>
 
+<p>当然，kafka 也存在一些缺点：</p>
+
+<ul>
+  <li>系统复杂性剖。 kafka 的引入是一个比较复杂的分布式中间件。管理、成本要求都比较高。</li>
+  <li>数据一致性问题。kafka 解决了自身的一致性问题，但是却可能给业务系统带来数据一致性问题，如：A系统把数据通过 kafka 发给给 B系统。A  B之间的数据可以不一致，出现丢失的情况。一般我的处理方式是兜底程序发现数据不一致时进行兜底处理。</li>
+</ul>
+
 <hr />
 
 <p>1、<a href="https://kafka.apachecn.org/">https://kafka.apachecn.org/</a></p>
@@ -248,7 +253,7 @@
 <span>
 	<a  href="/%E5%BA%95%E5%B1%82%E9%80%BB%E8%BE%91" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/server-how-to-design-systerm" class="pageNav"  >下一篇</a>
+	<a  href="/kafka-producer" class="pageNav"  >下一篇</a>
 </span>
 
 

@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 28 Feb 2023 16:41:43 +0800</pubDate>
-    <lastBuildDate>Tue, 28 Feb 2023 16:41:43 +0800</lastBuildDate>
+    <pubDate>Tue, 28 Feb 2023 18:51:32 +0800</pubDate>
+    <lastBuildDate>Tue, 28 Feb 2023 18:51:32 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -70,7 +70,7 @@
         
         <category>人工智能</category>
         
-        <category>学习备忘</category>
+        <category>学习笔记</category>
         
         
         <category>AI</category>
@@ -93,13 +93,13 @@
 
 &lt;p&gt;看到可以免费使用 GPU 就感觉很爽。&lt;/p&gt;
 
-&lt;p&gt;这么有关于 Colab 的介绍。 可以在浏览器中写和执行 python 。可以被用于 AI 的相关开发。&lt;/p&gt;
+&lt;p&gt;这么有关于 Colab 的介绍。 可以在浏览器中写和执行 python。可以被用于 AI 的相关开发。&lt;/p&gt;
 
 &lt;h1 id=&quot;stable-diffusion&quot;&gt;stable diffusion&lt;/h1&gt;
 
 &lt;p&gt;如何在  colab 中使用 stable diffusion webui 呢？&lt;/p&gt;
 
-&lt;p&gt;在文件中打开一个笔记本。方式： 文件-&amp;gt; 打开笔记本 -&amp;gt; 选择GItHub。&lt;/p&gt;
+&lt;p&gt;在文件中打开一个笔记本。方式： 文件-&amp;gt; 打开笔记本 -&amp;gt; 选择 GitHub。&lt;/p&gt;
 
 &lt;p&gt;在输入框中输入 ： &lt;a href=&quot;https://github.com/kakabei/stable_diffusion_chilloutmix_ipynb&quot;&gt;https://github.com/kakabei/stable_diffusion_chilloutmix_ipynb&lt;/a&gt;  点击搜索会展示出下面的三个项目，可以选择 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stable_diffusion_1_5_webui.ipynb&lt;/code&gt;，  点击进去。&lt;/p&gt;
 
@@ -156,7 +156,7 @@
         
         <category>人工智能</category>
         
-        <category>学习备忘</category>
+        <category>学习笔记</category>
         
         
         <category>AI</category>
@@ -262,7 +262,7 @@
         
         <category>人工智能</category>
         
-        <category>学习备忘</category>
+        <category>学习笔记</category>
         
         
         <category>AI</category>
