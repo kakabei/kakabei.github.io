@@ -5,8 +5,8 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 28 Feb 2023 00:13:13 +0800</pubDate>
-    <lastBuildDate>Tue, 28 Feb 2023 00:13:13 +0800</lastBuildDate>
+    <pubDate>Tue, 28 Feb 2023 16:38:47 +0800</pubDate>
+    <lastBuildDate>Tue, 28 Feb 2023 16:38:47 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -119,14 +119,9 @@
 
 &lt;p&gt;可以在右边的主界面依次执行。&lt;/p&gt;
 
-&lt;p&gt;右上角的 &lt;strong&gt;连接&lt;/strong&gt; 就是连接 google 的服务器的。&lt;/p&gt;
+&lt;p&gt;右上角的 &lt;strong&gt;连接&lt;/strong&gt; 就是连接 google 的服务器的。 google 分配的资源还可以：&lt;/p&gt;
 
-&lt;p&gt;我的 GPU 已经使用量已经被限制了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-47-30.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;google 分配的资源还可以：
-&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-49-36.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-28-08-55-44.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;依次点击主界面的左边的执行按钮，可以执行 python 代码。 如图：
 &lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-51-00.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
@@ -142,9 +137,13 @@
 
 &lt;h1 id=&quot;colab-pro&quot;&gt;Colab Pro&lt;/h1&gt;
 
-&lt;p&gt;google 会对免费的用户进行 GPU 的限制。花钱的话，它会更提供更多GPU 计算单位给你。&lt;/p&gt;
+&lt;p&gt;google 会对免费的用户进行 GPU 的限制。 如计算过了限制，就无去连接使用 GPU，如下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-23-01-46.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-47-30.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;想要继续用，就要花钱，它会更提供更多GPU 计算单位给你。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/stable-diffusion/colab-2023-02-27-23-01-46.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 
 </description>
         <pubDate>Sun, 26 Feb 2023 18:12:15 +0800</pubDate>

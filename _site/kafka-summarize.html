@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Kafka 学习</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/kafka-summarize">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/kafka-summarize">Kafka 学习</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2022-02-26
+     • Category: 
+        
+        <a href="/categories#学习备忘-ref" >学习备忘</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags#MQ-ref" >MQ</a>
+        
+            <a href="/tags#kafka-ref" >kafka</a>
+        
+    
+</div>
+
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<h1 id="mq">MQ</h1>
+<p>微服务开发中，经常用到了一个比较重要的组件就是 <code class="language-plaintext highlighter-rouge">MQ</code>。比较流行的 MQ 有 <code class="language-plaintext highlighter-rouge">RabbitMQ</code>、<code class="language-plaintext highlighter-rouge">RocketMQ</code>、<code class="language-plaintext highlighter-rouge">Kafka</code> 等。</p>
+
+<p>在工作中有使用到 <code class="language-plaintext highlighter-rouge">MQ</code> 的场景，主要目的就是有：</p>
+
+<ul>
+  <li><strong>异步通信</strong></li>
+  <li><strong>解耦</strong></li>
+  <li><strong>削峰</strong></li>
+</ul>
+
+<p><strong>异步通信</strong>： 比如业务处理流程中，我的 sku 状态发生了变化，要通知搜推业务方，而他们的业务接口比较重，我用调用他们接口后耗时比较大。这样会导致我的耗时也比较大，这时我们可以选择 MQ，把消息通过 MQ 发送给他们。我是生产者，只负责发送。发送成功即可往下处理自己的流程了，搜推业务方做了消费者他们收到数据后怎么处理不会影响到我接口的 qps 。</p>
+
+<p><strong>解耦</strong>： 如我的 sku 状态已经发生了，要通知相关的业务方比较多时，如：搜推、商详、商家、活动等等。这时我们需要调用他们的接口，工作量巨大。即使是并发调用他们的接口，只有一个接口延迟比较大，我的接口就会被拖累。如一个接口出问题了，也可能导致调用其他接口也出现异常。 这个就是把所有相关的业务方接口耦合在一起。 我们可以通过 MQ 中间件，做为生产者把消息发送过去。不同的业务方做为消费者处理数据即可，这样不同业务的就不会相互影响。</p>
+
+<p><strong>削峰</strong>： 我的流量突然陡增，qps 突然就大了，这时我的接口可以处理过来了，但相关的业务方的接口不一样可以处理过来。这样可能会导致们的接口报错， 或者机器负载突然过高，产生告警。而使用 MQ 中间件的话， 我把数据发给 MQ，做为消费者的业务方可以根据的自己的处理能力，正常处理。让一部分数据先积压在 MQ 上。（这里也有缓冲的作用）从而起到了削峰的目的，保护好自己的接口。</p>
+
+<h1 id="kafka">Kafka</h1>
+
+<p>我工作中有用到的是 <code class="language-plaintext highlighter-rouge">Kafka</code>。 <code class="language-plaintext highlighter-rouge">Kafka</code> 是一个优秀的分布式消息中间件。</p>
+
+<h2 id="kafka-主要设计目标">Kafka 主要设计目标</h2>
+
+<p>1、以时间复杂度为 <code class="language-plaintext highlighter-rouge">O(1)</code> 的方式提供持久化能力，</p>
+
+<p>2、高吞吐率做到单机每秒 <code class="language-plaintext highlighter-rouge">100K</code> 条消息传输。</p>
+
+<p>3、支持 <code class="language-plaintext highlighter-rouge">Kafka server</code> 间的消息分区，及分布消费，保证每个 <code class="language-plaintext highlighter-rouge">partition</code> 内的消息顺序传输。</p>
+
+<p>4、支持离线数据处理和实时数据处理。</p>
+
+<p>5、在线水平扩展。</p>
+
+<h2 id="kafka-架构中的一般概念">Kafka 架构中的一般概念</h2>
+
+<p>1、<strong>Producer</strong>：生产者，发送消息的一方。生产者负责创建消息，然后将其发送到 <code class="language-plaintext highlighter-rouge">Kafka</code> 。</p>
+
+<p>2、<strong>Consumer</strong>：消费者，也就是接受消息的一方。消费者连接到 <code class="language-plaintext highlighter-rouge">Kafka</code> 上并接收消息，进而进行相应的业务逻辑处理。</p>
+
+<p>3、<strong>Consumer Group</strong>：一个消费者组可以包含一个或多个消费者。使用多分区 + 多消费者方式可以极大提高数据下游的处理速度，同一消费组中的消费者不会重复消费消息，同样的，不同消费组中的消费者消息消息时互不影响。<code class="language-plaintext highlighter-rouge">Kafka</code> 就是通过消费组的方式来实现消息 P2P 模式和广播模式。</p>
+
+<p>4、<strong>Broker</strong>：服务代理节点。<code class="language-plaintext highlighter-rouge">Broker</code> 是 <code class="language-plaintext highlighter-rouge">Kafka</code> 的服务节点，即 <code class="language-plaintext highlighter-rouge">Kafka</code> 的服务器。</p>
+
+<p>5、<strong>Topic</strong>：<code class="language-plaintext highlighter-rouge">Kafka</code> 中的消息以 <code class="language-plaintext highlighter-rouge">Topic</code> 为单位进行划分，生产者将消息发送到特定的 <code class="language-plaintext highlighter-rouge">Topic</code>，而消费者负责订阅 <code class="language-plaintext highlighter-rouge">Topic</code> 的消息并进行消费。</p>
+
+<p>6、<strong>Partition</strong>：<code class="language-plaintext highlighter-rouge">Topic</code> 是一个逻辑的概念，它可以细分为多个分区，每个分区只属于单个主题。同一个主题下不同分区包含的消息是不同的，分区在存储层面可以看作一个可追加的日志（Log）文件，消息在被追加到分区日志文件的时候都会分配一个特定的偏移量（offset）。</p>
+
+<p>7、<strong>Offset</strong>：是消息在分区中的唯一标识，<code class="language-plaintext highlighter-rouge">Kafka</code> 通过它来保证消息在分区内的<strong>顺序性</strong>，不过 <code class="language-plaintext highlighter-rouge">offset</code> 并不跨越分区，也就是说，<code class="language-plaintext highlighter-rouge">Kafka 保证的是分区有序性而不是主题有序性</code>。</p>
+
+<p>8、<strong>Replication</strong>：副本，是<code class="language-plaintext highlighter-rouge"> Kafka</code> 保证数据高可用的方式。<code class="language-plaintext highlighter-rouge">Kafka</code> 同一 <code class="language-plaintext highlighter-rouge">Partition</code> 的数据可以在多 <code class="language-plaintext highlighter-rouge">Broker</code> 上存在多个副本，通常只有主副本对外提供读写服务，当主副本所在 broker 崩溃或发生网络一场，<code class="language-plaintext highlighter-rouge">Kafka</code> 会在 <code class="language-plaintext highlighter-rouge">Controller</code> 的管理下会重新选择新的 Leader 副本对外提供读写服务。</p>
+
+<p>9、<strong>Record</strong>：实际写入 <code class="language-plaintext highlighter-rouge">Kafka</code> 中并可以被读取的消息记录。每个 <code class="language-plaintext highlighter-rouge">record</code> 包含了 key、value 和 timestamp。</p>
+
+<h2 id="kafka-大致的架构图">Kafka 大致的架构图</h2>
+
+<p><img src="/assets/mq/kafka-mq-2023-02-28-14-19-07.png" alt="" /></p>
+
+<p>先理解了 Kafka 是一些概念之后，对这个框架图就比较好理解了。</p>
+
+<h3 id="生产者-producer">生产者 producer</h3>
+
+<p>1、<code class="language-plaintext highlighter-rouge">producer</code> 先从 <code class="language-plaintext highlighter-rouge">zookeeper</code> 找到主题的 <code class="language-plaintext highlighter-rouge">partition</code> 的 <code class="language-plaintext highlighter-rouge">leader</code>。</p>
+
+<p>2、<code class="language-plaintext highlighter-rouge">producer</code> 把数据 push 到这个 leader 的 <code class="language-plaintext highlighter-rouge">broker</code> 中。</p>
+
+<p>3、<code class="language-plaintext highlighter-rouge">leader</code> 会把数据写入到本地 log。</p>
+
+<p>4、<code class="language-plaintext highlighter-rouge">follow</code> 从 <code class="language-plaintext highlighter-rouge">leader</code> pull 出数据，写入本地 log 然后回复确认给 <code class="language-plaintext highlighter-rouge">leader</code>，<code class="language-plaintext highlighter-rouge">follow</code> 做为备份。</p>
+
+<p>5、<code class="language-plaintext highlighter-rouge">leader</code> 收到所有确认之后，就向 <code class="language-plaintext highlighter-rouge">producer</code> 发送确认回复。</p>
+
+<h3 id="消费者-customer">消费者 customer</h3>
+
+<p>1、 一个 <code class="language-plaintext highlighter-rouge">customer group</code> 可以包含多个 <code class="language-plaintext highlighter-rouge">customer</code>。不同的 <code class="language-plaintext highlighter-rouge">customer group</code> 互不干扰。</p>
+
+<p>2、同组的 <code class="language-plaintext highlighter-rouge">customer</code> 可以横向扩展，提高消费能力。</p>
+
+<p>3、同组的 <code class="language-plaintext highlighter-rouge">customer </code>不能多于这个 <code class="language-plaintext highlighter-rouge">topic</code> 的 <code class="language-plaintext highlighter-rouge">partition</code>。如果 <code class="language-plaintext highlighter-rouge">customer</code> 多了，就会出现 <code class="language-plaintext highlighter-rouge">customer</code> 空跑的情况。如果 <code class="language-plaintext highlighter-rouge">customer</code> 少了，就是出现一个 <code class="language-plaintext highlighter-rouge">customer</code> 连接多个 <code class="language-plaintext highlighter-rouge">partition</code>。最好的一对一的试。</p>
+
+<p>4、系统扩展时先扩展 <code class="language-plaintext highlighter-rouge">partition</code>。 再进行 <code class="language-plaintext highlighter-rouge">Rebalance。</code></p>
+
+<h3 id="rebalance">Rebalance</h3>
+
+<p><code class="language-plaintext highlighter-rouge">rebalance</code> 本质上是一种平衡分配的协议。 规定了一个<code class="language-plaintext highlighter-rouge"> consumer group</code> 下的所有 <code class="language-plaintext highlighter-rouge">consumer</code> 如何达成一致来分配订阅 <code class="language-plaintext highlighter-rouge">topic</code> 的每个 <code class="language-plaintext highlighter-rouge">partition</code>。比如某个 gro<code class="language-plaintext highlighter-rouge">up 下有 20 个 consumer，它订阅了一个具有 100 个 </code>partition<code class="language-plaintext highlighter-rouge"> 的 </code>topic<code class="language-plaintext highlighter-rouge">。正常情况下，</code>Kafka<code class="language-plaintext highlighter-rouge"> 平均会为每个 </code>consumer<code class="language-plaintext highlighter-rouge"> 分配 5 个 </code>partition<code class="language-plaintext highlighter-rouge">。这个分配的过程就叫 </code>rebalance`。</p>
+
+<p><strong>三种情况下如进行 Rebalance</strong></p>
+
+<ul>
+  <li>组成员发生变化</li>
+  <li>订阅主题数发生变化</li>
+  <li>订阅主题的分区数发生变化</li>
+</ul>
+
+<h1 id="最后">最后</h1>
+
+<p>这个就是 <code class="language-plaintext highlighter-rouge">kafka</code> 最简单的理解了。先熟悉这大致的流程再一步一步深入的去学习里面的细节和原理。</p>
+
+<hr />
+
+<p>1、<a href="https://kafka.apachecn.org/">https://kafka.apachecn.org/</a></p>
+
+<p>2、<a href="https://www.cnblogs.com/sodawoods-blogs/p/8969774.html">https://www.cnblogs.com/sodawoods-blogs/p/8969774.html</a></p>
+
+<p>3、<a href="https://mp.weixin.qq.com/s/OQrKeFSrNcyTiFXR21pENA">https://mp.weixin.qq.com/s/OQrKeFSrNcyTiFXR21pENA</a></p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+<span>
+	<a  href="/%E5%BA%95%E5%B1%82%E9%80%BB%E8%BE%91" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/server-how-to-design-systerm" class="pageNav"  >下一篇</a>
+</span>
+
+
+	<div class="article-author">
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+    <div class="avatar">
+        <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

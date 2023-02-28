@@ -46,14 +46,9 @@ stable diffusion 给图很吃GPU。 发现Google 有提供免费的 GUP 服务�
 
 可以在右边的主界面依次执行。
 
-右上角的 **连接** 就是连接 google 的服务器的。 
+右上角的 **连接** 就是连接 google 的服务器的。 google 分配的资源还可以：
 
-我的 GPU 已经使用量已经被限制了。 
-
-![](/assets/stable-diffusion/colab-2023-02-27-22-47-30.png)
-
-google 分配的资源还可以：
-![](/assets/stable-diffusion/colab-2023-02-27-22-49-36.png)
+![](/assets/stable-diffusion/colab-2023-02-28-08-55-44.png)
 
 依次点击主界面的左边的执行按钮，可以执行 python 代码。 如图：
 ![](/assets/stable-diffusion/colab-2023-02-27-22-51-00.png)
@@ -69,7 +64,11 @@ google 分配的资源还可以：
 
 # Colab Pro
 
-google 会对免费的用户进行 GPU 的限制。花钱的话，它会更提供更多GPU 计算单位给你。 
+google 会对免费的用户进行 GPU 的限制。 如计算过了限制，就无去连接使用 GPU，如下图：	
 
-![](/assets/stable-diffusion/colab-2023-02-27-23-01-46.png)
+![](/assets/stable-diffusion/colab-2023-02-27-22-47-30.png)
+
+想要继续用，就要花钱，它会更提供更多GPU 计算单位给你。
+
+[](/assets/stable-diffusion/colab-2023-02-27-23-01-46.png)
 
