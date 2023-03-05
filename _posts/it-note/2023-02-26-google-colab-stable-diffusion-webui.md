@@ -3,7 +3,7 @@ layout: post
 title: google colab stable diffusion webui
 date: 2023-02-26 10:12:15
 categories: AI   
-tags: stable-diffusion 人工智能 学习笔记
+tags: stable-diffusion 人工智能 技术学习笔记
 excerpt: 在 Google colab 中使用 stable diffusion 的方式
 ---
 在群里看到有人分享 AI 绘图。 问了一下，是 stable diffusion 。了解了一下，发现很牛。就学习了一下怎么画。 

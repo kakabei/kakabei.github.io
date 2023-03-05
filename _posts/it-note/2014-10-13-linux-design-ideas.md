@@ -3,7 +3,7 @@ layout: post
 title: Linux Unix 设计思想
 date: 2014-10-13 20:08:12
 categories: Linux
-tags: 技术阅读笔记 
+tags: 技术学习笔记 
 excerpt: Linux Unix design ideas
 ---
 

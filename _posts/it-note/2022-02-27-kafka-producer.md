@@ -3,7 +3,7 @@ layout: post
 title: Kafka producer and partition strategies
 date: 2022-02-27 10:12:15
 categories: MQ  
-tags: kafka 学习笔记
+tags: kafka 技术学习笔记
 excerpt: Kafka 生产者的逻辑和分区策略
 ---
 

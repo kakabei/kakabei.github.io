@@ -3,7 +3,7 @@ layout: post
 title: Kafka a kind of MQ
 date: 2022-02-26 10:12:15
 categories: MQ  
-tags: kafka 学习笔记
+tags: kafka 技术学习笔记
 excerpt: 工作中，我对 kafka 的学习与理解，整理成一个简单大致的概述
 ---
 

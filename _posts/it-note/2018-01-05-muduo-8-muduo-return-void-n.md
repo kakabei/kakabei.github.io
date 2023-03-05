@@ -3,7 +3,7 @@ layout: post
 title: muduo笔记  第八章  一些模块常有(void)n 的做法
 date: 2018-01-05 12:21:12
 categories: muduo
-tags:  系统编程 muduo 技术阅读笔记 
+tags:  系统编程 muduo 技术学习笔记 
 excerpt: muduo TimerQueue 定时器
 ---
 

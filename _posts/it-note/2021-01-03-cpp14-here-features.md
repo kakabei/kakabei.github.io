@@ -3,7 +3,7 @@ layout: post
 title: c++ 14 新特性
 date: 2021-01-03 16:12:15
 categories: c++  
-tags: c++ 技术笔记
+tags: c++ 技术学习笔记
 excerpt: C++14 新特性主要体现在三个领域：Lambda 函数、constexpr 和类型推导
 ---
 

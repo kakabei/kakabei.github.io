@@ -3,7 +3,7 @@ layout: post
 title: c++11 右值引用
 date: 2017-07-01 16:12:15
 categories: c++  
-tags: c++ 技术笔记
+tags: c++ 技术学习笔记
 excerpt: 左值可以取地址、位于等号左边；而右值没法取地址，位于等号右边
 ---
 

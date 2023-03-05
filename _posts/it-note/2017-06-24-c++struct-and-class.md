@@ -3,7 +3,7 @@ layout: post
 title: c++ struct 和 class 的区别
 date: 2017-06-24 16:12:15
 categories: c++  
-tags: c++  技术笔记
+tags: c++  技术学习笔记
 excerpt: 当字符串内部发生重叠后，memmove 可以保证数据正确性
 ---
 

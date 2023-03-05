@@ -3,7 +3,7 @@ layout: post
 title: c++ sizeof 和 strlen 的区别
 date: 2017-06-22 16:12:15
 categories: c++  
-tags: c++  技术笔记
+tags: c++  技术学习笔记
 excerpt: strlen 是函数，sizeof 是c++运算符
 ---
 
