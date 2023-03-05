@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>go语言字符类型 byte 和 rune</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/go-uint8-and-rune">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/go-uint8-and-rune">go语言字符类型 byte 和 rune</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2018-08-12
+     • Category: 
+        
+        <a href="/categories#go-ref" >go</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags#读书-ref" >读书</a>
+        
+            <a href="/tags#go-ref" >go</a>
+        
+    
+</div>
+
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>go 的字符有两种：</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">uint8</code> 类型，或叫 <code class="language-plaintext highlighter-rouge">byte</code> 型。代表了 <code class="language-plaintext highlighter-rouge">ASCII</code> 码的一个字符。</li>
+  <li><code class="language-plaintext highlighter-rouge">rune</code> 类型，代表一个UTF-8字符，当需要处理复合字符时，则需要用到 rune 类型。 rune 类型等价 <code class="language-plaintext highlighter-rouge">int32</code> 类型。</li>
+</ul>
+
+<p>传统 <code class="language-plaintext highlighter-rouge">ASCII</code> 编码只占用 1 个字节，所以可以用 <code class="language-plaintext highlighter-rouge">byte</code> 类型来表示， 如</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">ch</span> <span class="kt">byte</span><span class="o">=</span><span class="sc">'A'</span> 		<span class="c">// 字符使用单引号括起来。</span>
+<span class="k">var</span> <span class="n">ch</span> <span class="kt">byte</span> <span class="o">=</span> <span class="m">65</span> 		<span class="c">// 十进制表示</span>
+<span class="k">var</span> <span class="n">ch</span> <span class="kt">byte</span> <span class="o">=</span> <span class="sc">'\x41'</span>    <span class="c">//（\x 总是紧跟着长度为 2 的 16 进制数）</span>
+</code></pre></div></div>
+
+<p>在书写 <code class="language-plaintext highlighter-rouge">Unicode</code> 字符时，需要在 16 进制数之前加上前缀 <code class="language-plaintext highlighter-rouge">\u</code> 或者 <code class="language-plaintext highlighter-rouge">\U</code>。因为 <code class="language-plaintext highlighter-rouge">Unicode</code> 至少占用 2 个字节，所以我们使用 <code class="language-plaintext highlighter-rouge">int16</code> 或者 <code class="language-plaintext highlighter-rouge">int</code> 类型来表示。如果需要使用到 4 字节，则使用<code class="language-plaintext highlighter-rouge">\u</code>前缀，如果需要使用到 8 个字节，则使用<code class="language-plaintext highlighter-rouge">\U</code>前缀。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">ch1</span> <span class="kt">int</span> <span class="o">=</span> <span class="sc">'\u0041'</span>
+<span class="k">var</span> <span class="n">ch2</span> <span class="kt">int</span> <span class="o">=</span> <span class="sc">'\u03B2'</span>
+<span class="k">var</span> <span class="n">ch3</span> <span class="kt">int</span> <span class="o">=</span> <span class="sc">'\U00101234'</span>
+</code></pre></div></div>
+
+<p>Unicode 包中内置了一些用于测试字符的函数，这些函数的返回值都是一个布尔值，如下所示（其中 ch 代表字符）：</p>
+
+<ul>
+  <li>判断是否为字母：<code class="language-plaintext highlighter-rouge">unicode.IsLetter(ch)</code></li>
+  <li>判断是否为数字：<code class="language-plaintext highlighter-rouge">unicode.IsDigit(ch)</code></li>
+  <li>判断是否为空白符号：<code class="language-plaintext highlighter-rouge">unicode.IsSpace(ch)</code></li>
+</ul>
+
+<hr />
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+<span>
+	<a  href="/go-book-xushiwei" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/sourcecode-comment" class="pageNav"  >下一篇</a>
+</span>
+
+
+	<div class="article-author">
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+    <div class="avatar">
+        <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>
