@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Kafka producer and partition strategies
+title: Kafka 生产者和分区策略
 date: 2022-02-27 10:12:15
 categories: MQ  
 tags: kafka 技术学习笔记
@@ -24,7 +24,9 @@ kafka 生产者的流程大致如下图：
 
 5、如果服务器（`broker`） 将消息成功写入，就返回 `RecordMetaData` 对象，告诉 `Producer` 客户端主题、分区信息和偏移量。 
 
-6、如果写入失败，则返回错误信息，，让 Producer 重试。 
+6、主题的分区只能增加，不能减少。
+
+7、如果写入失败，则返回错误信息，让 Producer 重试。 
 
 如果没有指明 partition 值，但有 key 的情况下，将 key hash 后与topic 的 partition 数目进行取余操作，得到 partition 值。
 

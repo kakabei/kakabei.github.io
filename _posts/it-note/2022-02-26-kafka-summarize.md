@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Kafka a kind of MQ
+title: Kafka 一种分布式MQ
 date: 2022-02-26 10:12:15
 categories: MQ  
 tags: kafka 技术学习笔记

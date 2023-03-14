@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Kafka producer and partition strategies</title>
+    <title>Kafka 生产者和分区策略</title>
 
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
@@ -31,7 +31,7 @@
 
   <div class="site-title">
     
-    <h4 class="entry-title"><a href="/kafka-producer">Kafka producer and partition strategies</a></h4>
+    <h4 class="entry-title"><a href="/kafka-producer">Kafka 生产者和分区策略</a></h4>
     
   </div>
 
@@ -148,7 +148,9 @@
 
 <p>5、如果服务器（<code class="language-plaintext highlighter-rouge">broker</code>） 将消息成功写入，就返回 <code class="language-plaintext highlighter-rouge">RecordMetaData</code> 对象，告诉 <code class="language-plaintext highlighter-rouge">Producer</code> 客户端主题、分区信息和偏移量。</p>
 
-<p>6、如果写入失败，则返回错误信息，，让 Producer 重试。</p>
+<p>6、主题的分区只能增加，不能减少。</p>
+
+<p>7、如果写入失败，则返回错误信息，让 Producer 重试。</p>
 
 <p>如果没有指明 partition 值，但有 key 的情况下，将 key hash 后与topic 的 partition 数目进行取余操作，得到 partition 值。</p>
 
@@ -246,7 +248,7 @@
 <span>
 	<a  href="/kafka-summarize" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/server-how-to-design-systerm" class="pageNav"  >下一篇</a>
+	<a  href="/kafka-consumer" class="pageNav"  >下一篇</a>
 </span>
 
 
