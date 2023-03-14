@@ -2,7 +2,7 @@
 layout: post
 title: epoll 的两种模式
 date: 2014-10-15 9:08:12
-categories: Linux
+categories: network
 tags: network 
 excerpt: epoll的两种模式，水平触发（LT）和 边缘触发（ET）
 ---

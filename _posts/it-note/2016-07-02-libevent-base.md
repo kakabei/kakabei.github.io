@@ -2,8 +2,8 @@
 layout: post
 title: libevent 初步分析
 date: 2016-07-15 17:32:03
-categories: Linux
-tags: libevent network 
+categories: network
+tags: libevent network 系统编程
 excerpt: network frame libevent
 ---
 

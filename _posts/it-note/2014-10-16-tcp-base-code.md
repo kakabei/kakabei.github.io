@@ -2,7 +2,7 @@
 layout: post
 title: TCP 服务端、客户端简单代码
 date: 2014-10-16 9:08:12
-categories: tcp
+categories: network
 tags: network  tcp
 excerpt:  TCP 服务端、客户端简单代码示例
 ---

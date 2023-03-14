@@ -2,7 +2,7 @@
 layout: post
 title: 防盗链技术
 date: 2017-03-09 21:08:12
-categories: 安全
+categories: network
 tags: network 系统编程
 excerpt: 防止别人盗用你服务器的上资源
 ---
