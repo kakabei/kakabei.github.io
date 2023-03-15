@@ -20,7 +20,7 @@ Go语言最主要的特性：
 - 语言交互性
 
 
-Go 程序的代码注释与 C++保持一致，即同时支持以下两种用法:
+Go 程序的代码注释与 C++ 保持一致，即同时支持以下两种用法:
 
 ```go 
 /*
@@ -48,7 +48,7 @@ var v5 struct {
 
 var v6 * int // 指针
 var v7 map[string] int  // map，key为string类型，value为int类型
-var v8 func (a int) int
+var v8 func (a int) int // 函数变量
 
 ```
 
