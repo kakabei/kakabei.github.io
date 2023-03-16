@@ -5,9 +5,151 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 16 Mar 2023 13:43:35 +0800</pubDate>
-    <lastBuildDate>Thu, 16 Mar 2023 13:43:35 +0800</lastBuildDate>
+    <pubDate>Fri, 17 Mar 2023 00:30:21 +0800</pubDate>
+    <lastBuildDate>Fri, 17 Mar 2023 00:30:21 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
+    
+      <item>
+        <title>高性能数据库集群</title>
+        <description>&lt;p&gt;数据库厂商在数据库的高性能上做了多的优化和提升。但无法满足各行各业的业务发展。&lt;/p&gt;
+
+&lt;p&gt;所以，架构师通过数据库集群来提高数据库的性能。这里有两种方式： &lt;strong&gt;读写分离和分库分表&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h1 id=&quot;一读写分离&quot;&gt;一、读写分离&lt;/h1&gt;
+
+&lt;h3 id=&quot;读写分离原理&quot;&gt;读写分离原理&lt;/h3&gt;
+
+&lt;p&gt;读写分离的基本原理是将数据库读写操作分散到不同的节点为上。如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-16-22-07-54.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;1、数据库服务器集群配置有主从，一主多从。&lt;/p&gt;
+
+&lt;p&gt;2、数据库主机负责读写操作，从机只负责读操作。（从机的读时，极端情况数据可能存在不一致的情况）&lt;/p&gt;
+
+&lt;p&gt;3、数据库主机通过复制将数据同步到从机。主从机的所有数据都是一致的。&lt;/p&gt;
+
+&lt;h3 id=&quot;复制延迟&quot;&gt;复制延迟&lt;/h3&gt;
+
+&lt;p&gt;上面说到极端情况数据可能存在不一致的情况，就是复制延迟引起的。 以MySQL 为例，主从复制延迟可能达到1秒。&lt;/p&gt;
+
+&lt;p&gt;业务上场景是：程序将数据写入数据库后，马上又进行读取，这时数据还是从主机同步人机，此时读从机就无法读最新的数据。&lt;/p&gt;
+
+&lt;p&gt;解决这个问题的方法是：&lt;/p&gt;
+
+&lt;p&gt;1、写操作后读操作指定到数据库主机上读。&lt;/p&gt;
+
+&lt;p&gt;2、读从机失败后，再读一次主机。（如果只是数据没有更新，则不会读失败，只会读到最新数据）&lt;/p&gt;
+
+&lt;p&gt;3、关键业务读写操作全部指向主机，非关系业务采用读写分离的方式。&lt;/p&gt;
+
+&lt;h3 id=&quot;分配机制&quot;&gt;分配机制&lt;/h3&gt;
+
+&lt;p&gt;将读写操作区分开来，然后访问不同的数据库服务，一般有两种方式：程序代码封闭和中间件。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;程序代码封装&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;在程序代码中封装一个抽象数据访问层，实现读写操作分离和数据库服务连接的管理。这个访问层是被编译到程序当中的。&lt;/p&gt;
+
+&lt;p&gt;这种代码封装的方式有几个特点：&lt;/p&gt;
+
+&lt;p&gt;1、实现简单，贴近业务，可以做较多定制化的功能。&lt;/p&gt;
+
+&lt;p&gt;2、不同的开发语言要有不同的实现，重复开发。&lt;/p&gt;
+
+&lt;p&gt;3、故障进，主从发生切换，对应的服务重启。&lt;/p&gt;
+
+&lt;p&gt;开源的实现方案中： 淘宝的 TDDL（Taobao Distributed Data Layer）。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;中间件封装&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;中间件是独立的服务，实现读写操作分离和数据服务器连接的管理。 中间件服务提供SQL 兼容协议，业务程序不用自己进行读写分离，访问中间件和访问数据库没有区别。基本架构如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-16-22-42-53.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;数据库中间件的方式具备的特点是：&lt;/p&gt;
+
+&lt;p&gt;1、提供标准的SQL接口，所以和编程语言无关。&lt;/p&gt;
+
+&lt;p&gt;2、比较复杂，需要支持完整的SQL 语法和数据库协议。&lt;/p&gt;
+
+&lt;p&gt;3、对中间件的性能要求高，在业务程序和数据库中加了一层，多一些性能上的消耗。&lt;/p&gt;
+
+&lt;p&gt;4、数据库主从切换对业务程序无感知。&lt;/p&gt;
+
+&lt;p&gt;奇虎360 开源了数据库中间件Atas。&lt;/p&gt;
+
+&lt;h1 id=&quot;二-分库分表&quot;&gt;二 分库分表&lt;/h1&gt;
+
+&lt;p&gt;读写分离可以分散数据库读写操作的压力，但没有分散存储压力，当数据量达到千万甚至上亿条的时候，单台数据库服务器的存储能力会成为系统瓶颈。表现为：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;数据量大，读写的性能会下降，即使有索引，索引也会变得很大，性能同样下降。&lt;/li&gt;
+  &lt;li&gt;数据文件变得很大，数据库备份和恢复需要耗费很长时间。&lt;/li&gt;
+  &lt;li&gt;数据文件越大，极端情况下丢失败的数据的风险越高。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;业务分库&quot;&gt;业务分库&lt;/h3&gt;
+
+&lt;p&gt;业务分库指的是按照业务模块将数据分散到不同的数据库服服务器。如电商业务可以把用户、商品、订单三个业务模块分到不同数据库上。&lt;/p&gt;
+
+&lt;p&gt;业务分库能够分散存储和访问压力，同时也带来问题：&lt;/p&gt;
+
+&lt;p&gt;1、join 操作。分库后，相关的join 操作无法使用 。&lt;/p&gt;
+
+&lt;p&gt;2、事务问题。数据库的事务无法使用。只能要代码层面保证事务。&lt;/p&gt;
+
+&lt;p&gt;3、成本问题。服务库服务器多了，连接数据也复杂了。&lt;/p&gt;
+
+&lt;h3 id=&quot;分表方案&quot;&gt;分表方案&lt;/h3&gt;
+
+&lt;p&gt;单表数据拆分有两种方式： 垂直分表和水平分表。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-17-00-10-13.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;分表后，多个表存在同一个数据库服务中，也可以带来不的性能提升。当然也可以放在不同的数据库服务中。&lt;/p&gt;
+
+&lt;p&gt;分表能够有效地分散存储压力和琮来性能提升。同样也会引放各种复杂性问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;垂直分表&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;垂直分表适合将表中某些不常用且占了大量空间的列拆分出去。如前面图中： nickname 和 description 字段。&lt;/p&gt;
+
+&lt;p&gt;垂直分表的引入的复杂性主要体现在表操作的数据要增加。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;水平分表&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;水平分表适合数特别大的表。 例如：单表行数超过 5000W。当看到表的数据量达到千万级别时，就是警觉起来，考虑架构的性能瓶颈或者隐患。&lt;/p&gt;
+
+&lt;p&gt;水平分表后，数据应该放到哪一张中，就是需要进行路由分配， 一般都是某个业务ID进行hash 。&lt;/p&gt;
+
+&lt;p&gt;常风的路由算法有：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;范围路由：选取有序的数据列（如时间，ID等）作为路由的条件。不同范围放到不表中。 优点是可以随着数据的增加扩展比较方便。 缺点是数据不均衡。&lt;/li&gt;
+  &lt;li&gt;Hash 路由：选取某个表（或者某几个列组也可以）的值进行 hash 运算。如 ID % 1024 ， 分为1024张表。 优点是数据比较均衡。 缺点是扩充新的表比较麻烦。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 03 Mar 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/high-performance-database-cluster</link>
+        <guid isPermaLink="true">http://localhost:4000/high-performance-database-cluster</guid>
+        
+        <category>极客时间</category>
+        
+        <category>技术学习笔记</category>
+        
+        <category>mysql</category>
+        
+        
+        <category>系统设计</category>
+        
+      </item>
     
       <item>
         <title>架构设计三大原则</title>
@@ -62,7 +204,7 @@
 &lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
 
 </description>
-        <pubDate>Wed, 15 Mar 2023 18:12:15 +0800</pubDate>
+        <pubDate>Thu, 02 Mar 2023 18:12:15 +0800</pubDate>
         <link>http://localhost:4000/three-principles-of-architecture-design</link>
         <guid isPermaLink="true">http://localhost:4000/three-principles-of-architecture-design</guid>
         
@@ -331,7 +473,7 @@
 &lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
 
 </description>
-        <pubDate>Tue, 14 Mar 2023 18:12:15 +0800</pubDate>
+        <pubDate>Wed, 01 Mar 2023 18:12:15 +0800</pubDate>
         <link>http://localhost:4000/the-purpose-of-architecture-design</link>
         <guid isPermaLink="true">http://localhost:4000/the-purpose-of-architecture-design</guid>
         
@@ -733,56 +875,6 @@
         <pubDate>Tue, 10 Jan 2023 18:12:15 +0800</pubDate>
         <link>http://localhost:4000/the-way-you-say</link>
         <guid isPermaLink="true">http://localhost:4000/the-way-you-say</guid>
-        
-        <category>工作经验</category>
-        
-        <category>团队管理</category>
-        
-        
-        <category>总结</category>
-        
-      </item>
-    
-      <item>
-        <title>沟通原则</title>
-        <description>&lt;p&gt;1、耐心听别人把话说完。&lt;/p&gt;
-
-&lt;p&gt;2、不预设立场，明确搞明白对方的立场和表达的结论。&lt;/p&gt;
-
-&lt;p&gt;3、解决问题，要站在对方的立场上考虑问题，同时一定要对方感觉到这一点。&lt;/p&gt;
-
-&lt;p&gt;4、不要试图去证明对方是错的。&lt;/p&gt;
-
-&lt;p&gt;5、用“我可能没有表达清楚” 而不是 “你不懂”。&lt;/p&gt;
-
-&lt;p&gt;6、多说对方爱听的话，如夸奖、鼓励，对方的兴趣，要真诚。&lt;/p&gt;
-
-&lt;p&gt;7、清晰，准确的表达自己的意图，观点。&lt;/p&gt;
-
-&lt;p&gt;8、沟通完成后，做备忘录，双方确认。&lt;/p&gt;
-
-&lt;p&gt;9、多做预案、多做练习。&lt;/p&gt;
-
-&lt;p&gt;10、 沟通中有任何问题，事后都要做及时复盘。&lt;/p&gt;
-
-&lt;p&gt;11、事情总有意外发生，事后复盘即可，不必太在意了。&lt;/p&gt;
-
-&lt;p&gt;12、共赢、合作是都是最优化方案，不占尽别人的所有，留有余地。&lt;/p&gt;
-
-&lt;p&gt;13、沟通是解决问题，不是制造问题。&lt;/p&gt;
-
-&lt;p&gt;14、先解决情绪，再解决问题。&lt;/p&gt;
-
-&lt;p&gt;15、重要的事情，晚点回复。回复要正式，先过脑子，打草稿，检查有没有错别字。&lt;/p&gt;
-
-&lt;p&gt;16、紧急事件：语音，电话，非紧急事件，微信留言； 复杂事件：发邮件，然后微信或电话提醒。&lt;/p&gt;
-
-&lt;p&gt;17、说错话、做错事，要马上道歉。&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 09 Jan 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/principles-of-communication</link>
-        <guid isPermaLink="true">http://localhost:4000/principles-of-communication</guid>
         
         <category>工作经验</category>
         
