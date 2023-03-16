@@ -5,213 +5,342 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 15 Mar 2023 12:09:55 +0800</pubDate>
-    <lastBuildDate>Wed, 15 Mar 2023 12:09:55 +0800</lastBuildDate>
+    <pubDate>Thu, 16 Mar 2023 13:43:35 +0800</pubDate>
+    <lastBuildDate>Thu, 16 Mar 2023 13:43:35 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
-        <title>socks5  协议</title>
-        <description>&lt;h1 id=&quot;定义&quot;&gt;定义&lt;/h1&gt;
+        <title>架构设计三大原则</title>
+        <description>&lt;p&gt;三大原则：&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;socks5 是一个常用的代理协议, 它既可以用来代理 TCP, 也可以代理 UDP。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;ul&gt;
+  &lt;li&gt;合适原则。 合适优于业界领先。&lt;/li&gt;
+  &lt;li&gt;简单原则。简单优于复杂。&lt;/li&gt;
+  &lt;li&gt;演化原则。演化优于一步到位。&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;socks5 的用途非常广泛, 许多网络软件都支持 socks5, 主流操作系统也支持使用 socks5 作系统代理。&lt;/p&gt;
+&lt;h1 id=&quot;合适原则&quot;&gt;合适原则&lt;/h1&gt;
 
-&lt;p&gt;RFC 1928 是 socks5 协议的规范文档。 原文见 &lt;a href=&quot;https://tools.ietf.org/html/rfc1928&quot;&gt;RFC 1928 - SOCKS Protocol Version 5&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;再好的梦想，也需要脚踏实地实现！&lt;/p&gt;
 
-&lt;p&gt;透明安全地穿越防火墙。&lt;/p&gt;
+&lt;p&gt;主要体现如下：&lt;/p&gt;
 
-&lt;p&gt;协议旨在为 TCP 和 UDP 域中的客户端-服务器应用程序提供一个框架，以方便安全地使用网络防火墙的服务。该协议在概念上是应用层和传输层之间的 “中介层”。&lt;/p&gt;
+&lt;p&gt;1、将军难打无兵之仗。没那么多人，却想干那么多活，是失败的第一个主要原因。&lt;/p&gt;
 
-&lt;p&gt;新协议将第 4 版 SOCKS 协议模型扩展为包括 UDP, 并扩展其框架使其包含通用强身份验证方案的规范, 此外寻址方案也扩展为包含域名和 IPv6。&lt;/p&gt;
+&lt;p&gt;2、罗马不是一天建成的。没有那么多积累，却想一步登天，是失败的第二个主要原因。&lt;/p&gt;
 
-&lt;h1 id=&quot;原理&quot;&gt;原理&lt;/h1&gt;
+&lt;p&gt;3、冰山下面才是关键。没有那么卓越的业务场景，却幻想灵光一闪成为天才，是失败的第三个主要原因。&lt;/p&gt;
 
-&lt;p&gt;1、正常情况下，浏览器访问在一个 http 的网站服务，第一步是先和网站服务器建立 TCP 连接。然后三次握手，最后发起 http 请求。网站服务返回 http 响应。&lt;/p&gt;
+&lt;p&gt;真正优秀的架构都是在企业当前人力、条件、业务等各种约束下设计出来的，能够合理地
+将资源整合在一起并发挥出最大功效，并且能够快速落地。&lt;/p&gt;
 
-&lt;p&gt;2、如果加入了 socks5 的代理之后，流程上就变得复杂一些， 浏览器不和服务器直接建立连接。 而是先和 socks5 代理服务器建立连接，socks5 代理服务器再和网站服务器建议连接。&lt;/p&gt;
+&lt;h1 id=&quot;简单原则&quot;&gt;简单原则&lt;/h1&gt;
 
-&lt;p&gt;3、连接上 socks5 代理服务器的过程，分成四个阶段：握手阶段、认证阶段、请求阶段、 relay 阶段。&lt;/p&gt;
+&lt;p&gt;团队的压力有时也会有意无意地促进我们走向复杂的方向，因为大部分人在评价一个方案水平高
+低的时候，复杂性是其中一个重要的参考指标。&lt;/p&gt;
 
-&lt;p&gt;4、浏览器向 socks5 代理服务器发起请求。 内容有版本号，认证种类等。服务器返回认证方式。&lt;/p&gt;
+&lt;p&gt;复杂”在制造领域代表先进，在建筑领域代表领先，但在软件领域，却恰恰相反，代表的
+是“问题”。&lt;/p&gt;
 
-&lt;p&gt;5、浏览器会发送正常发送请求，然后代理服务器接收到请求之后，会直接把请求转换到真正的服务器上。然后如果真正的服务器以后返回响应的话，那么也会把请求转发到浏览器这边。实际上代理服务器并不关心流量的细节，可以是 HTTP 流量，也可以是其它 TCP 流量。&lt;/p&gt;
+&lt;h1 id=&quot;演化原则&quot;&gt;演化原则&lt;/h1&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/network/socks5-2023-03-14-17-29-07.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;软件的演化，其实就是不断进行迭代。&lt;/p&gt;
+
+&lt;p&gt;软件架构需要根据业务发展不断变化这个本质特点，软件架构设计其实更加类似于大自然“设计”一个生物，通过演化让生物适应环境，逐步变得更加强大。&lt;/p&gt;
+
+&lt;p&gt;软件架构设计的过程：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;设计出来的架构要满足当时的业务需要。&lt;/li&gt;
+  &lt;li&gt;架构要不断地在实际应用过程中迭代，保留优秀的设计，修复有缺陷的设计，改正错误的设计，去掉无用的设计，使得架构逐渐完善。&lt;/li&gt;
+  &lt;li&gt;当业务发生变化时，架构要扩展、重构，甚至重写；代码也许会重写，但有价值的经验、教训、逻辑、设计等（类似生物体内的基因）却可以在新架构中延续。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;合适原则是最重要的，它决定了对简单原则和演化原则的判断，没有以合适为基础，很难判断简单是否能满足业务的需求，演化的起点在哪里。&lt;/p&gt;
 
 &lt;hr /&gt;
-
-&lt;h1 id=&quot;基于-tcp-客户端的过程&quot;&gt;基于 TCP 客户端的过程&lt;/h1&gt;
-
-&lt;h3 id=&quot;1-请求协商&quot;&gt;1 请求协商&lt;/h3&gt;
-
-&lt;p&gt;客户端连接服务器, 然后发送一条包含版本号和方法选择的消息:&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;| VER  | NMETHODS | METHODS  |
-| &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;--------&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;--------&lt;/span&gt; |
-| 1    | 1        | 1 - 255  | 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;VER&lt;/code&gt; 字段在这个版本置为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'05'&lt;/code&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NMETHODS&lt;/code&gt; 字段包含出现在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;METHODS&lt;/code&gt; 字段中的方法标识符的字节数。&lt;/p&gt;
-
-&lt;p&gt;服务器从 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;METHODS&lt;/code&gt; 字段中给出的方法中选择一个, 将其放在返回给客户端消息的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;METHOD&lt;/code&gt; 字段中。&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;METHOD&lt;/code&gt; 目前已定义的方法有:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'00'&lt;/code&gt; 无需认证&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'01'&lt;/code&gt; GSSAPI&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'02'&lt;/code&gt; 用户名/密码&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'03'&lt;/code&gt; 至 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'7F'&lt;/code&gt; 由 IANA 分配&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'80'&lt;/code&gt; 至 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'FE'&lt;/code&gt; 保留的私有方法&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'FF'&lt;/code&gt; 没有可接受的方法&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;然后客户端和服务器进入认证流，称之为子协商过程（sub-negotiation）。&lt;/p&gt;
-
-&lt;h3 id=&quot;2请求&quot;&gt;2、请求&lt;/h3&gt;
-
-&lt;p&gt;子协商过程完成之后，客户端就开始发送请求详情。请求的格式如下：&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;| VER  | CMD  | RSV     | ATYP | DST.ADDR | DST.PORT |
-| &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;-------&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;--------&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;--------&lt;/span&gt; |
-| 1    | 1    | &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;X&lt;span class=&quot;s1&quot;&gt;'00'&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; | 1    | Variable | 2        |
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ER&lt;/code&gt; 协议版本 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'05'&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;CMD 命令:
-    &lt;ul&gt;
-      &lt;li&gt;CONNECT: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'01'&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;BIND: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'02'&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;UDP ASSOCIATE: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'03'&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RSV&lt;/code&gt; 保留&lt;/li&gt;
-  &lt;li&gt;ATYP 随后的地址类型
-    &lt;ul&gt;
-      &lt;li&gt;IPv4 地址: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'01'&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;域名: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'03'&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;IPv6 地址: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'04'&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DST.ADDR&lt;/code&gt; 目标地址&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DST.PORT&lt;/code&gt; 目标端口, 网络字节序&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;3地址&quot;&gt;3、地址&lt;/h3&gt;
-
-&lt;p&gt;对于地址字段 (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DST.ADDR&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BND.ADDR&lt;/code&gt;), 由 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ATYP&lt;/code&gt; 字段指定其包含的地址类型:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'01'&lt;/code&gt; ： IPv4 地址, 长度为 4 字节&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'03' &lt;/code&gt; ：完整的域名, 地址字段的第一个字节包含的数字表示接下来域名的长度 (字节数), 不包含结尾的 NUL 字节.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'04'&lt;/code&gt;：IPv4 地址, 长度为 16 字节&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;4应答&quot;&gt;4、应答&lt;/h3&gt;
-
-&lt;p&gt;sockes5 代理服务 返回的应答消息格式如下：&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;| VER  | REP  | RSV     | ATYP | BND.ADDR | BND.PORT |
-| &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;-------&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;--------&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;--------&lt;/span&gt; |
-| 1    | 1    | &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;X&lt;span class=&quot;s1&quot;&gt;'00'&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; | 1    | Variable | 2        |
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;VER&lt;/code&gt; 协议版本 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'05'&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;REP 应答字段:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'00'&lt;/code&gt; 成功&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'01'&lt;/code&gt; 常规 SOCKS 服务器故障&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'02'&lt;/code&gt; 规则不允许的链接&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'03'&lt;/code&gt; 网络无法访问&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'04'&lt;/code&gt; 主机无法访问&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'05'&lt;/code&gt; 连接被拒绝&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'06'&lt;/code&gt; TTL 过期&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'07'&lt;/code&gt; 不支持的命令&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'08'&lt;/code&gt; 不支持的地址类型&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'09'&lt;/code&gt; 至 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'FF'&lt;/code&gt; 未分配&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RSV&lt;/code&gt; 保留&lt;/li&gt;
-  &lt;li&gt;ATYP 随后的地址类型
-    &lt;ul&gt;
-      &lt;li&gt;IPv4 地址: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'01'&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;域名: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'03'&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;IPv6 地址: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'04'&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BND.ADDR&lt;/code&gt; 服务器绑定地址&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BND.PORT&lt;/code&gt; 服务器绑定端口, 网络字节序&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;标记为 “保留” 的字段必须置为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'00'&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;5-connect-请求&quot;&gt;5、 CONNECT 请求&lt;/h3&gt;
-
-&lt;p&gt;如果应答的是 CONNECT 请求, 则 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BND.PORT&lt;/code&gt; 需包含服务器连接目标主机所用的端口号, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BND.ADDR&lt;/code&gt; 包含相应的 IP 地址。&lt;/p&gt;
-
-&lt;p&gt;这里的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BND.ADDR&lt;/code&gt; 常常不同于客户端访问的 SOCKS 服务器的地址, 因为服务器常常是分布式部署的. 服务器通常会使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DST.ADDR&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DST.PORT&lt;/code&gt;, 以及客户端的源地址和端口, 来评估 CONNECT 请求。&lt;/p&gt;
-
-&lt;h3 id=&quot;6-应答的处理&quot;&gt;6、 应答的处理&lt;/h3&gt;
-
-&lt;p&gt;当一个应答消息指示出错 (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;REP&lt;/code&gt; 字段不为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'00'&lt;/code&gt;) 时, SOCKS 服务器应在发送完这条应答消息后的一小段时间内关闭连接. 这不应该超过检测到错误发生后的 10 秒.&lt;/p&gt;
-
-&lt;p&gt;如果应答码指示成功 (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;REP&lt;/code&gt; 字段为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'00'&lt;/code&gt;), 且请求为 BIND 或 CONNECT, 那么客户端就可以开始传送数据了. 如果使用的认证方法出于完整性, 身份验证或机密性的目的支持封装, 则应使用认证方法要求的封装方式封装数据. 同样地, 当需要发给客户端的数据到达服务器时, 服务器也必须使用相应的封装方式封装数据。&lt;/p&gt;
-
-&lt;h1 id=&quot;基于-udp-客户端的过程&quot;&gt;基于 UDP 客户端的过程&lt;/h1&gt;
-
-&lt;p&gt;基于 UDP 的客户端必须把数据报发送到 UDP 中继服务器的某个 UDP 端口中, 端口由 UDP ASSOCIATE 请求的应答中的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BND.PORT&lt;/code&gt; 字段指定。&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;| RSV  | FRAG | ATYP | DST.ADDR | DST.PORT | DATA     |
-| &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;----&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;--------&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;--------&lt;/span&gt; | &lt;span class=&quot;nt&quot;&gt;--------&lt;/span&gt; |
-| 2    | 1    | 1    | Variable | 2        | Variable |
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;UDP 请求头中的字段分别为:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RSV&lt;/code&gt; 保留, 固定为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'0000'&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FRAG&lt;/code&gt; 当前的分段号&lt;/li&gt;
-  &lt;li&gt;ATYP 随后的地址类型
-    &lt;ul&gt;
-      &lt;li&gt;IPv4 地址: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'01'&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;域名: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'03'&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;IPv6 地址: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X'04'&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DST.ADDR&lt;/code&gt; 目标地址&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DST.PORT&lt;/code&gt; 目标端口, 网络字节序&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DATA&lt;/code&gt; 用户数据&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;当 UDP 中继服务器要转发 UDP 数据报时, 它会静默转发, 不会给请求的客户端发送任何通知。&lt;/p&gt;
-
-&lt;p&gt;同样地, 它会丢弃无法或不会中继的数据报。所以这种是一种不安全的方式，可能会出现数据丢失的情况。&lt;/p&gt;
-
-&lt;p&gt;当 UDP 中继服务器接收到来自远程主机的应答数据报时, 它必须将数据报封装在上述的 UDP 请求头以及认证方法依赖的封装中。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;参考：&lt;/p&gt;
-
-&lt;p&gt;1、&lt;a href=&quot;https://luyuhuang.tech/2020/08/27/rfc1928.html&quot;&gt;https://luyuhuang.tech/2020/08/27/rfc1928.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;2、&lt;a href=&quot;https://juejin.cn/post/7097902857143189541&quot;&gt;https://juejin.cn/post/7097902857143189541&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
 
 </description>
-        <pubDate>Fri, 10 Mar 2023 17:08:12 +0800</pubDate>
-        <link>http://localhost:4000/socks5</link>
-        <guid isPermaLink="true">http://localhost:4000/socks5</guid>
+        <pubDate>Wed, 15 Mar 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/three-principles-of-architecture-design</link>
+        <guid isPermaLink="true">http://localhost:4000/three-principles-of-architecture-design</guid>
         
-        <category>network</category>
+        <category>极客时间</category>
         
-        <category>socks5</category>
+        <category>技术学习笔记</category>
         
         
-        <category>network</category>
+        <category>系统设计</category>
+        
+      </item>
+    
+      <item>
+        <title>架构设计的目的</title>
+        <description>&lt;h1 id=&quot;架构设计的真正目的&quot;&gt;架构设计的真正目的&lt;/h1&gt;
+
+&lt;p&gt;架构设计的主要目的是为解决软件系统复杂带来的问题。&lt;/p&gt;
+
+&lt;p&gt;架构即决策，用有限的资源合适地去解决当前的问题。有限的资源是：团队经验，成本，进度，业务背景，人，财，物，时间等。&lt;/p&gt;
+
+&lt;p&gt;需求驱动架构，架起分析与设计之实现的桥梁。&lt;/p&gt;
+
+&lt;p&gt;架构师有的放矢，而不是贪大求全。&lt;/p&gt;
+
+&lt;p&gt;系统的复杂度体现在哪里？主要体现在五个方面。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;性能&lt;/li&gt;
+  &lt;li&gt;可扩展性&lt;/li&gt;
+  &lt;li&gt;高可用&lt;/li&gt;
+  &lt;li&gt;安全性&lt;/li&gt;
+  &lt;li&gt;成本&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;高性能&quot;&gt;高性能&lt;/h1&gt;
+
+&lt;p&gt;软件系统的高性能带来的复杂度主要体现在两方面， 一方面是单机计算机内部为了高性能带来的复杂度。另一个方面是多台计算机集群为了高性能带来的复杂度。&lt;/p&gt;
+
+&lt;h3 id=&quot;单机复杂度&quot;&gt;单机复杂度&lt;/h3&gt;
+
+&lt;p&gt;计算机内部复杂度最关键的地方就是操作系统。&lt;/p&gt;
+
+&lt;p&gt;操作系统和性能最相关的就是进程和线程。&lt;/p&gt;
+
+&lt;p&gt;多进程多线程并行处理任务。&lt;/p&gt;
+
+&lt;h3 id=&quot;集群复杂度&quot;&gt;集群复杂度&lt;/h3&gt;
+
+&lt;p&gt;通过大量机器来提升性能时，就是让多台机器很好的配合，这就带来一个集群的复杂度。 如：&lt;/p&gt;
+
+&lt;p&gt;1、任务分解&lt;/p&gt;
+
+&lt;p&gt;通过任务分解，把一个大任务分解成小任务，分配到不同机器上去处理。&lt;/p&gt;
+
+&lt;p&gt;2、任务分配&lt;/p&gt;
+
+&lt;p&gt;不同机器可以处理不同的业务任务，这时就需要把任务分配不同的机器上。&lt;/p&gt;
+
+&lt;p&gt;性能是软件一个重要属性，衡量软件性能包括了响应时间、TPS、服务器资源的利用率等客户指标。&lt;/p&gt;
+
+&lt;p&gt;为什么需要高性能？&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;追求良好的用户体验&lt;/li&gt;
+  &lt;li&gt;满足业务增长的需要&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如何做好高性能？&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;可以从垂直和水平两个维度来考虑。&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;垂直：针对单机计算机，通过升级软件、硬件能力实现性能提升。&lt;/li&gt;
+      &lt;li&gt;水平：针对集群系统，利用合理任务分解和任务分配来提升。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;垂直维度的措施：&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;增大内存减少I/O。&lt;/li&gt;
+      &lt;li&gt;固态硬盘，提升I/O访问速度。&lt;/li&gt;
+      &lt;li&gt;用 RAID 增加I/O的吞吐能务。&lt;/li&gt;
+      &lt;li&gt;增加处理器，提高算力。&lt;/li&gt;
+      &lt;li&gt;升级网络带宽。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;水平维度的措施：&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;功能分解，把系统分解为多个子系统，微服务。&lt;/li&gt;
+      &lt;li&gt;多实例副本，同一组件重复部署到多台不 的服务器。&lt;/li&gt;
+      &lt;li&gt;数据分割，在每台机器上都只部署一部分数据。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;垂直维度方案比较适合业务的早期，主要从成本考虑。水平维度的方案适合在业务发展到一定程度。水平维度是技术发展的必经之路。&lt;/p&gt;
+
+&lt;h1 id=&quot;高可用&quot;&gt;高可用&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;系统无中断地执行其功能的能力，代表系统的可用性程度，是进行系统设计的时的准则之一。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;从系统内各个层面上看，“无中断”是几乎不可能的。硬件、软件、外部环境都可能导致难以预测是的问题。&lt;/p&gt;
+
+&lt;p&gt;从系统这个维度上看，&lt;strong&gt;高可用的本质就是通过“冗余”来实现&lt;/strong&gt;。即一台有问题，又一台顶着。一个机房有问题，有另一个机器扛着。&lt;/p&gt;
+
+&lt;p&gt;高可用主要从三方面考虑：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;高可用计算。业务逻辑的处理，无论在哪台机器上进行计算，同样的算法和输入数据，输出结果都是一样。&lt;/li&gt;
+  &lt;li&gt;高可用存储。存储高可用的难点不是在于如何备份数据，而在于如何减少或者规避数据不一致对业务造成的影响。&lt;/li&gt;
+  &lt;li&gt;高可用状态决策。即系统需要能够判断当前的状态是正常还是异常，如果出现了异常就要采取行动来保证高呆用。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;为什么会出现不可用？&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;硬件故障。应用运用到服务器中，现有的服务器有一些是普通的PC机，有一些docker 虚拟机的形式提供服务。本身就不具备高可用性。&lt;/li&gt;
+  &lt;li&gt;软件BUG。 BUG 不能消灭，只能减少。&lt;/li&gt;
+  &lt;li&gt;不可抗拒力。如地震，水灾，战争等。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;高可用的方案不是解决，而是减少或者规避。规避某个问题，一般可能会引来另一个问题，只是这个问题比之前的问题小。&lt;/p&gt;
+
+&lt;p&gt;高可用的设计过程其实也是一个取舍的过程。 这也是什么系统可用性永远只是几个九，不可能百分之一百。&lt;/p&gt;
+
+&lt;h1 id=&quot;可扩展性&quot;&gt;可扩展性&lt;/h1&gt;
+
+&lt;p&gt;可扩展性指的系统为了应对未来的需求而提供一种方便的扩展能力。当未来的某一个新需求出现时，系统以最小成本就可以支持，如只改配置或改动很少的代码。&lt;/p&gt;
+
+&lt;p&gt;设计具备良好的可扩展性的系统，有两个基本条件，正确预测变化、完美封闭变化。&lt;/p&gt;
+
+&lt;h3 id=&quot;预测变化&quot;&gt;预测变化&lt;/h3&gt;
+
+&lt;p&gt;预测变化的复杂性在于：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;不能每个设计点都考虑可扩展性。&lt;/li&gt;
+  &lt;li&gt;不能完全不考虑可扩展性。&lt;/li&gt;
+  &lt;li&gt;所有的预测都存在出错的可能性。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如何把握好预测的程序，提升预测结果的准备性，靠的就是自己的经验，直觉。小心过度设计，把系统搞得更加复杂了。&lt;/p&gt;
+
+&lt;h3 id=&quot;应对变化&quot;&gt;应对变化&lt;/h3&gt;
+
+&lt;p&gt;应对未来的变化，可以把系统进行分层，可能出现变化的和比较稳定的分好模块。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;系统需要拆分出变化层和稳定层。&lt;/li&gt;
+  &lt;li&gt;需要设计变化层和稳定层之间的接口。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;什么是架构的可扩展性？&lt;/p&gt;
+
+&lt;p&gt;业务需求、运行环境方面的变化都会导致软件系统的发生变化，而这种软件对上述变化&lt;strong&gt;适应能力&lt;/strong&gt;就是可扩展性。&lt;/p&gt;
+
+&lt;p&gt;一个具备良好可扩展性的架构设计应该当符合&lt;strong&gt;开闭原则&lt;/strong&gt;：对扩展开放，对修改关闭。&lt;/p&gt;
+
+&lt;p&gt;主要表现为：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;软件内部方面。在软件系统实现新增的业务功能时，对现有系统功能影响较少，即不需要对现在功能作任何发动或很少改动。&lt;/li&gt;
+  &lt;li&gt;软件外面方面。软件系统本身与其他方协同之间存在松耦关系，自身的变化对外部系统无影响。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如何设计可扩展性好的架构？&lt;/p&gt;
+
+&lt;p&gt;面向对象思想，设计模式等都是为了解决可扩展性而出现的方法与技术。&lt;/p&gt;
+
+&lt;p&gt;可以从两角度思考：&lt;/p&gt;
+
+&lt;p&gt;1、从业务维度。对业务深入的理解，对可预计的业务变化进行预测。&lt;/p&gt;
+
+&lt;p&gt;2、从技术维度。 利用扩展好的技术，实现对变化的封装。&lt;/p&gt;
+
+&lt;p&gt;在实际工作场景中常用的手段：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用分布式服务构建可复用的业务平台。&lt;/li&gt;
+  &lt;li&gt;使用分布式消息队列降低模块间的耦合性。&lt;/li&gt;
+  &lt;li&gt;稳定层可以考虑服务化。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;低成本安全规模&quot;&gt;低成本、安全、规模&lt;/h1&gt;
+
+&lt;p&gt;复杂度另外三个来源： 成本，安全和规模。&lt;/p&gt;
+
+&lt;h2 id=&quot;成本&quot;&gt;成本&lt;/h2&gt;
+
+&lt;p&gt;如果我们的架方案涉及到几百上千甚至上万台机器时，成本就是一个很重要的考虑点了。&lt;/p&gt;
+
+&lt;p&gt;当我们的架构设计“高可用、高性能”时，带来的就是更多服务器的高成本。 所以，低成本也成了架构设计的一个约束条件。&lt;/p&gt;
+
+&lt;p&gt;架构设计之前， 我们要设定一个成本目标，我的架构设计高可有，高性能也要满足这个成本目标。如果不行则要重新考虑方案。&lt;/p&gt;
+
+&lt;p&gt;为了降低成本，同时也是高可用，和性能架构。 一般的做法就是引入新技术。如：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;NoSQL （Redis、Memcache）做缓存解决高平发访问的问题&lt;/li&gt;
+  &lt;li&gt;全文搜索引擎 (Sphinx 、Elasticsearache、Solr) 解决数据库搜索低效问题&lt;/li&gt;
+  &lt;li&gt;Hadoop 解决海量数据存储和计算的问题。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;安全&quot;&gt;安全&lt;/h2&gt;
+
+&lt;p&gt;安全是一个大又复杂的技术领域，一旦出问题，对业务和企业的影响很大。&lt;/p&gt;
+
+&lt;p&gt;从技术的角度来讲，安全可以分为两类：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;功能上的安全 （防小偷）&lt;/li&gt;
+  &lt;li&gt;架构上的安全 （防强盗）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;功能上安全&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;如：XSS 攻击、CSRF攻击、SQL流入、系统漏洞、密码破解等。 问题很多时候出现在编码不严谨的时候，这一个逐步完善的过程。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;架构上的安全&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;传统的架构安全主是依靠防火墙。 防火墙的基本功能就是网络隔离，通过将网络划分成不同的区域，制定出不同区域的之间的访问控制策略来控制不同坐诊和程度区域传送的数据流。&lt;/p&gt;
+
+&lt;p&gt;互联网系统的架构安全目前并没有太好的设计手段来实现，更多地是依靠运营商或者云服务商强大的带宽和流量清洗的能力，自己的设计的架构上能做的事比较少。&lt;/p&gt;
+
+&lt;h2 id=&quot;规模&quot;&gt;规模&lt;/h2&gt;
+
+&lt;p&gt;规模带来的复杂度主要是因为“量变引起质变” 。&lt;/p&gt;
+
+&lt;p&gt;常用的规模带来的复杂度有：&lt;/p&gt;
+
+&lt;p&gt;1、功能越来越多，导致德比主复杂度指数级上升。&lt;/p&gt;
+
+&lt;p&gt;2、数据越来越多，系统复杂度发生质变。&lt;/p&gt;
+
+&lt;p&gt;规模问题需要与高性能、高可用、高扩展、高伸缩性统一考虑。常采用“分而治之，各个击破”的方法策略。&lt;/p&gt;
+
+&lt;h2 id=&quot;可伸缩性&quot;&gt;可伸缩性&lt;/h2&gt;
+
+&lt;p&gt;伸缩性一般是系统可以根据需求和成本调整自身处理能力的一种能力。伸缩性常意味着系统可以通过低成本并能够快速改变自身的处理能力以满足更多用户访问、处理更多数据而不会对用户体验造
+成任何影响。&lt;/p&gt;
+
+&lt;p&gt;伸缩性度量指标包括:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;处理更高并发。&lt;/li&gt;
+  &lt;li&gt;处理更多数据。&lt;/li&gt;
+  &lt;li&gt;处理更高频次的用户交互。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;其复杂度体现在：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;伸——增强系统在上述三个方面的处理能力。&lt;/li&gt;
+  &lt;li&gt;缩——缩减系统处理能力。&lt;/li&gt;
+  &lt;li&gt;上述伸缩过程还必须相对低成本和快速。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 14 Mar 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/the-purpose-of-architecture-design</link>
+        <guid isPermaLink="true">http://localhost:4000/the-purpose-of-architecture-design</guid>
+        
+        <category>极客时间</category>
+        
+        <category>技术学习笔记</category>
+        
+        
+        <category>系统设计</category>
         
       </item>
     
@@ -661,280 +790,6 @@
         
         
         <category>总结</category>
-        
-      </item>
-    
-      <item>
-        <title>c++11 thread 库</title>
-        <description>&lt;p&gt;C++11 标准引入了对线程的支持，这些支持主要包括以下内容：&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;std::thread&lt;/strong&gt; 类：C++11中引入了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::thread&lt;/code&gt; 类，它提供了一个可执行的线程对象，使得程序可以创建和管理线程。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;std::mutex&lt;/strong&gt; 类：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::mutex &lt;/code&gt;类提供了一种基本的互斥机制，允许程序员通过对共享资源的访问进行同步。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;std::condition_variable&lt;/strong&gt; 类：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::condition_variable&lt;/code&gt; 类提供了一种机制，使得线程能够等待某个条件成立，从而避免了线程轮询等待的问题。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;std::future&lt;/strong&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 类：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 类提供了一种异步编程的方式，允许程序员将任务提交到线程池中，并且可以得到返回值。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;std::atomic&lt;/strong&gt; 类：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::atomic &lt;/code&gt;类提供了一种基本的原子操作，用于在多线程环境下保证共享变量的原子性操作。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Thread-local storage&lt;/strong&gt;：C++11 标准中引入了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 关键字，用于指定变量在每个线程中是唯一的。&lt;/p&gt;
-
-&lt;h1 id=&quot;stdthread&quot;&gt;std::thread&lt;/h1&gt;
-
-&lt;p&gt;创建两个线程，一个线程输出奇数，另一个线程输出偶数：&lt;/p&gt;
-
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;printOddNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Odd number: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;printEvenNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Even number: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printOddNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printEvenNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;在主函数中，我们创建了两个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; std::thread &lt;/code&gt;对象 t1 和 t2，并将 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;printOddNumbers()&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;printEvenNumbers()&lt;/code&gt; 作为线程函数传递给它们。然后调用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;join()&lt;/code&gt; 函数等待线程的结束。运行程序后，输出如下：&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Odd number: 1
-Odd number: 3
-Odd number: 5
-Odd number: 7
-Odd number: 9
-Even number: 2
-Even number: 4
-Even number: 6
-Even number: 8
-Even number: 10
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;stdthread-1&quot;&gt;std::thread&lt;/h1&gt;
-
-&lt;p&gt;定义了一个全局变量 counter，并使用两个线程分别对其进行加和减的操作：&lt;/p&gt;
-
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;printOddNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Odd number: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;printEvenNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Even number: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printOddNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printEvenNumbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::mutex&lt;/code&gt; 的作用是对全局变量 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;counter&lt;/code&gt; 进行互斥访问，避免了两个线程同时对其进行修改导致的数据竞争问题。其中，在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;add&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sub&lt;/code&gt; 函数中，使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::mutex&lt;/code&gt; 的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lock()&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unlock()&lt;/code&gt; 方法来对互斥量进行加锁和解锁，从而确保了两个线程之间的数据访问互斥性。&lt;/p&gt;
-
-&lt;h1 id=&quot;stdcondition_variable&quot;&gt;std::condition_variable&lt;/h1&gt;
-
-&lt;p&gt;用于线程间的条件变量等待和通知。它是配合 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::unique_lock&lt;/code&gt; 使用的，用于线程间共享数据的同步。&lt;/p&gt;
-
-&lt;p&gt;下面是一个简单的示例程序，使用 std::condition_variable 实现两个线程间的同步：&lt;/p&gt;
-
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;mutex&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;condition_variable&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mutex&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mtx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;condition_variable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ready&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;consumer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unique_lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mutex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mtx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ready&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Consumer: data = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;producer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this_thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chrono&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seconds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;42&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;ready&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;notify_one&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumer_thread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consumer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;producer_thread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;producer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;consumer_thread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;producer_thread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer()&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer()&lt;/code&gt; 分别运行在两个线程中。&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer()&lt;/code&gt; 中使用 s&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;td::unique_lock&lt;/code&gt; 对 mtx 进行加锁，并在 while 循环中等待条件变量 ready 的值为 true，以防止在数据未准备好时访问 data。&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer()&lt;/code&gt; 中首先等待 1 秒钟以模拟数据的准备过程，然后修改 data 的值为 42，并将 ready 的值设置为 true，最后通过调用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cv.notify_one()&lt;/code&gt; 通知等待中的线程可以开始访问数据了。&lt;/p&gt;
-
-&lt;p&gt;最后在主线程中调用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;join()&lt;/code&gt; 等待两个线程结束。&lt;/p&gt;
-
-&lt;h1 id=&quot;stdfuture&quot;&gt;std::future&lt;/h1&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 是 C++11 中提供的用于线程间通信的工具，其中 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 是一个对象，它可以在某个线程中设置一个值，并让另一个线程等待该值的产生，而 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 则是用来获取这个值的。&lt;/p&gt;
-
-&lt;p&gt;下面是一个简单的例子，用于演示如何使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt;：&lt;/p&gt;
-
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;future&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;printValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Value: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fut&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_future&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;th1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;th2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([](&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this_thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chrono&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seconds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;th1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;th2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;创建了一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 对象 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prom&lt;/code&gt;，并通过它获取了一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::future&lt;/code&gt; 对象 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fut&lt;/code&gt;。接着，我们创建了两个线程 th1 和 th2，其中 th1 等待 fut 的值的产生，并在产生后将其打印出来；而 th2 则会等待 2 秒钟后，将值 10 设置到 prom 中，使得 th1 可以获取这个值并打印出来。&lt;/p&gt;
-
-&lt;p&gt;需要注意的是，在将 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::promise&lt;/code&gt; 对象 prom 传递给线程 th2 的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lambda&lt;/code&gt; 表达式时，我们必须使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::ref()&lt;/code&gt; 函数将其包装成一个引用，否则编译器将无法正确地处理它。&lt;/p&gt;
-
-&lt;h1 id=&quot;stdatomic&quot;&gt;std::atomic&lt;/h1&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::atomic&lt;/code&gt; 是 C++11 引入的一个用于原子操作的库，可以保证操作的原子性，避免多线程环境下的数据竞争。&lt;/p&gt;
-
-&lt;p&gt;以下是一个使用 std::atomic 的简单示例，假设有两个线程同时对共享变量进行加一操作：&lt;/p&gt;
-
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;atomic&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;atomic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 定义原子变量&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;increment_counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 对原子变量进行加一操作&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;increment_counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;increment_counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Counter value: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 输出共享变量的值&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;定义了一个名为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;counter&lt;/code&gt; 的原子变量，两个线程并行执行 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;increment_counter()&lt;/code&gt; 函数，对 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;counter&lt;/code&gt; 进行 10000 次加一操作。由于使用了&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; std::atomic&lt;/code&gt;，这个操作是原子的，不会发生数据竞争，保证了线程安全。最终输出 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;counter&lt;/code&gt; 的值。&lt;/p&gt;
-
-&lt;h1 id=&quot;thread-local-storage&quot;&gt;Thread-local storage&lt;/h1&gt;
-
-&lt;p&gt;&lt;strong&gt;Thread-local storage（TLS）&lt;/strong&gt;是指每个线程都有自己独立的存储空间，这些存储空间可以用来存储线程私有的数据，不同线程之间的数据互不干扰。TLS 是多线程编程中非常重要的一个概念，可以帮助开发者在多线程环境下更加高效地使用全局变量。&lt;/p&gt;
-
-&lt;p&gt;C++11中引入了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 关键字，它可以用来修饰全局变量、静态变量和局部静态变量。使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 修饰的变量只有在声明它的线程中可见，其他线程无法访问到该变量，也就是说，每个线程都有自己的变量副本。&lt;/p&gt;
-
-&lt;p&gt;以下是一个使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 修饰的全局变量的例子：&lt;/p&gt;
-
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;thread_local&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Thread &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this_thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;们定义了一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 的全局变量x，并在 foo 函数中对其进行修改和打印。接着创建了两个线程 t1 和 t2，并分别执行 foo 函数，最后调用 join 函数等待线程执行结束。&lt;/p&gt;
-
-&lt;p&gt;由于 x 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread_local&lt;/code&gt; 变量，因此在每个线程中都有自己的副本，两个线程对 x 的修改互不干扰。运行结果可能类似于：&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Thread 139861759004416: 1
-Thread 139861750611712: 1
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;每个线程都有自己的x变量副本，并且只能访问到自己的副本。这样可以避免不同线程之间对同一全局变量的竞争和冲突，从而提高程序的稳定性和并发性能。&lt;/p&gt;
-</description>
-        <pubDate>Sat, 26 Nov 2022 00:12:15 +0800</pubDate>
-        <link>http://localhost:4000/c++11-thread</link>
-        <guid isPermaLink="true">http://localhost:4000/c++11-thread</guid>
-        
-        <category>c++</category>
-        
-        <category>技术学习笔记</category>
-        
-        
-        <category>c++</category>
         
       </item>
     
