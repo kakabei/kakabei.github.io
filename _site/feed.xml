@@ -5,9 +5,135 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 17 Mar 2023 00:30:21 +0800</pubDate>
-    <lastBuildDate>Fri, 17 Mar 2023 00:30:21 +0800</lastBuildDate>
+    <pubDate>Sat, 18 Mar 2023 21:48:48 +0800</pubDate>
+    <lastBuildDate>Sat, 18 Mar 2023 21:48:48 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
+    
+      <item>
+        <title>架构的负载均衡</title>
+        <description>&lt;p&gt;单机机器无法满足业务的需求时，通过集群来提升系统的整体处理性能。这时负载均衡就成了一个很重要的基础网络组件，主要的功能是分配流量，被称之为&lt;strong&gt;负载均衡器&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h1 id=&quot;一负载均衡的分类&quot;&gt;一、负载均衡的分类&lt;/h1&gt;
+
+&lt;p&gt;常见的负载均衡系统：DNS 负载均衡、硬件负载均衡和软件负载均衡。&lt;/p&gt;
+
+&lt;h3 id=&quot;dns-负载均衡&quot;&gt;DNS 负载均衡&lt;/h3&gt;
+
+&lt;p&gt;DNS 负载均衡一般是实现地理级别的均衡，如访问 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;www.baidu.com&lt;/code&gt; 北方的用户访问北京的机房，南方的用户访问广州机房。DNS 负载均衡的本质就是 DNS 服务解析同一域名可以返回不同的IP地址。 是最简单的最常见的负载均衡方式。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-18-11-17-53.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;DNS 负载均衡的优化：简单，成本低； 就近访问，提升访问速度。&lt;/p&gt;
+
+&lt;p&gt;缺点：更新不及时； 扩展性差； 分配策略比较简单。&lt;/p&gt;
+
+&lt;h3 id=&quot;硬件负载均衡&quot;&gt;硬件负载均衡&lt;/h3&gt;
+
+&lt;p&gt;硬件负载均衡是通过硬件设备来实现的，像路由器，交换机等是一个基础网络设备。目前的业界的硬件负载均衡设备有：F5 和 A10。&lt;/p&gt;
+
+&lt;p&gt;硬件负载均衡的优点是：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;功能强大。 支持各层级负载均衡，支持全面负载均衡算法，支持全局负载均衡。&lt;/li&gt;
+  &lt;li&gt;性能强大。100万级的并发，软件的是10级别。&lt;/li&gt;
+  &lt;li&gt;稳定性高。&lt;/li&gt;
+  &lt;li&gt;安全防护。具备防火墙、防DDos 攻击等。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;缺点：价格贵； 扩展性能力差；&lt;/p&gt;
+
+&lt;h3 id=&quot;软件负载均衡&quot;&gt;软件负载均衡&lt;/h3&gt;
+
+&lt;p&gt;软件负载均衡常见的有 Nginx 和 LVS。 Nginx  是7层负载均衡，LVS 是 linux 内核的4层负载均衡。 这之间的区别是协议和灵活性。 Nginx 支持 HTTP、E- mail 协议，而LVS 是4层负载均衡，和协议无关，所有应用都可以做到。&lt;/p&gt;
+
+&lt;p&gt;软件和硬件的最主要区别是：硬件的负载均衡性能远远比软件高。 Nginx 的性能是万级，一般的 linux 上的 nginx 大概是5w/s。LVS的性能是十万级。 可达到80w/s。而硬件的 F5 是百万级，从200w/s 到800w/s 都有。&lt;/p&gt;
+
+&lt;p&gt;软件负载均衡的优点： 简单、便宜、灵活。缺点：性能一般、功能有限、不具安全功能。&lt;/p&gt;
+
+&lt;p&gt;Nginx 的负载均衡的示意图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-18-20-06-27.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;二负载均衡的架构&quot;&gt;二、负载均衡的架构&lt;/h1&gt;
+
+&lt;p&gt;负载均衡的三种方式者各有自己的优缺点，所以一般在运用时都是根据其优势进行综合使用。如DNS负载均衡用到实现地理级别； 硬件负载均衡用到集群级别的； 软件负载均衡用到实现机器级别的。如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;./assets/system-design/architecture-design-2023-03-18-20-11-15.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;整个系统分为三层：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;地理级别负载均衡。 通过DNS服务就近把域名解析到三地的机房。这里当一个机器出现故障时，也可以DNS服务上摘掉。&lt;/li&gt;
+  &lt;li&gt;集群级别负载均衡。机房的入口是F5 硬件负载均衡。由它分发到本地不同的集群去处理。&lt;/li&gt;
+  &lt;li&gt;机器级别负载均衡。 用的是软件负载均衡，如 nginx。 当流分发到集群中的某台机器上处理。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;三负载均衡的算法&quot;&gt;三、负载均衡的算法&lt;/h1&gt;
+
+&lt;p&gt;负载均衡的算法有：轮询、加权轮询、负载最低优先、性能最优类、hash 类。&lt;/p&gt;
+
+&lt;h3 id=&quot;轮询&quot;&gt;轮询&lt;/h3&gt;
+
+&lt;p&gt;轮询是最简单的一种策略，无需关注服务器本身的状态。无论是这个服务器是负载太重，还是服务器本身性能太差了。负载均衡系统都不会有感知，依然不断的发送流量过来。 有一点，服务器宕机或连接断开了，负载均衡系统是可感觉到的。 也会做出相关的处理，从配置表列中摘除掉。&lt;/p&gt;
+
+&lt;h3 id=&quot;加权轮询&quot;&gt;加权轮询&lt;/h3&gt;
+
+&lt;p&gt;负载均衡系统根据服务器的权重进行不同比例的分配，权重一般根据服务器的性能或状态人为的进行配置。 加权的目的就是为了解决不同服务器之间的处理能务的差异。&lt;/p&gt;
+
+&lt;h3 id=&quot;负载最低优先&quot;&gt;负载最低优先&lt;/h3&gt;
+
+&lt;p&gt;负载最低优先的意思是把流量分配给当前负载最低的服务器。从这里可以看到负载均衡系统是可以知道服务器的一个大概的运行状态的。&lt;/p&gt;
+
+&lt;p&gt;实践中，可以根据不同的指标来表示当前的负载最低。如：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;nginx 7层网络负载系统，用 http 请求数来判断服务器状态。（需进行nginx 扩展）&lt;/li&gt;
+  &lt;li&gt;CPU 负载。如果是自己做的负载均衡系统的，可以把服务器的CPU 负载情况发布到负载均衡系统来做这个指标。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用负载最低优先这种方式，负载均衡系统知道了服务器的状态，但是也变得复杂很多。 实际上真正应用场景反而没有轮询多。&lt;/p&gt;
+
+&lt;h3 id=&quot;性能最优类&quot;&gt;性能最优类&lt;/h3&gt;
+
+&lt;p&gt;性能最优类的的算法和负载最低优先的算法差不多，都是要需要感知服务器的状态。性能最优类只是通过响应时间来衡量服务器状态的。&lt;/p&gt;
+
+&lt;p&gt;负载均衡系统需要收集和分析每个服务器每个任务的响应时间。 所以需要采样统计来估算每一台服务器的响应时间。&lt;/p&gt;
+
+&lt;h3 id=&quot;hash-类&quot;&gt;Hash 类&lt;/h3&gt;
+
+&lt;p&gt;负载均衡系统根据任务中的某些关键信息进行 hash 运算。将相同的 hash 值的请求分配到同一台服务器上。这样做的目的主要是为了满足特定的业务需求。如：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;源地址 hash。 将源于同一个源IP地址的任务分配给同一个服务器进行处理。 适合于存在事务、会话的业务。&lt;/li&gt;
+  &lt;li&gt;ID hash  。 将某个ID标识的业务分配到同一个服务器中进行处理， ID 一般是临进性数据 （session ID）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这里有个疑问，如果有一台服务器挂了。那么 hash 之后是不是找不到对应的服务器了？&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
+
+&lt;p&gt;2、&lt;a href=&quot;https://skyao.gitbooks.io/learning-nginx/content/documentation/HTTP_load_balancer.html&quot;&gt;使用nginx实现HTTP负载均衡&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;3、&lt;a href=&quot;https://superproxy.github.io/docs/lvs/index.html&quot;&gt;LVS介绍&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;4、&lt;a href=&quot;https://zhuanlan.zhihu.com/p/23161920&quot;&gt;浅谈Nginx负载均衡与F5的区别&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;5、&lt;a href=&quot;https://developer.aliyun.com/article/502736&quot;&gt;F5负载均衡器原理&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 04 Mar 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/load-balancing-of-the-architecture</link>
+        <guid isPermaLink="true">http://localhost:4000/load-balancing-of-the-architecture</guid>
+        
+        <category>极客时间</category>
+        
+        <category>技术学习笔记</category>
+        
+        
+        <category>系统设计</category>
+        
+      </item>
     
       <item>
         <title>高性能数据库集群</title>
@@ -836,45 +962,6 @@
         <pubDate>Fri, 10 Feb 2023 18:12:15 +0800</pubDate>
         <link>http://localhost:4000/review-the-main-elements-of-document</link>
         <guid isPermaLink="true">http://localhost:4000/review-the-main-elements-of-document</guid>
-        
-        <category>工作经验</category>
-        
-        <category>团队管理</category>
-        
-        
-        <category>总结</category>
-        
-      </item>
-    
-      <item>
-        <title>说话的方式</title>
-        <description>&lt;p&gt;汇报或者表达时要按以下主要步骤:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;结论 –&amp;gt; 原因 –&amp;gt; 措施 –&amp;gt;建议&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;1、先把结论简单说一下&lt;/p&gt;
-
-&lt;p&gt;2、然后解释原因&lt;/p&gt;
-
-&lt;p&gt;3、并给出措施和建议。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;节奏:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;把握好沟通的节奏，如果没有办法把握整体的节奏，则把握好自己的节奏。&lt;/p&gt;
-
-&lt;p&gt;好好倾听，别人不对，也要好好倾听，不要随便打断别人节奏。&lt;/p&gt;
-
-&lt;p&gt;如果被别人打断了， 就停下来，让他先说，他说完之后，再按自己的节奏说。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;如何很好的回答别人的提问？&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;如果自己的观点已经不在对方的眼界认识之内，停止阐明观点。怎么说也没有用。&lt;/p&gt;
-
-&lt;p&gt;如果对方的观点，难以理解，可能已经不在眼界认识之内，不要急于否定，反驳。好好听，好好记。&lt;/p&gt;
-</description>
-        <pubDate>Tue, 10 Jan 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/the-way-you-say</link>
-        <guid isPermaLink="true">http://localhost:4000/the-way-you-say</guid>
         
         <category>工作经验</category>
         
