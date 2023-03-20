@@ -109,3 +109,5 @@ Nginx 的负载均衡的示意图：
 4、[浅谈Nginx负载均衡与F5的区别](https://zhuanlan.zhihu.com/p/23161920)
 
 5、[F5负载均衡器原理](https://developer.aliyun.com/article/502736)
+
+6、[HAProxy用法详解 ](http://www.ttlsa.com/linux/haproxy-study-tutorial/)

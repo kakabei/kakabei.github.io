@@ -5,9 +5,208 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 18 Mar 2023 21:48:48 +0800</pubDate>
-    <lastBuildDate>Sat, 18 Mar 2023 21:48:48 +0800</lastBuildDate>
+    <pubDate>Mon, 20 Mar 2023 15:36:43 +0800</pubDate>
+    <lastBuildDate>Mon, 20 Mar 2023 15:36:43 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
+    
+      <item>
+        <title>存储架构双机架构</title>
+        <description>&lt;p&gt;存储高可用的方案本质上就是通过数据冗余的方式来实现的。 方案的重点是：数据的复制、数据的一致性。&lt;/p&gt;
+
+&lt;p&gt;可以通过下面几方式来分析：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;数据如何复制？&lt;/li&gt;
+  &lt;li&gt;节点的职责是什么？&lt;/li&gt;
+  &lt;li&gt;如何应对复制延迟？&lt;/li&gt;
+  &lt;li&gt;如果应对复制中断？&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;常见的高可用存储架构有：主备、主从、双机、主主、集群、分区。&lt;/p&gt;
+
+&lt;h1 id=&quot;主备复制&quot;&gt;主备复制&lt;/h1&gt;
+
+&lt;p&gt;标准的主备方案结构图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-13-15-51.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这个架构中备机主要的功能是数据备份。 并不参与实现的业务功能。 切换需要人工手动进行。&lt;/p&gt;
+
+&lt;p&gt;主备复制架构的优点是：简单。特点是： 客户端不感知备机存在，备机只是备份数据，不参考业务； 故障后要人工切换。&lt;/p&gt;
+
+&lt;p&gt;场景：内部的后管理系统用主备复制架构比较多，主要是因为这类系统数据更新频率比较低。&lt;/p&gt;
+
+&lt;h1 id=&quot;主从复制&quot;&gt;主从复制&lt;/h1&gt;
+
+&lt;p&gt;标准主从复制架构图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-13-21-52.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;主机是可读也可写，从机只可读。&lt;/p&gt;
+
+&lt;p&gt;优点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;主机故障后，不影响从机的读。&lt;/li&gt;
+  &lt;li&gt;从机提供了读功能，参与到业务功能去，提高系统的性能。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;缺点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;客户端读写时要感知主机还是备机。&lt;/li&gt;
+  &lt;li&gt;如果主从数据复制延迟比较大，则可能会影响从机的读操作的数据一致性。&lt;/li&gt;
+  &lt;li&gt;故障旱需要人工干预。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;场景：适合一些读多写少的场景。如论坛，新闻网点等，读写比在 10倍到100倍之间。&lt;/p&gt;
+
+&lt;h1 id=&quot;双机切换&quot;&gt;双机切换&lt;/h1&gt;
+
+&lt;p&gt;双机切换是在上面两个种方式上增加了自动切换的功能。&lt;/p&gt;
+
+&lt;p&gt;关键的设计点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;主备间状态判断。状态传递的渠道，以及状态检测的内容。 检测是否掉电、进程是否存在、响应是否缓慢等。&lt;/li&gt;
+  &lt;li&gt;切换决策。切换时机、切换策略、自动程度。&lt;/li&gt;
+  &lt;li&gt;解决数据冲突。 故障的主机恢复之后，可能存在数据冲突。应该如何处理。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;常见的架构：有互连式、中介式、模拟式。&lt;/p&gt;
+
+&lt;p&gt;感觉双机主动切换，在实际应该中可能会出现很多问题。切换的时机，数据的一致性是一个很大的考验。不知道生产环境有没有企业真实的运用到。&lt;/p&gt;
+
+&lt;h1 id=&quot;主主复制&quot;&gt;主主复制&lt;/h1&gt;
+
+&lt;p&gt;主主复制是两台机器都是主机，双方都要把数据复制给对方，客户端可以任意挑其中一台机器进行读写操作。如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-14-03-28.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;特点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;两台都是主机，不存在切换。&lt;/li&gt;
+  &lt;li&gt;客户端读写其中一台主机即可。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对数据的设计有严格有要求，一般适合于临时性、可丢失、可覆盖的数据场景。&lt;/p&gt;
+
+&lt;h1 id=&quot;数据集群&quot;&gt;数据集群&lt;/h1&gt;
+
+&lt;p&gt;集群就是多台机器组全在一起形成一个统一的系统。主要是解决主备、主从架构的存储或处理能力不足的问题。集群可以根据不同业务来划分不同数据角色。&lt;/p&gt;
+
+&lt;p&gt;主要可以分两大类：数据集中集群，数据分散集群。&lt;/p&gt;
+
+&lt;h3 id=&quot;数据集中集群&quot;&gt;数据集中集群&lt;/h3&gt;
+
+&lt;p&gt;这种方式和主备、主从架构相似。 如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-14-42-30.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;集群中的服务器比较多，所以复杂度会更高一些，表现为：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;主机如何将数据复制给备机&lt;/li&gt;
+  &lt;li&gt;主要故障后，如何决定新的主机，如Zoobeeper 通过 ZAB 的算法来解决。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;数据集中集群，客户端只能将数据写到主机。&lt;/p&gt;
+
+&lt;h3 id=&quot;数据分散集群&quot;&gt;数据分散集群&lt;/h3&gt;
+
+&lt;p&gt;是指多个服务器给成一个集群。每台服务器都负责存储一部分数据。数据分散集群的复杂点在于如何将数据分配到不同的服务器上。 算法的考量如下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;均衡性&lt;/li&gt;
+  &lt;li&gt;容错性&lt;/li&gt;
+  &lt;li&gt;可伸缩性&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;数据分散集群中的每台服务器都可以处理读写请求。需要一台服务器来负责执行数据分配算法，可以是独立一台服务器也可以是选举出来的一台机器来承担。&lt;/p&gt;
+
+&lt;h1 id=&quot;数据分区&quot;&gt;数据分区&lt;/h1&gt;
+
+&lt;p&gt;前面的架构设计主要是考虑部分硬件出现故障问题，数据依然可用。 但是如果大面积出现故障，如一个机房出现问题了，如火灾等。这里这个机房中的所有集群的机器都可能会有故障。&lt;/p&gt;
+
+&lt;p&gt;我们可以通过设计地理级别的数据分区来解决这样的问题。&lt;/p&gt;
+
+&lt;p&gt;数据分区是将数据按一定的规则进行分区，不同分区分布上在不地域上，每个分区存储一部分，分区之前可以相互备份数据。这样一个地域发生事故时，可以通过另一个地域的机房的数据同步恢复数据。&lt;/p&gt;
+
+&lt;p&gt;数据分区架构，要考虑的有：&lt;/p&gt;
+
+&lt;p&gt;1、数据量&lt;/p&gt;
+
+&lt;p&gt;​	数据量大小直接决定了分区的规则和复杂度。数据服务器越多，单机的故障就会越常见。所以运维成本也更加复杂。&lt;/p&gt;
+
+&lt;p&gt;2、分区规则&lt;/p&gt;
+
+&lt;p&gt;地理位置，有远有近，分不同省市，考虑地域的安全性。业务范围，成本等。&lt;/p&gt;
+
+&lt;p&gt;3、复制规则&lt;/p&gt;
+
+&lt;p&gt;数据的一致性是最重要的核心。所以复制方式一定是一个高可用的方案。&lt;/p&gt;
+
+&lt;p&gt;常见的分区复制规则有三种： 集中式、互备式、独立式。&lt;/p&gt;
+
+&lt;h3 id=&quot;集中式&quot;&gt;集中式&lt;/h3&gt;
+
+&lt;p&gt;集中式备份指存在一个总的备份中心，所有的分区都将数据备份到备份中心，如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-15-21-52.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;特点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;扩展容易，可以随时增加一个分区&lt;/li&gt;
+  &lt;li&gt;成本高，需要一个独立的备份中心&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;互备式&quot;&gt;互备式&lt;/h3&gt;
+
+&lt;p&gt;每一个分区是另一个分区的数据备份。如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-15-24-01.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;特点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;设计复杂，分区既要承担数据存储功能，也要承担数据备份功能。&lt;/li&gt;
+  &lt;li&gt;扩展麻烦，相互备份的相关扩展越来比较麻烦&lt;/li&gt;
+  &lt;li&gt;成本低，无需独立备份中心，&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;独立式&quot;&gt;独立式&lt;/h3&gt;
+
+&lt;p&gt;每个分区都有自己的独立的备份中心，如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-15-27-35.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;特点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;设计简单，各分区互不影响&lt;/li&gt;
+  &lt;li&gt;扩展性好，新增比较简单快捷&lt;/li&gt;
+  &lt;li&gt;成本高&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 05 Mar 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/storage-architecture-dual-system-architecture</link>
+        <guid isPermaLink="true">http://localhost:4000/storage-architecture-dual-system-architecture</guid>
+        
+        <category>极客时间</category>
+        
+        <category>技术学习笔记</category>
+        
+        
+        <category>系统设计</category>
+        
+      </item>
     
       <item>
         <title>架构的负载均衡</title>
@@ -121,6 +320,8 @@
 &lt;p&gt;4、&lt;a href=&quot;https://zhuanlan.zhihu.com/p/23161920&quot;&gt;浅谈Nginx负载均衡与F5的区别&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;5、&lt;a href=&quot;https://developer.aliyun.com/article/502736&quot;&gt;F5负载均衡器原理&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;6、&lt;a href=&quot;http://www.ttlsa.com/linux/haproxy-study-tutorial/&quot;&gt;HAProxy用法详解 &lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Sat, 04 Mar 2023 18:12:15 +0800</pubDate>
         <link>http://localhost:4000/load-balancing-of-the-architecture</link>
@@ -934,34 +1135,6 @@
         <pubDate>Sun, 12 Feb 2023 18:12:15 +0800</pubDate>
         <link>http://localhost:4000/think-about-software-engineering</link>
         <guid isPermaLink="true">http://localhost:4000/think-about-software-engineering</guid>
-        
-        <category>工作经验</category>
-        
-        <category>团队管理</category>
-        
-        
-        <category>总结</category>
-        
-      </item>
-    
-      <item>
-        <title>复盘文档的要素</title>
-        <description>&lt;p&gt;&lt;strong&gt;复盘文档应该包括以下要素&lt;/strong&gt;：&lt;/p&gt;
-
-&lt;p&gt;1、事件的摘要。简短说明情况，什么时间什么业务什么原因出现什么情况，目前是什么状况。&lt;/p&gt;
-
-&lt;p&gt;2、具体事件。整个事件时间线，问题出现、问题发现、问题调查、问题解决。以时间线详细说明。&lt;/p&gt;
-
-&lt;p&gt;3、致该事件的主要原因，影响程度。&lt;/p&gt;
-
-&lt;p&gt;4、为什么没有及时发现，是否有系统演习，为什么没有覆盖到。&lt;/p&gt;
-
-&lt;p&gt;5、可立即修复问题的具体措施，防止事件再次发生的具体措施，经验教训。&lt;/p&gt;
-
-</description>
-        <pubDate>Fri, 10 Feb 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/review-the-main-elements-of-document</link>
-        <guid isPermaLink="true">http://localhost:4000/review-the-main-elements-of-document</guid>
         
         <category>工作经验</category>
         
