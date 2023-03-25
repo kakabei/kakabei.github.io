@@ -1,6 +1,6 @@
 ---
 layout: post
-title: go 编译时传递参数
+title: golang 编译时传递参数
 date: 2018-04-10 09:21:12
 categories: go 
 tags:  go

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: go 资料
+title: glang 资料
 date: 2018-04-03 09:21:12
 categories: go 
 tags:  go

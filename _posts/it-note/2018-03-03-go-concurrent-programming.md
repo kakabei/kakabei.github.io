@@ -1,6 +1,6 @@
 ---
 layout: post
-title: go 笔记 并发编程
+title: golang 笔记 并发编程
 date: 2018-03-03 07:21:12
 categories:  go 
 tags: go

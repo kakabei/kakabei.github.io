@@ -1,6 +1,6 @@
 ---
 layout: post
-title: go 笔记 反射
+title: golang 笔记 反射
 date: 2018-03-06 07:21:12
 categories:  go 
 tags: go

@@ -1,14 +1,14 @@
 ---
 layout: post
-title: go语言字符类型 byte 和 rune
+title: golang 字符类型 byte 和 rune
 date: 2018-08-11  16:12:15
 categories: go  
 tags:  读书 go
-excerpt: go 的字符有两种 uint8 和 rune
+excerpt: golang 的字符有两种 uint8 和 rune
 ---
 
 
-go 的字符有两种：
+golang 的字符有两种：
 -  `uint8` 类型，或叫 `byte` 型。代表了 `ASCII` 码的一个字符。
 -  `rune` 类型，代表一个UTF-8字符，当需要处理复合字符时，则需要用到 rune 类型。 rune 类型等价 `int32` 类型。
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: go 笔记 基础语法
+title: golang 笔记 基础语法
 date: 2018-03-01 07:21:12
 categories:  go 
 tags: go

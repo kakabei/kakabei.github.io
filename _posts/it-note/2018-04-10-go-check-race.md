@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  go 的竞争检测
+title:  golang 的竞争检测
 date: 2018-04-10 20:21:12
 categories: go 
 tags:  go

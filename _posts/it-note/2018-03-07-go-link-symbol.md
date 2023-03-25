@@ -1,6 +1,6 @@
 ---
 layout: post
-title: go 笔记 链接符号
+title: golang 笔记 链接符号
 date: 2018-03-07 07:21:12
 categories:  go 
 tags: go
