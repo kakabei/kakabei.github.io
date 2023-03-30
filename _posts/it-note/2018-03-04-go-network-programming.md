@@ -2,8 +2,8 @@
 layout: post
 title: golang 笔记 网络编程
 date: 2018-03-04 07:21:12
-categories:  go 
-tags: go
+categories:  golang 
+tags: golang
 excerpt: go 标准库里提供的 net 包，支持基于 IP 层、TCP/UDP 等网络操作
 ---
 

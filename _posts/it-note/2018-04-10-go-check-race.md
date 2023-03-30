@@ -2,8 +2,8 @@
 layout: post
 title:  golang 的竞争检测
 date: 2018-04-10 20:21:12
-categories: go 
-tags:  go
+categories: golang 
+tags:  golang
 excerpt: go的竞争检测
 ---
 

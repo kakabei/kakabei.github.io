@@ -2,8 +2,8 @@
 layout: post
 title: golang 编译时传递参数
 date: 2018-04-10 09:21:12
-categories: go 
-tags:  go
+categories: golang
+tags:  golang
 excerpt: go 编译时传递参数
 ---
 

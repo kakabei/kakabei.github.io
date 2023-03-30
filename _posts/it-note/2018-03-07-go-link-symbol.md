@@ -2,9 +2,9 @@
 layout: post
 title: golang 笔记 链接符号
 date: 2018-03-07 07:21:12
-categories:  go 
-tags: go
-excerpt: go 链接符号关心的是如何将语言文法使用的符号转化为链接期使用的符号
+categories:  golang 
+tags: golang
+excerpt: golang 链接符号关心的是如何将语言文法使用的符号转化为链接期使用的符号
 ---
 
 

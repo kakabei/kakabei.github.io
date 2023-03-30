@@ -2,8 +2,8 @@
 layout: post
 title: 《go 语言编程》 by 许式伟、吕桂华
 date: 2018-08-11  16:12:15
-categories: go  
-tags:  读书 go
+categories: golang  
+tags:  读书 golang
 excerpt: 许式伟的书，golang 入门书籍，比较基础
 ---
 

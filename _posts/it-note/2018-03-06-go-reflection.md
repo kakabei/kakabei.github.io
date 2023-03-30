@@ -2,9 +2,9 @@
 layout: post
 title: golang 笔记 反射
 date: 2018-03-06 07:21:12
-categories:  go 
-tags: go
-excerpt: go 通过反射，你可以获取丰富的类型信息，并可以利用这些类型信息做非常灵活的工作。
+categories:  golang 
+tags: golang
+excerpt: golang 通过反射，你可以获取丰富的类型信息，并可以利用这些类型信息做非常灵活的工作。
 ---
 
 反射( reflection )是在 Java 出现后迅速流行起来的一种概念。通过反射，你可以获取丰富的类型信息，并可以利用这些类型信息做非常灵活的工作。

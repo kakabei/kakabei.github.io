@@ -2,9 +2,9 @@
 layout: post
 title: glang 资料
 date: 2018-04-03 09:21:12
-categories: go 
-tags:  go
-excerpt: go 资料收集
+categories: golang 
+tags:  golang
+excerpt: golang 资料收集
 ---
 
 

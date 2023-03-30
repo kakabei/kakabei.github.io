@@ -2,8 +2,8 @@
 layout: post
 title: golang 笔记 并发编程
 date: 2018-03-03 07:21:12
-categories:  go 
-tags: go
+categories:  golang
+tags: golang
 excerpt: go 并发编程,最主要就是 channel 和 select。
 ---
 

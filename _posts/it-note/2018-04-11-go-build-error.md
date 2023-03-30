@@ -2,8 +2,8 @@
 layout: post
 title: golang build 时的错误分析
 date: 2018-04-11   11:21:12
-categories: go 
-tags:  go
+categories: golang
+tags:  golang
 excerpt: go build 时的错误分析
 ---
 

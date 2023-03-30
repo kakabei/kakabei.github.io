@@ -2,8 +2,8 @@
 layout: post
 title: golang 字符类型 byte 和 rune
 date: 2018-08-11  16:12:15
-categories: go  
-tags:  读书 go
+categories: golang  
+tags:  读书 golang
 excerpt: golang 的字符有两种 uint8 和 rune
 ---
 
