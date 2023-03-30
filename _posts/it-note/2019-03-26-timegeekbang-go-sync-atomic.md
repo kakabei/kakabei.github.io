@@ -2,8 +2,8 @@
 layout: post
 title: 《极客时间》go语言核心36讲 原子操作
 date: 2019-03-26 09:21:12
-categories:  go
-tags:  go 极客时间 技术学习笔记
+categories:  golang
+tags:  golang 极客时间 技术学习笔记
 excerpt: 在众多的同步工具中，真正能够保证原子性执行的只有原子操作（atomic operation）
 ---
 

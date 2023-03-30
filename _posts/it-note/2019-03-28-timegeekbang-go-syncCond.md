@@ -2,8 +2,8 @@
 layout: post
 title: 《极客时间》go语言核心36讲 条件变量 sync.Cond
 date: 2019-03-28 09:21:12
-categories:  go
-tags:  go 极客时间 技术学习笔记
+categories:  golang
+tags:  golang 极客时间 技术学习笔记
 excerpt: 条件变量是和互斥锁一起使用的。
 ---
 

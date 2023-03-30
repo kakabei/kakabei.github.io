@@ -2,8 +2,8 @@
 layout: post
 title: golang init 函数
 date: 2019-03-30 09:21:12
-categories:  go 
-tags:   go 
+categories:  golang 
+tags:   golang
 excerpt: golang 有一个特殊的函数 `init `函数，先于`main`函数执行，作用实现包的一些初始化操作
 ---
 
