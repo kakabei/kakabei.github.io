@@ -204,6 +204,20 @@
 <div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">nickName</span> <span class="o">:=</span> <span class="n">GetName</span><span class="p">()</span>
 </code></pre></div></div>
 
+<h2 id="变量后面的点后面直接跟括号">变量后面的点后面直接跟括号</h2>
+
+<p>1、类型转换</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span><span class="o">.</span><span class="p">(</span><span class="kt">string</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>2、获取类型，使用场景有限制</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">switch</span> <span class="n">value</span><span class="o">.</span><span class="p">(</span><span class="k">type</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">case</span> <span class="kt">string</span><span class="o">:</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <h1 id="二常量">二、常量</h1>
 
 <p>常量是指编译期间就已知且不可改变的值。常量可以是数值类型(包括整型、浮点型和复数类型)、布尔类型、字符串类型等。</p>
