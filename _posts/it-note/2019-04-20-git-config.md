@@ -27,8 +27,8 @@ excerpt: git configure set alias
         remote = origin
         merge = refs/heads/master
 [user]
-        name=carlos
-        email=1447675994@qq.com
+        name=cxxlxx
+        email=xxxxxxxxxx@qq.com
 [color]
         ui=true
 [alias]
