@@ -94,5 +94,4 @@ Linux xxxxx 5.10.102.1-microsoft-standard-WSL2 #1 SMP Wed Mar 2 00:30:59 UTC 202
 
 cat /etc/issue
 Ubuntu 22.04.1 LTS \n \l
-----
-
+```
