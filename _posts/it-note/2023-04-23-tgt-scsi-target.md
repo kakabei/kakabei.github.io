@@ -4,14 +4,39 @@ title: TGT Linux SCSI target framework
 date: 2023-04-23 10:12:15
 categories: 系统设计
 tags: tgt ceph 
-excerpt: 
+excerpt:  TGT Linux SCSI target framework fro creating and maintaining SCSI Targets
 ---
+ 
+TGT 是一种在用户态下的 SCSI target 框架。 用于 iSCSI 和 iSER 传输协议。 支持多种方式访问设备块。 
 
-支持 SCSI target 驱动协议， 如:iSCSI、Fibre Channel、SRP 等。 创建和维护的 SCSI target 的框架。 
-
-tgt 的目的是把传统的 SCSI target 协议驱动的创建和维护从内核态转至用户态。避免每一次修改代码都需要重新编译内核。同时在用户态下，开发者可以使用多种第三方库以及调试工具等，减轻了开发人员的负担。
+框架包含了用户态下的 deamon 和 工具。 
 
 源码在：[https://github.com/fujita/tgt](https://github.com/fujita/tgt)
+
+当前， TGT 支持的传输协议有：
+
+- 以太网网卡的 iSCSI  target 软件驱动程序
+- Infiniband 和 RDMA 网卡的 iSER target 软件驱动程序
+
+支持 可以访问的本地存储有： 
+
+- aio, the asynchronous I/O interface also known as libaio.
+- rdwr, smc and mmc, synchronous I/O based on the pread() and pwrite() system calls.
+- null, discards all data and reads zeroes.
+- ssc, SCSI tape support.
+- sg and bsg, SCSI pass-through.
+- glfs, the GlusterFS network filesystem.
+- rbd, Ceph's distributed-storage RADOS Block Device.
+- sheepdog, a distributed object storage system.
+
+工作中之所以用到 TGT， 就是为了访问 ceph 的块设备。 
+
+# iSCSI 协议
+
+SCSI (Small Computer System Interface,小型计算机系统接口) 用于主机与外部设备之间的连接。SCSI 协议是主机与磁盘通信的基本协议。它由SCSI 控制器进行数据操作,SCSI控制器相当于一个小型CPU,有自己的命令集和缓存 。
+
+而 iSCSI 协议 就是让 SCSI 可以在互联网上传输。 
+
 
 # TGT 的安装
 
@@ -22,7 +47,7 @@ tgt 的目的是把传统的 SCSI target 协议驱动的创建和维护从内核
 ```sh 
 git clone https://github.com/fujita/tgt.git
 
-sudo apt install -y lceph-common librados-dev  librbd-dev   manpages-zh  xsltproc   docbook-xsl
+sudo apt install -y ceph-common librados-dev  librbd-dev   manpages-zh  xsltproc   docbook-xsl
 
 cd tgt
 
@@ -44,9 +69,27 @@ install -m 755 bs_rbd.so /usr/lib/tgt/backing-store
 ```sh
 sudo apt install tgt-rbd
 ```
+# TGT 的程序框架
+
+TGT 的一个作用就是它可以在用户下创建管理块设备。这样不用每一次代码的更新都要重新编译内核。
+
+tgtamd 是 TGT的管理工具，它是通过 unix socket 和 tgt daemon 通信。 
+
+tgt daemon （进程名 tgtd）负责和内核态下的 tgt core 模块通信。 
+
+tgt core 通过 target 驱动程序和 ceph 块设备通信。
+
+![](/assets/dfs/tgt-2023-04-24-19-16-06.png)
+
+
+要和 ceph 块设备通信，系统要安装 ceph 的 librados，即上安装时要先 `apt install -y ceph-common librados-dev  librbd-dev`
+
+ceph 要安全认证，所以相关的配置文件要拷贝到 ` /etc/ceph/` 下。 
+
+安装完 tgt 后。可以使用 rbd 命令管理  ceph 集群上的块设备。rbd 是通过 tgtd 和 ceph 集群交互的。     
+
 
 # TGT 常用的命令
-
 
 1、创建 target
 
@@ -69,18 +112,21 @@ backing-store 代表我们后端存储的文件名，我们不是真正的磁盘
 tgtadm --lld iscsi --mode target --op bind --tid 1 -I ALL
 ```
 
-iSCSI协议可以设置访问权限的，可以通过IP来限制访问，也可以通过用户名/密码方式限制访问。
+iSCSI 协议可以设置访问权限的，可以通过 IP 来限制访问，也可以通过用户名/密码方式限制访问。
 
-4、查看创建的target和lun 
+4、查看创建的 target 和 lun 
 
 ```sh
 tgtadm --lld iscsi --mode target --op show
 ```
 
-更多的命令可以用 `man tgtadm` 查询
+更多的命令可以用 `man tgtadm` 查询。 
 
-# TGT 的程序框架
 
-![](/assets/dfs/tgt-2023-04-24-19-16-06.png)
+-----
 
-![](assets/dfs/tgt-2023-04-24-19-20-03.png)
+1、[RDMA 架构与实践](https://houmin.cc/posts/454a90d3/)
+
+2、[Infiniband技术简介](https://zhuanlan.zhihu.com/p/336499148)
+
+3、[TGT学习总结] (https://zhuanlan.zhihu.com/p/137047153)
