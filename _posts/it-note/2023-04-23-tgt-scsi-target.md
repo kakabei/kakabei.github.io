@@ -2,23 +2,23 @@
 layout: post
 title: TGT Linux SCSI target framework 
 date: 2023-04-23 10:12:15
-categories: 系统设计
+categories: storage
 tags: tgt ceph 
 excerpt:  TGT Linux SCSI target framework fro creating and maintaining SCSI Targets
 ---
  
 TGT 是一种在用户态下的 SCSI target 框架。 用于 iSCSI 和 iSER 传输协议。 支持多种方式访问设备块。 
 
-框架包含了用户态下的 deamon 和 工具。 
+框架包含了用户态下的 deamon 和工具。 
 
 源码在：[https://github.com/fujita/tgt](https://github.com/fujita/tgt)
 
-当前， TGT 支持的传输协议有：
+当前，TGT 支持的传输协议有：
 
 - 以太网网卡的 iSCSI  target 软件驱动程序
 - Infiniband 和 RDMA 网卡的 iSER target 软件驱动程序
 
-支持 可以访问的本地存储有： 
+支持可以访问的本地存储有： 
 
 - aio, the asynchronous I/O interface also known as libaio.
 - rdwr, smc and mmc, synchronous I/O based on the pread() and pwrite() system calls.
@@ -35,7 +35,7 @@ TGT 是一种在用户态下的 SCSI target 框架。 用于 iSCSI 和 iSER 传�
 
 SCSI (Small Computer System Interface,小型计算机系统接口) 用于主机与外部设备之间的连接。SCSI 协议是主机与磁盘通信的基本协议。它由SCSI 控制器进行数据操作,SCSI控制器相当于一个小型CPU,有自己的命令集和缓存 。
 
-而 iSCSI 协议 就是让 SCSI 可以在互联网上传输。 
+而 iSCSI 协议就是让 SCSI 可以在互联网上传输。 
 
 
 # TGT 的安装
@@ -82,9 +82,13 @@ tgt core 通过 target 驱动程序和 ceph 块设备通信。
 ![](/assets/dfs/tgt-2023-04-24-19-16-06.png)
 
 
-要和 ceph 块设备通信，系统要安装 ceph 的 librados，即上安装时要先 `apt install -y ceph-common librados-dev  librbd-dev`
+要和 ceph 块设备通信，系统要安装 ceph 的 librados。
 
-ceph 要安全认证，所以相关的配置文件要拷贝到 ` /etc/ceph/` 下。 
+即安装时要先 `apt install -y ceph-common librados-dev  librbd-dev`
+
+和 ceph 集群通信的是 ceph librados。
+
+ceph 集群要安全认证，所以相关的配置文件要拷贝到 `/etc/ceph/` 下。 
 
 安装完 tgt 后。可以使用 rbd 命令管理  ceph 集群上的块设备。rbd 是通过 tgtd 和 ceph 集群交互的。     
 
@@ -129,4 +133,4 @@ tgtadm --lld iscsi --mode target --op show
 
 2、[Infiniband技术简介](https://zhuanlan.zhihu.com/p/336499148)
 
-3、[TGT学习总结] (https://zhuanlan.zhihu.com/p/137047153)
+3、[TGT学习总结](https://zhuanlan.zhihu.com/p/137047153)
