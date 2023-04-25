@@ -134,3 +134,7 @@ tgtadm --lld iscsi --mode target --op show
 2、[Infiniband技术简介](https://zhuanlan.zhihu.com/p/336499148)
 
 3、[TGT学习总结](https://zhuanlan.zhihu.com/p/137047153)
+
+4、[tgt网关源码解读](https://blog.csdn.net/Morry_Chan/article/details/100891020)
+
+5、[linux iscsi网络的三种工具tgt iscsi_tgt targetcli](https://blog.csdn.net/qqqqqq999999/article/details/72547970)
