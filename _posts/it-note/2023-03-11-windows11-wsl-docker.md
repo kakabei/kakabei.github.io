@@ -1,7 +1,7 @@
 ---
 layout: post
 title: window 11 wsl Ubuntu 22.04.1 LTS  cannot connect to the Docker daemon 
-date: 2023-04-19 10:12:15
+date: 2023-03-11 10:12:15
 categories: 分布式
 tags: docker 
 excerpt: window11 下的子系统是 ubuntu22，安装docker 无法启动
