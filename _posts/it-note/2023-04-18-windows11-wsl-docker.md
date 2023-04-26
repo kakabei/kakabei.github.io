@@ -1,6 +1,6 @@
 ---
 layout: post
-title: window 11 wsl Ubuntu 22.04.1 LTS  docker  
+title: window 11 wsl Ubuntu 22.04.1 LTS  cannot connect to the Docker daemon 
 date: 2023-04-19 10:12:15
 categories: 分布式
 tags: docker 
