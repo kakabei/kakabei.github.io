@@ -75,9 +75,61 @@ Docker Registry 有公开的服务，也有私有的服务。
 
 # 私有仓库
 
-pass
+微服务治理一般采用的就是把服务打包成 docker 的镜像，然后直接部署镜像就可以了。所以，在服务治理中私有仓库对服务的安装部署是很关键的一个组件。 
+
+### 安装运行 docker-registry
+
+安装，启动
+
+```sh
+docker run -d -p 5000:5000 --restart=always --name registry registry
+
+Unable to find image 'registry:latest' locally
+Trying to pull repository docker.io/library/registry ...
+latest: Pulling from docker.io/library/registry
+91d30c5bc195: Pull complete
+65d52c8ad3c4: Pull complete
+54f80cd081c9: Pull complete
+ca8951d7f653: Pull complete
+5ee46e9ce9b6: Pull complete
+Digest: sha256:8c51be2f669c82da8015017ff1eae5e5155fcf707ba914c5c7b798fbeb03b50c
+Status: Downloaded newer image for docker.io/registry:latest
+aae28e223a1518128341c4d4edc4c66326394981bcf54e7a233ec0174101d25c
+/usr/bin/docker-current: Error response from daemon: driver failed programming external connectivity on endpoint registry (4fb7ad57ddc83f7bc7aa14ae4de582819cf07d9394ac3d89290cb3d4a8a69ee2): Error starting userland proxy: listen tcp 0.0.0.0:5000: bind: address already in use.
+```
+
+端点5000 被占用了，用5001启来就可以了。
+
+```sh 
+docker run -d -p 5001:5001  -v /opt/data/registry:/var/lib/registry  registry
+
+docker image ls
+
+REPOSITORY                            TAG                 IMAGE ID            CREATED             SIZE
+docker.io/nginx                       latest              6efc10a0510f        2 weeks ago         142 MB
+docker.io/registry                    latest              8db46f9d7550        4 weeks ago         24.2 MB
+```
+
+打标签， 格式为 `docker tag IMAGE[:TAG] [REGISTRY_HOST[:REGISTRY_PORT]/]REPOSITORY[:TAG]`。
+
+```sh
+docker tag nginx:latest  127.0.0.1:5001/nginx:latest
+docker image ls
+
+REPOSITORY                            TAG                 IMAGE ID            CREATED             SIZE
+127.0.0.1:5001/nginx                  latest              6efc10a0510f        2 weeks ago         142 MB
+docker.io/nginx                       latest              6efc10a0510f        2 weeks ago         142 MB
+docker.io/registry                    latest              8db46f9d7550        4 weeks ago         24.2 MB
+
+```
+
+上传标记的镜像
+
+```sh
+docker push 127.0.0.1:5001/nginx:latest
 
 
+``` 
 
 
 
