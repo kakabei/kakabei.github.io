@@ -25,8 +25,6 @@ Docker 框架：
 而 Docker 技术是让进程直接运用宿主机器上的内核，容器没有自己的内核。其实就是所有容器共有宿主的内核。 
 
 
-
-
 Docker 的三个基本概念,  是 Docker 的整个生命周期
 
 - 镜像（Image）
@@ -41,6 +39,7 @@ Docker 的三个基本概念,  是 Docker 的整个生命周期
 镜像是基于分层存储 Union FS设计的。它并非一个像ISO的打包文件，而是由多层文件系统联合组成。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。
 
 分层存储的特征还使得镜像的复用、定制变的更为容易。可以充分的利用之前的基础进一步添加新的层，以定制自己所需的内容，构建新的镜像。
+
 # 容器
 
 如果我个把镜像当作一个静态的文件，那么容器就是这个静态文件的运行状态，可以类比可执行文件和跑起的进程的场景。
@@ -72,10 +71,11 @@ Docker Registry 有公开的服务，也有私有的服务。
 - [Red Hat Quay.io](https://quay.io/repository/)
 
 
-也可以自己搭建私有的 Docker Registry。可以用官方提供的工具 [docker-registry](https://docs.docker.com/registry/)Docker Registry 搭建私有的 Docker Registry。
+也可以自己搭建私有的 Docker Registry。可以用官方提供的工具 [docker-registry](https://docs.docker.com/registry/) 搭建私有的 Docker Registry。
 
 # 私有仓库
 
+pass
 
 
 
