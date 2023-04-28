@@ -71,7 +71,7 @@ sudo apt install tgt-rbd
 ```
 # TGT 的程序框架
 
-TGT 的一个作用就是它可以在用户下创建管理块设备。这样不用每一次代码的更新都要重新编译内核。
+TGT 的一个作用就是它可以在用户态下创建管理块设备。这样不用每一次代码的更新都要重新编译内核模块。
 
 tgtamd 是 TGT的管理工具，它是通过 unix socket 和 tgt daemon 通信。 
 
