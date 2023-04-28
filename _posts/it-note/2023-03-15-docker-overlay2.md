@@ -184,6 +184,13 @@ overlay2 和 overlay 的性能比 aufs 和 devicemapper 都要高出很多。 �
 OverlayFS 的 `copy_up` 操作比使用 AUFS 的相同操作要快，因为 AUFS 比 OverlayFS 支持更多的层。 如果搜索许多 AUFS 层，可能会导致更大的延迟。Overlay2 也支持多层，但是通过缓存减轻了性能损失。
 
 - **Inode 限制** 使用 overlay 会导致inode消耗过多。在 Docker 主机上存在大量镜像和容器时 inode 消耗更利害。而增加文件系统可用 inode 数量的唯一方法是重新格式化。为了避免遇到这个问题，强烈建议尽可能使用 overlay2。 
+
+以下通用性能最佳实践也适用于 OverlayFS：
+
+- **Solid State Devices (SSD)**. For best performance it is always a good idea to use fast storage media such as solid state devices (SSD).
+
+- **Use Data Volumes**  Data volumes provide the best and most predictable performance. This is because they bypass the storage driver and do not incur any of the potential overheads introduced by thin provisioning and copy-on-write. For this reason, you should place heavy write workloads on data volumes.
+
 # OverlayFS 存在的局限
 
 总结下 OverlayFS 和其他文件系统不兼容的方面。 
