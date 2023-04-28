@@ -69,7 +69,7 @@ docker info
 
 OverlayFS 将低层的目录称为 `lowerdir`，将上层目录称为 `upperdir`。统一后视图是公开的目录，叫 `merged` 。
 
-overlay2 驱动程序原生支持多达 128 个较低的 OverlayFS 层。这种功能为 Docker 的层次相关命令(如 Docker build 和 Docker commit ) 提供了更好的性能，并且消耗后备文件系统上更少的 inode。 
+overlay2 原生支持多达 128 个 OverlayFS 的`lowerdir`层。这种功能为 Docker 的层次相关命令(如 Docker build 和 Docker commit ) 提供了更好的性能，并且消耗后备文件系统上更少的 inode。 
 
 镜像和容器在硬盘上的层如下： 
 
@@ -139,9 +139,9 @@ OverlayFS 将低层的目录称为 `lowerdir`，将上层目录称为 `upperdir`
 
 当镜像和容器出现相同的文件时，以容器的文件为主，它会屏蔽掉镜像中的文件。
 
-overlay 驱动程序只有两层，无法直接实现 OverlayFS 的多层。所以用另外一种方式去实现， 即用硬链接的方式与  `lowerdir` 共享数据。硬链接的过度使用导致 inode 节点不够。这是 overlay 驱动程序遗留下来的缺陷。 
+overlay 只有两层，无法直接实现 OverlayFS 的多层。所以用另外一种方式去实现， 即用硬链接的方式与  `lowerdir` 共享数据。硬链接的过度使用导致 inode 节点不够。这是 overlay 遗留下来的缺陷。 
 
-创建容器时，overlay 驱动程序当表示容器的那一层和镜像的那一层联合在一起。形成一个新的目录 。镜像的 `lowerdir` 层是只读，而容器的 `upperdir` 是可写的。
+创建容器时，overlay 当表示容器的那一层和镜像的那一层联合在一起。形成一个新的目录 。镜像的 `lowerdir` 层是只读，而容器的 `upperdir` 是可写的。
 
 
 # 容器是如何在 overlay 或 overlay2 进行的读写的
