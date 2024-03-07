@@ -7,11 +7,11 @@ tags: golang
 excerpt: go 标准库里提供的 net 包，支持基于 IP 层、TCP/UDP 等网络操作
 ---
 
-Go 语言标准库里提供的 net 包，支持基于 IP 层、TCP/UDP 层及更高层面(如 HTTP、FTP、SMTP )的网络操作，其中用于 IP 层的称为 Raw Socket。
+golang 语言标准库里提供的 net 包，支持基于 IP 层、TCP/UDP 层及更高层面(如 HTTP、FTP、SMTP )的网络操作，其中用于 IP 层的称为 Raw Socket。
 
 # 一、socket 编程
 
-Go 语言标准库对此过程进行了抽象和封装。无论我们期望使用什么协议建立什么形式的连接，都只需要调用`net.Dial()`即可。
+golang 语言标准库对此过程进行了抽象和封装。无论我们期望使用什么协议建立什么形式的连接，都只需要调用`net.Dial()`即可。
 
 ## 1.1 Dial()函数
 
@@ -124,11 +124,11 @@ func LookupHost(name string) (cname string, addrs []string, err error);
 
 # 二、HTTP 编程
 
-Go 语言标准库内建提供了net/http包，涵盖了HTTP客户端和服务端的具体实现。使用 `net/http` 包，我们可以很方便地编写 HTTP 客户端或服务端的程序。
+golang 语言标准库内建提供了net/http包，涵盖了HTTP客户端和服务端的具体实现。使用 `net/http` 包，我们可以很方便地编写 HTTP 客户端或服务端的程序。
 
 ## 2.1 HTTP 客户端
 
-Go 内置的 `net/http` 包提供了最简洁的 HTTP 客户端实现，我们无需借助第三方网络通信库 (比如 libcurl )就可以直接使用 HTTP 中用得最多的 GET 和 POST 方式请求数据。
+golang 内置的 `net/http` 包提供了最简洁的 HTTP 客户端实现，我们无需借助第三方网络通信库 (比如 libcurl )就可以直接使用 HTTP 中用得最多的 GET 和 POST 方式请求数据。
 
 ### 基本方法
 
@@ -274,7 +274,7 @@ log.Fatal(http.ListenAndServeTLS(":10443", "cert.pem", "key.pem", nil))
 
 # 三、Json 处理
 
-Go 语言内建对 JSON 的 支持。使用 Go 语言内置的 `encoding/json` 标准库。
+golang 语言内建对 JSON 的 支持。使用 golang 语言内置的 `encoding/json` 标准库。
 
 ## 3.1 编码为JSON格式
 
@@ -312,11 +312,11 @@ b == []byte(`{
 }`)
 ```
 
-Go 语言的大多数数据类型都可以转化为有效的 JSON 文本，但 channel、complex 和函数这几种类型除外。
+golang 语言的大多数数据类型都可以转化为有效的 JSON 文本，但 channel、complex 和函数这几种类型除外。
 
 如果转化前的数据结构中出现指针，那么将会转化指针所指向的值，如果指针指向的是零值， 那么 null 将作为转化后的结果输出。
 
-在 Go 中，JSON 转化前后的数据类型映射如下：
+在 golang 中，JSON 转化前后的数据类型映射如下：
 
 - 布尔值转化为 JSON 后还是布尔类型。
 - 浮点数和整型会被转化为 JSON 里边的常规数字。
@@ -351,7 +351,7 @@ book := Book{ "Go语言编程",
 
 要解码一段未知结构的 JSON，只需将这段 JSON 数据解码输出到一个空接口即可。
 
-Go 的标准库 `encoding/json` 包中，允许使用 `map[string]interface{}` 和`[]interface{}` 类型的值来分别存放未知结构的 JSON 对象或数组。
+golang 的标准库 `encoding/json` 包中，允许使用 `map[string]interface{}` 和`[]interface{}` 类型的值来分别存放未知结构的 JSON 对象或数组。
 
 ```go 
 b := []byte(`{
@@ -381,7 +381,7 @@ map[string]interface{}{
 
 ## 3.4 JSON 的流式读写
 
-Go 内建的 `encoding/json` 包还提供 Decoder 和 Encoder 两个类型，用于支持JSON数据的 流式读写，并提供 `NewDecoder()`和`NewEncoder()`两个函数来便于具体实现:
+golang 内建的 `encoding/json` 包还提供 Decoder 和 Encoder 两个类型，用于支持JSON数据的 流式读写，并提供 `NewDecoder()`和`NewEncoder()`两个函数来便于具体实现:
 
 ```go
 func NewDecoder(r io.Reader) *Decoder 

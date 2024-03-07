@@ -8,7 +8,7 @@ excerpt: go 并发编程,最主要就是 channel 和 select。
 ---
 
 
-在 Go 语言中最重要的一个特性，那就是 go 关键字。
+在 golang 语言中最重要的一个特性，那就是 go 关键字。
 
 # 一、并发基础
 
@@ -27,14 +27,14 @@ excerpt: go 并发编程,最主要就是 channel 和 select。
 
 协程，是一种轻量级线程。之后叫“轻量级”是因为它可以轻松创建上百万个而不会导致系统资源衰竭。而线程和进程通常最多也不能超过1万个。
 
-Go 语言在语言级别支持轻量级线程，叫 goroutine。
+golang 语言在语言级别支持轻量级线程，叫 goroutine。
 
-Go 语言标准库提供的所有系统调用操作 (当然也包括所有同步 IO 操作)，都会出让 CPU 给其他goroutine。这让事情变得非常简单，让轻
+golang 语言标准库提供的所有系统调用操作 (当然也包括所有同步 IO 操作)，都会出让 CPU 给其他goroutine。这让事情变得非常简单，让轻
 量级线程的切换管理不依赖于系统的线程和进程，也不依赖于CPU的核心数量。
 
 # 三、goroutine
 
-goroutine 是 Go 语言中的轻量级线程实现，由Go运行时(runtime)管理。
+goroutine 是 golang 语言中的轻量级线程实现，由 golang 运行时(runtime)管理。
 
 在一个函数调用前加上go关键字，这次调用就会在一个新的 goroutine 中并发执行。
 
@@ -56,7 +56,7 @@ func main() {
 }
 ```
 
-Go 程序从初始化 main package 并执行 main() 函数开始，当 main() 函数返回时，程序退出， 且程序并不等待其他 goroutine (非主 goroutine )结束。把这个例子什么也不会输出。
+golang 程序从初始化 main package 并执行 main() 函数开始，当 main() 函数返回时，程序退出， 且程序并不等待其他 goroutine (非主 goroutine )结束。把这个例子什么也不会输出。
 
 # 四、并发通信
 
@@ -101,11 +101,11 @@ func main() {
 
 这种方式是引进了锁的方式来完成通信，这个试比较晦涩，如 C++ 相同的方式， 并没有什么太大的优势。 
 
-Go 语言提供的是另一种以消息机制的通信模型，被称为 channel。
+golang 语言提供的是另一种以消息机制的通信模型，被称为 channel。
 
 # 五、channel
 
-channel 是 Go 语言在语言级别提供的 goroutine 间的通信方式。 我们可以使用 channel 在两个或 多个 goroutine 之间传递消息。
+channel 是 golang 语言在语言级别提供的 goroutine 间的通信方式。 我们可以使用 channel 在两个或 多个 goroutine 之间传递消息。
 
 channel 是**进程内**的通信方式，因此通过 channel 传递对象的过程和调用函数时的参数传递行为比较一致，比如也可以传递指针等。
 
@@ -175,7 +175,7 @@ value := <-ch
 
 ## 5.2 select
 
-Go 语言直接在语言级别支持 select 关键字，用于处理异步 IO 问题。
+golang 语言直接在语言级别支持 select 关键字，用于处理异步 IO 问题。
 
 select 的用法与 switch 语言非常类似，由 select 开始一个新的选择块，每个选择条件由 case 语句来描述。
 
@@ -206,7 +206,7 @@ select {
 
 在并发编程的通信过程中，最需要处理的就是超时问题。即向 channel 写数据时发现 channel已满，或者从 channel 试图读取数据时发现 channel 为空。如果不正确处理这些情况，很可能会导致整个 goroutine 锁死。
 
-Go 语言没有提供直接的超时处理机制，但我们可以利用 select 机制。select 的特点是只要其中一个 cas e已经完成，程序就会继续往下执行，而不会考虑其他 case 的情况。    
+golang 语言没有提供直接的超时处理机制，但我们可以利用 select 机制。select 的特点是只要其中一个 cas e已经完成，程序就会继续往下执行，而不会考虑其他 case 的情况。    
 
 ```go
 // 首先，我们实现并执行一个匿名的超时等待函数 
@@ -229,7 +229,7 @@ select {
 
 ## 5.5 channel 的传递
 
-在 Go 语言中 channel 本身也是一个原生类型，与 map类型地位一样，因此 channel 本身在定义后也可以通过 channel 来传递。
+在 golang 语言中 channel 本身也是一个原生类型，与 map类型地位一样，因此 channel 本身在定义后也可以通过 channel 来传递。
 
 ## 5.6 单向 channel
 
@@ -263,7 +263,7 @@ close(ch)
 
 # 六、多核并行化
 
-当前版本的 Go 编译器还不能很智能地去发现和利用多核的优势。虽然 我们确实创建了多个 goroutine。
+当前版本的 golang 编译器还不能很智能地去发现和利用多核的优势。虽然 我们确实创建了多个 goroutine。
 
 实际上所有 goroutine 都可能运行在同一个 CPU 核心上，在一个 goroutine 得到时间片执行的时候，其他 goroutine 都会处于等待状态。
 
@@ -279,7 +279,7 @@ runtime.GOMAXPROCS(16)
 
 # 八、同步
 
-Go 语言的设计者虽然对 channel 有极高的期望，但也提供了妥善的资源锁方案。
+golang 语言的设计者虽然对 channel 有极高的期望，但也提供了妥善的资源锁方案。
 
 ## 8.1  同步锁
 
