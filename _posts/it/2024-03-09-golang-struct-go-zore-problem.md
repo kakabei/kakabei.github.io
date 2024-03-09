@@ -1,11 +1,12 @@
 ---
 layout: post
-title: 2024-03-09
+title: go-zero httpc.Do post 数据因 struct 继承导致的失败
 date: 2024-03-09 9:08:12
 categories: 工作日志
 tags: 工作日志 
-excerpt: golang 结构体的"继承"导致 go-zore 的 httpc.Do()发送失败的问题
+excerpt: golang 结构体的"继承"导致 go-zero  的 httpc.Do()发送失败的问题
 ---
+
 
 工作时遇到的一个问题。
 
