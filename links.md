@@ -6,8 +6,6 @@ comments: false
 author_footer: false
 ---
 
-动态记录大神的技术文章笔记，看完就删了，发现好的就加入。
-
 ## 工具
 
 [Quick Reference: https://wangchujiang.com/reference/](https://wangchujiang.com/reference/)
@@ -28,3 +26,4 @@ author_footer: false
 5、[Hola : https://blog.lenage.com/](https://blog.lenage.com/)
 
 6、[框框大学:https://www.kkdaxue.com/](https://www.kkdaxue.com/)
+
