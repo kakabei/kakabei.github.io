@@ -7,6 +7,14 @@ author_footer: false
 ---
 
 动态记录大神的技术文章笔记，看完就删了，发现好的就加入。
+
+## 工具
+
+[Quick Reference: https://wangchujiang.com/reference/](https://wangchujiang.com/reference/)
+
+[golang play : https://go.dev/play/](https://go.dev/play/)
+
+
 ## 博客
 
 1、[YY哥：http://hustcat.github.io/](http://hustcat.github.io/)
