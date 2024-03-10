@@ -3,7 +3,7 @@ layout: post
 title: go-zero 日志输出的问题
 date: 2024-03-09 9:08:12
 categories: 工作日志
-tags: 工作日志 
+tags: galang 
 excerpt: 用 json 格式输出时有字段显示不正常，用 plain 格式时正常
 ---
 

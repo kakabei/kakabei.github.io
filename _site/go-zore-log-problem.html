@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>go-zero 日志输出的问题</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/go-zore-log-problem">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+    
+    
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/go-zore-log-problem">go-zero 日志输出的问题</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2024-03-09
+     • Category: 
+        
+        <a href="/categories#工作日志-ref" >工作日志</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags#galang-ref" >galang</a>
+        
+    
+</div>
+
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>go-zore 日志输出方式体验让我有一些不适。</p>
+
+<p>今天还遇到一个现象，日志输出如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span><span class="s2">"@timestamp"</span>:<span class="s2">"2024-03-09T15:48:08.026+08"</span>,<span class="s2">"caller"</span>:<span class="s2">"server/Helper.go:164"</span>,<span class="s2">"content"</span>:<span class="s2">"httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset=0</span><span class="se">\u</span><span class="s2">0026limit=10</span><span class="se">\u</span><span class="s2">0026order=desc</span><span class="se">\u</span><span class="s2">0026sortby=create_time</span><span class="se">\u</span><span class="s2">0026state=-1</span><span class="se">\u</span><span class="s2">0026states=0,1,2,3,4</span><span class="se">\u</span><span class="s2">0026biz_id=0</span><span class="se">\u</span><span class="s2">0026agent_id=512]"</span>,<span class="s2">"level"</span>:<span class="s2">"error"</span>,<span class="s2">"span"</span>:<span class="s2">"66a2ba1882458680"</span>,<span class="s2">"trace"</span>:<span class="s2">"c94c9ac8179690d592fc348b40666e16"</span><span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>出一些  <code class="language-plaintext highlighter-rouge">\u0026</code> 之类的。 但如果把 Encoding 设置为 plain，则正常。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2024-03-09T15:47:08.006+08       error  httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset<span class="o">=</span>0&amp;limit<span class="o">=</span>10&amp;order<span class="o">=</span>desc&amp;sortby<span class="o">=</span>create_time&amp;state<span class="o">=</span><span class="nt">-1</span>&amp;states<span class="o">=</span>0,1,2,3,4&amp;biz_id<span class="o">=</span>0&amp;agent_id<span class="o">=</span>512]      <span class="nb">caller</span><span class="o">=</span>server/Helper.go:164        <span class="nv">trace</span><span class="o">=</span>ca5e1ad81e7d0528f38b361c63a75f35  <span class="nv">span</span><span class="o">=</span>48b14f5d8bce91e9
+</code></pre></div></div>
+
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+<span>
+	<a  href="/go-zore-struct-httpc-do-problem" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a   class="pageNavInvalid"  >下一篇</a>
+</span>
+
+
+	<div class="article-author">
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+    <div class="avatar">
+        <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>

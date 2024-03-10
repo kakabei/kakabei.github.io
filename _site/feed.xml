@@ -5,1176 +5,488 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 01 Apr 2023 23:19:11 +0800</pubDate>
-    <lastBuildDate>Sat, 01 Apr 2023 23:19:11 +0800</lastBuildDate>
+    <pubDate>Sun, 10 Mar 2024 00:09:49 +0800</pubDate>
+    <lastBuildDate>Sun, 10 Mar 2024 00:09:49 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
-        <title>RESTful 架构</title>
-        <description>&lt;h3 id=&quot;概念定义&quot;&gt;概念定义&lt;/h3&gt;
+        <title>go-zero 日志输出的问题</title>
+        <description>&lt;p&gt;go-zore 日志输出方式体验让我有一些不适。&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RESTful&lt;/code&gt; 架构，是目前比较流行的一种互联网软件架构。它结构清晰、符合标准、易于理解、扩展方便，所以正得到越来越多网站的采用。&lt;/p&gt;
+&lt;p&gt;今天还遇到一个现象，日志输出如下：&lt;/p&gt;
 
-&lt;p&gt;Fielding 将他对互联网软件的架构原则，定名为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;REST&lt;/code&gt;，即 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Representational State Transfer&lt;/code&gt; 的缩写,翻译是”表现层状态转化”。&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;@timestamp&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;2024-03-09T15:48:08.026+08&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;caller&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;server/Helper.go:164&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;content&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset=0&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026limit=10&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026order=desc&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026sortby=create_time&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026state=-1&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026states=0,1,2,3,4&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026biz_id=0&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026agent_id=512]&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;level&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;error&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;span&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;66a2ba1882458680&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;trace&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;c94c9ac8179690d592fc348b40666e16&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;表现层状态转化的主体是资源。&lt;/p&gt;
-
-&lt;h3 id=&quot;具体说明&quot;&gt;具体说明&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;资源&lt;/strong&gt;：是网络上的一个实体，如一段文本、图片等。 可以用URI指向它。每一种URI对应着一个资源。 上网就是与这个资源的一个交互。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;表现层&lt;/strong&gt;： 资料有多种表现的形式，如HTML格式、XML格式、JSON格式等。 图片也可以有不同的表现方式，如：JPG 格式表现，也可以用PNG格式表现。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;状态转化&lt;/strong&gt;：上网就是客户端和服务器的一个互动过程。这里一般都会有数据和状态的变化。&lt;/p&gt;
-
-&lt;p&gt;由于HTTP协议，是一个无状态协议。所以，所有的状态都保存在服务器端。因此，如果客户端想要操作服务器，必须通过某种手段，让服务器端发生”状态转化”（State Transfer）。而这种转化是建立在表现层之上的，所以就是”表现层状态转化”。&lt;/p&gt;
-
-&lt;p&gt;客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;GET 用来获取资源，&lt;/li&gt;
-  &lt;li&gt;POST 用来新建资源（也可以用于更新资源），&lt;/li&gt;
-  &lt;li&gt;PUT 用来更新资源，&lt;/li&gt;
-  &lt;li&gt;DELETE 用来删除资源。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;总结一下什么是restful架构&quot;&gt;总结一下什么是RESTful架构&lt;/h3&gt;
-
-&lt;p&gt;1、 每一个URI代表一种资源。&lt;/p&gt;
-
-&lt;p&gt;2、客户端和服务器之间，传递这种资源的某种表现层。&lt;/p&gt;
-
-&lt;p&gt;3、客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。&lt;/p&gt;
-
-&lt;h3 id=&quot;两个设计误区&quot;&gt;两个设计误区&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;最常见的一种设计错误，就是URI包含动词。&lt;/strong&gt;因为”资源”表示一种实体，所以应该是名词，URI不应该有动词，动词应该放在HTTP协议中。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;另一个设计误区，就是在URI中加入版本号&lt;/strong&gt;。因为不同的版本，可以理解成同一种资源的不同表现形式，所以应该采用同一个URI。版本号可以在HTTP请求头信息的Accept字段中进行区分。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、&lt;a href=&quot;https://www.ruanyifeng.com/blog/2011/09/restful.html&quot;&gt;https://www.ruanyifeng.com/blog/2011/09/restful.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;2、&lt;a href=&quot;https://www.informit.com/articles/article.aspx?p=1566460&quot;&gt;https://www.informit.com/articles/article.aspx?p=1566460&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;3、Fielding是一个非常重要的人，他是HTTP协议（1.0版和1.1版）的主要设计者、Apache服务器软件的作者之一、Apache 基金会的第一任主席。&lt;/p&gt;
-</description>
-        <pubDate>Thu, 09 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/RESTful</link>
-        <guid isPermaLink="true">http://localhost:4000/RESTful</guid>
-        
-        <category>技术学习笔记</category>
-        
-        <category>性能分析</category>
-        
-        
-        <category>系统设计</category>
-        
-      </item>
-    
-      <item>
-        <title>CPU 密集型 和I/O 密集型</title>
-        <description>&lt;p&gt;CPU 密集型和 I/O 密集型是两种不同类型的系统负载。&lt;/p&gt;
-
-&lt;p&gt;CPU 密集型的系统负载主要是指系统需要大量的 CPU 处理能力，例如复杂的计算、加密、解压等操作，此时系统的CPU资源是系统性能的瓶颈。&lt;/p&gt;
-
-&lt;p&gt;而 I/O 密集型的系统负载则主要是指系统需要大量的I/O（输入输出）操作，例如大量的文件读写、网络传输、数据库查询等操作，此时系统的瓶颈在于I/O资源的限制。&lt;/p&gt;
-
-&lt;p&gt;要判断一个系统是 CPU 密集型还是IO密集型，可以考虑以下几点：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;CPU 密集型系统负载会占用大量的 CPU 资源，导致 CPU 利用率接近或达到 100%。而 I/O 密集型系统负载则不一定会占用大量的 CPU 资源，CPU 利用率可能不会很高。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;CPU 密集型系统负载的主要瓶颈在于 CPU 资源，因此增加 CPU 的数量或提高 CPU 的性能可以提升系统性能。而 I/O 密集型系统负载的主要瓶颈在于 I/O 资源，因此增加磁盘、网络等 I/O 设备的数量或提高 I/O 设备的性能可以提升系统性能。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;CPU 密集型系统负载通常可以通过并行化处理来提高系统性能。例如将一个任务拆分成多个子任务，分别由多个 CPU 核心同时处理。而 I/O 密集型系统负载则通常无法通过并行化处理来提高性能，因为 I/O 操作通常是有序的，无法并行处理。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在实际应用中，可以通过监控系统资源的使用情况来判断系统是 CPU 密集型还是 I/O 密集型。例如可以通过查看 CPU 利用率、磁盘 I/O 速率、网络吞吐量等指标来判断系统负载类型。同时也可以通过分析系统日志、调查应用程序的工作方式来确定系统负载类型。&lt;/p&gt;
-
-&lt;p&gt;在 Linux 系统中，通过什么指标来判断程序是 CPU 密集型和 I/O 密集型？&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;CPU 使用率：如果一个程序在运行过程中占用了大量的 CPU 时间，那么它很可能是 CPU 密集型的。可以使用 top、htop 或 pidstat 等命令来查看进程的 CPU 使用率。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;I/O 操作次数和速率：如果一个程序在运行过程中需要频繁进行 I/O 操作，那么它很可能是 I/O 密集型的。可以使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;iostat&lt;/code&gt; 或 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dstat&lt;/code&gt; 命令来查看进程的 I/O 操作次数和速率。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;上下文切换次数：上下文切换是 CPU 在不同进程或线程之间切换的过程，如果一个程序需要频繁地进行上下文切换，那么它很可能是 CPU 密集型的。可以使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vmstat&lt;/code&gt; 或 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pidstat&lt;/code&gt; 命令来查看进程的上下文切换次数。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;内存使用情况：如果一个程序需要大量的内存来存储数据，那么它很可能是 CPU 密集型的。可以使用 top 或 ps 命令来查看进程的内存使用情况。&lt;/p&gt;
-
-&lt;p&gt;用 iostat 查看系统信息，性能分析&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@VM-0-15-centos ~]# iostat
-Linux 3.10.0-1062.18.1.el7.x86_64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;VM-0-15-centos&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 	2023年03月23日 	_x86_64_	&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1 CPU&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-
-avg-cpu:  %user   %nice %system %iowait  %steal   %idle
-           0.73    0.00    0.60    0.16    0.00   98.51
-
-Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
-vda               5.07        49.60        88.86 3946267318 7070489480
-scd0              0.00         0.00         0.00        314          0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;I/O瓶颈&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;如果 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%iowait&lt;/code&gt; 的值过高，表示硬盘存在 I/O 瓶颈&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;内存不足&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%idle&lt;/code&gt; 值高，表示 CPU 较空闲，如果&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%idle&lt;/code&gt; 值高但系统响应慢时，有可能是 CPU 在等待分配内存，此时应加大内存容量&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;CPU资源不足&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;如果 %idle 值持续低于 10，那么系统的 PU 处理能力相对较低，表明系统中最需要解决的资源是 CPU.&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 06 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/cpu-intensive-and-IO-intensive</link>
-        <guid isPermaLink="true">http://localhost:4000/cpu-intensive-and-IO-intensive</guid>
-        
-        <category>工作经验</category>
-        
-        <category>性能分析</category>
-        
-        
-        <category>Linux</category>
-        
-      </item>
-    
-      <item>
-        <title>可扩展架构的模式</title>
-        <description>&lt;p&gt;架构可扩展模式包括分层架构、SOA架构、微服务和微内核等。&lt;/p&gt;
-
-&lt;p&gt;可扩展的基本思想 : &lt;strong&gt;可扩展的架构的设计方法很多，但本质的思想就是：拆。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;将原来大的系统拆分成多个规模的小系统。扩展时只修改其中一部分即可。通过减少改动范围，降低改动风险。&lt;/p&gt;
-
-&lt;p&gt;要有建设性的拆就会有比较高的难度。常见的拆分思路有：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;面向流程拆分：将整个业务流程拆分为几个阶段，每个阶段作为一部分。&lt;/li&gt;
-  &lt;li&gt;面向服务拆分：将系统提供的服务拆分，每个服务作为一部分。&lt;/li&gt;
-  &lt;li&gt;面向功能拆分：将系统提供的功能拆分，每个功能作为一部分。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;从范围上来看，从大到小依次次为：流程&amp;gt; 服务 &amp;gt; 功能。&lt;/p&gt;
-
-&lt;p&gt;以一个简单的学生信息管理系统为例。&lt;/p&gt;
-
-&lt;h3 id=&quot;1面向流程拆分&quot;&gt;1、面向流程拆分&lt;/h3&gt;
-
-&lt;p&gt;展示层  -&amp;gt; 业务层  -&amp;gt; 数据层  -&amp;gt; 存储层&lt;/p&gt;
-
-&lt;p&gt;展示层：负责用户面面设计，不同业务有不同的页面。例如：登录页面、注册页面、信息管理页面等&lt;/p&gt;
-
-&lt;p&gt;业务层：负责具体业务逻辑的处理。&lt;/p&gt;
-
-&lt;p&gt;数据层：负责数据的存储。&lt;/p&gt;
-
-&lt;h3 id=&quot;2-面向服务拆分&quot;&gt;2、 面向服务拆分&lt;/h3&gt;
-
-&lt;p&gt;注册服务、登录服务、信息管理服务、安全设置服务&lt;/p&gt;
-
-&lt;h3 id=&quot;3面向功能拆分&quot;&gt;3、面向功能拆分&lt;/h3&gt;
-
-&lt;p&gt;注册服务：多种方式进时注册，包括手机号注册、身份证注册、学生邮箱注册三个功能。&lt;/p&gt;
-
-&lt;p&gt;登录服务：包括手机号登录、身份证登录、邮箱登录三个功能。&lt;/p&gt;
-
-&lt;p&gt;信息管理服务：包括基本信息管理、课程信息管理、经、成绩信息管理等功能。&lt;/p&gt;
-
-&lt;p&gt;安全设置服务：修改密码、安全手机、找回密码等功能。&lt;/p&gt;
-
-&lt;p&gt;不同的拆分方式，将得到不同的系统架构：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;面向流程拆分：分层架构。&lt;/li&gt;
-  &lt;li&gt;面向服务拆分：SOA、微服务。&lt;/li&gt;
-  &lt;li&gt;面向功能拆分：微内核架构。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
-</description>
-        <pubDate>Mon, 06 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/patterns-for-extensible-architectures</link>
-        <guid isPermaLink="true">http://localhost:4000/patterns-for-extensible-architectures</guid>
-        
-        <category>极客时间</category>
-        
-        <category>技术学习笔记</category>
-        
-        
-        <category>系统设计</category>
-        
-      </item>
-    
-      <item>
-        <title>存储架构双机架构</title>
-        <description>&lt;p&gt;存储高可用的方案本质上就是通过数据冗余的方式来实现的。 方案的重点是：数据的复制、数据的一致性。&lt;/p&gt;
-
-&lt;p&gt;可以通过下面几方式来分析：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;数据如何复制？&lt;/li&gt;
-  &lt;li&gt;节点的职责是什么？&lt;/li&gt;
-  &lt;li&gt;如何应对复制延迟？&lt;/li&gt;
-  &lt;li&gt;如果应对复制中断？&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;常见的高可用存储架构有：主备、主从、双机、主主、集群、分区。&lt;/p&gt;
-
-&lt;h1 id=&quot;主备复制&quot;&gt;主备复制&lt;/h1&gt;
-
-&lt;p&gt;标准的主备方案结构图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-13-15-51.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这个架构中备机主要的功能是数据备份。 并不参与实现的业务功能。 切换需要人工手动进行。&lt;/p&gt;
-
-&lt;p&gt;主备复制架构的优点是：简单。特点是： 客户端不感知备机存在，备机只是备份数据，不参考业务； 故障后要人工切换。&lt;/p&gt;
-
-&lt;p&gt;场景：内部的后管理系统用主备复制架构比较多，主要是因为这类系统数据更新频率比较低。&lt;/p&gt;
-
-&lt;h1 id=&quot;主从复制&quot;&gt;主从复制&lt;/h1&gt;
-
-&lt;p&gt;标准主从复制架构图如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-13-21-52.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;主机是可读也可写，从机只可读。&lt;/p&gt;
-
-&lt;p&gt;优点：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;主机故障后，不影响从机的读。&lt;/li&gt;
-  &lt;li&gt;从机提供了读功能，参与到业务功能去，提高系统的性能。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;缺点：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;客户端读写时要感知主机还是备机。&lt;/li&gt;
-  &lt;li&gt;如果主从数据复制延迟比较大，则可能会影响从机的读操作的数据一致性。&lt;/li&gt;
-  &lt;li&gt;故障旱需要人工干预。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;场景：适合一些读多写少的场景。如论坛，新闻网点等，读写比在 10倍到100倍之间。&lt;/p&gt;
-
-&lt;h1 id=&quot;双机切换&quot;&gt;双机切换&lt;/h1&gt;
-
-&lt;p&gt;双机切换是在上面两个种方式上增加了自动切换的功能。&lt;/p&gt;
-
-&lt;p&gt;关键的设计点：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;主备间状态判断。状态传递的渠道，以及状态检测的内容。 检测是否掉电、进程是否存在、响应是否缓慢等。&lt;/li&gt;
-  &lt;li&gt;切换决策。切换时机、切换策略、自动程度。&lt;/li&gt;
-  &lt;li&gt;解决数据冲突。 故障的主机恢复之后，可能存在数据冲突。应该如何处理。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;常见的架构：有互连式、中介式、模拟式。&lt;/p&gt;
-
-&lt;p&gt;感觉双机主动切换，在实际应该中可能会出现很多问题。切换的时机，数据的一致性是一个很大的考验。不知道生产环境有没有企业真实的运用到。&lt;/p&gt;
-
-&lt;h1 id=&quot;主主复制&quot;&gt;主主复制&lt;/h1&gt;
-
-&lt;p&gt;主主复制是两台机器都是主机，双方都要把数据复制给对方，客户端可以任意挑其中一台机器进行读写操作。如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-14-03-28.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;特点：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;两台都是主机，不存在切换。&lt;/li&gt;
-  &lt;li&gt;客户端读写其中一台主机即可。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;对数据的设计有严格有要求，一般适合于临时性、可丢失、可覆盖的数据场景。&lt;/p&gt;
-
-&lt;h1 id=&quot;数据集群&quot;&gt;数据集群&lt;/h1&gt;
-
-&lt;p&gt;集群就是多台机器组全在一起形成一个统一的系统。主要是解决主备、主从架构的存储或处理能力不足的问题。集群可以根据不同业务来划分不同数据角色。&lt;/p&gt;
-
-&lt;p&gt;主要可以分两大类：数据集中集群，数据分散集群。&lt;/p&gt;
-
-&lt;h3 id=&quot;数据集中集群&quot;&gt;数据集中集群&lt;/h3&gt;
-
-&lt;p&gt;这种方式和主备、主从架构相似。 如下图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-14-42-30.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;集群中的服务器比较多，所以复杂度会更高一些，表现为：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;主机如何将数据复制给备机&lt;/li&gt;
-  &lt;li&gt;主要故障后，如何决定新的主机，如Zoobeeper 通过 ZAB 的算法来解决。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;数据集中集群，客户端只能将数据写到主机。&lt;/p&gt;
-
-&lt;h3 id=&quot;数据分散集群&quot;&gt;数据分散集群&lt;/h3&gt;
-
-&lt;p&gt;是指多个服务器给成一个集群。每台服务器都负责存储一部分数据。数据分散集群的复杂点在于如何将数据分配到不同的服务器上。 算法的考量如下：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;均衡性&lt;/li&gt;
-  &lt;li&gt;容错性&lt;/li&gt;
-  &lt;li&gt;可伸缩性&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;数据分散集群中的每台服务器都可以处理读写请求。需要一台服务器来负责执行数据分配算法，可以是独立一台服务器也可以是选举出来的一台机器来承担。&lt;/p&gt;
-
-&lt;h1 id=&quot;数据分区&quot;&gt;数据分区&lt;/h1&gt;
-
-&lt;p&gt;前面的架构设计主要是考虑部分硬件出现故障问题，数据依然可用。 但是如果大面积出现故障，如一个机房出现问题了，如火灾等。这里这个机房中的所有集群的机器都可能会有故障。&lt;/p&gt;
-
-&lt;p&gt;我们可以通过设计地理级别的数据分区来解决这样的问题。&lt;/p&gt;
-
-&lt;p&gt;数据分区是将数据按一定的规则进行分区，不同分区分布上在不地域上，每个分区存储一部分，分区之前可以相互备份数据。这样一个地域发生事故时，可以通过另一个地域的机房的数据同步恢复数据。&lt;/p&gt;
-
-&lt;p&gt;数据分区架构，要考虑的有：&lt;/p&gt;
-
-&lt;p&gt;1、数据量&lt;/p&gt;
-
-&lt;p&gt;​	数据量大小直接决定了分区的规则和复杂度。数据服务器越多，单机的故障就会越常见。所以运维成本也更加复杂。&lt;/p&gt;
-
-&lt;p&gt;2、分区规则&lt;/p&gt;
-
-&lt;p&gt;地理位置，有远有近，分不同省市，考虑地域的安全性。业务范围，成本等。&lt;/p&gt;
-
-&lt;p&gt;3、复制规则&lt;/p&gt;
-
-&lt;p&gt;数据的一致性是最重要的核心。所以复制方式一定是一个高可用的方案。&lt;/p&gt;
-
-&lt;p&gt;常见的分区复制规则有三种： 集中式、互备式、独立式。&lt;/p&gt;
-
-&lt;h3 id=&quot;集中式&quot;&gt;集中式&lt;/h3&gt;
-
-&lt;p&gt;集中式备份指存在一个总的备份中心，所有的分区都将数据备份到备份中心，如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-15-21-52.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;特点：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;扩展容易，可以随时增加一个分区&lt;/li&gt;
-  &lt;li&gt;成本高，需要一个独立的备份中心&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;互备式&quot;&gt;互备式&lt;/h3&gt;
-
-&lt;p&gt;每一个分区是另一个分区的数据备份。如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-15-24-01.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;特点：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;设计复杂，分区既要承担数据存储功能，也要承担数据备份功能。&lt;/li&gt;
-  &lt;li&gt;扩展麻烦，相互备份的相关扩展越来比较麻烦&lt;/li&gt;
-  &lt;li&gt;成本低，无需独立备份中心，&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;独立式&quot;&gt;独立式&lt;/h3&gt;
-
-&lt;p&gt;每个分区都有自己的独立的备份中心，如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-20-15-27-35.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;特点：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;设计简单，各分区互不影响&lt;/li&gt;
-  &lt;li&gt;扩展性好，新增比较简单快捷&lt;/li&gt;
-  &lt;li&gt;成本高&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
-
-</description>
-        <pubDate>Sun, 05 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/storage-architecture-dual-system-architecture</link>
-        <guid isPermaLink="true">http://localhost:4000/storage-architecture-dual-system-architecture</guid>
-        
-        <category>极客时间</category>
-        
-        <category>技术学习笔记</category>
-        
-        
-        <category>系统设计</category>
-        
-      </item>
-    
-      <item>
-        <title>架构的负载均衡</title>
-        <description>&lt;p&gt;单机机器无法满足业务的需求时，通过集群来提升系统的整体处理性能。这时负载均衡就成了一个很重要的基础网络组件，主要的功能是分配流量，被称之为&lt;strong&gt;负载均衡器&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;h1 id=&quot;一负载均衡的分类&quot;&gt;一、负载均衡的分类&lt;/h1&gt;
-
-&lt;p&gt;常见的负载均衡系统：DNS 负载均衡、硬件负载均衡和软件负载均衡。&lt;/p&gt;
-
-&lt;h3 id=&quot;dns-负载均衡&quot;&gt;DNS 负载均衡&lt;/h3&gt;
-
-&lt;p&gt;DNS 负载均衡一般是实现地理级别的均衡，如访问 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;www.baidu.com&lt;/code&gt; 北方的用户访问北京的机房，南方的用户访问广州机房。DNS 负载均衡的本质就是 DNS 服务解析同一域名可以返回不同的IP地址。 是最简单的最常见的负载均衡方式。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-18-11-17-53.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DNS 负载均衡的优化：简单，成本低； 就近访问，提升访问速度。&lt;/p&gt;
-
-&lt;p&gt;缺点：更新不及时； 扩展性差； 分配策略比较简单。&lt;/p&gt;
-
-&lt;h3 id=&quot;硬件负载均衡&quot;&gt;硬件负载均衡&lt;/h3&gt;
-
-&lt;p&gt;硬件负载均衡是通过硬件设备来实现的，像路由器，交换机等是一个基础网络设备。目前的业界的硬件负载均衡设备有：F5 和 A10。&lt;/p&gt;
-
-&lt;p&gt;硬件负载均衡的优点是：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;功能强大。 支持各层级负载均衡，支持全面负载均衡算法，支持全局负载均衡。&lt;/li&gt;
-  &lt;li&gt;性能强大。100万级的并发，软件的是10级别。&lt;/li&gt;
-  &lt;li&gt;稳定性高。&lt;/li&gt;
-  &lt;li&gt;安全防护。具备防火墙、防DDos 攻击等。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;缺点：价格贵； 扩展性能力差；&lt;/p&gt;
-
-&lt;h3 id=&quot;软件负载均衡&quot;&gt;软件负载均衡&lt;/h3&gt;
-
-&lt;p&gt;软件负载均衡常见的有 Nginx 和 LVS。 Nginx  是7层负载均衡，LVS 是 linux 内核的4层负载均衡。 这之间的区别是协议和灵活性。 Nginx 支持 HTTP、E- mail 协议，而LVS 是4层负载均衡，和协议无关，所有应用都可以做到。&lt;/p&gt;
-
-&lt;p&gt;软件和硬件的最主要区别是：硬件的负载均衡性能远远比软件高。 Nginx 的性能是万级，一般的 linux 上的 nginx 大概是5w/s。LVS的性能是十万级。 可达到80w/s。而硬件的 F5 是百万级，从200w/s 到800w/s 都有。&lt;/p&gt;
-
-&lt;p&gt;软件负载均衡的优点： 简单、便宜、灵活。缺点：性能一般、功能有限、不具安全功能。&lt;/p&gt;
-
-&lt;p&gt;Nginx 的负载均衡的示意图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-18-20-06-27.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;二负载均衡的架构&quot;&gt;二、负载均衡的架构&lt;/h1&gt;
-
-&lt;p&gt;负载均衡的三种方式者各有自己的优缺点，所以一般在运用时都是根据其优势进行综合使用。如DNS负载均衡用到实现地理级别； 硬件负载均衡用到集群级别的； 软件负载均衡用到实现机器级别的。如下图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;./assets/system-design/architecture-design-2023-03-18-20-11-15.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;整个系统分为三层：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;地理级别负载均衡。 通过DNS服务就近把域名解析到三地的机房。这里当一个机器出现故障时，也可以DNS服务上摘掉。&lt;/li&gt;
-  &lt;li&gt;集群级别负载均衡。机房的入口是F5 硬件负载均衡。由它分发到本地不同的集群去处理。&lt;/li&gt;
-  &lt;li&gt;机器级别负载均衡。 用的是软件负载均衡，如 nginx。 当流分发到集群中的某台机器上处理。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;三负载均衡的算法&quot;&gt;三、负载均衡的算法&lt;/h1&gt;
-
-&lt;p&gt;负载均衡的算法有：轮询、加权轮询、负载最低优先、性能最优类、hash 类。&lt;/p&gt;
-
-&lt;h3 id=&quot;轮询&quot;&gt;轮询&lt;/h3&gt;
-
-&lt;p&gt;轮询是最简单的一种策略，无需关注服务器本身的状态。无论是这个服务器是负载太重，还是服务器本身性能太差了。负载均衡系统都不会有感知，依然不断的发送流量过来。 有一点，服务器宕机或连接断开了，负载均衡系统是可感觉到的。 也会做出相关的处理，从配置表列中摘除掉。&lt;/p&gt;
-
-&lt;h3 id=&quot;加权轮询&quot;&gt;加权轮询&lt;/h3&gt;
-
-&lt;p&gt;负载均衡系统根据服务器的权重进行不同比例的分配，权重一般根据服务器的性能或状态人为的进行配置。 加权的目的就是为了解决不同服务器之间的处理能务的差异。&lt;/p&gt;
-
-&lt;h3 id=&quot;负载最低优先&quot;&gt;负载最低优先&lt;/h3&gt;
-
-&lt;p&gt;负载最低优先的意思是把流量分配给当前负载最低的服务器。从这里可以看到负载均衡系统是可以知道服务器的一个大概的运行状态的。&lt;/p&gt;
-
-&lt;p&gt;实践中，可以根据不同的指标来表示当前的负载最低。如：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;nginx 7层网络负载系统，用 http 请求数来判断服务器状态。（需进行nginx 扩展）&lt;/li&gt;
-  &lt;li&gt;CPU 负载。如果是自己做的负载均衡系统的，可以把服务器的CPU 负载情况发布到负载均衡系统来做这个指标。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用负载最低优先这种方式，负载均衡系统知道了服务器的状态，但是也变得复杂很多。 实际上真正应用场景反而没有轮询多。&lt;/p&gt;
-
-&lt;h3 id=&quot;性能最优类&quot;&gt;性能最优类&lt;/h3&gt;
-
-&lt;p&gt;性能最优类的的算法和负载最低优先的算法差不多，都是要需要感知服务器的状态。性能最优类只是通过响应时间来衡量服务器状态的。&lt;/p&gt;
-
-&lt;p&gt;负载均衡系统需要收集和分析每个服务器每个任务的响应时间。 所以需要采样统计来估算每一台服务器的响应时间。&lt;/p&gt;
-
-&lt;h3 id=&quot;hash-类&quot;&gt;Hash 类&lt;/h3&gt;
-
-&lt;p&gt;负载均衡系统根据任务中的某些关键信息进行 hash 运算。将相同的 hash 值的请求分配到同一台服务器上。这样做的目的主要是为了满足特定的业务需求。如：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;源地址 hash。 将源于同一个源IP地址的任务分配给同一个服务器进行处理。 适合于存在事务、会话的业务。&lt;/li&gt;
-  &lt;li&gt;ID hash  。 将某个ID标识的业务分配到同一个服务器中进行处理， ID 一般是临进性数据 （session ID）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这里有个疑问，如果有一台服务器挂了。那么 hash 之后是不是找不到对应的服务器了？&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
-
-&lt;p&gt;2、&lt;a href=&quot;https://skyao.gitbooks.io/learning-nginx/content/documentation/HTTP_load_balancer.html&quot;&gt;使用nginx实现HTTP负载均衡&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;3、&lt;a href=&quot;https://superproxy.github.io/docs/lvs/index.html&quot;&gt;LVS介绍&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;4、&lt;a href=&quot;https://zhuanlan.zhihu.com/p/23161920&quot;&gt;浅谈Nginx负载均衡与F5的区别&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;5、&lt;a href=&quot;https://developer.aliyun.com/article/502736&quot;&gt;F5负载均衡器原理&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;6、&lt;a href=&quot;http://www.ttlsa.com/linux/haproxy-study-tutorial/&quot;&gt;HAProxy用法详解 &lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sat, 04 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/load-balancing-of-the-architecture</link>
-        <guid isPermaLink="true">http://localhost:4000/load-balancing-of-the-architecture</guid>
-        
-        <category>极客时间</category>
-        
-        <category>技术学习笔记</category>
-        
-        
-        <category>系统设计</category>
-        
-      </item>
-    
-      <item>
-        <title>高性能数据库集群</title>
-        <description>&lt;p&gt;数据库厂商在数据库的高性能上做了多的优化和提升。但无法满足各行各业的业务发展。&lt;/p&gt;
-
-&lt;p&gt;所以，架构师通过数据库集群来提高数据库的性能。这里有两种方式： &lt;strong&gt;读写分离和分库分表&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;h1 id=&quot;一读写分离&quot;&gt;一、读写分离&lt;/h1&gt;
-
-&lt;h3 id=&quot;读写分离原理&quot;&gt;读写分离原理&lt;/h3&gt;
-
-&lt;p&gt;读写分离的基本原理是将数据库读写操作分散到不同的节点为上。如下图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-16-22-07-54.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;说明：&lt;/p&gt;
-
-&lt;p&gt;1、数据库服务器集群配置有主从，一主多从。&lt;/p&gt;
-
-&lt;p&gt;2、数据库主机负责读写操作，从机只负责读操作。（从机的读时，极端情况数据可能存在不一致的情况）&lt;/p&gt;
-
-&lt;p&gt;3、数据库主机通过复制将数据同步到从机。主从机的所有数据都是一致的。&lt;/p&gt;
-
-&lt;h3 id=&quot;复制延迟&quot;&gt;复制延迟&lt;/h3&gt;
-
-&lt;p&gt;上面说到极端情况数据可能存在不一致的情况，就是复制延迟引起的。 以MySQL 为例，主从复制延迟可能达到1秒。&lt;/p&gt;
-
-&lt;p&gt;业务上场景是：程序将数据写入数据库后，马上又进行读取，这时数据还是从主机同步人机，此时读从机就无法读最新的数据。&lt;/p&gt;
-
-&lt;p&gt;解决这个问题的方法是：&lt;/p&gt;
-
-&lt;p&gt;1、写操作后读操作指定到数据库主机上读。&lt;/p&gt;
-
-&lt;p&gt;2、读从机失败后，再读一次主机。（如果只是数据没有更新，则不会读失败，只会读到最新数据）&lt;/p&gt;
-
-&lt;p&gt;3、关键业务读写操作全部指向主机，非关系业务采用读写分离的方式。&lt;/p&gt;
-
-&lt;h3 id=&quot;分配机制&quot;&gt;分配机制&lt;/h3&gt;
-
-&lt;p&gt;将读写操作区分开来，然后访问不同的数据库服务，一般有两种方式：程序代码封闭和中间件。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;程序代码封装&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;在程序代码中封装一个抽象数据访问层，实现读写操作分离和数据库服务连接的管理。这个访问层是被编译到程序当中的。&lt;/p&gt;
-
-&lt;p&gt;这种代码封装的方式有几个特点：&lt;/p&gt;
-
-&lt;p&gt;1、实现简单，贴近业务，可以做较多定制化的功能。&lt;/p&gt;
-
-&lt;p&gt;2、不同的开发语言要有不同的实现，重复开发。&lt;/p&gt;
-
-&lt;p&gt;3、故障进，主从发生切换，对应的服务重启。&lt;/p&gt;
-
-&lt;p&gt;开源的实现方案中： 淘宝的 TDDL（Taobao Distributed Data Layer）。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;中间件封装&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;中间件是独立的服务，实现读写操作分离和数据服务器连接的管理。 中间件服务提供SQL 兼容协议，业务程序不用自己进行读写分离，访问中间件和访问数据库没有区别。基本架构如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-16-22-42-53.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;数据库中间件的方式具备的特点是：&lt;/p&gt;
-
-&lt;p&gt;1、提供标准的SQL接口，所以和编程语言无关。&lt;/p&gt;
-
-&lt;p&gt;2、比较复杂，需要支持完整的SQL 语法和数据库协议。&lt;/p&gt;
-
-&lt;p&gt;3、对中间件的性能要求高，在业务程序和数据库中加了一层，多一些性能上的消耗。&lt;/p&gt;
-
-&lt;p&gt;4、数据库主从切换对业务程序无感知。&lt;/p&gt;
-
-&lt;p&gt;奇虎360 开源了数据库中间件Atas。&lt;/p&gt;
-
-&lt;h1 id=&quot;二-分库分表&quot;&gt;二 分库分表&lt;/h1&gt;
-
-&lt;p&gt;读写分离可以分散数据库读写操作的压力，但没有分散存储压力，当数据量达到千万甚至上亿条的时候，单台数据库服务器的存储能力会成为系统瓶颈。表现为：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;数据量大，读写的性能会下降，即使有索引，索引也会变得很大，性能同样下降。&lt;/li&gt;
-  &lt;li&gt;数据文件变得很大，数据库备份和恢复需要耗费很长时间。&lt;/li&gt;
-  &lt;li&gt;数据文件越大，极端情况下丢失败的数据的风险越高。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;业务分库&quot;&gt;业务分库&lt;/h3&gt;
-
-&lt;p&gt;业务分库指的是按照业务模块将数据分散到不同的数据库服服务器。如电商业务可以把用户、商品、订单三个业务模块分到不同数据库上。&lt;/p&gt;
-
-&lt;p&gt;业务分库能够分散存储和访问压力，同时也带来问题：&lt;/p&gt;
-
-&lt;p&gt;1、join 操作。分库后，相关的join 操作无法使用 。&lt;/p&gt;
-
-&lt;p&gt;2、事务问题。数据库的事务无法使用。只能要代码层面保证事务。&lt;/p&gt;
-
-&lt;p&gt;3、成本问题。服务库服务器多了，连接数据也复杂了。&lt;/p&gt;
-
-&lt;h3 id=&quot;分表方案&quot;&gt;分表方案&lt;/h3&gt;
-
-&lt;p&gt;单表数据拆分有两种方式： 垂直分表和水平分表。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/system-design/architecture-design-2023-03-17-00-10-13.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;分表后，多个表存在同一个数据库服务中，也可以带来不的性能提升。当然也可以放在不同的数据库服务中。&lt;/p&gt;
-
-&lt;p&gt;分表能够有效地分散存储压力和琮来性能提升。同样也会引放各种复杂性问题。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;垂直分表&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;垂直分表适合将表中某些不常用且占了大量空间的列拆分出去。如前面图中： nickname 和 description 字段。&lt;/p&gt;
-
-&lt;p&gt;垂直分表的引入的复杂性主要体现在表操作的数据要增加。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;水平分表&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;水平分表适合数特别大的表。 例如：单表行数超过 5000W。当看到表的数据量达到千万级别时，就是警觉起来，考虑架构的性能瓶颈或者隐患。&lt;/p&gt;
-
-&lt;p&gt;水平分表后，数据应该放到哪一张中，就是需要进行路由分配， 一般都是某个业务ID进行hash 。&lt;/p&gt;
-
-&lt;p&gt;常风的路由算法有：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;范围路由：选取有序的数据列（如时间，ID等）作为路由的条件。不同范围放到不表中。 优点是可以随着数据的增加扩展比较方便。 缺点是数据不均衡。&lt;/li&gt;
-  &lt;li&gt;Hash 路由：选取某个表（或者某几个列组也可以）的值进行 hash 运算。如 ID % 1024 ， 分为1024张表。 优点是数据比较均衡。 缺点是扩充新的表比较麻烦。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
-
-</description>
-        <pubDate>Fri, 03 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/high-performance-database-cluster</link>
-        <guid isPermaLink="true">http://localhost:4000/high-performance-database-cluster</guid>
-        
-        <category>极客时间</category>
-        
-        <category>技术学习笔记</category>
-        
-        <category>mysql</category>
-        
-        
-        <category>系统设计</category>
-        
-      </item>
-    
-      <item>
-        <title>架构设计三大原则</title>
-        <description>&lt;p&gt;三大原则：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;合适原则。 合适优于业界领先。&lt;/li&gt;
-  &lt;li&gt;简单原则。简单优于复杂。&lt;/li&gt;
-  &lt;li&gt;演化原则。演化优于一步到位。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;合适原则&quot;&gt;合适原则&lt;/h1&gt;
-
-&lt;p&gt;再好的梦想，也需要脚踏实地实现！&lt;/p&gt;
-
-&lt;p&gt;主要体现如下：&lt;/p&gt;
-
-&lt;p&gt;1、将军难打无兵之仗。没那么多人，却想干那么多活，是失败的第一个主要原因。&lt;/p&gt;
-
-&lt;p&gt;2、罗马不是一天建成的。没有那么多积累，却想一步登天，是失败的第二个主要原因。&lt;/p&gt;
-
-&lt;p&gt;3、冰山下面才是关键。没有那么卓越的业务场景，却幻想灵光一闪成为天才，是失败的第三个主要原因。&lt;/p&gt;
-
-&lt;p&gt;真正优秀的架构都是在企业当前人力、条件、业务等各种约束下设计出来的，能够合理地
-将资源整合在一起并发挥出最大功效，并且能够快速落地。&lt;/p&gt;
-
-&lt;h1 id=&quot;简单原则&quot;&gt;简单原则&lt;/h1&gt;
-
-&lt;p&gt;团队的压力有时也会有意无意地促进我们走向复杂的方向，因为大部分人在评价一个方案水平高
-低的时候，复杂性是其中一个重要的参考指标。&lt;/p&gt;
-
-&lt;p&gt;复杂”在制造领域代表先进，在建筑领域代表领先，但在软件领域，却恰恰相反，代表的
-是“问题”。&lt;/p&gt;
-
-&lt;h1 id=&quot;演化原则&quot;&gt;演化原则&lt;/h1&gt;
-
-&lt;p&gt;软件的演化，其实就是不断进行迭代。&lt;/p&gt;
-
-&lt;p&gt;软件架构需要根据业务发展不断变化这个本质特点，软件架构设计其实更加类似于大自然“设计”一个生物，通过演化让生物适应环境，逐步变得更加强大。&lt;/p&gt;
-
-&lt;p&gt;软件架构设计的过程：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;设计出来的架构要满足当时的业务需要。&lt;/li&gt;
-  &lt;li&gt;架构要不断地在实际应用过程中迭代，保留优秀的设计，修复有缺陷的设计，改正错误的设计，去掉无用的设计，使得架构逐渐完善。&lt;/li&gt;
-  &lt;li&gt;当业务发生变化时，架构要扩展、重构，甚至重写；代码也许会重写，但有价值的经验、教训、逻辑、设计等（类似生物体内的基因）却可以在新架构中延续。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;合适原则是最重要的，它决定了对简单原则和演化原则的判断，没有以合适为基础，很难判断简单是否能满足业务的需求，演化的起点在哪里。&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 02 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/three-principles-of-architecture-design</link>
-        <guid isPermaLink="true">http://localhost:4000/three-principles-of-architecture-design</guid>
-        
-        <category>极客时间</category>
-        
-        <category>技术学习笔记</category>
-        
-        
-        <category>系统设计</category>
-        
-      </item>
-    
-      <item>
-        <title>架构设计的目的</title>
-        <description>&lt;h1 id=&quot;架构设计的真正目的&quot;&gt;架构设计的真正目的&lt;/h1&gt;
-
-&lt;p&gt;架构设计的主要目的是为解决软件系统复杂带来的问题。&lt;/p&gt;
-
-&lt;p&gt;架构即决策，用有限的资源合适地去解决当前的问题。有限的资源是：团队经验，成本，进度，业务背景，人，财，物，时间等。&lt;/p&gt;
-
-&lt;p&gt;需求驱动架构，架起分析与设计之实现的桥梁。&lt;/p&gt;
-
-&lt;p&gt;架构师有的放矢，而不是贪大求全。&lt;/p&gt;
-
-&lt;p&gt;系统的复杂度体现在哪里？主要体现在五个方面。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;性能&lt;/li&gt;
-  &lt;li&gt;可扩展性&lt;/li&gt;
-  &lt;li&gt;高可用&lt;/li&gt;
-  &lt;li&gt;安全性&lt;/li&gt;
-  &lt;li&gt;成本&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;高性能&quot;&gt;高性能&lt;/h1&gt;
-
-&lt;p&gt;软件系统的高性能带来的复杂度主要体现在两方面， 一方面是单机计算机内部为了高性能带来的复杂度。另一个方面是多台计算机集群为了高性能带来的复杂度。&lt;/p&gt;
-
-&lt;h3 id=&quot;单机复杂度&quot;&gt;单机复杂度&lt;/h3&gt;
-
-&lt;p&gt;计算机内部复杂度最关键的地方就是操作系统。&lt;/p&gt;
-
-&lt;p&gt;操作系统和性能最相关的就是进程和线程。&lt;/p&gt;
-
-&lt;p&gt;多进程多线程并行处理任务。&lt;/p&gt;
-
-&lt;h3 id=&quot;集群复杂度&quot;&gt;集群复杂度&lt;/h3&gt;
-
-&lt;p&gt;通过大量机器来提升性能时，就是让多台机器很好的配合，这就带来一个集群的复杂度。 如：&lt;/p&gt;
-
-&lt;p&gt;1、任务分解&lt;/p&gt;
-
-&lt;p&gt;通过任务分解，把一个大任务分解成小任务，分配到不同机器上去处理。&lt;/p&gt;
-
-&lt;p&gt;2、任务分配&lt;/p&gt;
-
-&lt;p&gt;不同机器可以处理不同的业务任务，这时就需要把任务分配不同的机器上。&lt;/p&gt;
-
-&lt;p&gt;性能是软件一个重要属性，衡量软件性能包括了响应时间、TPS、服务器资源的利用率等客户指标。&lt;/p&gt;
-
-&lt;p&gt;为什么需要高性能？&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;追求良好的用户体验&lt;/li&gt;
-  &lt;li&gt;满足业务增长的需要&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如何做好高性能？&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;可以从垂直和水平两个维度来考虑。&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;垂直：针对单机计算机，通过升级软件、硬件能力实现性能提升。&lt;/li&gt;
-      &lt;li&gt;水平：针对集群系统，利用合理任务分解和任务分配来提升。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;垂直维度的措施：&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;增大内存减少I/O。&lt;/li&gt;
-      &lt;li&gt;固态硬盘，提升I/O访问速度。&lt;/li&gt;
-      &lt;li&gt;用 RAID 增加I/O的吞吐能务。&lt;/li&gt;
-      &lt;li&gt;增加处理器，提高算力。&lt;/li&gt;
-      &lt;li&gt;升级网络带宽。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;水平维度的措施：&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;功能分解，把系统分解为多个子系统，微服务。&lt;/li&gt;
-      &lt;li&gt;多实例副本，同一组件重复部署到多台不 的服务器。&lt;/li&gt;
-      &lt;li&gt;数据分割，在每台机器上都只部署一部分数据。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;垂直维度方案比较适合业务的早期，主要从成本考虑。水平维度的方案适合在业务发展到一定程度。水平维度是技术发展的必经之路。&lt;/p&gt;
-
-&lt;h1 id=&quot;高可用&quot;&gt;高可用&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;系统无中断地执行其功能的能力，代表系统的可用性程度，是进行系统设计的时的准则之一。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;从系统内各个层面上看，“无中断”是几乎不可能的。硬件、软件、外部环境都可能导致难以预测是的问题。&lt;/p&gt;
-
-&lt;p&gt;从系统这个维度上看，&lt;strong&gt;高可用的本质就是通过“冗余”来实现&lt;/strong&gt;。即一台有问题，又一台顶着。一个机房有问题，有另一个机器扛着。&lt;/p&gt;
-
-&lt;p&gt;高可用主要从三方面考虑：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;高可用计算。业务逻辑的处理，无论在哪台机器上进行计算，同样的算法和输入数据，输出结果都是一样。&lt;/li&gt;
-  &lt;li&gt;高可用存储。存储高可用的难点不是在于如何备份数据，而在于如何减少或者规避数据不一致对业务造成的影响。&lt;/li&gt;
-  &lt;li&gt;高可用状态决策。即系统需要能够判断当前的状态是正常还是异常，如果出现了异常就要采取行动来保证高呆用。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;为什么会出现不可用？&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;硬件故障。应用运用到服务器中，现有的服务器有一些是普通的PC机，有一些docker 虚拟机的形式提供服务。本身就不具备高可用性。&lt;/li&gt;
-  &lt;li&gt;软件BUG。 BUG 不能消灭，只能减少。&lt;/li&gt;
-  &lt;li&gt;不可抗拒力。如地震，水灾，战争等。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;高可用的方案不是解决，而是减少或者规避。规避某个问题，一般可能会引来另一个问题，只是这个问题比之前的问题小。&lt;/p&gt;
-
-&lt;p&gt;高可用的设计过程其实也是一个取舍的过程。 这也是什么系统可用性永远只是几个九，不可能百分之一百。&lt;/p&gt;
-
-&lt;h1 id=&quot;可扩展性&quot;&gt;可扩展性&lt;/h1&gt;
-
-&lt;p&gt;可扩展性指的系统为了应对未来的需求而提供一种方便的扩展能力。当未来的某一个新需求出现时，系统以最小成本就可以支持，如只改配置或改动很少的代码。&lt;/p&gt;
-
-&lt;p&gt;设计具备良好的可扩展性的系统，有两个基本条件，正确预测变化、完美封闭变化。&lt;/p&gt;
-
-&lt;h3 id=&quot;预测变化&quot;&gt;预测变化&lt;/h3&gt;
-
-&lt;p&gt;预测变化的复杂性在于：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;不能每个设计点都考虑可扩展性。&lt;/li&gt;
-  &lt;li&gt;不能完全不考虑可扩展性。&lt;/li&gt;
-  &lt;li&gt;所有的预测都存在出错的可能性。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如何把握好预测的程序，提升预测结果的准备性，靠的就是自己的经验，直觉。小心过度设计，把系统搞得更加复杂了。&lt;/p&gt;
-
-&lt;h3 id=&quot;应对变化&quot;&gt;应对变化&lt;/h3&gt;
-
-&lt;p&gt;应对未来的变化，可以把系统进行分层，可能出现变化的和比较稳定的分好模块。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;系统需要拆分出变化层和稳定层。&lt;/li&gt;
-  &lt;li&gt;需要设计变化层和稳定层之间的接口。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;什么是架构的可扩展性？&lt;/p&gt;
-
-&lt;p&gt;业务需求、运行环境方面的变化都会导致软件系统的发生变化，而这种软件对上述变化&lt;strong&gt;适应能力&lt;/strong&gt;就是可扩展性。&lt;/p&gt;
-
-&lt;p&gt;一个具备良好可扩展性的架构设计应该当符合&lt;strong&gt;开闭原则&lt;/strong&gt;：对扩展开放，对修改关闭。&lt;/p&gt;
-
-&lt;p&gt;主要表现为：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;软件内部方面。在软件系统实现新增的业务功能时，对现有系统功能影响较少，即不需要对现在功能作任何发动或很少改动。&lt;/li&gt;
-  &lt;li&gt;软件外面方面。软件系统本身与其他方协同之间存在松耦关系，自身的变化对外部系统无影响。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如何设计可扩展性好的架构？&lt;/p&gt;
-
-&lt;p&gt;面向对象思想，设计模式等都是为了解决可扩展性而出现的方法与技术。&lt;/p&gt;
-
-&lt;p&gt;可以从两角度思考：&lt;/p&gt;
-
-&lt;p&gt;1、从业务维度。对业务深入的理解，对可预计的业务变化进行预测。&lt;/p&gt;
-
-&lt;p&gt;2、从技术维度。 利用扩展好的技术，实现对变化的封装。&lt;/p&gt;
-
-&lt;p&gt;在实际工作场景中常用的手段：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;使用分布式服务构建可复用的业务平台。&lt;/li&gt;
-  &lt;li&gt;使用分布式消息队列降低模块间的耦合性。&lt;/li&gt;
-  &lt;li&gt;稳定层可以考虑服务化。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;低成本安全规模&quot;&gt;低成本、安全、规模&lt;/h1&gt;
-
-&lt;p&gt;复杂度另外三个来源： 成本，安全和规模。&lt;/p&gt;
-
-&lt;h2 id=&quot;成本&quot;&gt;成本&lt;/h2&gt;
-
-&lt;p&gt;如果我们的架方案涉及到几百上千甚至上万台机器时，成本就是一个很重要的考虑点了。&lt;/p&gt;
-
-&lt;p&gt;当我们的架构设计“高可用、高性能”时，带来的就是更多服务器的高成本。 所以，低成本也成了架构设计的一个约束条件。&lt;/p&gt;
-
-&lt;p&gt;架构设计之前， 我们要设定一个成本目标，我的架构设计高可有，高性能也要满足这个成本目标。如果不行则要重新考虑方案。&lt;/p&gt;
-
-&lt;p&gt;为了降低成本，同时也是高可用，和性能架构。 一般的做法就是引入新技术。如：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;NoSQL （Redis、Memcache）做缓存解决高平发访问的问题&lt;/li&gt;
-  &lt;li&gt;全文搜索引擎 (Sphinx 、Elasticsearache、Solr) 解决数据库搜索低效问题&lt;/li&gt;
-  &lt;li&gt;Hadoop 解决海量数据存储和计算的问题。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;安全&quot;&gt;安全&lt;/h2&gt;
-
-&lt;p&gt;安全是一个大又复杂的技术领域，一旦出问题，对业务和企业的影响很大。&lt;/p&gt;
-
-&lt;p&gt;从技术的角度来讲，安全可以分为两类：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;功能上的安全 （防小偷）&lt;/li&gt;
-  &lt;li&gt;架构上的安全 （防强盗）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;功能上安全&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;如：XSS 攻击、CSRF攻击、SQL流入、系统漏洞、密码破解等。 问题很多时候出现在编码不严谨的时候，这一个逐步完善的过程。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;架构上的安全&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;传统的架构安全主是依靠防火墙。 防火墙的基本功能就是网络隔离，通过将网络划分成不同的区域，制定出不同区域的之间的访问控制策略来控制不同坐诊和程度区域传送的数据流。&lt;/p&gt;
-
-&lt;p&gt;互联网系统的架构安全目前并没有太好的设计手段来实现，更多地是依靠运营商或者云服务商强大的带宽和流量清洗的能力，自己的设计的架构上能做的事比较少。&lt;/p&gt;
-
-&lt;h2 id=&quot;规模&quot;&gt;规模&lt;/h2&gt;
-
-&lt;p&gt;规模带来的复杂度主要是因为“量变引起质变” 。&lt;/p&gt;
-
-&lt;p&gt;常用的规模带来的复杂度有：&lt;/p&gt;
-
-&lt;p&gt;1、功能越来越多，导致德比主复杂度指数级上升。&lt;/p&gt;
-
-&lt;p&gt;2、数据越来越多，系统复杂度发生质变。&lt;/p&gt;
-
-&lt;p&gt;规模问题需要与高性能、高可用、高扩展、高伸缩性统一考虑。常采用“分而治之，各个击破”的方法策略。&lt;/p&gt;
-
-&lt;h2 id=&quot;可伸缩性&quot;&gt;可伸缩性&lt;/h2&gt;
-
-&lt;p&gt;伸缩性一般是系统可以根据需求和成本调整自身处理能力的一种能力。伸缩性常意味着系统可以通过低成本并能够快速改变自身的处理能力以满足更多用户访问、处理更多数据而不会对用户体验造
-成任何影响。&lt;/p&gt;
-
-&lt;p&gt;伸缩性度量指标包括:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;处理更高并发。&lt;/li&gt;
-  &lt;li&gt;处理更多数据。&lt;/li&gt;
-  &lt;li&gt;处理更高频次的用户交互。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;其复杂度体现在：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;伸——增强系统在上述三个方面的处理能力。&lt;/li&gt;
-  &lt;li&gt;缩——缩减系统处理能力。&lt;/li&gt;
-  &lt;li&gt;上述伸缩过程还必须相对低成本和快速。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;1、《从零开始学架构》 李运华&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 01 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/the-purpose-of-architecture-design</link>
-        <guid isPermaLink="true">http://localhost:4000/the-purpose-of-architecture-design</guid>
-        
-        <category>极客时间</category>
-        
-        <category>技术学习笔记</category>
-        
-        
-        <category>系统设计</category>
-        
-      </item>
-    
-      <item>
-        <title>stable diffusion webui 的本地部署 mac 环境</title>
-        <description>&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stable diffusion webui&lt;/code&gt; 的 github 地址：&lt;a href=&quot;https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&quot;&gt;https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&lt;/a&gt;。我没有去深究这个地址是不是官方的。&lt;/p&gt;
-
-&lt;p&gt;安装 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stable diffusion webui&lt;/code&gt; 的 方法并不难，只是在 Mac 环境上可能有一些坑。&lt;/p&gt;
-
-&lt;p&gt;按上面的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;README.md&lt;/code&gt; 的 &lt;strong&gt;Installation and Running&lt;/strong&gt; 要求的环境有：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;[https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg](https://www.python.org/ftp/python/3.10.10/python-3.10.10-macos11.pkg)&quot;&gt;python 3.10&lt;/a&gt; 最好就用这个版本，其他版本估计要报很多错误了。&lt;/li&gt;
-  &lt;li&gt;git. 下载 github 用的。 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://repo.anaconda.com/archive/Anaconda3-5.3.1-MacOSX-x86_64.sh&quot;&gt;Anaconda3-5.3.1-MacOSX-x86_64.sh&lt;/a&gt; 我 mac 本地有 python 2.7 的版本还有，所以安装了  Anaconda。如果不用就去把 py2.7 升级到上面的 py3.10&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;anaconda&quot;&gt;Anaconda&lt;/h1&gt;
-
-&lt;p&gt;进入Anaconda 环境的方法是：&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; ~/anaconda3/bin/activate 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;注意前面有一点 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.&lt;/code&gt;。进入之后，前面有 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(base)&lt;/code&gt;  如图：&lt;/p&gt;
+&lt;p&gt;出一些  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\u0026&lt;/code&gt; 之类的。 但如果把 Encoding 设置为 plain，则正常。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/stable-diffusion-webui-2023-02-27-23-48-14.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;stable-diffusion-webui&quot;&gt;stable diffusion webui&lt;/h1&gt;
-
-&lt;p&gt;进入 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stable-diffusion-webui&lt;/code&gt; 目录之后，可以执行 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webui.sh&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;脚本会安装一些必要的依赖。 可能有一点慢。最好是有“梯子”，不然可能会有一些依赖包没有办法下载点。&lt;/p&gt;
-
-&lt;p&gt;目录中有一个脚本 &lt;strong&gt;webui-macos-env.sh&lt;/strong&gt;  运行的过程中会出现一些错误是由于 Mac 环境引起的。 要在这里配置参数。我添加后参数之后的样子：&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;COMMANDLINE_ARGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;--skip-torch-cuda-test --upcast-sampling --no-half-vae --use-cpu interrogate --precision full --no-half --disable-nan-check&quot;&lt;/span&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2024-03-09T15:47:08.006+08       error  httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0&amp;amp;limit&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;10&amp;amp;order&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;desc&amp;amp;sortby&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;create_time&amp;amp;state&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;&amp;amp;states&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0,1,2,3,4&amp;amp;biz_id&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0&amp;amp;agent_id&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;512]      &lt;span class=&quot;nb&quot;&gt;caller&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;server/Helper.go:164        &lt;span class=&quot;nv&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;ca5e1ad81e7d0528f38b361c63a75f35  &lt;span class=&quot;nv&quot;&gt;span&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;48b14f5d8bce91e9
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;执行后 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webui.sh&lt;/code&gt; 之后出现一个 URL: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://127.0.0.1:7860&lt;/code&gt;  如下图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/stable-diffusion-webui-2023-02-27-23-56-56.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;在浏览器访问它即可。&lt;/p&gt;
-
-&lt;p&gt;另： 上面出现的一些错误应该下载一些模型失败的。可以暂时忽略掉。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/stable-diffusion-webui-2023-02-28-00-00-17.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;最后&quot;&gt;最后&lt;/h1&gt;
-
-&lt;p&gt;Mac 环境是安装好，但是在这样的环境下进行 AI 绘图有一些难受。生成一张图大于1个小时左右，训练模型就久了吧。&lt;/p&gt;
-
-&lt;p&gt;最好还是要在台式机上，要有好的 GPU 才行。 其实有一些遗忘的，以前遇到了再补充进来。&lt;/p&gt;
-
 </description>
-        <pubDate>Mon, 27 Feb 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/stable-diffusion-webui-mac-local-dev</link>
-        <guid isPermaLink="true">http://localhost:4000/stable-diffusion-webui-mac-local-dev</guid>
+        <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
+        <link>http://localhost:4000/go-zore-log-problem</link>
+        <guid isPermaLink="true">http://localhost:4000/go-zore-log-problem</guid>
         
-        <category>stable-diffusion</category>
-        
-        <category>人工智能</category>
-        
-        <category>技术学习笔记</category>
+        <category>galang</category>
         
         
-        <category>AI</category>
+        <category>工作日志</category>
         
       </item>
     
       <item>
-        <title>google colab stable diffusion webui</title>
-        <description>&lt;p&gt;在群里看到有人分享 AI 绘图。 问了一下，是 stable diffusion 。了解了一下，发现很牛。就学习了一下怎么画。&lt;/p&gt;
+        <title>go-zero httpc.Do post 数据因 struct 继承导致的失败</title>
+        <description>&lt;p&gt;工作时遇到的一个问题。&lt;/p&gt;
 
-&lt;p&gt;stable diffusion 给图很吃GPU。 发现Google 有提供免费的 GUP 服务可以用。 当然是有使用限制的。&lt;/p&gt;
+&lt;p&gt;背景大概可以简化为：请求不同服务过来的数据后做聚合，然后转发另一个服务。&lt;/p&gt;
 
-&lt;h1 id=&quot;google-colab&quot;&gt;google colab&lt;/h1&gt;
+&lt;p&gt;对于数据的处理习惯性就是：&lt;/p&gt;
 
-&lt;p&gt;网址： &lt;a href=&quot;https://colab.research.google.com/&quot;&gt;https://colab.research.google.com/&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;c&quot;&gt;// data from server A &lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BaseB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;Offset&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int64&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;offset&quot;`&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;Limit&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;int64&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;limit&quot;`&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;当然，你要有梯子可以科学上网，要有google 的帐号。 找开网址进行的界面如下：&lt;/p&gt;
+&lt;span class=&quot;c&quot;&gt;// data from server B &lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BaseB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;Id&lt;/span&gt;    &lt;span class=&quot;kt&quot;&gt;int64&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;id&quot;`&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;name&quot;`&lt;/span&gt;
+	  
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-27-47.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;span class=&quot;c&quot;&gt;// send to server C&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BaseC&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;BaseA&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;BaseB&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Addr&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;addr&quot;`&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;看到可以免费使用 GPU 就感觉很爽。&lt;/p&gt;
+&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BaseC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Offset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;199&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;kane&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Addr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;guangdong&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;baseC ----- &amp;gt; %+v&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-&lt;p&gt;这么有关于 Colab 的介绍。 可以在浏览器中写和执行 python。可以被用于 AI 的相关开发。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;stable-diffusion&quot;&gt;stable diffusion&lt;/h1&gt;
+&lt;p&gt;这里对 BaseC 成员变量的操作和它继承的BaseB、BaseB 的成员一样，都按 BaseC的成员一样处理。&lt;/p&gt;
 
-&lt;p&gt;如何在  colab 中使用 stable diffusion webui 呢？&lt;/p&gt;
+&lt;p&gt;但是，在 fmt.Printf baseC 时，baseC 的结构却有点和想像中不一样。而是：&lt;/p&gt;
 
-&lt;p&gt;在文件中打开一个笔记本。方式： 文件-&amp;gt; 打开笔记本 -&amp;gt; 选择 GitHub。&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; baseC &lt;span class=&quot;nt&quot;&gt;-----&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &amp;amp;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;BaseA:&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;Offset:199 Limit:0&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; BaseB:&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;Id:1 Name:kane&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; Addr:guangdong&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;中包含了 “BaseA” “BaseB”。&lt;/p&gt;
 
-&lt;p&gt;在输入框中输入 ： &lt;a href=&quot;https://github.com/kakabei/stable_diffusion_chilloutmix_ipynb&quot;&gt;https://github.com/kakabei/stable_diffusion_chilloutmix_ipynb&lt;/a&gt;  点击搜索会展示出下面的三个项目，可以选择 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stable_diffusion_1_5_webui.ipynb&lt;/code&gt;，  点击进去。&lt;/p&gt;
+&lt;p&gt;多想一步，把这个结构体转 json 输出，如下：&lt;/p&gt;
 
-&lt;p&gt;如下图：&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;baseCByte &lt;span class=&quot;nt&quot;&gt;-----&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;offset&quot;&lt;/span&gt;:199,&lt;span class=&quot;s2&quot;&gt;&quot;limit&quot;&lt;/span&gt;:0,&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;:1,&lt;span class=&quot;s2&quot;&gt;&quot;name&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;kane&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;addr&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;guangdong&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-36-26.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;想像上面 baseC 数据的结构应该是这样的。但事实却不一样。&lt;/p&gt;
 
-&lt;p&gt;加载后之后出现的主界面如下： 
-&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-42-56.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;自己 golang 的底层知识不够导致的。&lt;/p&gt;
 
-&lt;p&gt;可以看左边的菜单，分为几个主要部分：&lt;/p&gt;
+&lt;p&gt;go-zore 的  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;httpc.Do()&lt;/code&gt;在 post 数据带上设置头信息时，&lt;a href=&quot;https://go-zero.dev/docs/tutorials/http/client/index&quot;&gt;https://go-zero.dev/docs/tutorials/http/client/index&lt;/a&gt;&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;选择模型&lt;/li&gt;
-  &lt;li&gt;检查 GPU &amp;amp; 检查环境&lt;/li&gt;
-  &lt;li&gt;第一次使用 - 安装依赖并启动&lt;/li&gt;
-  &lt;li&gt;重启 - 重新启动 Stable Diffusion WebUI&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 
-&lt;p&gt;可以在右边的主界面依次执行。&lt;/p&gt;
+    &lt;span class=&quot;n&quot;&gt;req&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;s&quot;&gt;&quot;foo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;foo-header&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;foo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;bar&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;httpc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Do&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Background&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MethodPost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;domain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/nodes/:node&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;右上角的 &lt;strong&gt;连接&lt;/strong&gt; 就是连接 google 的服务器的。 google 分配的资源还可以：&lt;/p&gt;
+    &lt;span class=&quot;n&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Copy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Stdout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;当  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Request&lt;/code&gt; 用了继承的方式：
+如：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-28-08-55-44.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Body&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;    &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;foo&quot;`&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;    &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;bar&quot;`&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Request&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Body&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Header&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`header:&quot;X-Header&quot;`&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;依次点击主界面的左边的执行按钮，可以执行 python 代码。 如图：
-&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-51-00.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
+        <link>http://localhost:4000/go-zore-struct-httpc-do-problem</link>
+        <guid isPermaLink="true">http://localhost:4000/go-zore-struct-httpc-do-problem</guid>
+        
+        <category>golang</category>
+        
+        
+        <category>工作日志</category>
+        
+      </item>
+    
+      <item>
+        <title>golang 开发备忘</title>
+        <description>&lt;p&gt;go 常用命令&lt;/p&gt;
 
-&lt;p&gt;执行到第三步“3. 第一次使用 - 安装依赖并启动” 完成后，会出现 URL 。点击进去就是 stable diffcusion webui  的界面了。&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+go mod tidy 
 
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-55-41.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;stable diffcusion webui  的界面如下图： 
-&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-57-44.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：&lt;/p&gt;
 
-&lt;p&gt;脚本中安装了很多的插件，还是很不错的。&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;go mod require &amp;lt;module&amp;gt;@&amp;lt;branch&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Tue, 02 Jan 2024 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/go-note</link>
+        <guid isPermaLink="true">http://localhost:4000/go-note</guid>
+        
+        <category>golang</category>
+        
+        
+        <category>golang</category>
+        
+      </item>
+    
+      <item>
+        <title>window11 wsl 使用问题记录</title>
+        <description>&lt;p&gt;1、wsl 内无法 ping 通 宿主机的IP，无法 ping 通 外网。 试了很多方式都没有成功，自己网络方面的知识也不够全面，我补一下。&lt;/p&gt;
 
-&lt;h1 id=&quot;colab-pro&quot;&gt;Colab Pro&lt;/h1&gt;
-
-&lt;p&gt;google 会对免费的用户进行 GPU 的限制。 如计算过了限制，就无去连接使用 GPU，如下图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/stable-diffusion/colab-2023-02-27-22-47-30.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;想要继续用，就要花钱，它会更提供更多GPU 计算单位给你。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/stable-diffusion/colab-2023-02-27-23-01-46.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;最后在网上找到一个方法：[修复 WSL 无 Internet 网络连接问题]（https://www.ghostchu.com/fix-wsl-no-internet-connection/）&lt;/p&gt;
+</description>
+        <pubDate>Fri, 01 Sep 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/window-wsl</link>
+        <guid isPermaLink="true">http://localhost:4000/window-wsl</guid>
+        
+        <category>wsl</category>
+        
+        
+        <category>window</category>
+        
+      </item>
+    
+      <item>
+        <title>《月亮与六便士》 毛姆</title>
+        <description>&lt;p&gt;&lt;img src=&quot;/assets/reading/the-moon-and-sixpence-2023-06-21-09-53-03.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 </description>
-        <pubDate>Sun, 26 Feb 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/google-colab-stable-diffusion-webui</link>
-        <guid isPermaLink="true">http://localhost:4000/google-colab-stable-diffusion-webui</guid>
+        <pubDate>Thu, 01 Jun 2023 19:13:00 +0800</pubDate>
+        <link>http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</link>
+        <guid isPermaLink="true">http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</guid>
         
-        <category>stable-diffusion</category>
-        
-        <category>人工智能</category>
-        
-        <category>技术学习笔记</category>
+        <category>读书</category>
         
         
-        <category>AI</category>
+        <category>reading</category>
+        
+      </item>
+    
+      <item>
+        <title>《面纱》 毛姆</title>
+        <description>&lt;p&gt;&lt;img src=&quot;/assets/reading/the-painted-veil-2023-06-21-10-02-35.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我最不喜欢的就是讲人性，但很多故事也是深刻的讲人性才有了冲突和升华。&lt;/p&gt;
+
+&lt;p&gt;《面纱》让人知道，我们看到人和事物就是人性上装饰的面纱，一切感觉很美好，和谐。可面纱之下才是真实的人性丑恶，很多人没看到过，很多人不相信人性如此，很多人就是喜欢表面的面纱。&lt;/p&gt;
+
+&lt;p&gt;人生的常态是什么，是无论你喜欢否，知道否，面纱一直存在。大部分人并知道真实是什么，也不想知道真实是什么。&lt;/p&gt;
+
+&lt;p&gt;这书和毛姆《月亮与六便士》、《刀锋》重点不一样。对比之下，《刀锋》和《月亮与六便士》更喜欢些吧。我不喜欢探讨太多的人性。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 27 May 2023 19:13:00 +0800</pubDate>
+        <link>http://localhost:4000/%E9%9D%A2%E7%BA%B1</link>
+        <guid isPermaLink="true">http://localhost:4000/%E9%9D%A2%E7%BA%B1</guid>
+        
+        <category>读书</category>
+        
+        
+        <category>reading</category>
+        
+      </item>
+    
+      <item>
+        <title>《刀锋》 毛姆</title>
+        <description>&lt;p&gt;&lt;img src=&quot;/assets/reading/the-razors-edge-2023-06-20-09-45-10.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;拉里一直在追寻他活着的意义，在救赎自己，也在救赎身边的人。
+最终，他也不知道是否已经找到，或许找不到，或许根本没有。但他放下了，或说顿悟了。
+至此，他又回到了世俗的生活。却也不是当初的自己了。&lt;/p&gt;
+
+&lt;p&gt;感觉他什么都可以放下，什么都可以不在意。不知道在空军时他好友的死给他带来了什么样的冲击。他才开始他与众不同的道路。&lt;/p&gt;
+
+&lt;p&gt;总有人追求自己的世界，总有人的生活有别于世俗世界。&lt;/p&gt;
+
+&lt;p&gt;《月亮与六便士》的斯特里克兰同样走这不同于世俗的道路，但如疯狂，如疯子变态。不被世俗理解甚至被嘲笑厌恶。相比之下拉里的道路不被理解，但也温柔很多。&lt;/p&gt;
+
+&lt;p&gt;斯特里克兰追求表达自己，拉里追求救赎自己。&lt;/p&gt;
+
+&lt;p&gt;不明白为什么有那么多人喜欢当“人生导师”，肆无忌惮的指点和批评别人的生活或人生呢。可能最俗的人就是你自己。&lt;/p&gt;
+
+&lt;p&gt;人是可以有很多不同的道路去走，同样也应该宽容你身边的人的各种格格不入的生活态度和行为举止。可能他在救赎自己。&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 02 May 2023 19:13:00 +0800</pubDate>
+        <link>http://localhost:4000/%E5%88%80%E9%94%8B</link>
+        <guid isPermaLink="true">http://localhost:4000/%E5%88%80%E9%94%8B</guid>
+        
+        <category>读书</category>
+        
+        
+        <category>reading</category>
+        
+      </item>
+    
+      <item>
+        <title>storage learning list</title>
+        <description>&lt;p&gt;1、 QEMU/KVM 的基本使用方法： https://blog.wohin.me/posts/qemu-kvm-basic/&lt;/p&gt;
+
+&lt;p&gt;2、 qemu-nbd技术分析: https://cloud.tencent.com/developer/article/1087439&lt;/p&gt;
+
+&lt;p&gt;3、 Windows server 安装qemu-img : https://www.volcengine.com/docs/6627/114289&lt;/p&gt;
+
+&lt;p&gt;4、 qemu-img for Windows: https://zhuanlan.zhihu.com/p/543230850&lt;/p&gt;
+
+&lt;p&gt;5、 Linux 空洞文件 : https://banbanpeppa.github.io/2019/08/21/linux/holefile/&lt;/p&gt;
+
+&lt;p&gt;6、 qcow2 镜像 ：https://zhuanlan.zhihu.com/p/534033659&lt;/p&gt;
+
+&lt;p&gt;7、 KVM - qcow2 和 raw 格式对比 : https://blog.csdn.net/sssssuuuuu666/article/details/106999198&lt;/p&gt;
+
+&lt;p&gt;8、 NBD（Network Block Device）简介及基本使用: https://zhuanlan.zhihu.com/p/50460919&lt;/p&gt;
+
+&lt;p&gt;9、 qemu-nbd使用教程 : https://www.cnblogs.com/silvermagic/p/7666234.html&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;1、iSCSI 的基本架构及操作简介：https://zhuanlan.zhihu.com/p/60986068&lt;/p&gt;
+
+&lt;p&gt;2、什么是 ISCSI? ISCSI 又能干什么呢？https://blog.csdn.net/ZhangPengFeiToWinner/article/details/87926989&lt;/p&gt;
+
+&lt;p&gt;3、linux iscsi 网络的三种工具tgt iscsi_tgt targetcli  https://blog.csdn.net/qqqqqq999999/article/details/72547970&lt;/p&gt;
+
+&lt;p&gt;4、tgt+ceph-rbd创建iscsi链接流程 :  https://confluence.vrviu.com:8443/pages/viewpage.action?pageId=1580763526&lt;/p&gt;
+
+&lt;p&gt;5、TGT 学习总结 ： https://zhuanlan.zhihu.com/p/137047153  很好的文章，已经介绍到源码了。&lt;/p&gt;
+
+&lt;p&gt;5、tgt网关源码解读 ：https://blog.csdn.net/Morry_Chan/article/details/100891020&lt;/p&gt;
+
+&lt;p&gt;6、TGT github ：https://github.com/fujita/tgt&lt;/p&gt;
+
+&lt;p&gt;6、ipxe : https://www.jianshu.com/p/f9070d76892a&lt;/p&gt;
+
+&lt;p&gt;7 perf学习总结: https://zhuanlan.zhihu.com/p/141694060&lt;/p&gt;
+
+&lt;p&gt;8、RFC7143 ： https://www.rfc-editor.org/rfc/rfc7143.html rfc 标准协议&lt;/p&gt;
+
+&lt;p&gt;9、iscsi target tgt架构 : https://developer.aliyun.com/article/296888&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;1、Ceph—Rbd https://blog.csdn.net/weixin_45413603/article/details/103782448&lt;/p&gt;
+
+&lt;p&gt;2、Ceph 存储介绍  https://blog.csdn.net/shenyuanhaojie/article/details/121261005&lt;/p&gt;
+
+&lt;p&gt;3、Ceph介绍及原理架构分享 https://blog.csdn.net/robinhunan/article/details/128488026&lt;/p&gt;
+
+&lt;p&gt;4、ceph学习路线https://www.zhihu.com/search?q=ceph%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF&amp;amp;utm_content=search_suggestion&amp;amp;type=content&lt;/p&gt;
+
+&lt;p&gt;5、Ceph v10.0 中文文档  https://www.bookstack.cn/read/ceph-10-zh/cd0dcad3545db7c0.md&lt;/p&gt;
+
+&lt;p&gt;6、RBD Mirror（镜像）（pacific版本） https://www.cnblogs.com/varden/p/16124316.html&lt;/p&gt;
+
+&lt;p&gt;7、openstack 推荐几个大咖，大家可以百度找他们的博客来看：陈沙克、何明桂、孔令贤，Cloudman。&lt;/p&gt;
+
+&lt;p&gt;8、块设备指南 ： https://access.redhat.com/documentation/zh-cn/red_hat_ceph_storage/4/html/block_device_guide/index&lt;/p&gt;
+
+&lt;p&gt;9、我所了解的各公司使用的 Ceph 存储集群 (携程、乐视、有云、宝德云、联通等) ： https://www.cnblogs.com/sammyliu/p/4908668.html&lt;/p&gt;
+
+&lt;p&gt;10、用Ceph搭个私人NAS网盘！ https://www.jianshu.com/p/25c7ca195aa7&lt;/p&gt;
+
+&lt;p&gt;11、CentOS7 下安装 iSCSI Target(tgt) ，使用 Ceph rbd ：https://www.cnblogs.com/zengzhihua/p/9910704.html&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 01 May 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/ceph-tgt-qemu-kvm-image</link>
+        <guid isPermaLink="true">http://localhost:4000/ceph-tgt-qemu-kvm-image</guid>
+        
+        <category>tgt</category>
+        
+        <category>ceph</category>
+        
+        
+        <category>storage</category>
+        
+      </item>
+    
+      <item>
+        <title>TGT Linux SCSI target framework</title>
+        <description>&lt;p&gt;TGT 是一种在用户态下的 SCSI target 框架。 用于 iSCSI 和 iSER 传输协议。 支持多种方式访问设备块。&lt;/p&gt;
+
+&lt;p&gt;框架包含了用户态下的 deamon 和工具。&lt;/p&gt;
+
+&lt;p&gt;源码在：&lt;a href=&quot;https://github.com/fujita/tgt&quot;&gt;https://github.com/fujita/tgt&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;当前，TGT 支持的传输协议有：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;以太网网卡的 iSCSI  target 软件驱动程序&lt;/li&gt;
+  &lt;li&gt;Infiniband 和 RDMA 网卡的 iSER target 软件驱动程序&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;支持可以访问的本地存储有：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;aio, the asynchronous I/O interface also known as libaio.&lt;/li&gt;
+  &lt;li&gt;rdwr, smc and mmc, synchronous I/O based on the pread() and pwrite() system calls.&lt;/li&gt;
+  &lt;li&gt;null, discards all data and reads zeroes.&lt;/li&gt;
+  &lt;li&gt;ssc, SCSI tape support.&lt;/li&gt;
+  &lt;li&gt;sg and bsg, SCSI pass-through.&lt;/li&gt;
+  &lt;li&gt;glfs, the GlusterFS network filesystem.&lt;/li&gt;
+  &lt;li&gt;rbd, Ceph’s distributed-storage RADOS Block Device.&lt;/li&gt;
+  &lt;li&gt;sheepdog, a distributed object storage system.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;工作中之所以用到 TGT， 就是为了访问 ceph 的块设备。&lt;/p&gt;
+
+&lt;h1 id=&quot;iscsi-协议&quot;&gt;iSCSI 协议&lt;/h1&gt;
+
+&lt;p&gt;SCSI (Small Computer System Interface,小型计算机系统接口) 用于主机与外部设备之间的连接。SCSI 协议是主机与磁盘通信的基本协议。它由SCSI 控制器进行数据操作,SCSI控制器相当于一个小型CPU,有自己的命令集和缓存 。&lt;/p&gt;
+
+&lt;p&gt;而 iSCSI 协议就是让 SCSI 可以在互联网上传输。&lt;/p&gt;
+
+&lt;h1 id=&quot;tgt-的安装&quot;&gt;TGT 的安装&lt;/h1&gt;
+
+&lt;p&gt;两种方式：&lt;/p&gt;
+
+&lt;p&gt;1、源码编译&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/fujita/tgt.git
+
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; ceph-common librados-dev  librbd-dev   manpages-zh  xsltproc   docbook-xsl
+
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;tgt
+
+make
+
+make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;安装后文件的目录&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 755 /usr/sbin
+&lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 755 tgtd tgtadm tgtimg /usr/sbin
+&lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 755 /usr/lib/tgt/backing-store
+&lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 755 bs_rbd.so /usr/lib/tgt/backing-store
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2、 apt 直接安装&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;tgt-rbd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h1 id=&quot;tgt-的程序框架&quot;&gt;TGT 的程序框架&lt;/h1&gt;
+
+&lt;p&gt;TGT 的一个作用就是它可以在用户态下创建管理块设备。这样不用每一次代码的更新都要重新编译内核模块。&lt;/p&gt;
+
+&lt;p&gt;tgtamd 是 TGT的管理工具，它是通过 unix socket 和 tgt daemon 通信。&lt;/p&gt;
+
+&lt;p&gt;tgt daemon （进程名 tgtd）负责和内核态下的 tgt core 模块通信。&lt;/p&gt;
+
+&lt;p&gt;tgt core 通过 target 驱动程序和 ceph 块设备通信。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/dfs/tgt-2023-04-24-19-16-06.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;要和 ceph 块设备通信，系统要安装 ceph 的 librados。&lt;/p&gt;
+
+&lt;p&gt;即安装时要先 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;apt install -y ceph-common librados-dev  librbd-dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;和 ceph 集群通信的是 ceph librados。&lt;/p&gt;
+
+&lt;p&gt;ceph 集群要安全认证，所以相关的配置文件要拷贝到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/etc/ceph/&lt;/code&gt; 下。&lt;/p&gt;
+
+&lt;p&gt;安装完 tgt 后。可以使用 rbd 命令管理  ceph 集群上的块设备。rbd 是通过 tgtd 和 ceph 集群交互的。&lt;/p&gt;
+
+&lt;h1 id=&quot;tgt-常用的命令&quot;&gt;TGT 常用的命令&lt;/h1&gt;
+
+&lt;p&gt;1、创建 target&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tgtadm &lt;span class=&quot;nt&quot;&gt;--lld&lt;/span&gt; iscsi &lt;span class=&quot;nt&quot;&gt;--mode&lt;/span&gt; target &lt;span class=&quot;nt&quot;&gt;--op&lt;/span&gt; new &lt;span class=&quot;nt&quot;&gt;--tid&lt;/span&gt; 1 &lt;span class=&quot;nt&quot;&gt;--targetname&lt;/span&gt; iqn.2009-02.com.example:for.all
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;targetname 是我们要创建的 target 的名字，其采用IQN 命名格式：iqn.年-月.反向域名:任何唯一的名字&lt;/p&gt;
+
+&lt;p&gt;2、创建 lun&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tgtadm &lt;span class=&quot;nt&quot;&gt;--lld&lt;/span&gt; iscsi &lt;span class=&quot;nt&quot;&gt;--mode&lt;/span&gt; logicalunit &lt;span class=&quot;nt&quot;&gt;--op&lt;/span&gt; new &lt;span class=&quot;nt&quot;&gt;--tid&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--lun&lt;/span&gt; 1 &lt;span class=&quot;nt&quot;&gt;--backing-store&lt;/span&gt; /mnt/disk.img
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;backing-store 代表我们后端存储的文件名，我们不是真正的磁盘；要模拟磁盘的数据保存功能，可以将数据保持在这个文件里。&lt;/p&gt;
+
+&lt;p&gt;3、设置访问权限（此处我们允许所有IP访问）&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tgtadm &lt;span class=&quot;nt&quot;&gt;--lld&lt;/span&gt; iscsi &lt;span class=&quot;nt&quot;&gt;--mode&lt;/span&gt; target &lt;span class=&quot;nt&quot;&gt;--op&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bind&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--tid&lt;/span&gt; 1 &lt;span class=&quot;nt&quot;&gt;-I&lt;/span&gt; ALL
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;iSCSI 协议可以设置访问权限的，可以通过 IP 来限制访问，也可以通过用户名/密码方式限制访问。&lt;/p&gt;
+
+&lt;p&gt;4、查看创建的 target 和 lun&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tgtadm &lt;span class=&quot;nt&quot;&gt;--lld&lt;/span&gt; iscsi &lt;span class=&quot;nt&quot;&gt;--mode&lt;/span&gt; target &lt;span class=&quot;nt&quot;&gt;--op&lt;/span&gt; show
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;更多的命令可以用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;man tgtadm&lt;/code&gt; 查询。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;1、&lt;a href=&quot;https://houmin.cc/posts/454a90d3/&quot;&gt;RDMA 架构与实践&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2、&lt;a href=&quot;https://zhuanlan.zhihu.com/p/336499148&quot;&gt;Infiniband技术简介&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;3、&lt;a href=&quot;https://zhuanlan.zhihu.com/p/137047153&quot;&gt;TGT学习总结&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;4、&lt;a href=&quot;https://blog.csdn.net/Morry_Chan/article/details/100891020&quot;&gt;tgt网关源码解读&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;5、&lt;a href=&quot;https://blog.csdn.net/qqqqqq999999/article/details/72547970&quot;&gt;linux iscsi网络的三种工具tgt iscsi_tgt targetcli&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 23 Apr 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/tgt-scsi-target</link>
+        <guid isPermaLink="true">http://localhost:4000/tgt-scsi-target</guid>
+        
+        <category>tgt</category>
+        
+        <category>ceph</category>
+        
+        
+        <category>storage</category>
+        
+      </item>
+    
+      <item>
+        <title>linux network namespaces</title>
+        <description>&lt;p&gt;一般来说，Linux 系统会安装共享一组网络接口和路由表项。我们可以修改路由表项的策略路由， 但根本上网络接口集和路由表/项还是在在整个操作系统中共享。&lt;/p&gt;
+
+&lt;p&gt;使用网络名称空间，您可以拥有相互独立操作的网络接口和路由表的不同且独立的实例。&lt;/p&gt;
+</description>
+        <pubDate>Wed, 15 Mar 2023 18:12:15 +0800</pubDate>
+        <link>http://localhost:4000/docker-network-namespaces</link>
+        <guid isPermaLink="true">http://localhost:4000/docker-network-namespaces</guid>
+        
+        <category>docker</category>
+        
+        
+        <category>分布式</category>
         
       </item>
     

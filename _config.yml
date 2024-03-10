@@ -19,7 +19,7 @@ kramdown:
     syntax_highlighter: rouge
     #extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
     extensions: [ "fenced_code_blocks", "hard_wrap","autolink", "tables", "smart","strikethrough", "superscript", "with_toc_data", "highlight", "prettify","no_intra_emphasis"]
-
+    #extensions: [ "fenced_code_blocks", "hard_wrap","autolink", "tables", "strikethrough", "superscript", "with_toc_data", "highlight", "prettify","no_intra_emphasis"]
 
 sass:
     style: :compressed

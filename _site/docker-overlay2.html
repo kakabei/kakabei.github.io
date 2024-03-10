@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Docker use the OverlayFS storage driver</title>
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+
+    
+    
+
+    <link rel="canonical" href="http://localhost:4000/docker-overlay2">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/monster.css">
+    
+    
+
+    
+
+</head>
+
+
+    <body>
+    
+    <div class="wrapper">
+
+      <header class="header">
+
+  <div class="site-title">
+    
+    <h4 class="entry-title"><a href="/docker-overlay2">Docker use the OverlayFS storage driver</a></h4>
+    
+  </div>
+
+<div class="links">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+</header>
+
+      
+      <div class="navi">
+    
+    <a href="/" class="page-link">Blog</a>
+    
+    
+    
+    
+      <a class="page-link"
+        href="/about/">About</a>
+    
+    
+    
+      <a class="page-link"
+        href="/categories">Categories</a>
+    
+    
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/links/">Links</a>
+    
+    
+    
+    
+    
+      <a class="page-link"
+        href="/tags">Tags</a>
+    
+    
+    <a href="/feed.xml" target="_blank" class="page-link">RSS</a>
+</div>
+
+
+      <div class="content">
+        <div class="articles">
+            <div class="article-meta">
+    2023-03-15
+     • Category: 
+        
+        <a href="/categories#分布式-ref" >分布式</a>
+        
+    
+     • Tag: 
+        
+            <a href="/tags#docker-ref" >docker</a>
+        
+    
+</div>
+
+
+<div class="entry post">
+
+	<div class="entry-content">
+	  <article class="entry-body">
+	  	
+	  		<p>docker 镜像是基于分层存储 Union FS 设计的。Docker 目前支持的 Union FS 包括 overlay2, fuse-overlayfs, btrfs, zfs, aufs,overlay, devicemapper 和 vfs。</p>
+
+<p>可以通过下面的命令查看底层的 Union FS 存储驱动是什么</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info  
+ 
+Storage Driver: overlay2
+  Backing Filesystem: extfs
+  Supports d_type: <span class="nb">true
+  </span>Using metacopy: <span class="nb">false
+  </span>Native Overlay Diff: <span class="nb">true
+  </span>userxattr: <span class="nb">false</span>
+</code></pre></div></div>
+
+<p>overlay 有两个版本，overlay 和 overlay2， overlay2 是为了解决 overlay 的inode 节点不够的问题。 它们的存储驱动都是 OverlayFS。</p>
+
+<p>overlay2 对 Linux 内核的要求是 version 4.0 或者更高。</p>
+
+<p>更改 docker 底层的存储驱动之前，要先把容器和镜像保存到 Docker Hub 或 私有仓库中，这个就不用重新创建它们了。</p>
+
+<h1 id="如何配置-docker-overlay2">如何配置 docker overlay2</h1>
+
+<p>1、停止 docker 服务</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl stop docker
+</code></pre></div></div>
+
+<p>2、备份原有 docker 的文件</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cp</span> <span class="nt">-au</span> /var/lib/docker /var/lib/docker.bk
+</code></pre></div></div>
+
+<p>3、修改配置文件 <code class="language-plaintext highlighter-rouge">/etc/docker/daemon.json</code>，如果不存在则创建它。json 格式要正确。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim /etc/docker/daemon.json
+
+<span class="o">{</span>
+  <span class="s2">"storage-driver"</span>: <span class="s2">"overlay2"</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>4、启动 docker 服务。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl start docker
+</code></pre></div></div>
+
+<p>5、查看是不是已经配置成功。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info
+</code></pre></div></div>
+<p>如果 <code class="language-plaintext highlighter-rouge">Storage Driver: overlay2</code> 则说明修改成功。</p>
+<h1 id="overlay2-如何工作">overlay2 如何工作</h1>
+
+<p>在 linux 主机上， 有两个目录， overlay2 把它们呈现为单个目录， 这个些目录被称之为层， 这个过程被称之联合挂载。</p>
+
+<p>OverlayFS 将低层的目录称为 <code class="language-plaintext highlighter-rouge">lowerdir</code>，将上层目录称为 <code class="language-plaintext highlighter-rouge">upperdir</code>。统一后视图是公开的目录，叫 <code class="language-plaintext highlighter-rouge">merged</code> 。</p>
+
+<p>overlay2 原生支持多达 128 个 OverlayFS 的<code class="language-plaintext highlighter-rouge">lowerdir</code>层。这种功能为 Docker 的层次相关命令(如 Docker build 和 Docker commit ) 提供了更好的性能，并且消耗后备文件系统上更少的 inode。</p>
+
+<p>镜像和容器在硬盘上的层如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ll /var/lib/docker/overlay2
+drwx--x--- 12 root root 4096 Apr 25 03:37 ./
+drwx--x--- 13 root root 4096 Apr 25 03:37 ../
+drwx--x---  4 root root 4096 Apr 24 19:17 2ffv7isdx76992p0e1xe63w8l/
+drwx--x---  4 root root 4096 Apr 24 19:10 4bfc2416e4df45d9728d6b30e0cb7a24cc5e79d8ab706f7f4eca65b4201a7728/
+drwx--x---  3 root root 4096 Apr 24 19:10 5a363a401329642d4513bde699089649aa9744d4a660087365a80386565f5b1a/
+drwx--x---  4 root root 4096 Apr 24 19:10 7df40ac6a9d5a2e56fff9bbdd6fb325a333c4fb4dcd4313b19e395c287afdfdc/
+drwx--x---  4 root root 4096 Apr 24 19:13 87167d5bffd332084fdade32412ae5c9f1ca0d3e2356c88066a218ed9e050ac0/
+drwx--x---  4 root root 4096 Apr 24 19:13 ea0fd665b5d79524b26c619e43a250338369bd68414be01eb50b1fb613171b61/
+drwx--x---  3 root root 4096 Apr 24 19:07 iqfgvzrdel3gio9wqulzrbz9f/
+drwx--x---  3 root root 4096 Apr 24 19:07 ko1strpiy4zuq8gwxc9hokw04/
+drwx------  2 root root 4096 Apr 24 19:17 l/
+drwx--x---  4 root root 4096 Apr 24 19:19 ounx9o9ydt0wnbap3hvqcirp1/
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">/var/lib/docker/overlay2</code> 这个目录下的文件由 docker 管理。不要去做操作。</p>
+
+<p><code class="language-plaintext highlighter-rouge">l</code>目录包含缩短的层标识符作为符号链接。这些标识符用于避免达到 mount 命令参数的页大小限制。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ll /var/lib/docker/overlay2/l/
+total 28
+drwx------  2 root root 4096 Apr 24 19:17 ./
+drwx--x--- 12 root root 4096 Apr 25 03:37 ../
+lrwxrwxrwx  1 root root   33 Apr 24 19:07 7BQ7X72HRISR7ZCGHGLD6NPIZJ -&gt; ../ko1strpiy4zuq8gwxc9hokw04/diff/
+lrwxrwxrwx  1 root root   72 Apr 24 19:10 7NXG5WLGONVJKKJGYFSRZ23OL2 -&gt; ../87167d5bffd332084fdade32412ae5c9f1ca0d3e2356c88066a218ed9e050ac0/diff/
+lrwxrwxrwx  1 root root   72 Apr 24 19:10 BOFYG6VCTBOTXYIFTHQANEZUBI -&gt; ../4bfc2416e4df45d9728d6b30e0cb7a24cc5e79d8ab706f7f4eca65b4201a7728/diff/
+lrwxrwxrwx  1 root root   33 Apr 24 19:07 F3XG6EZ3PJYVVQJFBXM3DG4L5G -&gt; ../iqfgvzrdel3gio9wqulzrbz9f/diff/
+lrwxrwxrwx  1 root root   33 Apr 24 19:13 HSJTNS5KPTJ3IP6JB3H6JMZTET -&gt; ../2ffv7isdx76992p0e1xe63w8l/diff/
+lrwxrwxrwx  1 root root   72 Apr 24 19:10 L53KG6ASJKV6CLXCWKJVVJOCNL -&gt; ../5a363a401329642d4513bde699089649aa9744d4a660087365a80386565f5b1a/diff/
+lrwxrwxrwx  1 root root   72 Apr 24 19:13 UPCEH2S24CH6FMLEUIA7VNRCSN -&gt; ../ea0fd665b5d79524b26c619e43a250338369bd68414be01eb50b1fb613171b61/diff/
+lrwxrwxrwx  1 root root   72 Apr 24 19:10 VZROBWGSVSJPZNOX7SO663OQZO -&gt; ../7df40ac6a9d5a2e56fff9bbdd6fb325a333c4fb4dcd4313b19e395c287afdfdc/diff/
+lrwxrwxrwx  1 root root   33 Apr 24 19:17 Y73E6QE355DROK3VEWK7C5AVOG -&gt; ../ounx9o9ydt0wnbap3hvqcirp1/diff/
+</code></pre></div></div>
+<p>The lowest layer contains a file called link, which contains the name of the shortened identifier, and a directory called diff which contains the layer’s contents.</p>
+
+<p>最低层包含的一个叫 link的文件，它包含缩短标识符的名称，以及一个叫 diff 的目录，该目录包含了该层的内容。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ll /var/lib/docker/overlay2/4bfc2416e4df45d9728d6b30e0cb7a24cc5e79d8ab706f7f4eca65b4201a7728
+total 24
+drwx--x---  4 root root 4096 Apr 24 19:10 ./
+drwx--x--- 12 root root 4096 Apr 25 03:37 ../
+<span class="nt">-rw-------</span>  1 root root    0 Apr 24 19:10 committed
+drwxr-xr-x  7 root root 4096 Apr 24 19:10 diff/
+<span class="nt">-rw-r--r--</span>  1 root root   26 Apr 24 19:10 <span class="nb">link</span>
+<span class="nt">-rw-r--r--</span>  1 root root   28 Apr 24 19:10 lower
+drwx------  2 root root 4096 Apr 24 19:10 work/
+root@LAPTOP-0ODB1KTF:/home/kane/cloudsky#
+</code></pre></div></div>
+<p>可分别查看 committed、diff、link、lower、work的内容。</p>
+<h1 id="overlay-如何工作">overlay 如何工作</h1>
+
+<p>在 linux 主机上， 有两个目录， overlay2 把它们呈现为单个目录， 这个些目录被称之为层， 这个过程被称之联合挂载。</p>
+
+<p>OverlayFS 将低层的目录称为 <code class="language-plaintext highlighter-rouge">lowerdir</code>，将上层目录称为 <code class="language-plaintext highlighter-rouge">upperdir</code>。统一后视图是公开的目录，叫 <code class="language-plaintext highlighter-rouge">merged</code> 。</p>
+
+<p>下图显示 docker 的镜像和容器的是如何分层的。 镜像是 lowerdir， 容器是upperdir 。联合的视图通过目录 merged 呈现出来。就是容器的实际挂载点。
+这个展示了 docker 结构和 overlay FS 的映射关系 。</p>
+
+<p><img src="/assets/docker/docker-overlya2-2023-04-28-22-05-30.png" alt="" /></p>
+
+<p>当镜像和容器出现相同的文件时，以容器的文件为主，它会屏蔽掉镜像中的文件。</p>
+
+<p>overlay 只有两层，无法直接实现 OverlayFS 的多层。所以用另外一种方式去实现， 即用硬链接的方式与  <code class="language-plaintext highlighter-rouge">lowerdir</code> 共享数据。硬链接的过度使用导致 inode 节点不够。这是 overlay 遗留下来的缺陷。</p>
+
+<p>创建容器时，overlay 当表示容器的那一层和镜像的那一层联合在一起。形成一个新的目录 。镜像的 <code class="language-plaintext highlighter-rouge">lowerdir</code> 层是只读，而容器的 <code class="language-plaintext highlighter-rouge">upperdir</code> 是可写的。</p>
+
+<h1 id="容器是如何在-overlay-或-overlay2-进行的读写的">容器是如何在 overlay 或 overlay2 进行的读写的</h1>
+
+<h2 id="读文件">读文件</h2>
+
+<p>有三种场景，容器会通过 overlay 打开并读出文件。</p>
+
+<ul>
+  <li><strong>文件不存在容器层:</strong> 如果容器打开一个文件，它不存在容器这一层，即 <code class="language-plaintext highlighter-rouge">upperdir</code>,它就会去 镜像那一层，即 <code class="language-plaintext highlighter-rouge">lowerdir</code>读取。通过 overhead 性能消耗很低。</li>
+  <li><strong>文件存在容器层:</strong> 如果容器打开一个文件，它刚好存在这一层 <code class="language-plaintext highlighter-rouge">upperdir</code>，直接读取即可。</li>
+  <li><strong>文件存在容器层和镜像层:</strong>。如果容器打开的文件 <code class="language-plaintext highlighter-rouge">upperdir</code> 和 <code class="language-plaintext highlighter-rouge">lowerdir</code> 层都存在，则 <code class="language-plaintext highlighter-rouge">upperdir</code>层的文件会隐藏掉<code class="language-plaintext highlighter-rouge">lowerdir</code>的文件，即只会读到<code class="language-plaintext highlighter-rouge">upperdir</code>层的文件。</li>
+</ul>
+
+<h2 id="修改文件和目录">修改文件和目录</h2>
+
+<p>有以下几种场景，容器被修改</p>
+
+<ul>
+  <li>
+    <p><strong>第一次写文件:</strong> 容器第一次写文件，这个文件存在于镜像层（ <code class="language-plaintext highlighter-rouge">lowerdir</code> 层）但不存在于容器层（ <code class="language-plaintext highlighter-rouge">upperdir</code> 层）。overlay 或 overlay2 会执行一个 <code class="language-plaintext highlighter-rouge">copy_up</code> 的方法。把文件从 <code class="language-plaintext highlighter-rouge">lowerdir</code> 层拷贝到  <code class="language-plaintext highlighter-rouge">upperdir</code> 层。 容器随把写入的更新到新拷贝到<code class="language-plaintext highlighter-rouge">upperdir</code> 层的文件里。 
+然后，  OverlayFS是工作在到文件层级而不是块层级的，这就意味着 OverlayFS 的 <code class="language-plaintext highlighter-rouge">copy_up</code> 方法要拷贝整个文件。 如果一个文件很大，但改动很小，同样要拷贝整个文件。这个很明显会对容器写的性能造成很大的影响。 因此，以下两点很值得注意：</p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">copy_up</code> 方法的操作只发生在第一次写入文件时的情况，后继的写入同个文件则是在已被拷贝到容器层的文件副本进行的。</li>
+      <li>OverlayFS 只有两次，所以它的性能比 AUFS 好，后者需要搜索很多层的镜像的文件时可能会有些性能上损耗。overlay 和 overlay2 都有这个优点。Overlayfs2 在初始读取时的性能略低于overlayfs，因为它必须遍历更多的层，但它会缓存结果，所以这只是一个很小的损失。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>删除文件或目录：</strong></p>
+
+    <ul>
+      <li>当容器里的一个文件被删除时，会在容器层（<code class="language-plaintext highlighter-rouge">upperdir</code> 层）写入一个 whiteout 文件。 镜像层（ <code class="language-plaintext highlighter-rouge">lowerdir</code> 层）中的文件不会被删除，因为镜像层（ <code class="language-plaintext highlighter-rouge">lowerdir</code> 层）中只读。而 whiteout 文件让它在容器里失效，成了已被删除的文件。</li>
+      <li>当容器里的一个目录被删除时，会在容器层 （<code class="language-plaintext highlighter-rouge">upperdir</code> 层） 创建一个  opaque 目录。和 whiteout 文件方式一样，让阻止了 镜像层（ <code class="language-plaintext highlighter-rouge">lowerdir</code> 层）中的目录生效，  镜像层（ <code class="language-plaintext highlighter-rouge">lowerdir</code> 层）中的目录是依然存在的。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>重命名目录:</strong> 只有当源目录和目的目录都在容器层（<code class="language-plaintext highlighter-rouge">upperdir</code> 层），调用 <code class="language-plaintext highlighter-rouge">rename(2)</code> 重命名目录者才可以成功，否则，它返回 EXDEV 错误(“不允许跨设备链接”) 应用层应该处理好  EXDEV 错误。</p>
+  </li>
+</ul>
+
+<h1 id="overlayfs-and-docker-的性能">OverlayFS and Docker 的性能</h1>
+
+<p>overlay2 和 overlay 的性能比 aufs 和 devicemapper 都要高出很多。 在某些情况下，overlay2 也可能比 btrfs 表现得更好。但是，也要注意以下细节：</p>
+
+<ul>
+  <li><strong>页缓存</strong> OverlayFS 支持页缓存共存。 访问同一文件的多个容器共享该文件的单个页面缓存项。这使得 overlay 和 overlay2 在内存方面效率很高，对于 PaaS 等高密度用例来说是一个很好的选择。</li>
+  <li><strong>copy_up 方法</strong>  与 AUFS 一样，OverlayFS 在容器第一次写入文件时会执行复制操作。这会降低写的性能，特别是对于大文件。但是，一旦文件被复制，随后对该文件的所有写操作都发生在容器层（<code class="language-plaintext highlighter-rouge">upperdir</code> 层） ，而不需要进一步的复制操作。</li>
+</ul>
+
+<p>OverlayFS 的 <code class="language-plaintext highlighter-rouge">copy_up</code> 操作比使用 AUFS 的相同操作要快，因为 AUFS 比 OverlayFS 支持更多的层。 如果搜索许多 AUFS 层，可能会导致更大的延迟。Overlay2 也支持多层，但是通过缓存减轻了性能损失。</p>
+
+<ul>
+  <li><strong>Inode 限制</strong> 使用 overlay 会导致inode消耗过多。在 Docker 主机上存在大量镜像和容器时 inode 消耗更利害。而增加文件系统可用 inode 数量的唯一方法是重新格式化。为了避免遇到这个问题，强烈建议尽可能使用 overlay2。</li>
+</ul>
+
+<p>以下通用性能最佳实践也适用于 OverlayFS：</p>
+
+<ul>
+  <li>
+    <p><strong>Solid State Devices (SSD)</strong>. For best performance it is always a good idea to use fast storage media such as solid state devices (SSD).</p>
+  </li>
+  <li>
+    <p><strong>Use Data Volumes</strong>  Data volumes provide the best and most predictable performance. This is because they bypass the storage driver and do not incur any of the potential overheads introduced by thin provisioning and copy-on-write. For this reason, you should place heavy write workloads on data volumes.</p>
+  </li>
+</ul>
+
+<h1 id="overlayfs-存在的局限">OverlayFS 存在的局限</h1>
+
+<p>总结下 OverlayFS 和其他文件系统不兼容的方面。</p>
+
+<ul>
+  <li><strong>open(2):</strong> OverlayFS 只实现 POSIX 标准的一个子集。这就导致一些  OverlayFS 操作违反了 POSIX 标准， 如 <code class="language-plaintext highlighter-rouge">copy_up</code> 操作。如程序的调用
+    <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fd1</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">"foo"</span><span class="p">,</span> <span class="n">O_RDONLY</span><span class="p">)</span> 
+<span class="n">fd2</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">"foo"</span><span class="p">,</span> <span class="n">O_RDWR</span><span class="p">)</span>
+</code></pre></div>    </div>
+    <p>我们的理解这是同个文件，但在第二个<code class="language-plaintext highlighter-rouge">open </code>发生了 <code class="language-plaintext highlighter-rouge">copy_up</code> 操作，描述符指向不同的文件。  fd1 指向了镜像层（ <code class="language-plaintext highlighter-rouge">lowerdir</code>层）因为它是只读。而fd2 指向的是容器层（<code class="language-plaintext highlighter-rouge">upperdir</code> 层）。导致这个问题的原因就是触发了<code class="language-plaintext highlighter-rouge">copy_up</code> 操作。<code class="language-plaintext highlighter-rouge">open(2)</code> 后的所有的操作无论是读和写都发生在容器层（<code class="language-plaintext highlighter-rouge">upperdir</code> 层）。</p>
+  </li>
+  <li><strong>rename(2):</strong> OverlayFS 没有全部支持 <code class="language-plaintext highlighter-rouge">rename(2)</code>系统调用，应用上考虑检测是否因为失败和回滚策略，</li>
+</ul>
+
+<hr />
+
+<p>1、<a href="https://gdevillele.github.io/engine/userguide/storagedriver/overlayfs-driver/">Docker and OverlayFS in practice</a></p>
+
+<p>2、<a href="https://docs.docker.com/storage/storagedriver/overlayfs-driver/">Use the OverlayFS storage driver</a></p>
+
+  		
+	  </article>
+    </div>
+
+</div>
+
+<span>
+	<a  href="/docker-data-volume" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/docker-network-namespaces" class="pageNav"  >下一篇</a>
+</span>
+
+
+	<div class="article-author">
+    <div class="name">
+        <h4><b>carlos</b> </h4>
+        Just for fun!
+    </div>
+    <div class="avatar">
+        <img width="50" height="50" src="/images/header.png" alt=" Avatar"/>
+    </div>
+</div>
+
+
+	
+	    <!--
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '';
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+	
+
+
+
+<!--
+<div class="cnzz"><script src="http://s4.cnzz.com/z_stat.php?id=1255123325&web_id=1255123325" language="JavaScript"></script> </div>
+ -->
+
+        </div>
+      </div>
+    </div>
+
+    </body>
+</html>
