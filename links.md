@@ -12,6 +12,7 @@ author_footer: false
 
 [golang play : https://go.dev/play/](https://go.dev/play/)
 
+[The AI search engine for developers  www.phind.com](https://www.phind.com/agent?home=true)
 
 ## 博客
 
