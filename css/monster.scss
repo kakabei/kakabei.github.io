@@ -7,17 +7,22 @@ body {
     padding-bottom: 40px;
     //font-family: Exo,'-apple-system','Open Sans',HelveticaNeue-Light,'Helvetica Neue Light','Helvetica Neue','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;
     font-family:"Trebuchet MS","Galdeano","Hiragino Sans GB","Microsoft YaHei",Trebuchet,Tahoma,"Lucida Grande","Lucida Sans Unicode",Verdana,sans-serif;color:#000000;background-color:#ffffff;
+	
 }
 
 /** common style **/
 a {
     text-decoration: none;
     color: #D00;
+	font-size: 20px;
+
 
     &:hover {
         text-decoration: none;
     }
 }
+
+
 
 hr {
     border-bottom: 1px solid #ccc;
@@ -201,6 +206,7 @@ em {
 
         p {
             margin: 22px 0;
+			font-size: 20px;
         }
 
         p.caption {
@@ -347,6 +353,7 @@ em {
     }
     .list-item {
         font-size: 20px;
+		//width: 150%;
         margin-left: 2em;
         line-height: 30px;
         span {color: #999}

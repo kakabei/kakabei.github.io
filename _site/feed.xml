@@ -3,10 +3,10 @@
   <channel>
     <title>xyecho - just my notes</title>
     <description>读书，生活，技术</description>
-    <link>http://blog.xyecho.com/</link>
-    <atom:link href="http://blog.xyecho.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 14 Mar 2024 23:34:50 +0800</pubDate>
-    <lastBuildDate>Thu, 14 Mar 2024 23:34:50 +0800</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Fri, 15 Mar 2024 00:08:32 +0800</pubDate>
+    <lastBuildDate>Fri, 15 Mar 2024 00:08:32 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
@@ -26,8 +26,8 @@
 
 </description>
         <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
-        <link>http://blog.xyecho.com/go-zore-log-problem</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/go-zore-log-problem</guid>
+        <link>http://localhost:4000/go-zore-log-problem</link>
+        <guid isPermaLink="true">http://localhost:4000/go-zore-log-problem</guid>
         
         <category>galang</category>
         
@@ -128,8 +128,8 @@
 &lt;p&gt;发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。&lt;/p&gt;
 </description>
         <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
-        <link>http://blog.xyecho.com/go-zore-struct-httpc-do-problem</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/go-zore-struct-httpc-do-problem</guid>
+        <link>http://localhost:4000/go-zore-struct-httpc-do-problem</link>
+        <guid isPermaLink="true">http://localhost:4000/go-zore-struct-httpc-do-problem</guid>
         
         <category>golang</category>
         
@@ -153,8 +153,8 @@ go mod tidy
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Tue, 02 Jan 2024 18:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/go-note</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/go-note</guid>
+        <link>http://localhost:4000/go-note</link>
+        <guid isPermaLink="true">http://localhost:4000/go-note</guid>
         
         <category>golang</category>
         
@@ -170,8 +170,8 @@ go mod tidy
 &lt;p&gt;最后在网上找到一个方法：[修复 WSL 无 Internet 网络连接问题]（https://www.ghostchu.com/fix-wsl-no-internet-connection/）&lt;/p&gt;
 </description>
         <pubDate>Fri, 01 Sep 2023 18:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/window-wsl</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/window-wsl</guid>
+        <link>http://localhost:4000/window-wsl</link>
+        <guid isPermaLink="true">http://localhost:4000/window-wsl</guid>
         
         <category>wsl</category>
         
@@ -186,8 +186,8 @@ go mod tidy
 
 </description>
         <pubDate>Thu, 01 Jun 2023 19:13:00 +0800</pubDate>
-        <link>http://blog.xyecho.com/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</guid>
+        <link>http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</link>
+        <guid isPermaLink="true">http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</guid>
         
         <category>读书</category>
         
@@ -209,8 +209,8 @@ go mod tidy
 &lt;p&gt;这书和毛姆《月亮与六便士》、《刀锋》重点不一样。对比之下，《刀锋》和《月亮与六便士》更喜欢些吧。我不喜欢探讨太多的人性。&lt;/p&gt;
 </description>
         <pubDate>Sat, 27 May 2023 19:13:00 +0800</pubDate>
-        <link>http://blog.xyecho.com/%E9%9D%A2%E7%BA%B1</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/%E9%9D%A2%E7%BA%B1</guid>
+        <link>http://localhost:4000/%E9%9D%A2%E7%BA%B1</link>
+        <guid isPermaLink="true">http://localhost:4000/%E9%9D%A2%E7%BA%B1</guid>
         
         <category>读书</category>
         
@@ -241,8 +241,8 @@ go mod tidy
 
 </description>
         <pubDate>Tue, 02 May 2023 19:13:00 +0800</pubDate>
-        <link>http://blog.xyecho.com/%E5%88%80%E9%94%8B</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/%E5%88%80%E9%94%8B</guid>
+        <link>http://localhost:4000/%E5%88%80%E9%94%8B</link>
+        <guid isPermaLink="true">http://localhost:4000/%E5%88%80%E9%94%8B</guid>
         
         <category>读书</category>
         
@@ -321,8 +321,8 @@ go mod tidy
 
 </description>
         <pubDate>Mon, 01 May 2023 18:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/ceph-tgt-qemu-kvm-image</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/ceph-tgt-qemu-kvm-image</guid>
+        <link>http://localhost:4000/ceph-tgt-qemu-kvm-image</link>
+        <guid isPermaLink="true">http://localhost:4000/ceph-tgt-qemu-kvm-image</guid>
         
         <category>tgt</category>
         
@@ -461,8 +461,8 @@ make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
 &lt;p&gt;5、&lt;a href=&quot;https://blog.csdn.net/qqqqqq999999/article/details/72547970&quot;&gt;linux iscsi网络的三种工具tgt iscsi_tgt targetcli&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 23 Apr 2023 18:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/tgt-scsi-target</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/tgt-scsi-target</guid>
+        <link>http://localhost:4000/tgt-scsi-target</link>
+        <guid isPermaLink="true">http://localhost:4000/tgt-scsi-target</guid>
         
         <category>tgt</category>
         
@@ -480,8 +480,8 @@ make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
 &lt;p&gt;使用网络名称空间，您可以拥有相互独立操作的网络接口和路由表的不同且独立的实例。&lt;/p&gt;
 </description>
         <pubDate>Wed, 15 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://blog.xyecho.com/docker-network-namespaces</link>
-        <guid isPermaLink="true">http://blog.xyecho.com/docker-network-namespaces</guid>
+        <link>http://localhost:4000/docker-network-namespaces</link>
+        <guid isPermaLink="true">http://localhost:4000/docker-network-namespaces</guid>
         
         <category>docker</category>
         
