@@ -6,15 +6,20 @@ comments: false
 author_footer: false
 ---
 
-## 工具
+## tools
 
 [Quick Reference: https://wangchujiang.com/reference/](https://wangchujiang.com/reference/)
 
-[golang play : https://go.dev/play/](https://go.dev/play/)
+[golang play: https://go.dev/play/](https://go.dev/play/)
 
-[The AI search engine for developers  www.phind.com](https://www.phind.com/agent?home=true)
+[Learning Git Branching : https://learngitbranching.js.org ](https://learngitbranching.js.org/?locale=zh_CN&NODEMO=)
 
-## 博客
+## AI 
+[The AI search engine for developers: www.phind.com](https://www.phind.com/agent?home=true)
+
+
+
+## blog
 
 1、[YY哥：http://hustcat.github.io/](http://hustcat.github.io/)
 
