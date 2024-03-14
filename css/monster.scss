@@ -295,6 +295,10 @@ em {
             -webkit-margin-after:0;
             -webkit-margin-start:0;
             -webkit-margin-end:0;
+<<<<<<< HEAD
+=======
+			
+>>>>>>> 467a14133f3f634bc6299fa0985703a651165164
             //margin-before:0;
             //margin-after:0;
             //margin-start:0;
@@ -340,13 +344,13 @@ em {
 .article-list {
     margin-top: 10px;
     .list-year {
-        font-size: 20px; 
+        font-size: 25px; 
         height: 30px; 
         line-height: 30px;
         font-weight:bold;
     }
     .list-item {
-        font-size: 16px;
+        font-size: 20px;
         margin-left: 2em;
         line-height: 30px;
         span {color: #999}
@@ -413,5 +417,6 @@ em {
 }
 
 @import "base";
-@import "syntax-highlighting";
+//@import "syntax-highlighting";
+@import "highlight";
 
