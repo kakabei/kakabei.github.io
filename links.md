@@ -14,10 +14,15 @@ author_footer: false
 
 [Learning Git Branching : https://learngitbranching.js.org ](https://learngitbranching.js.org/?locale=zh_CN&NODEMO=)
 
+[MP3 剪切: https://mp3cut.net/cn/](https://mp3cut.net/cn/)
+
 ## AI 
 
 [The AI search engine for developers: www.phind.com](https://www.phind.com/agent?home=true)
 
+[openAI :https://chat.openai.com](https://chat.openai.com/)
+
+[声音生成 AI elevnelabs :https://elevenlabs.io](https://elevenlabs.io/)
 
 
 ## blog
