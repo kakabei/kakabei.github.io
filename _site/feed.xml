@@ -5,9 +5,39 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 15 Mar 2024 00:08:32 +0800</pubDate>
-    <lastBuildDate>Fri, 15 Mar 2024 00:08:32 +0800</lastBuildDate>
+    <pubDate>Wed, 20 Mar 2024 15:13:51 +0800</pubDate>
+    <lastBuildDate>Wed, 20 Mar 2024 15:13:51 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
+    
+      <item>
+        <title>python mysql 插入更新一些特殊的字符</title>
+        <description>&lt;p&gt;写了一个脚本，把一个mysql 表的中数据 从一个表更新到另一个表中。其他有字段是路径，包含有 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/&lt;/code&gt; 和  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&apos;&lt;/code&gt;  等字符。&lt;/p&gt;
+
+&lt;p&gt;我第一次的做法是：&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;update t_softname set icon=%s, start_cmd=%s where name=%s&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;icon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;明显的问题就是在遇到特殊的字符会被转义。如：写入的路径后没了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\&lt;/code&gt;。或遇到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&apos;&lt;/code&gt; 出现 sql 解析异常。&lt;/p&gt;
+
+&lt;p&gt;要使用参数化查询才可以，如下：&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+    &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;update t_softname set icon=%s, start_cmd=%s where name=%s&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;icon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
+        <link>http://localhost:4000/python-mysql-connector</link>
+        <guid isPermaLink="true">http://localhost:4000/python-mysql-connector</guid>
+        
+        <category>python</category>
+        
+        
+        <category>工作日志</category>
+        
+      </item>
     
       <item>
         <title>go-zero 日志输出的问题</title>
@@ -470,23 +500,6 @@ make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
         
         
         <category>storage</category>
-        
-      </item>
-    
-      <item>
-        <title>linux network namespaces</title>
-        <description>&lt;p&gt;一般来说，Linux 系统会安装共享一组网络接口和路由表项。我们可以修改路由表项的策略路由， 但根本上网络接口集和路由表/项还是在在整个操作系统中共享。&lt;/p&gt;
-
-&lt;p&gt;使用网络名称空间，您可以拥有相互独立操作的网络接口和路由表的不同且独立的实例。&lt;/p&gt;
-</description>
-        <pubDate>Wed, 15 Mar 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/docker-network-namespaces</link>
-        <guid isPermaLink="true">http://localhost:4000/docker-network-namespaces</guid>
-        
-        <category>docker</category>
-        
-        
-        <category>分布式</category>
         
       </item>
     
