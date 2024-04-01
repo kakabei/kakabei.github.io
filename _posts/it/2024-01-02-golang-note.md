@@ -15,9 +15,9 @@ go 常用命令
 go mod tidy 
 
 ```
- 
+
 如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：
 
-```sh   
+```curl cip.ccsh   
 go mod require <module>@<branch>
 ```

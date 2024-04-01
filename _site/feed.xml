@@ -5,23 +5,135 @@
     <description>读书，生活，技术</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 20 Mar 2024 15:13:51 +0800</pubDate>
-    <lastBuildDate>Wed, 20 Mar 2024 15:13:51 +0800</lastBuildDate>
+    <pubDate>Mon, 01 Apr 2024 12:34:38 +0800</pubDate>
+    <lastBuildDate>Mon, 01 Apr 2024 12:34:38 +0800</lastBuildDate>
     <generator>Jekyll v4.2.2</generator>
     
       <item>
-        <title>python mysql 插入更新一些特殊的字符</title>
-        <description>&lt;p&gt;写了一个脚本，把一个mysql 表的中数据 从一个表更新到另一个表中。其他有字段是路径，包含有 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/&lt;/code&gt; 和  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&apos;&lt;/code&gt;  等字符。&lt;/p&gt;
+        <title></title>
+        <description>&lt;h1 id=&quot;curl--常见的技巧&quot;&gt;curl  常见的技巧&lt;/h1&gt;
 
-&lt;p&gt;我第一次的做法是：&lt;/p&gt;
+&lt;p&gt;github 地址：&lt;a href=&quot;https://github.com/curl/curl&quot;&gt;https://github.com/curl/curl&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;参数：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &amp;lt;file&amp;gt;    &lt;span class=&quot;c&quot;&gt;# --output: 写入文件&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; user:pass &lt;span class=&quot;c&quot;&gt;# --user: 验证&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt;           &lt;span class=&quot;c&quot;&gt;# --verbose: 在操作期间使 curl 冗长&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-vv&lt;/span&gt;          &lt;span class=&quot;c&quot;&gt;# 更冗长&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt;           &lt;span class=&quot;c&quot;&gt;# --silent: 不显示进度表或错误&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt;           &lt;span class=&quot;c&quot;&gt;# --show-error: 与 --silent (-sS) 一起使用时，显示错误但没有进度表&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;           &lt;span class=&quot;c&quot;&gt;# --include: 在输出中包含 HTTP 标头&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-I&lt;/span&gt;           &lt;span class=&quot;c&quot;&gt;# --head: 仅标头&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;数据：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# --data: HTTP post 数据&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# URL 编码(例如，status=&quot;Hello&quot;)&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;data&apos;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# --data 通过文件&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; @file
+
+&lt;span class=&quot;c&quot;&gt;# --get: 通过 get 发送 -d 数据&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-G&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;头信息 Headers：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt; &amp;lt;str&amp;gt;     &lt;span class=&quot;c&quot;&gt;# --user-agent&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;val  &lt;span class=&quot;c&quot;&gt;# --cookie&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 从 URL 的指定文件加载 cookie&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--cookie&lt;/span&gt; FILE
+&lt;span class=&quot;c&quot;&gt;# 将 cookie 从 URL 保存到指定文件&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--cookie-jar&lt;/span&gt; FILE
+
+&lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; FILE          &lt;span class=&quot;c&quot;&gt;# --cookie&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;X-Foo: y&quot;&lt;/span&gt;    &lt;span class=&quot;c&quot;&gt;# --header&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;--compressed&lt;/span&gt;     &lt;span class=&quot;c&quot;&gt;# 使用 deflate/gzip &lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;ssl :&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;--cacert&lt;/span&gt; &amp;lt;file&amp;gt;
+    &lt;span class=&quot;nt&quot;&gt;--capath&lt;/span&gt; &amp;lt;&lt;span class=&quot;nb&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-E&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--cert&lt;/span&gt; &amp;lt;cert&amp;gt;     &lt;span class=&quot;c&quot;&gt;# --cert: 客户端证书文件&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;--cert-type&lt;/span&gt;       &lt;span class=&quot;c&quot;&gt;# der/pem/eng&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--insecure&lt;/span&gt;        &lt;span class=&quot;c&quot;&gt;# 对于自签名证书&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;示例&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;1、GET 请求&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-I&lt;/span&gt; https://www.baidu.com	 						             &lt;span class=&quot;c&quot;&gt;# curl 发请求&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-I&lt;/span&gt; https://www.baidu.com						             &lt;span class=&quot;c&quot;&gt;#带有详细信息的 curl 发请求&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; GET https://www.baidu.com	 					             &lt;span class=&quot;c&quot;&gt;#使用显式 http 方法进行 curl&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;--noproxy&lt;/span&gt; 127.0.0.1 http://www.stackoverflow.com	 			 &lt;span class=&quot;c&quot;&gt;#没有 http 代理的 curl&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;--connect-timeout&lt;/span&gt; 10 &lt;span class=&quot;nt&quot;&gt;-I&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; https://www.baidu.com	 			 &lt;span class=&quot;c&quot;&gt;#curl 默认没有超时&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;--verbose&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--header&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Host: www.mytest.com:8182&quot;&lt;/span&gt; www.baidu.com	 &lt;span class=&quot;c&quot;&gt;#curl 得到额外的标题&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; https://www.google.com	                                 &lt;span class=&quot;c&quot;&gt;#curl 获取带有标题的响应&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2、POST 请求&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;url &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;name=username&amp;amp;password=123456&quot;&lt;/span&gt; &amp;lt;URL&amp;gt;	&lt;span class=&quot;c&quot;&gt;# curl 发请求&lt;/span&gt;
+curl &amp;lt;URL&amp;gt; &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;{ &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;woof&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;: &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;bark&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;}&quot;&lt;/span&gt;	&lt;span class=&quot;c&quot;&gt;# curl 发送 json&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3、高级用法&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-L&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; http://ipecho.net/plain, curl &lt;span class=&quot;nt&quot;&gt;-L&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; http://whatismijnip.nl	&lt;span class=&quot;c&quot;&gt;#获取我的公共 IP&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$username&lt;/span&gt;:&lt;span class=&quot;nv&quot;&gt;$password&lt;/span&gt; http://repo.dennyzhang.com/README.txt	    &lt;span class=&quot;c&quot;&gt;#带凭证的 curl&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-F&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;key1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;value1 &lt;span class=&quot;nt&quot;&gt;-F&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;upload&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;@localfilename &amp;lt;URL&amp;gt;				    &lt;span class=&quot;c&quot;&gt;#curl 上传&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--http2&lt;/span&gt; https://www.google.com/	                            &lt;span class=&quot;c&quot;&gt;#使用 http2 curl&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-T&lt;/span&gt; cryptopp552.zip &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;:test ftp://10.32.99.187/	             &lt;span class=&quot;c&quot;&gt;#url ftp 上传&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;:test ftp://10.32.99.187/cryptopp552.zip &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; cryptopp552.zip	curl &lt;span class=&quot;c&quot;&gt;#ftp 下载&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; admin:admin123 &lt;span class=&quot;nt&quot;&gt;--upload-file&lt;/span&gt; package1.zip http://mysever:8081/dir/package1.zip	&lt;span class=&quot;c&quot;&gt;#使用凭证 curl 上传&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;4、查询当前机器的出口IP&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;base&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; C:&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;ools&amp;gt; curl cip.cc
+IP      : 121.12.81.78
+地址    : 中国  广东  江门
+运营商  : 电信
+
+数据二  : 广东省深圳市 | 电信
+
+数据三  : 中国广东省深圳市 | 电信
+URL     : http://www.cip.cc/121.12.81.78
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Mon, 01 Apr 2024 12:34:38 +0800</pubDate>
+        <link>http://localhost:4000/2019-01-02-frequently-used-command-reference</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-01-02-frequently-used-command-reference</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>python mysql 插入更新一些特殊的字符</title>
+        <description>&lt;p&gt;写了一个脚本，把一个mysql 表的中数据从一个表更新到另一个表中。其他有字段是路径，包含有 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/&lt;/code&gt; 和  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&apos;&lt;/code&gt;  等字符。&lt;/p&gt;
+
+&lt;p&gt;第一次的做法是：&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;update t_softname set icon=%s, start_cmd=%s where name=%s&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;icon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;明显的问题就是在遇到特殊的字符会被转义。如：写入的路径后没了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\&lt;/code&gt;。或遇到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&apos;&lt;/code&gt; 出现 sql 解析异常。&lt;/p&gt;
+&lt;p&gt;却发现了问题，就是在遇到特殊的字符会被转义。如：写入的路径后会没了斜杠 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\&lt;/code&gt;。或遇到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&apos;&lt;/code&gt; 出现 sql 解析异常。&lt;/p&gt;
 
-&lt;p&gt;要使用参数化查询才可以，如下：&lt;/p&gt;
+&lt;p&gt;这是字符串被转义导致的。&lt;/p&gt;
+
+&lt;p&gt;要&lt;strong&gt;使用参数化查询&lt;/strong&gt;才可以，如下：&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
     &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;update t_softname set icon=%s, start_cmd=%s where name=%s&quot;&lt;/span&gt;
@@ -33,6 +145,31 @@
         <guid isPermaLink="true">http://localhost:4000/python-mysql-connector</guid>
         
         <category>python</category>
+        
+        
+        <category>工作日志</category>
+        
+      </item>
+    
+      <item>
+        <title>go-zero swagger 的使用</title>
+        <description>&lt;p&gt;Swagger 是一个开源的 API 设计工具，它帮助开发者设计、构建、记录和使用RESTful Web服务。Swagger的核心是 OpenAPI 规范。&lt;/p&gt;
+
+&lt;p&gt;官网：(https://swagger.io/)[https://swagger.io/]&lt;/p&gt;
+
+&lt;p&gt;主要特点：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;自动化文档生成：Swagger可以自动从代码注释和API定义生成API文档，这些文档可以被人类阅读，也可以被机器解析。&lt;/li&gt;
+  &lt;li&gt;交互式API测试：Swagger UI提供了一个交互式的界面，允许开发者直接在浏览器中测试API，而无需编写代码。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;s&lt;/p&gt;
+</description>
+        <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
+        <link>http://localhost:4000/go-zore-swagger</link>
+        <guid isPermaLink="true">http://localhost:4000/go-zore-swagger</guid>
+        
+        <category>galang</category>
         
         
         <category>工作日志</category>
@@ -179,12 +316,13 @@ go mod tidy
 
 &lt;p&gt;如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：&lt;/p&gt;
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;go mod require &amp;lt;module&amp;gt;@&amp;lt;branch&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;curl cip.ccsh   
+go mod require &amp;lt;module&amp;gt;@&amp;lt;branch&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
 </description>
         <pubDate>Tue, 02 Jan 2024 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/go-note</link>
-        <guid isPermaLink="true">http://localhost:4000/go-note</guid>
+        <link>http://localhost:4000/golang-note</link>
+        <guid isPermaLink="true">http://localhost:4000/golang-note</guid>
         
         <category>golang</category>
         
@@ -278,228 +416,6 @@ go mod tidy
         
         
         <category>reading</category>
-        
-      </item>
-    
-      <item>
-        <title>storage learning list</title>
-        <description>&lt;p&gt;1、 QEMU/KVM 的基本使用方法： https://blog.wohin.me/posts/qemu-kvm-basic/&lt;/p&gt;
-
-&lt;p&gt;2、 qemu-nbd技术分析: https://cloud.tencent.com/developer/article/1087439&lt;/p&gt;
-
-&lt;p&gt;3、 Windows server 安装qemu-img : https://www.volcengine.com/docs/6627/114289&lt;/p&gt;
-
-&lt;p&gt;4、 qemu-img for Windows: https://zhuanlan.zhihu.com/p/543230850&lt;/p&gt;
-
-&lt;p&gt;5、 Linux 空洞文件 : https://banbanpeppa.github.io/2019/08/21/linux/holefile/&lt;/p&gt;
-
-&lt;p&gt;6、 qcow2 镜像 ：https://zhuanlan.zhihu.com/p/534033659&lt;/p&gt;
-
-&lt;p&gt;7、 KVM - qcow2 和 raw 格式对比 : https://blog.csdn.net/sssssuuuuu666/article/details/106999198&lt;/p&gt;
-
-&lt;p&gt;8、 NBD（Network Block Device）简介及基本使用: https://zhuanlan.zhihu.com/p/50460919&lt;/p&gt;
-
-&lt;p&gt;9、 qemu-nbd使用教程 : https://www.cnblogs.com/silvermagic/p/7666234.html&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、iSCSI 的基本架构及操作简介：https://zhuanlan.zhihu.com/p/60986068&lt;/p&gt;
-
-&lt;p&gt;2、什么是 ISCSI? ISCSI 又能干什么呢？https://blog.csdn.net/ZhangPengFeiToWinner/article/details/87926989&lt;/p&gt;
-
-&lt;p&gt;3、linux iscsi 网络的三种工具tgt iscsi_tgt targetcli  https://blog.csdn.net/qqqqqq999999/article/details/72547970&lt;/p&gt;
-
-&lt;p&gt;4、tgt+ceph-rbd创建iscsi链接流程 :  https://confluence.vrviu.com:8443/pages/viewpage.action?pageId=1580763526&lt;/p&gt;
-
-&lt;p&gt;5、TGT 学习总结 ： https://zhuanlan.zhihu.com/p/137047153  很好的文章，已经介绍到源码了。&lt;/p&gt;
-
-&lt;p&gt;5、tgt网关源码解读 ：https://blog.csdn.net/Morry_Chan/article/details/100891020&lt;/p&gt;
-
-&lt;p&gt;6、TGT github ：https://github.com/fujita/tgt&lt;/p&gt;
-
-&lt;p&gt;6、ipxe : https://www.jianshu.com/p/f9070d76892a&lt;/p&gt;
-
-&lt;p&gt;7 perf学习总结: https://zhuanlan.zhihu.com/p/141694060&lt;/p&gt;
-
-&lt;p&gt;8、RFC7143 ： https://www.rfc-editor.org/rfc/rfc7143.html rfc 标准协议&lt;/p&gt;
-
-&lt;p&gt;9、iscsi target tgt架构 : https://developer.aliyun.com/article/296888&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、Ceph—Rbd https://blog.csdn.net/weixin_45413603/article/details/103782448&lt;/p&gt;
-
-&lt;p&gt;2、Ceph 存储介绍  https://blog.csdn.net/shenyuanhaojie/article/details/121261005&lt;/p&gt;
-
-&lt;p&gt;3、Ceph介绍及原理架构分享 https://blog.csdn.net/robinhunan/article/details/128488026&lt;/p&gt;
-
-&lt;p&gt;4、ceph学习路线https://www.zhihu.com/search?q=ceph%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF&amp;amp;utm_content=search_suggestion&amp;amp;type=content&lt;/p&gt;
-
-&lt;p&gt;5、Ceph v10.0 中文文档  https://www.bookstack.cn/read/ceph-10-zh/cd0dcad3545db7c0.md&lt;/p&gt;
-
-&lt;p&gt;6、RBD Mirror（镜像）（pacific版本） https://www.cnblogs.com/varden/p/16124316.html&lt;/p&gt;
-
-&lt;p&gt;7、openstack 推荐几个大咖，大家可以百度找他们的博客来看：陈沙克、何明桂、孔令贤，Cloudman。&lt;/p&gt;
-
-&lt;p&gt;8、块设备指南 ： https://access.redhat.com/documentation/zh-cn/red_hat_ceph_storage/4/html/block_device_guide/index&lt;/p&gt;
-
-&lt;p&gt;9、我所了解的各公司使用的 Ceph 存储集群 (携程、乐视、有云、宝德云、联通等) ： https://www.cnblogs.com/sammyliu/p/4908668.html&lt;/p&gt;
-
-&lt;p&gt;10、用Ceph搭个私人NAS网盘！ https://www.jianshu.com/p/25c7ca195aa7&lt;/p&gt;
-
-&lt;p&gt;11、CentOS7 下安装 iSCSI Target(tgt) ，使用 Ceph rbd ：https://www.cnblogs.com/zengzhihua/p/9910704.html&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 01 May 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/ceph-tgt-qemu-kvm-image</link>
-        <guid isPermaLink="true">http://localhost:4000/ceph-tgt-qemu-kvm-image</guid>
-        
-        <category>tgt</category>
-        
-        <category>ceph</category>
-        
-        
-        <category>storage</category>
-        
-      </item>
-    
-      <item>
-        <title>TGT Linux SCSI target framework</title>
-        <description>&lt;p&gt;TGT 是一种在用户态下的 SCSI target 框架。 用于 iSCSI 和 iSER 传输协议。 支持多种方式访问设备块。&lt;/p&gt;
-
-&lt;p&gt;框架包含了用户态下的 deamon 和工具。&lt;/p&gt;
-
-&lt;p&gt;源码在：&lt;a href=&quot;https://github.com/fujita/tgt&quot;&gt;https://github.com/fujita/tgt&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;当前，TGT 支持的传输协议有：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;以太网网卡的 iSCSI  target 软件驱动程序&lt;/li&gt;
-  &lt;li&gt;Infiniband 和 RDMA 网卡的 iSER target 软件驱动程序&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;支持可以访问的本地存储有：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;aio, the asynchronous I/O interface also known as libaio.&lt;/li&gt;
-  &lt;li&gt;rdwr, smc and mmc, synchronous I/O based on the pread() and pwrite() system calls.&lt;/li&gt;
-  &lt;li&gt;null, discards all data and reads zeroes.&lt;/li&gt;
-  &lt;li&gt;ssc, SCSI tape support.&lt;/li&gt;
-  &lt;li&gt;sg and bsg, SCSI pass-through.&lt;/li&gt;
-  &lt;li&gt;glfs, the GlusterFS network filesystem.&lt;/li&gt;
-  &lt;li&gt;rbd, Ceph’s distributed-storage RADOS Block Device.&lt;/li&gt;
-  &lt;li&gt;sheepdog, a distributed object storage system.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;工作中之所以用到 TGT， 就是为了访问 ceph 的块设备。&lt;/p&gt;
-
-&lt;h1 id=&quot;iscsi-协议&quot;&gt;iSCSI 协议&lt;/h1&gt;
-
-&lt;p&gt;SCSI (Small Computer System Interface,小型计算机系统接口) 用于主机与外部设备之间的连接。SCSI 协议是主机与磁盘通信的基本协议。它由SCSI 控制器进行数据操作,SCSI控制器相当于一个小型CPU,有自己的命令集和缓存 。&lt;/p&gt;
-
-&lt;p&gt;而 iSCSI 协议就是让 SCSI 可以在互联网上传输。&lt;/p&gt;
-
-&lt;h1 id=&quot;tgt-的安装&quot;&gt;TGT 的安装&lt;/h1&gt;
-
-&lt;p&gt;两种方式：&lt;/p&gt;
-
-&lt;p&gt;1、源码编译&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/fujita/tgt.git
-
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; ceph-common librados-dev  librbd-dev   manpages-zh  xsltproc   docbook-xsl
-
-&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;tgt
-
-make
-
-make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;安装后文件的目录&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 755 /usr/sbin
-&lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 755 tgtd tgtadm tgtimg /usr/sbin
-&lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 755 /usr/lib/tgt/backing-store
-&lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 755 bs_rbd.so /usr/lib/tgt/backing-store
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2、 apt 直接安装&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;tgt-rbd
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h1 id=&quot;tgt-的程序框架&quot;&gt;TGT 的程序框架&lt;/h1&gt;
-
-&lt;p&gt;TGT 的一个作用就是它可以在用户态下创建管理块设备。这样不用每一次代码的更新都要重新编译内核模块。&lt;/p&gt;
-
-&lt;p&gt;tgtamd 是 TGT的管理工具，它是通过 unix socket 和 tgt daemon 通信。&lt;/p&gt;
-
-&lt;p&gt;tgt daemon （进程名 tgtd）负责和内核态下的 tgt core 模块通信。&lt;/p&gt;
-
-&lt;p&gt;tgt core 通过 target 驱动程序和 ceph 块设备通信。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/dfs/tgt-2023-04-24-19-16-06.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;要和 ceph 块设备通信，系统要安装 ceph 的 librados。&lt;/p&gt;
-
-&lt;p&gt;即安装时要先 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;apt install -y ceph-common librados-dev  librbd-dev&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;和 ceph 集群通信的是 ceph librados。&lt;/p&gt;
-
-&lt;p&gt;ceph 集群要安全认证，所以相关的配置文件要拷贝到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/etc/ceph/&lt;/code&gt; 下。&lt;/p&gt;
-
-&lt;p&gt;安装完 tgt 后。可以使用 rbd 命令管理  ceph 集群上的块设备。rbd 是通过 tgtd 和 ceph 集群交互的。&lt;/p&gt;
-
-&lt;h1 id=&quot;tgt-常用的命令&quot;&gt;TGT 常用的命令&lt;/h1&gt;
-
-&lt;p&gt;1、创建 target&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tgtadm &lt;span class=&quot;nt&quot;&gt;--lld&lt;/span&gt; iscsi &lt;span class=&quot;nt&quot;&gt;--mode&lt;/span&gt; target &lt;span class=&quot;nt&quot;&gt;--op&lt;/span&gt; new &lt;span class=&quot;nt&quot;&gt;--tid&lt;/span&gt; 1 &lt;span class=&quot;nt&quot;&gt;--targetname&lt;/span&gt; iqn.2009-02.com.example:for.all
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;targetname 是我们要创建的 target 的名字，其采用IQN 命名格式：iqn.年-月.反向域名:任何唯一的名字&lt;/p&gt;
-
-&lt;p&gt;2、创建 lun&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tgtadm &lt;span class=&quot;nt&quot;&gt;--lld&lt;/span&gt; iscsi &lt;span class=&quot;nt&quot;&gt;--mode&lt;/span&gt; logicalunit &lt;span class=&quot;nt&quot;&gt;--op&lt;/span&gt; new &lt;span class=&quot;nt&quot;&gt;--tid&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--lun&lt;/span&gt; 1 &lt;span class=&quot;nt&quot;&gt;--backing-store&lt;/span&gt; /mnt/disk.img
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;backing-store 代表我们后端存储的文件名，我们不是真正的磁盘；要模拟磁盘的数据保存功能，可以将数据保持在这个文件里。&lt;/p&gt;
-
-&lt;p&gt;3、设置访问权限（此处我们允许所有IP访问）&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tgtadm &lt;span class=&quot;nt&quot;&gt;--lld&lt;/span&gt; iscsi &lt;span class=&quot;nt&quot;&gt;--mode&lt;/span&gt; target &lt;span class=&quot;nt&quot;&gt;--op&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bind&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--tid&lt;/span&gt; 1 &lt;span class=&quot;nt&quot;&gt;-I&lt;/span&gt; ALL
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;iSCSI 协议可以设置访问权限的，可以通过 IP 来限制访问，也可以通过用户名/密码方式限制访问。&lt;/p&gt;
-
-&lt;p&gt;4、查看创建的 target 和 lun&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tgtadm &lt;span class=&quot;nt&quot;&gt;--lld&lt;/span&gt; iscsi &lt;span class=&quot;nt&quot;&gt;--mode&lt;/span&gt; target &lt;span class=&quot;nt&quot;&gt;--op&lt;/span&gt; show
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;更多的命令可以用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;man tgtadm&lt;/code&gt; 查询。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、&lt;a href=&quot;https://houmin.cc/posts/454a90d3/&quot;&gt;RDMA 架构与实践&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;2、&lt;a href=&quot;https://zhuanlan.zhihu.com/p/336499148&quot;&gt;Infiniband技术简介&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;3、&lt;a href=&quot;https://zhuanlan.zhihu.com/p/137047153&quot;&gt;TGT学习总结&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;4、&lt;a href=&quot;https://blog.csdn.net/Morry_Chan/article/details/100891020&quot;&gt;tgt网关源码解读&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;5、&lt;a href=&quot;https://blog.csdn.net/qqqqqq999999/article/details/72547970&quot;&gt;linux iscsi网络的三种工具tgt iscsi_tgt targetcli&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 23 Apr 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/tgt-scsi-target</link>
-        <guid isPermaLink="true">http://localhost:4000/tgt-scsi-target</guid>
-        
-        <category>tgt</category>
-        
-        <category>ceph</category>
-        
-        
-        <category>storage</category>
         
       </item>
     

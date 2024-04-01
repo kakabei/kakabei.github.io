@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>golang 编译时传递参数</title>
+    <title>golang 开发备忘</title>
 
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
@@ -12,7 +12,7 @@
     
     
 
-    <link rel="canonical" href="http://localhost:4000/go-build-ldflags">
+    <link rel="canonical" href="http://localhost:4000/golang-note">
     <link rel="icon" type="image/png" href="/images/logo.png">
 
     <!-- Custom CSS -->
@@ -33,7 +33,7 @@
 
   <div class="site-title">
     
-    <h4 class="entry-title"><a href="/go-build-ldflags">golang 编译时传递参数</a></h4>
+    <h4 class="entry-title"><a href="/golang-note">golang 开发备忘</a></h4>
     
   </div>
 
@@ -113,7 +113,7 @@
       <div class="content">
         <div class="articles">
             <div class="article-meta">
-    2018-04-10
+    2024-01-02
      • Category: 
         
         <a href="/categories#golang-ref" >golang</a>
@@ -132,30 +132,18 @@
 	<div class="entry-content">
 	  <article class="entry-body">
 	  	
-	  		<p>很有意思，可能运用的场景不多。如果想调试某个模块时，可以在编译直接给他赋值。</p>
+	  		<p>go 常用命令</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+go mod tidy 
 
-<span class="k">import</span> <span class="s">"fmt"</span>
-
-<span class="k">var</span> <span class="n">BuildDate</span> <span class="o">=</span> <span class="s">"no build date"</span>
-
-<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"build date: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">BuildDate</span><span class="p">)</span>
-<span class="p">}</span>
 </code></pre></div></div>
 
-<p>传递参数步骤：</p>
+<p>如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：</p>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>go build demo.go
-<span class="nv">$ </span>./demo
-build <span class="nb">date</span>: no build <span class="nb">date</span>
-<span class="nv">$ DATE</span><span class="o">=</span><span class="sb">`</span><span class="nb">date</span> <span class="s1">'+%Y-%m-%d-%I:%M:%S'</span><span class="sb">`</span>
-<span class="nv">$ </span>go build <span class="nt">-ldflags</span> <span class="s2">"-X main.BuildDate=</span><span class="nv">$DATE</span><span class="s2">"</span> demo.go
-<span class="nv">$ </span>./demo
-build <span class="nb">date</span>: 2018-05-03-03:15:35
-</code></pre></div></div>
-<p>通过-X选项，可以给go程序传递相关参数。例如示例中，借助-X选项，将编译日期BuildDate实时传递到程序中。另外，如版本信息之类也可以通过该方式实现。</p>
+<p><code class="language-plaintext highlighter-rouge">curl cip.ccsh   
+go mod require &lt;module&gt;@&lt;branch&gt;
+</code></p>
 
   		
 	  </article>
@@ -164,9 +152,9 @@ build <span class="nb">date</span>: 2018-05-03-03:15:35
 </div>
 
 <span>
-	<a  href="/go-defer-1" class="pageNav"  >上一篇</a>
+	<a  href="/window-wsl" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/go-check-race" class="pageNav"  >下一篇</a>
+	<a  href="/go-zore-struct-httpc-do-problem" class="pageNav"  >下一篇</a>
 </span>
 
 
