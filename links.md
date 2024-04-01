@@ -20,6 +20,10 @@ author_footer: false
 
 [The AI search engine for developers: www.phind.com](https://www.phind.com/agent?home=true)
 
+[通义千问：https://tongyi.aliyun.com/qianwen/](https://tongyi.aliyun.com/qianwen/)
+
+[百度问心一言：https://yiyan.baidu.com/](https://yiyan.baidu.com/)
+
 [openAI :https://chat.openai.com](https://chat.openai.com/)
 
 [声音生成 AI elevnelabs :https://elevenlabs.io](https://elevenlabs.io/)
