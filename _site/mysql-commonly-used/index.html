@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>mysql 常用语句</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>mysql 常用语句</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2015-05-22">2015-05-22</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#db" title="db">db</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#mysql" title="mysql">mysql</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<h1 id="一数据库">一、数据库</h1>
+
+<h2 id="11--登录">1.1  登录</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql <span class="nt">-h</span> 127.0.0.1 <span class="nt">-u</span> &lt;用户名&gt; <span class="nt">-p</span>&lt;密码&gt;.   <span class="c">##  默认用户名&lt;root&gt;，-p 是密码，参数后面不需要空格</span>
+
+mysql <span class="nt">-D</span> 所选择的数据库名 <span class="nt">-h</span> 主机名 <span class="nt">-u</span> 用户名 <span class="nt">-p</span>
+</code></pre></div></div>
+
+<h2 id="12--退出">1.2  退出</h2>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; <span class="nb">exit</span>  <span class="c">## 退出 </span>
+</code></pre></div></div>
+
+<h2 id="13-数据相关信息">1.3 数据相关信息</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; status<span class="p">;</span>   <span class="c">## 显示当前mysql的version的各种信息</span>
+
+mysql&gt; <span class="k">select </span>version<span class="o">()</span><span class="p">;</span>  <span class="c">## 显示当前mysql的version信息</span>
+
+mysql&gt; show global variables like <span class="s1">'port'</span><span class="p">;</span>  <span class="c">## 查看MySQL端口号</span>
+</code></pre></div></div>
+
+<h2 id="14-数据库操作">1.4 数据库操作</h2>
+
+<pre><code class="language-mysql">--  创建一个数据库
+create database database_name character set gbk; 
+
+-- 删除数据库
+drop database database_name;                     
+
+-- 显示数据库列表
+show databases;                                  
+
+-- 切换数据库
+use database_name;                               	
+</code></pre>
+
+<h1 id="二表">二、表</h1>
+
+<h2 id="21-表操作">2.1 表操作</h2>
+
+<pre><code class="language-mysql">-- 显示 samp_db 下面所有的表名字
+show tables;                 
+
+-- 显示数据表的结构
+describe table_name;         
+
+-- 清空表中记录
+delete from table_name;       
+
+-- 用于删除数据库中的现有表。
+drop table table_name;        
+
+-- 用于删除表内的数据，但不删除表本身。
+truncate table table_name;   
+
+-- 修改表名
+alter table table_name rename new_table_name;
+</code></pre>
+
+<h2 id="22-表创建">2.2 表创建</h2>
+
+<pre><code class="language-mysql">CREATE TABLE `UserInfo` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号ID',
+  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '用户名',
+  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
+  `extendInfo` varchar(1024) NOT NULL DEFAULT '' COMMENT '扩展字段',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+</code></pre>
+
+<p>表的一些属性说明：</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">NULL</code>：数据列可包含 NULL 值；</li>
+  <li><code class="language-plaintext highlighter-rouge">NOT NULL</code>：数据列不允许包含 NULL 值；</li>
+  <li><code class="language-plaintext highlighter-rouge">DEFAULT</code>：默认值；</li>
+  <li><code class="language-plaintext highlighter-rouge">PRIMARY KEY</code>：主键；</li>
+  <li><code class="language-plaintext highlighter-rouge">AUTO_INCREMENT</code>：自动递增，适用于整数类型；</li>
+  <li><code class="language-plaintext highlighter-rouge">UNSIGNED</code>：是指数值类型只能为正数；</li>
+  <li><code class="language-plaintext highlighter-rouge">CHARACTER SET name</code>：指定一个字符集；</li>
+  <li><code class="language-plaintext highlighter-rouge">COMMENT</code>：对表或者字段说明；</li>
+</ul>
+
+<h2 id="23-列的操作">2.3 列的操作</h2>
+
+<pre><code class="language-mysql">-- 添加列
+alter table 表名 add 列名 列数据类型 [after 插入位置];
+
+-- 在 age 后添加 birthday 
+alter table Userinfo add birthday varchar(100) not null default "" date after age;
+
+-- 修改列
+alter table 表名 change 列名称 列新名称 新数据类型;
+
+-- 将 name 列的数据类型改为 char(16): 
+alter table Userinfo change name name char(16) not null;
+
+-- 删除列
+alter table 表名 drop 列名称;
+
+-- 删除 birthday 这一列
+alter table Userinfo drop birthday;
+</code></pre>
+
+<h1 id="三常用语句">三、常用语句</h1>
+
+<h2 id="31-select">3.1 SELECT</h2>
+
+<pre><code class="language-mysql">select id, name from UserInfo where id = 111; 
+</code></pre>
+
+<h2 id="32-update">3.2 UPDATE</h2>
+
+<pre><code class="language-mysql">-- update 语句 根据条件更新对应的字段
+update UserInfo set name='南山肯德鸡'  where id = 111; 
+</code></pre>
+
+<h2 id="33-insert">3.3 INSERT</h2>
+
+<pre><code class="language-mysql">insert into UserInfo(name, create_time，update_time) value ('夏有凉风'， '2020-11-10 08:33:21', '2020-11-10 08:33:21');
+
+-- 从一个表的数据插入到另外一个表
+insert into live (user_id, name) SELECT m.user_id, m.name FROM moot m where m.id=111;
+
+-- 如不存在则插入，如存在则更新用 : INSERT INTO ON ... DUPLICATE KEY UPDATE
+INSERT INTO `charger` (`id`,`type`,`create_at`,`update_at`) VALUES (3,2,'2017-05-18 11:06:17','2017-05-18 11:06:17') ON DUPLICATE KEY UPDATE `id`=VALUES(`id`), `type`=VALUES(`type`), `update_at`=VALUES(`update_at`);
+</code></pre>
+
+<h2 id="34--delete">3.4  DELETE</h2>
+
+<p>现实开发实践中，业务上一般不允许删除。DBA 要把这个权限收回。</p>
+
+<pre><code class="language-mysql">-- 清空表
+delete from  UserInfo
+-- 或
+delete * from  UserInfo
+
+-- 删除指定的一行
+delete from  UserInfo  WHERE id = 111; 
+</code></pre>
+
+<h2 id="35--order-by">3.5  ORDER BY</h2>
+
+<p>order by  用于按升序或降序对结果集进行排序。 默认按 asc 。  asc 升序排序, desc 降序排序。</p>
+
+<pre><code class="language-mysql">-- 升序
+select * from UserInfo order by  id asc; 
+
+-- 降序
+select * from UserInfo order by id desc;
+</code></pre>
+
+<h2 id="36-group-by">3.6 GROUP BY</h2>
+
+<p>将具有相同值的行分组到汇总。</p>
+
+<pre><code class="language-mysql">-- 分组汇总不同性别的人数
+select male, count(id) from UserInfo group by male; 
+</code></pre>
+
+<h2 id="37--union">3.7  UNION</h2>
+
+<p>合并两个或多个 SELECT 语句的结果集。</p>
+
+<pre><code class="language-mysql">select name from Employees_ZH union select name from Employees_USA; 
+</code></pre>
+
+<h2 id="38--join">3.8  JOIN</h2>
+
+<p>JOIN 子句用于根据两个或多个表之间的相关列组合来自两个或多个表的行。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">INNER JOIN</code> : 两个表都存在的行，才返回。</li>
+  <li><code class="language-plaintext highlighter-rouge">LEFT JOIN</code>:  右表没有，左表有，也要返回。</li>
+  <li><code class="language-plaintext highlighter-rouge">RIGHT JOIN</code>: 左表没有，右表有，也要返回。</li>
+  <li><code class="language-plaintext highlighter-rouge">FULL JOIN</code>: 只要其中一个表中有，就返回行。 (MySQL 是不支持的，通过 <code class="language-plaintext highlighter-rouge">LEFT JOIN + UNION + RIGHT JOIN</code> 的方式 来实现)</li>
+</ul>
+
+<h2 id="29--full-outer-join">2.9  FULL OUTER JOIN</h2>
+
+<p>当左（表1）或右（表2）表记录中存在匹配时，关键字返回所有记录</p>
+
+<h1 id="四sql函数">四、SQL函数</h1>
+
+<h2 id="41-count">4.1 COUNT</h2>
+
+<p>统计满足条件的行数。</p>
+
+<pre><code class="language-mysql">select male, count(id) from UserInfo group by male; 
+</code></pre>
+
+<h2 id="42-avg">4.2 AVG</h2>
+
+<p>数值列的平均值。</p>
+
+<pre><code class="language-mysql">SELECT AVG(列名称) FROM 表名称 WHERE 条件;
+</code></pre>
+
+<h2 id="43-sum">4.3 SUM</h2>
+
+<p>数值列的总和</p>
+
+<pre><code class="language-mysql">SELECT SUM(列名称) FROM 表名称 WHERE 条件;
+</code></pre>
+
+<h2 id="44-max">4.4 MAX</h2>
+
+<p>所选列的最大值</p>
+
+<pre><code class="language-mysql">SELECT MIN(列名称) FROM 表名称 WHERE 条件;
+</code></pre>
+
+<h2 id="45-min">4.5 MIN</h2>
+
+<p>所选列的最小值</p>
+
+<pre><code class="language-mysql">SELECT MIN(列名称) FROM 表名称 WHERE 条件;
+</code></pre>
+
+<h1 id="五索引">五、索引</h1>
+
+<h2 id="51--普通索引">5.1  普通索引</h2>
+
+<pre><code class="language-mysql">--  添加索引 普通索引(INDEX)
+ALTER TABLE `表名字` ADD INDEX 索引名字 ( `字段名字` )
+
+-- 直接创建索引
+CREATE INDEX index_user ON Userinfo(name)
+
+-- 修改表结构的方式添加索引
+ALTER TABLE table_name ADD INDEX index_name ON (column(length))
+
+-- 给 表中的 name 字段 添加普通索引
+ALTER TABLE `Userinfo` ADD INDEX index_name (name)
+
+-- 创建表的时候同时创建索引
+CREATE TABLE `user` (
+    `id` int(11) NOT NULL AUTO_INCREMENT ,
+    `title` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+    `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+    `time` int(10) NULL DEFAULT NULL ,
+    PRIMARY KEY (`id`),
+    INDEX index_name (title(length))
+)
+
+-- 删除索引
+DROP INDEX index_name ON table
+</code></pre>
+
+<h2 id="52--主键索引">5.2  主键索引</h2>
+
+<pre><code class="language-mysql">ALTER TABLE `表名字` ADD PRIMARY KEY ( `字段名字` )
+</code></pre>
+
+<h2 id="53-唯一索引">5.3 唯一索引</h2>
+
+<pre><code class="language-mysql">ALTER TABLE `表名字` ADD UNIQUE (`字段名字`)
+</code></pre>
+
+<h2 id="54--全文索引">5.4  全文索引</h2>
+
+<pre><code class="language-mysql">ALTER TABLE `表名字` ADD FULLTEXT (`字段名字`)
+</code></pre>
+
+<h2 id="55--添加多列索引">5.5  添加多列索引</h2>
+
+<pre><code class="language-mysql">ALTER TABLE `table_name` ADD INDEX index_name ( `column1`, `column2`, `column3`)
+</code></pre>
+
+<h1 id="六其他">六、其他</h1>
+
+<h2 id="61-删除重复记录">6.1 删除重复记录</h2>
+
+<pre><code class="language-mysql">-- 查找表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断
+select * from people where peopleId in (select peopleId from people group by peopleId having count(peopleId) &gt; 1)
+
+-- 删除表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断，只留有rowid最小的记录
+delete from people 
+where peopleId in (select peopleId from people group by peopleId having count(peopleId) &gt; 1)
+and rowid not in (select min(rowid) from people group by peopleId having count(peopleId )&gt;1)
+
+-- 查找表中多余的重复记录（多个字段）
+select * from vitae a
+where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)
+
+-- 删除表中多余的重复记录（多个字段），只留有rowid最小的记录
+delete from vitae a
+where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1) and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)
+
+-- 查找表中多余的重复记录（多个字段），不包含rowid最小的记录
+select * from vitae a
+where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1) and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)
+
+</code></pre>
+
+<h2 id="62-批量创建分表">6.2 批量创建分表</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span>i <span class="k">in</span> <span class="o">{</span>0..1023<span class="o">}</span>
+<span class="k">do
+
+</span>mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-uadmin</span> <span class="nt">-padmin123</span> <span class="nt">-P3358</span> hgame  -e <span class="s2">"CREATE TABLE UserInfo</span><span class="nv">$i</span><span class="s2"> (
+
+  id bigint(20) unsigned NOT NULL COMMENT 'SKU ID',
+  createi_time varchar(255) NOT NULL DEFAULT '' COMMENT '导入时间',
+  ext varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (id)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8"</span><span class="p">;</span>
+
+<span class="k">done</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>1、<a href="https://github.com/jaywcjlove/mysql-tutorial/blob/master/docs/21-minutes-MySQL-basic-entry.md">https://github.com/jaywcjlove/mysql-tutorial/blob/master/docs/21-minutes-MySQL-basic-entry.md</a></p>
+
+<p>2、<a href="https://www.w3school.com.cn/sql/index.asp">https://www.w3school.com.cn/sql/index.asp</a></p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/redis-base-command/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/mysql-architecture/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2015-05-22-mysql-commonly-used.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

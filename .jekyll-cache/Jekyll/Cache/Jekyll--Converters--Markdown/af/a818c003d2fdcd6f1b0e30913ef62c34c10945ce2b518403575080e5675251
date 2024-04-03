@@ -1,0 +1,201 @@
+I"�W<p>一个互斥锁可以被 用来保护一个临界区或一组相关临界区。保证在同一时刻只有一个Goroutine处于该临界区之内</p>
+
+<p>为了兑现这保证上，每当goroutine 想进入临界区时，都要先对它进行锁定 ，离开时临界区时都要及时地对它进行解锁。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">writer</span><span class="o">.</span><span class="n">Write</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+ <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"error: %s [%d]"</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">id</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>使用互斥锁时有哪 些注意事项：</strong></p>
+
+<p>1 不要重复锁定互斥锁。</p>
+
+<p>2 不要忘记解锁互斥锁，必要时用 defer 语句</p>
+
+<p>3 不要对沿未锁定或者已经解锁的互斥锁解锁</p>
+
+<p>4 不要在多个函数之前直接传递互斥锁</p>
+
+<p>死锁时抛出的panic是属于致使错误，都是无法被恢复的，调用recover函数对它们起不了任何作用。</p>
+
+<p>互斥锁是开箱即用的。sysnc.Mutex类型 是一个结构体类型，属于值类型中的一种，把它传给一个函数、将它从函数中返回，把它赋给其他变量。让它进入 某个通道都会导致它的副本的产生。
+它们是独立的，都是不同的互斥锁。</p>
+
+<p><strong>读写锁与互斥锁有哪 异同？</strong></p>
+
+<p>sync.RWMute类型的值代表。 都是开箱即用。 它是把对共享资源的“读操作”和“写操作”区别对待。</p>
+
+<p>比互斥锁有列加细腻的访问控制。</p>
+
+<p>一个读写锁中实际上包含了两个锁，即：读锁和写锁。sync.RWMutex类型中的Lock方法和Unlock方法分别用于对写锁进行锁定和解锁，而它的RLock方法和RUnlock方法则分别用于对读锁进行锁定和解锁。</p>
+
+<p><strong>另外，对于同一个读写锁来说有如下规则：</strong></p>
+
+<p>1 在写锁已被锁定的情况下再试图锁定写锁，会阻塞当前的 goroutine。</p>
+
+<p>2 在写锁已被锁定的情况下试图锁定读锁，也会阻塞当前的 goroutine</p>
+
+<p>3 在读锁已被锁定的情况下试图锁定写锁，同样会阻塞当前的goroutine。</p>
+
+<p>4 在读锁已被锁定的情况下再试图锁定读锁，并不会阻塞当前的goroutine。</p>
+
+<p>换一个角度来说，对于某个受到读写锁保护的共享资源，多个写操作不能同时进行，写操作和读操作也不能同时进行，但多个读操作却可以同时进行。</p>
+
+<p>go 语言代码  实例：</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+    <span class="s">"bytes"</span>
+    <span class="s">"errors"</span>
+    <span class="s">"fmt"</span>
+    <span class="s">"io"</span>
+    <span class="s">"log"</span>
+    <span class="s">"sync"</span>
+    <span class="s">"time"</span>
+<span class="p">)</span>
+
+<span class="c">// singleHandler 代表单次处理函数的类型。</span>
+<span class="k">type</span> <span class="n">singleHandler</span> <span class="k">func</span><span class="p">()</span> <span class="p">(</span><span class="n">data</span> <span class="kt">string</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+
+<span class="c">// handlerConfig 代表处理流程配置的类型。</span>
+<span class="k">type</span> <span class="n">handlerConfig</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">handler</span>   <span class="n">singleHandler</span> <span class="c">// 单次处理函数。</span>
+    <span class="n">goNum</span>     <span class="kt">int</span>           <span class="c">// 需要启用的goroutine的数量。</span>
+    <span class="n">number</span>    <span class="kt">int</span>           <span class="c">// 单个goroutine中的处理次数。</span>
+    <span class="n">interval</span>  <span class="n">time</span><span class="o">.</span><span class="n">Duration</span> <span class="c">// 单个goroutine中的处理间隔时间。</span>
+    <span class="n">counter</span>   <span class="kt">int</span>           <span class="c">// 数据量计数器，以字节为单位。</span>
+    <span class="n">counterMu</span> <span class="n">sync</span><span class="o">.</span><span class="n">Mutex</span>    <span class="c">// 数据量计数器专用的互斥锁。</span>
+
+<span class="p">}</span>
+
+<span class="c">// count 会增加计数器的值，并会返回增加后的计数。</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">hc</span> <span class="o">*</span><span class="n">handlerConfig</span><span class="p">)</span> <span class="n">count</span><span class="p">(</span><span class="n">increment</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">hc</span><span class="o">.</span><span class="n">counterMu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+    <span class="k">defer</span> <span class="n">hc</span><span class="o">.</span><span class="n">counterMu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
+    <span class="n">hc</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="n">increment</span>
+    <span class="k">return</span> <span class="n">hc</span><span class="o">.</span><span class="n">counter</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c">// mu 代表以下流程要使用的互斥锁。</span>
+    <span class="c">// 在下面的函数中直接使用即可，不要传递。</span>
+    <span class="k">var</span> <span class="n">mu</span> <span class="n">sync</span><span class="o">.</span><span class="n">Mutex</span>
+
+    <span class="c">// genWriter 代表的是用于生成写入函数的函数。</span>
+    <span class="n">genWriter</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">writer</span> <span class="n">io</span><span class="o">.</span><span class="n">Writer</span><span class="p">)</span> <span class="n">singleHandler</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">func</span><span class="p">()</span> <span class="p">(</span><span class="n">data</span> <span class="kt">string</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c">// 准备数据。</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\t</span><span class="s">"</span><span class="p">,</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span><span class="o">.</span><span class="n">Format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">StampNano</span><span class="p">))</span>
+            <span class="c">// 写入数据。</span>
+            <span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+            <span class="k">defer</span> <span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
+            <span class="n">n</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">Write</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">// genReader 代表的是用于生成读取函数的函数。</span>
+    <span class="n">genReader</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">reader</span> <span class="n">io</span><span class="o">.</span><span class="n">Reader</span><span class="p">)</span> <span class="n">singleHandler</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">func</span><span class="p">()</span> <span class="p">(</span><span class="n">data</span> <span class="kt">string</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">buffer</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">reader</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">bytes</span><span class="o">.</span><span class="n">Buffer</span><span class="p">)</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
+                <span class="n">err</span> <span class="o">=</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"unsupported reader"</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="p">}</span>
+            <span class="c">// 读取数据。</span>
+            <span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+            <span class="k">defer</span> <span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">ReadString</span><span class="p">(</span><span class="sc">'\t'</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">// buffer 代表缓冲区。</span>
+    <span class="k">var</span> <span class="n">buffer</span> <span class="n">bytes</span><span class="o">.</span><span class="n">Buffer</span>
+
+    <span class="c">// 数据写入配置。</span>
+    <span class="n">writingConfig</span> <span class="o">:=</span> <span class="n">handlerConfig</span><span class="p">{</span>
+        <span class="n">handler</span><span class="o">:</span>  <span class="n">genWriter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">),</span>
+        <span class="n">goNum</span><span class="o">:</span>    <span class="m">5</span><span class="p">,</span>
+        <span class="n">number</span><span class="o">:</span>   <span class="m">4</span><span class="p">,</span>
+        <span class="n">interval</span><span class="o">:</span> <span class="n">time</span><span class="o">.</span><span class="n">Millisecond</span> <span class="o">*</span> <span class="m">100</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="c">// 数据读取配置。</span>
+    <span class="n">readingConfig</span> <span class="o">:=</span> <span class="n">handlerConfig</span><span class="p">{</span>
+        <span class="n">handler</span><span class="o">:</span>  <span class="n">genReader</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">),</span>
+        <span class="n">goNum</span><span class="o">:</span>    <span class="m">10</span><span class="p">,</span>
+        <span class="n">number</span><span class="o">:</span>   <span class="m">2</span><span class="p">,</span>
+        <span class="n">interval</span><span class="o">:</span> <span class="n">time</span><span class="o">.</span><span class="n">Millisecond</span> <span class="o">*</span> <span class="m">100</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c">// sign 代表信号的通道。</span>
+    <span class="n">sign</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="k">struct</span><span class="p">{},</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="o">+</span><span class="n">readingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="p">)</span>
+
+    <span class="c">// 启用多个goroutine对缓冲区进行多次数据写入。</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">go</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">defer</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+                <span class="n">sign</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+            <span class="p">}()</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">number</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">writingConfig</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span>
+                <span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">handler</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"writer [%d-%d]: error: %s"</span><span class="p">,</span>
+                        <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="p">}</span>
+                <span class="n">total</span> <span class="o">:=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"writer [%d-%d]: %s (total: %d)"</span><span class="p">,</span>
+                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}(</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c">// 启用多个goroutine对缓冲区进行多次数据读取。</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">goNum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">go</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">defer</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+                <span class="n">sign</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+            <span class="p">}()</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">number</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">readingConfig</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span>
+                <span class="k">var</span> <span class="n">data</span> <span class="kt">string</span>
+                <span class="k">var</span> <span class="n">n</span> <span class="kt">int</span>
+                <span class="k">var</span> <span class="n">err</span> <span class="kt">error</span>
+                <span class="k">for</span> <span class="p">{</span>
+                    <span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">handler</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="no">nil</span> <span class="o">||</span> <span class="n">err</span> <span class="o">!=</span> <span class="n">io</span><span class="o">.</span><span class="n">EOF</span> <span class="p">{</span>
+                        <span class="k">break</span>
+                    <span class="p">}</span>
+                    <span class="c">// 如果读比写快（读时会发生EOF错误），那就等一会儿再读。</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">readingConfig</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"reader [%d-%d]: error: %s"</span><span class="p">,</span>
+                        <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="p">}</span>
+                <span class="n">total</span> <span class="o">:=</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"reader [%d-%d]: %s (total: %d)"</span><span class="p">,</span>
+                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}(</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c">// signNumber 代表需要接收的信号的数量。</span>
+    <span class="n">signNumber</span> <span class="o">:=</span> <span class="n">writingConfig</span><span class="o">.</span><span class="n">goNum</span> <span class="o">+</span> <span class="n">readingConfig</span><span class="o">.</span><span class="n">goNum</span>
+    <span class="c">// 等待上面启用的所有goroutine的运行全部结束。</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">signNumber</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+        <span class="o">&lt;-</span><span class="n">sign</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+:ET

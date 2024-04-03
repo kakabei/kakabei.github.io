@@ -1,0 +1,103 @@
+I"�<p>C++11 赋予 <code class="language-plaintext highlighter-rouge">auto</code> 关键字新的含义，使用它来做自动类型推导。</p>
+
+<p><code class="language-plaintext highlighter-rouge">auto</code> 仅仅是一个占位符，在编译器期间它会被真正的类型所替代。或者说，C++ 中的变量必须是有明确类型的，只是这个类型是由编译器自己推导出来的。所以 <code class="language-plaintext highlighter-rouge">auto</code> 会延长编译时间。</p>
+
+<p>使用 <code class="language-plaintext highlighter-rouge">auto</code> 类型推导的变量必须马上初始化，这个很容易理解，因为 <code class="language-plaintext highlighter-rouge">auto</code> 在 C++11 中只是“占位符”，并非如 <code class="language-plaintext highlighter-rouge">int</code> 一样的真正的类型声明。</p>
+
+<p>例子：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="k">auto</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">1000.8</span><span class="p">;</span>
+<span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">;</span>
+<span class="k">auto</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"gitHub"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h1 id="auto-的高级用法">auto 的高级用法</h1>
+
+<p><code class="language-plaintext highlighter-rouge">auto</code> 除了可以独立使用，还可以和某些具体类型混合使用，这样 auto 表示的就是“半个”类型，而不是完整的类型。</p>
+
+<p>如：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span>  <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">auto</span> <span class="o">*</span><span class="n">p1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">;</span>   <span class="c1">//p1 为 int *，auto 推导为 int</span>
+<span class="k">auto</span>  <span class="n">p2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">;</span>   <span class="c1">//p2 为 int*，auto 推导为 int*</span>
+<span class="k">auto</span> <span class="o">&amp;</span><span class="n">r1</span>  <span class="o">=</span> <span class="n">x</span><span class="p">;</span>   <span class="c1">//r1 为 int&amp;，auto 推导为 int</span>
+<span class="k">auto</span> <span class="n">r2</span> <span class="o">=</span> <span class="n">r1</span><span class="p">;</span>    <span class="c1">//r2 为  int，auto 推导为 int</span>
+</code></pre></div></div>
+<h1 id="auto-的限制">auto 的限制</h1>
+
+<p>1、auto 不能在函数的参数中使用。</p>
+
+<p>2、auto 不能作用于类的非静态成员变量（也就是没有 static 关键字修饰的成员变量）中。</p>
+
+<p>3、auto 关键字不能定义数组。</p>
+
+<p>4、auto 不能作用于模板参数。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">A</span><span class="p">{</span>
+    <span class="c1">//TODO:</span>
+<span class="p">};</span>
+
+<span class="kt">int</span>  <span class="n">main</span><span class="p">(){</span>
+    <span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">C1</span><span class="p">;</span>
+    <span class="n">A</span><span class="o">&lt;</span><span class="k">auto</span><span class="o">&gt;</span> <span class="n">C2</span> <span class="o">=</span> <span class="n">C1</span><span class="p">;</span>  <span class="c1">//错误</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="auto-的应用">auto 的应用</h1>
+
+<p>1、使用 <code class="language-plaintext highlighter-rouge">auto</code> 定义迭代器。（比较好用）</p>
+
+<p>2、<code class="language-plaintext highlighter-rouge">auto</code> 用于泛型编程。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">vector</span><span class="o">&lt;</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>  <span class="c1">//使用 auto 代替具体的类型</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">get</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+        <span class="k">return</span> <span class="mi">100</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">B</span><span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">get</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+        <span class="k">return</span> <span class="s">"hello gitHub"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="k">auto</span> <span class="n">val</span> <span class="o">=</span> <span class="n">T</span><span class="o">::</span><span class="n">get</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="n">func</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="n">func</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+<hr />
+<p>1、《深入理解C++11：C++11新特性解析与应用》</p>
+
+<p>2、<a href="http://c.biancheng.net/view/6984.html">C++ auto类型推导完全攻略</a></p>
+:ET

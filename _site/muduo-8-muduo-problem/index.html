@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>muduo笔记  muduo 在网上看到一些疑问</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>muduo笔记  muduo 在网上看到一些疑问</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2018-01-06">2018-01-06</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#muduo" title="muduo">muduo</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
+  
+  <a href="/tags/#muduo" title="muduo">muduo</a>&nbsp;
+  
+  <a href="/tags/#技术学习笔记" title="技术学习笔记">技术学习笔记</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>大致看完muduo关于网络这一部分了， 其他的都是一些基本库。在base这个目录下。</p>
+
+<p>也在网上看看别对muduo的一些评价和疑问。也可学习到很多，毕竟有一些问题自己没注意到。</p>
+
+<p><a href="https://www.zhihu.com/topic/20013250/hot">知乎上muduo的一些问题</a></p>
+
+<p><a href="https://www.zhihu.com/question/59576980/answer/166730296">muduo中，本来可以直接调用的函数，为什么要扔到 EventLoop 中呢？</a></p>
+
+<p><a href="https://www.zhihu.com/question/24311085">muduo库的很多返回值为空的函数的最后一行都有类似 (void) n的一句， 为什么要这样做？</a></p>
+
+<p>你在linux多线程编程中1.12说，member data 的mutex 不能保护析构，TcpClient 的析构函数使用 MutexLock 没有问题吗？</p>
+
+<p><a href="https://www.zhihu.com/question/31459750/answer/52061391">多线程编程中什么情况下需要加 volatile？</a></p>
+
+<p><a href="https://www.zhihu.com/question/279734963/answer/409009408">类初始化时 this 指针何时生成，在构造函数中如何确保 this 指针有效？</a></p>
+
+<p>[对象池的一个 race condition]https://zhuanlan.zhihu.com/p/30522095</p>
+
+<p>这就是一个，看代码时就是没能注意到。</p>
+
+<hr />
+<p><a href="https://www.zhihu.com/question/24590359">muduo库在实际项目中使用的人多吗？</a></p>
+
+<p>这个是关于一些muduo的讨论，很有意思。可能用于生产环境的人真的不多吧。但muduo的思想对于学习网络库还是很有借鉴的作用。像360的<a href="https://github.com/Qihoo360/evpp">evpp</a>就是参考了muduo。</p>
+
+<p>长时间在源码代中，特别还看陈硕的书。很容易眼障， 看不出不好的地方。像这里提到了水木网友的文章。不知道原文章的出处<a href="https://pastebin.com/8S7CjdSb">https://pastebin.com/8S7CjdSb</a>。同时要看一下下面回复的一些讨论。每个人的观点不可能一样的。各有所爱吧。</p>
+
+<p><a href="https://www.zhihu.com/question/25016042/answer/29798924?group_id=783954989#comment-59736874">当应用程序调用Send之后怎么判断对方是否成功接收?</a>
+这个地方关于在tcp中, send/recv能否正确写好的问题。 对muduo的一些看法，也是超出了我的见识啊。又学习了。对于TCP的理解还是深到那个地步啊。看那个水手应该是个牛人。</p>
+
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/muduo-8-muduo-tcpserver-tcpconnection-send/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/sourcecode-comment/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2018-01-05-muduo-8-muduo-problem.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

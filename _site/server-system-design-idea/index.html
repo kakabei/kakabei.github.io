@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>系统设计方案注意事项</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>系统设计方案注意事项</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2022-01-25">2022-01-25</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#系统设计" title="系统设计">系统设计</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#工作经验" title="工作经验">工作经验</a>&nbsp;
+  
+  <a href="/tags/#团队管理" title="团队管理">团队管理</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<h1 id="一需求背景">一、需求背景</h1>
+
+<p>1、 清晰掌握需求的各个场景，以业务为导向，检验技术和系统能否很好支持需求的各个场景。</p>
+
+<p>2、了解需求背景，有助于从技术角度上看，需求是否存在漏洞</p>
+
+<h1 id="二系统架构">二、系统架构</h1>
+
+<p>1、画出清晰的高层框架图，主要体现出用什么组件，之间是怎么连接的，数据流向。</p>
+
+<p>2、证明你的思路，用框架图进行推演，是否可以解决需求问题。</p>
+
+<p>3、各个组件节点，是否存在关键点，是否有备用方案，即容错容灾。</p>
+
+<p>4、 估算业务数据，并发，数据总量，系统是否可以满足。</p>
+
+<h1 id="三关键业务流程图">三、关键业务流程图</h1>
+
+<p>1、深入描述清楚关键组件节点的核心业务逻辑。</p>
+
+<p>2、本地缓存防止热点出现。 本地缓存考虑空标情况。</p>
+
+<p>3、处理外部接口异常情况。</p>
+
+<p>4、防止流程出现阻塞情况。</p>
+
+<p>5、关键接口，或读写缓存/db是否有重试机制。</p>
+
+<p>6、业务或第三方接口是否考虑可重入。</p>
+
+<p>7、关键数据一致性考虑。</p>
+
+<p>8、关键流程是否存在并发，是否需要加锁。极端情况也不能忽略，觉得量少不可能会有并发情况，但极端情况果可以由其他bug导致的。</p>
+
+<p>9、对外接口做频限保护。</p>
+
+<p>10、核心业务流程记录流水。</p>
+
+<h1 id="四业务">四、业务</h1>
+
+<p>1、活动和时间相关的，注意零点和跨年的边界问题。</p>
+
+<h1 id="五数据结构-mysql表设计redis缓存数据">五、数据结构  （mysql 表设计，redis 缓存数据）</h1>
+
+<p>1、<code class="language-plaintext highlighter-rouge">mysql</code> 表设计是否合理，相关字段的索引；字段类型定义；是否有扩展字段；业务的数据总量是否考虑分表，用什么维度分表。</p>
+
+<p>2、<code class="language-plaintext highlighter-rouge">mysql</code> <code class="language-plaintext highlighter-rouge">dao</code> 考虑连接数多少。防止对数据库压力过大，是否要加一层redis缓存。</p>
+
+<p>3、<code class="language-plaintext highlighter-rouge">mysql</code> 优先考虑写主，读从。但也要防止主从同步的时间差可能导致业务逻辑的问题。</p>
+
+<p>4、<code class="language-plaintext highlighter-rouge">mysql</code> sql 效率问题，如:  是否让索引失效，是否有必要连表，连表的是否表设计有问题。</p>
+
+<p>5、<code class="language-plaintext highlighter-rouge">redis</code> 缓存是否存在热点， 是否存在大key， 是否考虑缓存空标，空标有效时间和正常的有效时间要区别出来。有效时间是否考虑打散，防止数据同时失效出现雪崩。</p>
+
+<p>6、<code class="language-plaintext highlighter-rouge">redis</code> 数据结构设计注意版本号或扩展字段。反过来，在迭代新增扩展字段时，要考虑数据序列化问题，即版本号等问题。</p>
+
+<h1 id="六协议">六、协议</h1>
+
+<p>1、协议要简洁易懂，字段命名不要出现歧义，注释清楚。一定要有初始化，且初始化的值要合理。</p>
+
+<p>2、协议要有对应的文档。文档说明清晰。文档要用 <code class="language-plaintext highlighter-rouge">source</code> 记录调用业务来源，预估请量，相关负责人。</p>
+
+<p>3、请求协议要有 <code class="language-plaintext highlighter-rouge">source</code> 字段定义业务来源。</p>
+
+<p>4、服务的协议要注意可扩展，新增字段要在 <code class="language-plaintext highlighter-rouge">mapExt</code> 中添加。</p>
+
+<p>5、服务的协议初始化，序列化要对应正确。</p>
+
+<p>6、响应协议要有错误码和错误信息。在文档要对错误码做出释义。</p>
+
+<h1 id="七配置监控">七、配置监控</h1>
+
+<p>1、对所有第三方接口要单独监控。</p>
+
+<p>2、<code class="language-plaintext highlighter-rouge">dao</code> 操作要做单独监控。</p>
+
+<p>3、<code class="language-plaintext highlighter-rouge">redis</code> 缓存/进程内缓存要监控命中率。</p>
+
+<p>4、对外接口做全局监控。</p>
+
+<p>5、<code class="language-plaintext highlighter-rouge">daemon</code> 也要做全局监控。</p>
+
+<p>6、对外部参数的校验可以不做告警。</p>
+
+<p>7、集中建立个性化视图，写清楚紧急联系人，方便快速找到对应的负责人。</p>
+
+<p>8、接口调用来源做统计监控。</p>
+
+<p>9、关键业务做出错告警。</p>
+
+<p>10、 监控让服务有可观察性。</p>
+
+<h1 id="八异常处理">八、异常处理</h1>
+
+<p>1、考虑兜底方案，降级方案，补偿机制。</p>
+
+<p>2、重试，告警。</p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/server-acitivity-ninebox/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/server-service-discovery/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2022-01-17-server-system-design-idea.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

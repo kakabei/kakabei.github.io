@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>CPU 密集型 和I/O 密集型</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>CPU 密集型 和I/O 密集型</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2023-03-06">2023-03-06</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#Linux" title="Linux">Linux</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#工作经验" title="工作经验">工作经验</a>&nbsp;
+  
+  <a href="/tags/#性能分析" title="性能分析">性能分析</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>CPU 密集型和 I/O 密集型是两种不同类型的系统负载。</p>
+
+<p>CPU 密集型的系统负载主要是指系统需要大量的 CPU 处理能力，例如复杂的计算、加密、解压等操作，此时系统的CPU资源是系统性能的瓶颈。</p>
+
+<p>而 I/O 密集型的系统负载则主要是指系统需要大量的I/O（输入输出）操作，例如大量的文件读写、网络传输、数据库查询等操作，此时系统的瓶颈在于I/O资源的限制。</p>
+
+<p>要判断一个系统是 CPU 密集型还是IO密集型，可以考虑以下几点：</p>
+
+<ul>
+  <li>
+    <p>CPU 密集型系统负载会占用大量的 CPU 资源，导致 CPU 利用率接近或达到 100%。而 I/O 密集型系统负载则不一定会占用大量的 CPU 资源，CPU 利用率可能不会很高。</p>
+  </li>
+  <li>
+    <p>CPU 密集型系统负载的主要瓶颈在于 CPU 资源，因此增加 CPU 的数量或提高 CPU 的性能可以提升系统性能。而 I/O 密集型系统负载的主要瓶颈在于 I/O 资源，因此增加磁盘、网络等 I/O 设备的数量或提高 I/O 设备的性能可以提升系统性能。</p>
+  </li>
+  <li>
+    <p>CPU 密集型系统负载通常可以通过并行化处理来提高系统性能。例如将一个任务拆分成多个子任务，分别由多个 CPU 核心同时处理。而 I/O 密集型系统负载则通常无法通过并行化处理来提高性能，因为 I/O 操作通常是有序的，无法并行处理。</p>
+  </li>
+</ul>
+
+<p>在实际应用中，可以通过监控系统资源的使用情况来判断系统是 CPU 密集型还是 I/O 密集型。例如可以通过查看 CPU 利用率、磁盘 I/O 速率、网络吞吐量等指标来判断系统负载类型。同时也可以通过分析系统日志、调查应用程序的工作方式来确定系统负载类型。</p>
+
+<p>在 Linux 系统中，通过什么指标来判断程序是 CPU 密集型和 I/O 密集型？</p>
+
+<ul>
+  <li>
+    <p>CPU 使用率：如果一个程序在运行过程中占用了大量的 CPU 时间，那么它很可能是 CPU 密集型的。可以使用 top、htop 或 pidstat 等命令来查看进程的 CPU 使用率。</p>
+  </li>
+  <li>
+    <p>I/O 操作次数和速率：如果一个程序在运行过程中需要频繁进行 I/O 操作，那么它很可能是 I/O 密集型的。可以使用 <code class="language-plaintext highlighter-rouge">iostat</code> 或 <code class="language-plaintext highlighter-rouge">dstat</code> 命令来查看进程的 I/O 操作次数和速率。</p>
+  </li>
+  <li>
+    <p>上下文切换次数：上下文切换是 CPU 在不同进程或线程之间切换的过程，如果一个程序需要频繁地进行上下文切换，那么它很可能是 CPU 密集型的。可以使用 <code class="language-plaintext highlighter-rouge">vmstat</code> 或 <code class="language-plaintext highlighter-rouge">pidstat</code> 命令来查看进程的上下文切换次数。</p>
+  </li>
+</ul>
+
+<p>内存使用情况：如果一个程序需要大量的内存来存储数据，那么它很可能是 CPU 密集型的。可以使用 top 或 ps 命令来查看进程的内存使用情况。</p>
+
+<p>用 iostat 查看系统信息，性能分析</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@VM-0-15-centos ~]# iostat
+Linux 3.10.0-1062.18.1.el7.x86_64 <span class="o">(</span>VM-0-15-centos<span class="o">)</span> 	2023年03月23日 	_x86_64_	<span class="o">(</span>1 CPU<span class="o">)</span>
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           0.73    0.00    0.60    0.16    0.00   98.51
+
+Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
+vda               5.07        49.60        88.86 3946267318 7070489480
+scd0              0.00         0.00         0.00        314          0
+</code></pre></div></div>
+<p><strong>I/O瓶颈</strong></p>
+
+<p>如果 <code class="language-plaintext highlighter-rouge">%iowait</code> 的值过高，表示硬盘存在 I/O 瓶颈</p>
+
+<p><strong>内存不足</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">%idle</code> 值高，表示 CPU 较空闲，如果<code class="language-plaintext highlighter-rouge">%idle</code> 值高但系统响应慢时，有可能是 CPU 在等待分配内存，此时应加大内存容量</p>
+
+<p><strong>CPU资源不足</strong></p>
+
+<p>如果 %idle 值持续低于 10，那么系统的 PU 处理能力相对较低，表明系统中最需要解决的资源是 CPU.</p>
+
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/patterns-for-extensible-architectures/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/RESTful/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2023-03-07-cpu-intensive-and-IO-intensive.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

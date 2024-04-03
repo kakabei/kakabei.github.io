@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>muduo笔记 第七章 定时器</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>muduo笔记 第七章 定时器</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2018-01-05">2018-01-05</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#muduo" title="muduo">muduo</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#技术学习笔记" title="技术学习笔记">技术学习笔记</a>&nbsp;
+  
+  <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
+  
+  <a href="/tags/#muduo" title="muduo">muduo</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>在一般的服务端程序设计 中， 与时间有关的常见任务有：</p>
+
+<p>1、获取当前时间， 计算时间间隔。</p>
+
+<p>2、时区转换与日期计算； 把纽约当地时间转换为上海当地时间； 2011-02-05 之后第100天是几月几号星期几；等等。</p>
+
+<p>3、 定时操作， 比如在预定的时间执行任务， 或者在一段延时之后执行任务。</p>
+
+<p>计时，只使用gettimeofday(2)来获取当前时间</p>
+
+<p>定时，只使用timerfd_*系统函数来处理定时任务</p>
+
+<p>1、 time(2) 的精度太低了， ftime(3)被废弃。 clock_gettime(2)精度最高，但是系统调用的开销比gettimeofday大。</p>
+
+<p>2、gettimeofday 不是系统调用，而是在用户态实现的。 没有上下文切换和陷入内核的开销。</p>
+
+<p>3、timerfd_create(2)把时间变成了一个文件描述符，该“文件”在定时器超时的那一该变得可读，这样就能很方便的融入select(2)/poll(2)框架中，用统一的方式 来处理IO事件和超时事件，这也正是Reactor模式的长处。</p>
+
+<p>4、传统的Reactor利用select(2)/poll(2)/epoll(4)的timeout来实现定时功能，但poll(2)和epoll_wait(2)的定时精度只有毫秒，远低于timerfd_ settime(2)的定时精度。</p>
+
+<h4 id="muoduo-的定时器接口有三个都在eventloop中">muoduo 的定时器接口有三个。都在EventLoop中。</h4>
+<p>1.runAt 在 指定的时间调用TimerCallback；</p>
+
+<p>2.runAfter 等一段时间调用TimerCallback；</p>
+
+<p>3.runEvery 以固定的间隔反复调用TimerCallback；</p>
+
+<p>cancel 取消timer。 回调函数在EventLoop 对象所属的线程发生，与onMessage()、 onConnection() 等网络事件函数在同一个线程。</p>
+
+<h3 id="注">[注]</h3>
+<p>1、现在所在游戏项目中所用的时间函数是clock_gettime 然后再转成毫秒。</p>
+
+<hr />
+<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/muduo-7-muduo-max-connection/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/muduo-7-muduo-timing-wheel/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2018-01-04-muduo-7-muduo-timer.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+I"e	<p>用来声明类构造函数是显示调用的，而非隐式调用，<strong>可以阻止调用构造函数时进行隐式转换</strong>。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">var</span><span class="p">;</span>
+    <span class="k">explicit</span> <span class="n">A</span><span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">var</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">A</span> <span class="n">ex</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+    <span class="n">A</span> <span class="n">ex1</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// error: conversion from 'int' to non-scalar type 'A' requested</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>说明，发现隐性调用：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="n">ex1</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">A</span> <span class="nf">ex2</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> 
+<span class="n">A</span> <span class="n">ex1</span> <span class="o">=</span> <span class="n">ex2</span><span class="p">;</span> 
+</code></pre></div></div>
+:ET

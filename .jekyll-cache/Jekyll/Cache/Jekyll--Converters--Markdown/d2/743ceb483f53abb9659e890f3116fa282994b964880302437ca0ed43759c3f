@@ -1,0 +1,69 @@
+I";<p>在群里看到有人分享 AI 绘图。 问了一下，是 stable diffusion 。了解了一下，发现很牛。就学习了一下怎么画。</p>
+
+<p>stable diffusion 给图很吃GPU。 发现Google 有提供免费的 GUP 服务可以用。 当然是有使用限制的。</p>
+
+<h1 id="google-colab">google colab</h1>
+
+<p>网址： <a href="https://colab.research.google.com/">https://colab.research.google.com/</a></p>
+
+<p>当然，你要有梯子可以科学上网，要有google 的帐号。 找开网址进行的界面如下：</p>
+
+<p><img src="/assets/stable-diffusion/colab-2023-02-27-22-27-47.png" alt="" /></p>
+
+<p>看到可以免费使用 GPU 就感觉很爽。</p>
+
+<p>这么有关于 Colab 的介绍。 可以在浏览器中写和执行 python。可以被用于 AI 的相关开发。</p>
+
+<h1 id="stable-diffusion">stable diffusion</h1>
+
+<p>如何在  colab 中使用 stable diffusion webui 呢？</p>
+
+<p>在文件中打开一个笔记本。方式： 文件-&gt; 打开笔记本 -&gt; 选择 GitHub。</p>
+
+<p>在输入框中输入 ： <a href="https://github.com/kakabei/stable_diffusion_chilloutmix_ipynb">https://github.com/kakabei/stable_diffusion_chilloutmix_ipynb</a>  点击搜索会展示出下面的三个项目，可以选择 <code class="language-plaintext highlighter-rouge">stable_diffusion_1_5_webui.ipynb</code>，  点击进去。</p>
+
+<p>如下图：</p>
+
+<p><img src="/assets/stable-diffusion/colab-2023-02-27-22-36-26.png" alt="" /></p>
+
+<p>加载后之后出现的主界面如下： 
+<img src="/assets/stable-diffusion/colab-2023-02-27-22-42-56.png" alt="" /></p>
+
+<p>可以看左边的菜单，分为几个主要部分：</p>
+
+<ul>
+  <li>选择模型</li>
+  <li>检查 GPU &amp; 检查环境</li>
+  <li>第一次使用 - 安装依赖并启动</li>
+  <li>重启 - 重新启动 Stable Diffusion WebUI</li>
+</ul>
+
+<p>可以在右边的主界面依次执行。</p>
+
+<p>右上角的 <strong>连接</strong> 就是连接 google 的服务器的。 google 分配的资源还可以：</p>
+
+<p><img src="/assets/stable-diffusion/colab-2023-02-28-08-55-44.png" alt="" /></p>
+
+<p>依次点击主界面的左边的执行按钮，可以执行 python 代码。 如图：
+<img src="/assets/stable-diffusion/colab-2023-02-27-22-51-00.png" alt="" /></p>
+
+<p>执行到第三步“3. 第一次使用 - 安装依赖并启动” 完成后，会出现 URL 。点击进去就是 stable diffcusion webui  的界面了。</p>
+
+<p><img src="/assets/stable-diffusion/colab-2023-02-27-22-55-41.png" alt="" /></p>
+
+<p>stable diffcusion webui  的界面如下图： 
+<img src="/assets/stable-diffusion/colab-2023-02-27-22-57-44.png" alt="" /></p>
+
+<p>脚本中安装了很多的插件，还是很不错的。</p>
+
+<h1 id="colab-pro">Colab Pro</h1>
+
+<p>google 会对免费的用户进行 GPU 的限制。 如计算过了限制，就无去连接使用 GPU，如下图：</p>
+
+<p><img src="/assets/stable-diffusion/colab-2023-02-27-22-47-30.png" alt="" /></p>
+
+<p>想要继续用，就要花钱，它会更提供更多GPU 计算单位给你。</p>
+
+<p><a href="/assets/stable-diffusion/colab-2023-02-27-23-01-46.png"></a></p>
+
+:ET

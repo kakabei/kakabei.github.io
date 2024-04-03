@@ -1,0 +1,20 @@
+I"�<h1 id="一继承构造函数">一、继承构造函数</h1>
+
+<p>用 using 可以把<strong>基类中的构造函数悉数继承到派生类</strong></p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">A</span> <span class="p">{</span>
+    <span class="n">A</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{}</span> 
+    <span class="n">A</span><span class="p">(</span> <span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{}</span> 
+    <span class="n">A</span><span class="p">(</span> <span class="kt">float</span> <span class="n">f</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">c</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">// ... </span>
+<span class="p">};</span> 
+
+<span class="k">struct</span> <span class="nc">B</span> <span class="o">:</span> <span class="n">A</span> <span class="p">{</span> 
+    <span class="k">using</span> <span class="n">A</span><span class="o">::</span><span class="n">A</span><span class="p">;</span> <span class="c1">// 继承 构造 函数 </span>
+    <span class="c1">// ... </span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">ExtraInterface</span><span class="p">(){}</span>
+ <span class="p">};</span>
+</code></pre></div></div>
+
+<hr />
+<p>1、《深入理解C++11：C++11新特性解析与应用》</p>
+:ET

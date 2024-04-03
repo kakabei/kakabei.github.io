@@ -1,0 +1,19 @@
+I"�<p>写了一个脚本，把一个mysql 表的中数据从一个表更新到另一个表中。其他有字段是路径，包含有 <code class="language-plaintext highlighter-rouge">/</code> 和  <code class="language-plaintext highlighter-rouge">'</code>  等字符。</p>
+
+<p>第一次的做法是：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<p>却发现了问题，就是在遇到特殊的字符会被转义。如：写入的路径后会没了斜杠 <code class="language-plaintext highlighter-rouge">\</code>。或遇到 <code class="language-plaintext highlighter-rouge">'</code> 出现 sql 解析异常。</p>
+
+<p>这是字符串被转义导致的。</p>
+
+<p>要<strong>使用参数化查询</strong>才可以，如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>  
+</code></pre></div></div>
+:ET

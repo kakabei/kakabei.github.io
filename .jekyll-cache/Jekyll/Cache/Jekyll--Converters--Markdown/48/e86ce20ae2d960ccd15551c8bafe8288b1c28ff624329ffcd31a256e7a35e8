@@ -1,0 +1,25 @@
+I"�<h1 id="进程与进程组">进程与进程组</h1>
+
+<p>1 每个进程都隶属于一个进程组，所以它有 <code class="language-plaintext highlighter-rouge">PID</code> 信息还有 <code class="language-plaintext highlighter-rouge">PGID</code> 。可以用<code class="language-plaintext highlighter-rouge"> pid_t getpgid( pid_t pid)</code> ;</p>
+
+<p>2 每个进程组都有一个首领进程，其 <code class="language-plaintext highlighter-rouge">PGID</code> 和 <code class="language-plaintext highlighter-rouge">PID</code> 相同。进程组将一直存在，直到其中所有进程都退出，或者加入到其他进程组。</p>
+
+<p>3 <code class="language-plaintext highlighter-rouge">setpgid(pid_t pid, pid_t pgid); </code> 将 <code class="language-plaintext highlighter-rouge">PID</code> 为 <code class="language-plaintext highlighter-rouge">pid</code> 的进程的 <code class="language-plaintext highlighter-rouge">PGID</code> 设置为 <code class="language-plaintext highlighter-rouge">pgid</code>。如果 <code class="language-plaintext highlighter-rouge">pid</code> 和 <code class="language-plaintext highlighter-rouge">pgid</code> 相同，则由 <code class="language-plaintext highlighter-rouge">pid</code> 指定的进程将被设置为进程首领。如果 <code class="language-plaintext highlighter-rouge">pid</code> 为 0，则表示设置当前进程的 <code class="language-plaintext highlighter-rouge">PGID</code> 为 <code class="language-plaintext highlighter-rouge">pgid</code>; 如果 <code class="language-plaintext highlighter-rouge">pgid</code> 为0， 则使用 <code class="language-plaintext highlighter-rouge">pid</code> 作为目标 <code class="language-plaintext highlighter-rouge">PGID</code>。</p>
+
+<p>4 一个进程只能设置自己的或者其子进程的 <code class="language-plaintext highlighter-rouge">PGID</code>。并且当子进程调用 exec 系列函数后，我们也不能再在父进程中对它设置 <code class="language-plaintext highlighter-rouge">PGID</code>。</p>
+
+<h1 id="会话">会话</h1>
+
+<p>一些有关联的进程组开成一个会话。创建一个会话的函数。</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pid_t</span> <span class="nf">setsid</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这个函数不能由进程组的首领进程调用。否则将产生一个错误。对于非组首领的进程，调用该函数不仅创建新会话，而且有如下额外效果：</p>
+
+<p>（1）调用进程成为会话的首领，此时该进程是新会话的唯一成员.</p>
+
+<p>（2）新建一个进程组，其 <code class="language-plaintext highlighter-rouge">PGID</code> 就是调用进程的 <code class="language-plaintext highlighter-rouge">PID</code>,调用进程成为该组的首领。</p>
+
+<p>（3）调用进程将甩开终端，（如果有的话）</p>
+
+:ET

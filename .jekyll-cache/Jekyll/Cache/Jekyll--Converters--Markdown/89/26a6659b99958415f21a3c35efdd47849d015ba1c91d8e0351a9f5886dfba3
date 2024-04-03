@@ -1,0 +1,35 @@
+I"
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="o">[</span>core]
+        repositoryformatversion <span class="o">=</span> 0
+        <span class="nv">filemode</span><span class="o">=</span><span class="nb">true
+        </span><span class="nv">bare</span><span class="o">=</span><span class="nb">false
+        </span><span class="nv">logallrefupdates</span><span class="o">=</span><span class="nb">true
+        </span><span class="nv">symlinks</span><span class="o">=</span><span class="nb">false
+        </span><span class="nv">ignorecase</span><span class="o">=</span><span class="nb">true
+        </span><span class="nv">hideDotFiles</span><span class="o">=</span>dotGitOnly
+        <span class="nv">autocrlf</span><span class="o">=</span><span class="nb">true
+        </span><span class="nv">quotepath</span><span class="o">=</span><span class="nb">false</span>
+
+<span class="o">[</span>remote <span class="s2">"origin"</span><span class="o">]</span>
+        url <span class="o">=</span> https://github.com/alonegarden/alonegarden.github.io.git
+        fetch <span class="o">=</span> +refs/heads/<span class="k">*</span>:refs/remotes/origin/<span class="k">*</span>
+<span class="o">[</span>branch <span class="s2">"master"</span><span class="o">]</span>
+        remote <span class="o">=</span> origin
+        merge <span class="o">=</span> refs/heads/master
+<span class="o">[</span>user]
+        <span class="nv">name</span><span class="o">=</span>cxxlxx
+        <span class="nv">email</span><span class="o">=</span>xxxxxxxxxx@qq.com
+<span class="o">[</span>color]
+        <span class="nv">ui</span><span class="o">=</span><span class="nb">true</span>
+<span class="o">[</span><span class="nb">alias</span><span class="o">]</span>
+        <span class="nv">co</span><span class="o">=</span>checkout
+        <span class="nv">ci</span><span class="o">=</span>commit
+        <span class="nv">br</span><span class="o">=</span>branch
+        <span class="nv">st</span><span class="o">=</span>status
+        <span class="nv">last</span><span class="o">=</span>log -1
+        <span class="nv">lg</span><span class="o">=</span><span class="s2">"log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"</span>
+        <span class="nv">lgo</span><span class="o">=</span><span class="s2">"log origin/master --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"</span>
+</code></pre></div></div>
+
+:ET

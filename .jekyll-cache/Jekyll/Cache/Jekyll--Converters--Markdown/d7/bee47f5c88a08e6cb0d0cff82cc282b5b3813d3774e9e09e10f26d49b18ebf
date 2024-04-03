@@ -1,0 +1,406 @@
+I"�<h1 id="一-为什么要使用信号量">一 为什么要使用信号量</h1>
+
+<p>为了防止出现因多个程序同时访问一个共享资源而引发的一系列问题，我们需要一种方法，它可以通过生成并使用<strong>令牌</strong>来授权，在任一时刻只能有一个执行线程访问代码的临界区域。临界区域是指执行数据更新的代码需要独占式地执行。而信号量就可以提供这样的一种访问机制，让一个临界区同一时间只有一个线程在访问它， 也就是说信号量是用来调协进程对共享资源的访问的。其中共享内存的使用就要用到信号量。</p>
+
+<h1 id="二-信号量的工作原理">二 信号量的工作原理</h1>
+
+<p>由于信号量只能进行两种操作等待和发送信号，即 P(sv) 和 V(sv),他们的行为是这样的：</p>
+
+<p>P(sv)：如果sv的值大于零，就给它减1；如果它的值为零，就挂起该进程的执行.</p>
+
+<p>V(sv)：如果有其他进程因等待sv而被挂起，就让它恢复运行，如果没有进程因等待sv而挂起，就给它加 1.</p>
+
+<p>举个例子，就是两个进程共享信号量 sv，一旦其中一个进程执行了 P(sv) 操作，它将得到信号量，并可以进入临界区，使 sv 减1。而第二个进程将被阻止进入临界区，因为 当它试图执行 P(sv) 时，sv 为 0，它会被挂起以等待第一个进程离开临界区域并执行 V(sv) 释放信号量，这时第二个进程就可以恢复执行。</p>
+
+<h1 id="三-linux-的信号量机制">三 Linux 的信号量机制</h1>
+
+<p>Linux 提供了一组精心设计的信号量接口来对信号进行操作，它们不只是针对二进制信号量，下面将会对这些函数进行介绍，但请注意，这些函数都是用来对成组的信号量值进行操作的。它们声明在头文件 <code class="language-plaintext highlighter-rouge">sys/sem.h</code> 中。</p>
+
+<h1 id="四-信号号相关的两个结构体">四 信号号相关的两个结构体</h1>
+
+<p>内核为每个信号量集合设置了一个semid_ds结构</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">semid_ds</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="n">ipc_permsem_perm</span> <span class="p">;</span>
+    <span class="n">structsem</span><span class="o">*</span>    <span class="n">sem_base</span> <span class="p">;</span> <span class="c1">//信号数组指针</span>
+    <span class="n">ushort</span>        <span class="n">sem_nsem</span> <span class="p">;</span> <span class="c1">//此集中信号个数</span>
+    <span class="kt">time_t</span>        <span class="n">sem_otime</span> <span class="p">;</span> <span class="c1">//最后一次semop时间</span>
+    <span class="kt">time_t</span>        <span class="n">sem_ctime</span> <span class="p">;</span> <span class="c1">//最后一次创建时间</span>
+<span class="p">}</span> <span class="p">;</span>
+</code></pre></div></div>
+
+<p>每个信号量由一个无名结构表示，它至少包含下列成员： （这个是什么意思？？）</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span>  <span class="p">{</span>
+    <span class="n">ushort_t</span>  <span class="n">semval</span> <span class="p">;</span>  <span class="c1">//信号量的值</span>
+    <span class="kt">short</span>     <span class="n">sempid</span> <span class="p">;</span>  <span class="c1">//最后一个调用semop的进程ID</span>
+    <span class="n">ushort</span>    <span class="n">semncnt</span> <span class="p">;</span> <span class="c1">//等待该信号量值大于当前值的进程数（一有进程释放资源 就被唤醒）</span>
+    <span class="n">ushort</span>    <span class="n">semzcnt</span> <span class="p">;</span> <span class="c1">//等待该信号量值等于0的进程数</span>
+<span class="p">}</span> <span class="p">;</span> 
+</code></pre></div></div>
+
+<h3 id="五-信号量的使用">五 信号量的使用</h3>
+
+<p>1、创建信号量</p>
+
+<p>semget函数创建一个信号量集或访问一个已存在的信号量集。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
+</span><span class="kt">int</span>  <span class="nf">semget</span> <span class="p">(</span><span class="n">key_t</span> <span class="n">key</span><span class="p">,</span>  <span class="kt">int</span> <span class="n">nsem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">oflag</span><span class="p">)</span> <span class="p">;</span>
+</code></pre></div></div>
+
+<p>返回值是一个称为信号量标识符的整数，semop和semctl函数将使用它。
+参数nsem指定集合中的信号量数。（若用于访问一个已存在的集合，那就可以把该参数指定为0）
+参数 oflag 可以是 SEM_R(read) 和 SEM_A(alter) 常值的组合。（打开时用到），也可以是 IPC_CREAT 或 IPC_EXCL ;</p>
+
+<p>2、打开信号量</p>
+
+<p>使用 semget 打开一个信号量集后，对其中一个或多个信号量的操作就使用 semop(op–operate) 函数来执行。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
+</span><span class="kt">int</span>  <span class="nf">semop</span> <span class="p">(</span><span class="kt">int</span> <span class="n">semid</span><span class="p">,</span>  <span class="k">struct</span> <span class="n">sembuf</span> <span class="o">*</span> <span class="n">opsptr</span><span class="p">,</span>  <span class="kt">size_t</span> <span class="n">nops</span><span class="p">)</span> <span class="p">;</span>
+</code></pre></div></div>
+
+<p>参数 opsptr 是一个指针，它指向一个信号量操作数组，信号量操作由sembuf结构表示：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">sembuf</span><span class="p">{</span>  
+    <span class="kt">short</span> <span class="n">sem_num</span><span class="p">;</span>   <span class="c1">// 除非使用一组信号量，否则它为0  </span>
+    <span class="kt">short</span> <span class="n">sem_op</span><span class="p">;</span>    <span class="c1">// 信号量在一次操作中需要改变的数据，通常是两个数，</span>
+                     <span class="c1">// 一个是-1，即P（等待）操作，一个是+1，即V（发送信号）操作  </span>
+    <span class="kt">short</span> <span class="n">sem_flg</span><span class="p">;</span>   <span class="c1">// 通常为SEM_UNDO,使操作系统跟踪信号，并在进程没有释放该信号量而终止时，</span>
+                     <span class="c1">// 操作系统释放信号量  </span>
+<span class="p">};</span>  
+</code></pre></div></div>
+
+<ul>
+  <li>参数 nops 规定 opsptr 数组中元素个数。</li>
+  <li>sem_op 值：</li>
+</ul>
+
+<p>（1）若 sem_op 为正，这对应于进程释放占用的资源数。sem_op值加到信号量的值上。（V操作）</p>
+
+<p>（2）若 sem_op 为负,这表示要获取该信号量控制的资源数。信号量值减去sem_op的绝对值。（P操作）</p>
+
+<p>（3）若 sem_op 为0,这表示调用进程希望等待到该信号量值变成 0。</p>
+
+<ul>
+  <li>如果信号量值小于 sem_op 的绝对值（资源不能满足要求），则：</li>
+  <li>（1）若指定了 IPC_NOWAIT，则 semop() 出错返回EAGAIN。
+（2）若未指定 IPC_NOWAIT，则信号量的 semncnt 值加 1（因为调用进程将进入休眠状态），然后调用进程被挂起直至：
+①此信号量变成大于或等于sem_op的绝对值；②从系统中删除了此信号量，返回EIDRM；③进程捕捉到一个信 号，并从信号处理程序返回，返回EINTR。（与消息队列的阻塞处理方式 很相似）</li>
+</ul>
+
+<p>3、信号量是操作</p>
+
+<p>semctl 函数对一个信号量执行各种控制操作。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
+</span><span class="kt">int</span>  <span class="nf">semctl</span> <span class="p">(</span><span class="kt">int</span> <span class="n">semid</span><span class="p">,</span>  <span class="kt">int</span> <span class="n">semnum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="cm">/*可选参数*/</span> <span class="p">)</span> <span class="p">;</span>
+</code></pre></div></div>
+
+<p>第四个参数是可选的，取决于第三个参数cmd。</p>
+
+<p>参数semnum指定信号集中的哪个信号（操作对象）</p>
+
+<p>参数cmd指定以下10种命令中的一种,在semid指定的信号量集合上执行此命令。</p>
+
+<p>IPC_STAT   读取一个信号量集的数据结构semid_ds，并将其存储在semun中的buf参数中。
+IPC_SET     设置信号量集的数据结构semid_ds中的元素ipc_perm，其值取自semun中的buf参数。
+IPC_RMID  将信号量集从内存中删除。
+GETALL      用于读取信号量集中的所有信号量的值。
+GETNCNT  返回正在等待资源的进程数目。
+GETPID      返回最后一个执行semop操作的进程的PID。
+GETVAL      返回信号量集中的一个单个的信号量的值。
+GETZCNT   返回这在等待完全空闲的资源的进程数目。
+SETALL       设置信号量集中的所有的信号量的值。
+SETVAL      设置信号量集中的一个单独的信号量的值。</p>
+
+<h1 id="五-信号量值的初始化">五 信号量值的初始化</h1>
+
+<p>semget并不初始化各个信号量的值，这个初始化必须通过以SETVAL命令(设置集合中的一个值)或SETALL命令(设置集合中的所有值) 调用semctl来完成。
+SystemV信号量的设计中，创建一个信号量集并将它初始化需两次函数调用是一个致命的缺陷。一个不完备的解决方案是：在调用semget时指定IPC_CREAT | IPC_EXCL标志，这样只有一个进程（首先调用semget的那个进程）创建所需信号量，该进程随后初始化该信号量。</p>
+
+<h1 id="六-例子">六 例子</h1>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/sem.h&gt;</span><span class="cp">
+</span>
+<span class="k">union</span> <span class="n">semun</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">semid_ds</span> <span class="o">*</span><span class="n">buf</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">short</span> <span class="o">*</span><span class="n">arry</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="n">sem_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">set_semvalue</span><span class="p">();</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">del_semvalue</span><span class="p">();</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">semaphore_p</span><span class="p">();</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">semaphore_v</span><span class="p">();</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">message</span> <span class="o">=</span> <span class="sc">'X'</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="cm">/* 创建信号量 */</span>
+    <span class="n">sem_id</span> <span class="o">=</span> <span class="n">semget</span><span class="p">((</span><span class="n">key_t</span><span class="p">)</span><span class="mi">1234</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mo">0666</span> <span class="o">|</span> <span class="n">IPC_CREAT</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">argc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="cm">/* 程序第一次被调用，初始化信号量 */</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">set_semvalue</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Failed to initialize semaphore</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="cm">/* 设置要输出到屏幕中的信息，即其参数的第一个字符 */</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="cm">/* 进入临界区 */</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">semaphore_p</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="cm">/* 向屏幕中输出数据 */</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%c"</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+        <span class="cm">/* 清理缓冲区，然后休眠随机时间 */</span>
+        <span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">3</span><span class="p">);</span>
+        <span class="cm">/* 离开临界区前再一次向屏幕输出数据 */</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%c"</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+        <span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+        <span class="cm">/* 离开临界区，休眠随机时间后继续循环 */</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">semaphore_v</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">%d - finished</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">getpid</span><span class="p">());</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">argc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="cm">/* 如果程序是第一次被调用，则在退出前删除信号量 */</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+        <span class="n">del_semvalue</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">set_semvalue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="cm">/* 用于初始化信号量，在使用信号量前必须这样做 */</span>
+    <span class="k">union</span> <span class="n">semun</span> <span class="n">sem_union</span><span class="p">;</span>
+    <span class="n">sem_union</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">semctl</span><span class="p">(</span><span class="n">sem_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SETVAL</span><span class="p">,</span> <span class="n">sem_union</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">del_semvalue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="cm">/* 删除信号量 */</span>
+    <span class="k">union</span> <span class="n">semun</span> <span class="n">sem_union</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">semctl</span><span class="p">(</span><span class="n">sem_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">IPC_RMID</span><span class="p">,</span> <span class="n">sem_union</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Failed to delete semaphore</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">semaphore_p</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="cm">/* 对信号量做减1操作，即等待P（sv）*/</span>
+    <span class="k">struct</span> <span class="n">sembuf</span> <span class="n">sem_b</span><span class="p">;</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_op</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="c1">//P()</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="n">SEM_UNDO</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">semop</span><span class="p">(</span><span class="n">sem_id</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sem_b</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"semaphore_p failed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">semaphore_v</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="cm">/* 这是一个释放操作，它使信号量变为可用，即发送信号V（sv）*/</span>
+    <span class="k">struct</span> <span class="n">sembuf</span> <span class="n">sem_b</span><span class="p">;</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_op</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="c1">//V()</span>
+    <span class="n">sem_b</span><span class="p">.</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="n">SEM_UNDO</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">semop</span><span class="p">(</span><span class="n">sem_id</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sem_b</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"semaphore_v failed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="七-信号量集合的例子">七 信号量集合的例子</h1>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;sys/types.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;sys/ipc.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;sys/sem.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;errno.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;string.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;stdlib.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;assert.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;time.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;unistd.h&gt;</span><span class="c1">  </span><span class="cp">
+#include</span><span class="cpf">&lt;sys/wait.h&gt;</span><span class="c1">    </span><span class="cp">
+#define MAX_SEMAPHORE 10   
+#define FILE_NAME "test2.c"  
+</span>  
+<span class="k">union</span> <span class="n">semun</span><span class="p">{</span>  
+    <span class="kt">int</span> <span class="n">val</span> <span class="p">;</span>  
+    <span class="k">struct</span> <span class="n">semid_ds</span> <span class="o">*</span><span class="n">buf</span> <span class="p">;</span>  
+    <span class="kt">unsigned</span> <span class="kt">short</span>  <span class="o">*</span><span class="n">array</span> <span class="p">;</span>  
+    <span class="k">struct</span> <span class="n">seminfo</span> <span class="o">*</span><span class="n">_buf</span> <span class="p">;</span>  
+<span class="p">}</span><span class="n">arg</span><span class="p">;</span>  
+<span class="k">struct</span> <span class="n">semid_ds</span> <span class="n">sembuf</span><span class="p">;</span>  
+  
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>  
+<span class="p">{</span>  
+    <span class="n">key_t</span> <span class="n">key</span> <span class="p">;</span>  
+    <span class="kt">int</span> <span class="n">semid</span> <span class="p">,</span><span class="n">ret</span><span class="p">,</span><span class="n">i</span><span class="p">;</span>   
+    <span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">buf</span><span class="p">[</span><span class="n">MAX_SEMAPHORE</span><span class="p">]</span> <span class="p">;</span>  
+    <span class="k">struct</span> <span class="n">sembuf</span> <span class="n">sb</span><span class="p">[</span><span class="n">MAX_SEMAPHORE</span><span class="p">]</span> <span class="p">;</span>  
+    <span class="n">pid_t</span> <span class="n">pid</span> <span class="p">;</span>  
+      
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">()</span> <span class="p">;</span>  
+    <span class="k">if</span><span class="p">(</span><span class="n">pid</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>  
+    <span class="p">{</span>  
+        <span class="cm">/* Create process Error! */</span>  
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"Create Process Error!:%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>  
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>  
+    <span class="p">}</span>     
+    <span class="k">if</span><span class="p">(</span><span class="n">pid</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>  
+    <span class="p">{</span>  
+        <span class="cm">/* in parent process !*/</span>          
+        <span class="n">key</span> <span class="o">=</span> <span class="n">ftok</span><span class="p">(</span><span class="n">FILE_NAME</span><span class="p">,</span><span class="sc">'a'</span><span class="p">)</span> <span class="p">;</span>  
+        <span class="k">if</span><span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="cm">/* in parent process*/</span>  
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"Error in ftok:%s!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>  
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>     
+        <span class="p">}</span>  
+  
+        <span class="n">semid</span> <span class="o">=</span> <span class="n">semget</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">MAX_SEMAPHORE</span><span class="p">,</span><span class="n">IPC_CREAT</span><span class="o">|</span><span class="mo">0666</span><span class="p">);</span>  <span class="c1">//创建信号量集合</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">semid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"Error in semget:%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>   
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>     
+        <span class="p">}</span>  
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Semaphore have been initialed successfully in parent process,ID is :%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">semid</span><span class="p">);</span>     
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">;</span>  
+        <span class="n">printf</span><span class="p">(</span><span class="s">"parent wake up....</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
+        <span class="cm">/*父进程在子进程得到semaphore的时候请求semaphore，此时父进程将阻塞直至子进程释放掉semaphore*/</span>  
+        <span class="cm">/* 此时父进程的阻塞是因为semaphore 1 不能申请，因而导致的进程阻塞*/</span>  
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">MAX_SEMAPHORE</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_num</span> <span class="o">=</span> <span class="n">i</span> <span class="p">;</span>  
+            <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_op</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="p">;</span>     <span class="cm">/*表示申请semaphore*/</span>  
+            <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>  
+        <span class="p">}</span>  
+        <span class="n">printf</span><span class="p">(</span><span class="s">"parent is asking for resource...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">semop</span><span class="p">(</span><span class="n">semid</span> <span class="p">,</span> <span class="n">sb</span> <span class="p">,</span><span class="mi">10</span><span class="p">);</span> <span class="c1">//p() </span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="n">printf</span><span class="p">(</span><span class="s">"parent got the resource!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
+        <span class="p">}</span>         
+        <span class="cm">/* 父进程等待子进程退出 */</span>  
+        <span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>  
+        <span class="n">printf</span><span class="p">(</span><span class="s">"parent exiting .. </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">;</span>  
+    <span class="p">}</span>  
+    <span class="k">else</span>  
+    <span class="p">{</span>  
+        <span class="cm">/* in child process! */</span>   
+        <span class="n">key</span> <span class="o">=</span> <span class="n">ftok</span><span class="p">(</span><span class="n">FILE_NAME</span><span class="p">,</span><span class="sc">'a'</span><span class="p">)</span> <span class="p">;</span>  
+        <span class="k">if</span><span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="cm">/* in child process*/</span>  
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"Error in ftok:%s!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>  
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>     
+        <span class="p">}</span>  
+  
+        <span class="n">semid</span> <span class="o">=</span> <span class="n">semget</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">MAX_SEMAPHORE</span><span class="p">,</span><span class="n">IPC_CREAT</span><span class="o">|</span><span class="mo">0666</span><span class="p">);</span>  
+        <span class="k">if</span><span class="p">(</span><span class="n">semid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"Error in semget:%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>   
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>     
+        <span class="p">}</span>  
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Semaphore have been initialed successfully in child process,ID is:%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">semid</span><span class="p">);</span>   
+  
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">MAX_SEMAPHORE</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="cm">/* Initial semaphore */</span>  
+            <span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>  
+        <span class="p">}</span>  
+        <span class="n">arg</span><span class="p">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">buf</span><span class="p">;</span>  
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">semctl</span><span class="p">(</span><span class="n">semid</span> <span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SETALL</span><span class="p">,</span><span class="n">arg</span><span class="p">);</span>  
+        <span class="k">if</span><span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"Error in semctl in child:%s!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>  
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>  
+        <span class="p">}</span>         
+        <span class="n">printf</span><span class="p">(</span><span class="s">"In child , Semaphore Initailed!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
+  
+        <span class="cm">/*子进程在初始化了semaphore之后，就申请获得semaphore*/</span>  
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">MAX_SEMAPHORE</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>  
+        <span class="p">{</span>
+            <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_num</span> <span class="o">=</span> <span class="n">i</span> <span class="p">;</span>  
+            <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_op</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="p">;</span>  
+            <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>  
+        <span class="p">}</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">semop</span><span class="p">(</span><span class="n">semid</span> <span class="p">,</span> <span class="n">sb</span> <span class="p">,</span> <span class="mi">10</span><span class="p">);</span><span class="c1">//信号量0被阻塞</span>
+        <span class="k">if</span><span class="p">(</span> <span class="n">ret</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"子进程申请semaphore失败：%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>  
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>         
+        <span class="p">}</span>         
+        <span class="n">printf</span><span class="p">(</span><span class="s">"child got semaphore,and start to sleep 3 seconds!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="p">;</span>    
+        <span class="n">printf</span><span class="p">(</span><span class="s">"child wake up .</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">MAX_SEMAPHORE</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_num</span> <span class="o">=</span> <span class="n">i</span> <span class="p">;</span>  
+            <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_op</span> <span class="o">=</span>  <span class="o">+</span><span class="mi">1</span> <span class="p">;</span>  
+            <span class="n">sb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sem_flg</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>       
+        <span class="p">}</span>  
+        <span class="n">printf</span><span class="p">(</span><span class="s">"child start to release the resource...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>  
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">semop</span><span class="p">(</span><span class="n">semid</span><span class="p">,</span> <span class="n">sb</span> <span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="p">;</span>      
+        <span class="k">if</span><span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"子进程释放semaphore失败:%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>  
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>  
+        <span class="p">}</span>         
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">semctl</span><span class="p">(</span><span class="n">semid</span> <span class="p">,</span><span class="mi">0</span> <span class="p">,</span><span class="n">IPC_RMID</span><span class="p">);</span>  
+        <span class="k">if</span><span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  
+        <span class="p">{</span>  
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"semaphore删除失败:%s！</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>  
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>     
+        <span class="p">}</span>         
+        <span class="n">printf</span><span class="p">(</span><span class="s">"child exiting successfully!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>      
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">;</span>         
+    <span class="p">}</span>  
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
+<span class="p">}</span>  
+</code></pre></div></div>
+
+<p>信号量的意图在于进程间同步，互斥锁和条件变量的意图则在于线程间同步。但是信号量也可用于线程间，互斥锁和条件变量也可用于进程间。我们应该使用适合具体应用的那组原语。</p>
+
+:ET

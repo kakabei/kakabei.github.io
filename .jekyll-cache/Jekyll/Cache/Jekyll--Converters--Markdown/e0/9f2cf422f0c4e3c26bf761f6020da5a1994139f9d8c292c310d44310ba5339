@@ -1,0 +1,215 @@
+I"�1<h1 id="一reactor-模式">一、reactor 模式</h1>
+
+<p>整个 libevent 本身就是一个 reactor(反应堆)，是一种事件驱动机制。libevent 底层所运用的就是 epoll 这样的一些模型。</p>
+
+<p>应用程序一般都要在 reactor 注册回调函数。当事件被触发时，回调函数会被调用。这些事件可能是<strong>I/O读写</strong>， <strong>定时器</strong>和<strong>信号</strong>。</p>
+
+<p>reactor 模型必备的几个组件：事件源、reactor 框架、多路利用机制和事件处理函数。</p>
+
+<p><strong>事件源：</strong></p>
+
+<p>Linux上是文件描述符， win下的socket 或 handle.</p>
+
+<p><strong>event demultipexer (事件多路分发机制)：</strong></p>
+
+<p>linux下如：epoll、 select、kqueue、devpoll</p>
+
+<p>当有事件到达时， <code class="language-plaintext highlighter-rouge">event demultiplexer</code> 会发出通知。这时相关的事件就成了就绪状态。libevent 会在非阻塞的情况下进行处理。</p>
+
+<p>libevent 用 eventtop 对 select epoll poll 等进行了封闭，形成统一的接口。</p>
+
+<p><strong>reactor 反应器：</strong></p>
+
+<p>reactor 是事件管理接口。内部使用 event demultiplexer 注册、注销事件；并运行事件循环，
+当有事件进入“就绪”状态时，调用注册事件的回调函数处理事件。对应到 libevent 中，就是 event_base 结构体。</p>
+
+<p><strong>事件处理流程图：</strong></p>
+
+<p>1）首先应用程序准备并初始化 event，设置好事件类型和回调函数；</p>
+
+<p>2）向 libevent 添加该事件 event。对于定时事件， libevent 使用一个小根堆管理， key 为超
+时时间；对于 Signal 和 I/O 事件， libevent 将其放入到等待链表（ wait list）中，这是一
+个双向链表结构；</p>
+
+<p>3） 程序调用 <code class="language-plaintext highlighter-rouge">event_base_dispatch()</code> 系列函数进入无限循环，等待事件，以 <code class="language-plaintext highlighter-rouge">select()</code> 函数为例；
+每次循环前 libevent 会检查定时事件的最小超时时间 tv，根据 tv 设置 <code class="language-plaintext highlighter-rouge">select()</code> 的最大等
+待时间，以便于后面及时处理超时事件；当 <code class="language-plaintext highlighter-rouge">select()</code> 返回后，首先检查超时事件，然后检查 I/O 事件；</p>
+
+<p><img src="/assets/network/libevent_event_next.png" alt="" /></p>
+
+<h1 id="二源码文件组织结构">二、源码文件组织结构</h1>
+
+<p>主要分为头文件、内部使用的头文件、辅助功能函数、日志、libevent框架、对系统 I/O 多路复用机制的封装
+信号管理、定时事件管理、缓冲区管理、基本数据和基于libevent的两个实用库的向个部分。</p>
+
+<p><strong>头文件</strong></p>
+
+<p>event.h：事件宏定义、接口函数声明，主要结构体event的声明；</p>
+
+<p>xxx-internal.h：内部数据结构和函数，对外不可见，以达到信息隐藏的目的；</p>
+
+<p><strong>libevent框架</strong></p>
+
+<p>event.c：event整体框架的代码实现；</p>
+
+<p>对系统I/O多路复用机制的封装</p>
+
+<ul>
+  <li>epoll.c：对epoll的封装；</li>
+  <li>select.c：对select的封装；</li>
+  <li>devpoll.c：对dev/poll的封装;</li>
+  <li>kqueue.c：对kqueue的封装；</li>
+</ul>
+
+<p><strong>定时事件管理</strong></p>
+
+<p>min-heap.h：其实就是一个以时间作为key的小根堆结构；</p>
+
+<p><strong>信号管理</strong></p>
+
+<p>signal.c：对信号事件的处理；</p>
+
+<p><strong>辅助功能函数</strong></p>
+
+<p>evutil.h 和evutil.c：一些辅助功能函数，包括创建socket pair和一些时间操作函数：加、减和比较等。</p>
+
+<p><strong>日志</strong></p>
+
+<p>log.h和log.c：log日志函数</p>
+
+<p><strong>缓冲区管理</strong></p>
+
+<p>evbuffer.c 和 buffer.c：libevent 对缓冲区的封装；</p>
+
+<p><strong>基本数据结构</strong></p>
+
+<p>compat\sys 下的两个源文件：queue.h 是 libevent 基本数据结构的实现，包括链表，双向链表，队列等；
+_libevent_time.h：一些用于时间操作的结构体定义、函数和宏定义；</p>
+
+<p><strong>实用网络库</strong></p>
+
+<p>http和evdns：是基于libevent实现的http服务器和异步dns查询库</p>
+
+<h1 id="三事件-event">三、事件 event</h1>
+
+<p>主要的结构体：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">event_base</span> <span class="c1">// event最主要的结构，</span>
+<span class="k">struct</span> <span class="n">eventop</span>    <span class="c1">// 定义backend结构， 通过它定义各个模型，</span>
+</code></pre></div></div>
+
+<ul>
+  <li>ev_events： event关注的事件类型，它可以是以下3种类型：</li>
+  <li>I/O事件：  EV_WRITE和EV_READ</li>
+  <li>定时事件： EV_TIMEOUT</li>
+  <li>信号：     EV_SIGNAL</li>
+  <li>辅助选项： EV_PERSIST，表明是一个永久事件</li>
+</ul>
+
+<p>ev_next， ev_active_next 和 ev_signal_next 都是双向链表节点指针。</p>
+
+<p>I/O和Signal事件使用了双向链表。</p>
+
+<p>定时事件 使用了小根堆 min_heap_idx.</p>
+
+<p>ev_next 是该I/O事件在链表中的位置，表示是“已注册事件链表”。
+ev_signal_next signal事件在signal事件链表中的位置。
+ev_active_next libevent将所有的激活事件放入到链表active list中，然后遍历 active list执行调度，ev_active_next 就指明了event 在 active list中的位置。</p>
+
+<p><strong><em>libevent 对 event 的管理</em></strong></p>
+
+<p><img src="/assets/network/libevent_event_managemant.png" alt="" /></p>
+
+<p>事件设置的接口函数</p>
+
+<p>libevent 提供了函数：event_set(), event_base_set(), event_priority_set()。</p>
+
+<p>设置事件 如：I/O事件、 时间事件、信号事件:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">event_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">short</span> <span class="n">events</span><span class="p">,</span>
+		<span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">short</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">),</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>设置 event ev 将要注册到的 event_base；</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_base_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>设置event ev的优先级:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">event_priority_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pri</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h1 id="四事件处理框架">四、事件处理框架</h1>
+
+<p>事件处理都是围绕着 event_base。</p>
+
+<p>初始化一个 event_base。 本质上是调用了 event_base_new_with_config。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span> <span class="n">event_init</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>也是 初始化一个 event_base。不同的是 先创建了一个struct event_config。 这个东西是干什么用的还不清楚。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span> <span class="n">event_base_new</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>内部主要调用了 event_base_new_with_config。()</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">event_add</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>内部主要调用了 event_del_internal()</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">event_del</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">);</span>
+</code></pre></div></div>
+<p>函数将删除事件 ev，对于 I/O 事件，从 I/O 的 demultiplexer 上将事件注销；对于 Signal
+事件，将从 Signal 事件链表中删除；对于定时事件，将从堆上删除。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">event_base_loop</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="kt">int</span> <span class="n">loops</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">event_active</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">event</span><span class="p">,</span> <span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="kt">short</span> <span class="n">events</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">event_process_active</span><span class="p">(</span><span class="k">struct</span> <span class="n">event_base</span> <span class="o">*</span><span class="n">base</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>event_base_loop： 等待事件，分发事件。</p>
+
+<p>event_active：就绪事件。</p>
+
+<p>event_process_active：　处理就绪事件。</p>
+
+<h1 id="五事件主循环">五、事件主循环</h1>
+
+<p>struct evsig_info // 这个又是干吗的？</p>
+
+<p><strong>I/O和Timer事件的统一</strong></p>
+
+<p>libevent将Timer和Signal事件都统一到了系统的I/O 的demultiplex机制中了，</p>
+
+<p>堆是一种经典的数据结构，向堆中插入、删除元素时间复杂度都是O(lgN)。而获取最小key值（小根堆）的复杂度为O(1)。</p>
+
+<p><strong>I/O和Signal事件的统一</strong></p>
+
+<p>如果当Signal发生时，并不立即调用event的callback函数处理信号，而是设法通知系统的I/O机制，让其返回，然后再统一和I/O事件以及Timer一起处理。</p>
+
+<h1 id="六集成信号处理">六、集成信号处理</h1>
+
+<p>singal和I/O的事件统一是通过 socket pair的方式实现。（这个方式有点像是管道）</p>
+
+<h1 id="七io多路复用技术">七、I/O多路复用技术</h1>
+
+<p>libevent根据系统配置和编译选项决定使用哪一种I/O demultiplex机制，而不支持在运行阶段根据配置再次选择。</p>
+
+<h1 id="十一-时间管理">十一 、时间管理</h1>
+
+<p>Libevent 本身不是多线程安全的
+libevent 库的其他组件提供其他功能，包括缓冲的事件系统（用于缓冲发送到客户端/从客户端接收的数据）以及 HTTP、DNS 和 RPC 系统的核心实现。</p>
+
+<p>可以对比一下 libev</p>
+
+<hr />
+
+<p>参考：<a href="http://pan.baidu.com/s/1hssU5KC"><strong>libevent源码深度剖析.pdf</strong></a></p>
+
+:ET

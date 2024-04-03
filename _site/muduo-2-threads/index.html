@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>muduo笔记 第二章 线程同步精要</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>muduo笔记 第二章 线程同步精要</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2018-01-04">2018-01-04</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#muduo" title="muduo">muduo</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#技术学习笔记" title="技术学习笔记">技术学习笔记</a>&nbsp;
+  
+  <a href="/tags/#系统编程" title="系统编程">系统编程</a>&nbsp;
+  
+  <a href="/tags/#muduo" title="muduo">muduo</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<h4 id="二-不要用读写锁和信号量">二 不要用读写锁和信号量</h4>
+
+<p>理由是什么？</p>
+
+<h5 id="读写锁">读写锁</h5>
+
+<p>1.在后期的维护阶段，程序员可能在读的状态(read lock)写入共享数据。</p>
+
+<p>2.从性能方面，读写锁并没有比mutex高效多少。如果临界区很小，锁竞争不是很激烈。mutex可能会更好。</p>
+
+<p>3.通常read lock是可重入。writer lock是不可重入。但是为了防止writer饥饿，writer lock通常会阻塞后来的reader lock，因此reader lock在重入的时候可能死锁。</p>
+
+<h5 id="信号量">信号量</h5>
+
+<p>1.条件变量配合互斥器可以完全替代信号量。</p>
+
+<p>2.信号量的另一个问题在于它有自己的计数值，而通常我们自己的数据结构也有长度值，这就造成了同样的信息存了两份，需要时刻保持一致，这增加了程序员的负担和出错的可能。</p>
+
+<p>3.信号量允许多个线程同时进入临界区。</p>
+
+<h4 id="三线程安全的singleton实现">三　线程安全的Singleton实现</h4>
+
+<p>一开始一度认为double checked locking是王道。但后来有人指出由于乱序执行的影响，DCL是靠不住的。</p>
+
+<p>在实践中运用pthread_once就可以了。c++11 中用std::call_once （pthread_once单例模式）</p>
+
+<h4 id="四sleep3不是同步原语">四　sleep(3)不是同步原语</h4>
+<p>sleep()/usleep()/nanosleep()只能出现在测试代码中，比如写单元测试的时候 ；或者用于有意延长临界区，加速复现死锁的情况。</p>
+
+<p>sleep不具备memory barrier（内存屏障）语义，它不能保证内存的可见性。</p>
+
+<p>在程序的正常执行中，如果需要等待一段已知的时间，应该往event loop里注册一个timer，然后在timer的回调函数里接着干活，因为线程是个珍贵的共享资源，不能轻易浪费（阻塞也是浪费）。如果等待某个事件发生，那么应该采用条件变量或IO事件回调，不能用sleep来轮询。</p>
+
+<p>如果多线程的安全性和效率要靠代码主动调用sleep来保证，这显然是设计出了问题。等待某个事件发生，正确的做法是用select()等价物或Condition，抑或（更理想地）高层同步工具；在用户态做轮询（polling）是低效的。</p>
+
+<h4 id="五总结">五　总结</h4>
+
+<p>线程同步的原则</p>
+
+<ul>
+  <li>尽量用高层同步设施（线程池、队列、倒计时）</li>
+  <li>使用普通互斥器和条件变量完成剩余的同步任务，</li>
+  <li>采用RAII惯用手法（idiom）和Scoped Locking。</li>
+</ul>
+
+<h2 id="用好这几样东西基本上就能应付多线程服务端开发的各种场合或许有人会觉得性能没有发挥到极致我认为应该先把程序写正确并尽量保持清晰和简单然后再考虑性能优化如果确实还有必要优化的话这在多线程下仍然成立让一个正确的程序变快远比让一个快的程序变正确容易得多">用好这几样东西，基本上就能应付多线程服务端开发的各种场合。或许有人会觉得性能没有发挥到极致。我认为，应该先把程序写正确（并尽量保持清晰和简单），然后再考虑性能优化，如果确实还有必要优化的话。这在多线程下仍然成立。让一个正确的程序变快，远比”让一个快的程序变正确”容易得多。</h2>
+<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/muduo-1-threads/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/muduo-3-threads/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2018-01-03-muduo-2-threads.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

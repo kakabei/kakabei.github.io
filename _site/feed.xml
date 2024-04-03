@@ -1,395 +1,163 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>xyecho - just my notes</title>
-    <description>读书，生活，技术</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 01 Apr 2024 14:54:25 +0800</pubDate>
-    <lastBuildDate>Mon, 01 Apr 2024 14:54:25 +0800</lastBuildDate>
-    <generator>Jekyll v4.2.2</generator>
-    
-      <item>
-        <title>python mysql 插入更新一些特殊的字符</title>
-        <description>&lt;p&gt;写了一个脚本，把一个mysql 表的中数据从一个表更新到另一个表中。其他有字段是路径，包含有 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/&lt;/code&gt; 和  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&apos;&lt;/code&gt;  等字符。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-04-03T13:59:06+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">xyecho - just my notes</title><author><name>kane</name></author><entry><title type="html">golang time.AddDate的问题</title><link href="http://localhost:4000/golang-time-adddate/" rel="alternate" type="text/html" title="golang time.AddDate的问题" /><published>2024-04-02T04:08:12+08:00</published><updated>2024-04-02T04:08:12+08:00</updated><id>http://localhost:4000/golang-time-adddate</id><content type="html" xml:base="http://localhost:4000/golang-time-adddate/"><![CDATA[<p>周末线上出现一个问题，3月份的订单没有算出来，从数据库表数据上看，订单数据已经是完成状态，但数据为空。</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[olang time.AddDate出现你意料之外的结果]]></summary></entry><entry><title type="html">go-zero httpc.Do post 数据因 struct 继承导致的失败</title><link href="http://localhost:4000/go-zore-struct-httpc-do-problem/" rel="alternate" type="text/html" title="go-zero httpc.Do post 数据因 struct 继承导致的失败" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-struct-httpc-do-problem</id><content type="html" xml:base="http://localhost:4000/go-zore-struct-httpc-do-problem/"><![CDATA[<p>工作时遇到的一个问题。</p>
 
-&lt;p&gt;第一次的做法是：&lt;/p&gt;
+<p>背景大概可以简化为：请求不同服务过来的数据后做聚合，然后转发另一个服务。</p>
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;update t_softname set icon=%s, start_cmd=%s where name=%s&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;icon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>对于数据的处理习惯性就是：</p>
 
-&lt;p&gt;却发现了问题，就是在遇到特殊的字符会被转义。如：写入的路径后会没了斜杠 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\&lt;/code&gt;。或遇到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&apos;&lt;/code&gt; 出现 sql 解析异常。&lt;/p&gt;
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c">// data from server A </span>
+<span class="k">type</span> <span class="n">BaseB</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Offset</span> <span class="kt">int64</span> <span class="s">`json:"offset"`</span>
+	<span class="n">Limit</span>  <span class="kt">int64</span> <span class="s">`json:"limit"`</span>
+<span class="p">}</span>
 
-&lt;p&gt;这是字符串被转义导致的。&lt;/p&gt;
-
-&lt;p&gt;要&lt;strong&gt;使用参数化查询&lt;/strong&gt;才可以，如下：&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-    &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;update t_softname set icon=%s, start_cmd=%s where name=%s&quot;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;icon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
-        <link>http://localhost:4000/python-mysql-connector</link>
-        <guid isPermaLink="true">http://localhost:4000/python-mysql-connector</guid>
-        
-        <category>python</category>
-        
-        
-        <category>工作日志</category>
-        
-      </item>
-    
-      <item>
-        <title>go-zero swagger 的使用</title>
-        <description>&lt;p&gt;Swagger 是一个开源的 API 设计工具，它帮助开发者设计、构建、记录和使用RESTful Web服务。Swagger的核心是 OpenAPI 规范。&lt;/p&gt;
-
-&lt;p&gt;官网：(https://swagger.io/)[https://swagger.io/]&lt;/p&gt;
-
-&lt;p&gt;主要特点：&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;自动化文档生成：Swagger可以自动从代码注释和API定义生成API文档，这些文档可以被人类阅读，也可以被机器解析。&lt;/li&gt;
-  &lt;li&gt;交互式API测试：Swagger UI提供了一个交互式的界面，允许开发者直接在浏览器中测试API，而无需编写代码。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;s&lt;/p&gt;
-</description>
-        <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
-        <link>http://localhost:4000/go-zore-swagger</link>
-        <guid isPermaLink="true">http://localhost:4000/go-zore-swagger</guid>
-        
-        <category>galang</category>
-        
-        
-        <category>工作日志</category>
-        
-      </item>
-    
-      <item>
-        <title>go-zero 日志输出的问题</title>
-        <description>&lt;p&gt;go-zore 日志输出方式体验让我有一些不适。&lt;/p&gt;
-
-&lt;p&gt;今天还遇到一个现象，日志输出如下：&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;@timestamp&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;2024-03-09T15:48:08.026+08&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;caller&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;server/Helper.go:164&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;content&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset=0&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026limit=10&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026order=desc&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026sortby=create_time&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026state=-1&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026states=0,1,2,3,4&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026biz_id=0&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\u&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;0026agent_id=512]&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;level&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;error&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;span&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;66a2ba1882458680&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;trace&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;c94c9ac8179690d592fc348b40666e16&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;出一些  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\u0026&lt;/code&gt; 之类的。 但如果把 Encoding 设置为 plain，则正常。&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2024-03-09T15:47:08.006+08       error  httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0&amp;amp;limit&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;10&amp;amp;order&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;desc&amp;amp;sortby&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;create_time&amp;amp;state&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;&amp;amp;states&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0,1,2,3,4&amp;amp;biz_id&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0&amp;amp;agent_id&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;512]      &lt;span class=&quot;nb&quot;&gt;caller&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;server/Helper.go:164        &lt;span class=&quot;nv&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;ca5e1ad81e7d0528f38b361c63a75f35  &lt;span class=&quot;nv&quot;&gt;span&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;48b14f5d8bce91e9
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
-        <link>http://localhost:4000/go-zore-log-problem</link>
-        <guid isPermaLink="true">http://localhost:4000/go-zore-log-problem</guid>
-        
-        <category>galang</category>
-        
-        
-        <category>工作日志</category>
-        
-      </item>
-    
-      <item>
-        <title>go-zero httpc.Do post 数据因 struct 继承导致的失败</title>
-        <description>&lt;p&gt;工作时遇到的一个问题。&lt;/p&gt;
-
-&lt;p&gt;背景大概可以简化为：请求不同服务过来的数据后做聚合，然后转发另一个服务。&lt;/p&gt;
-
-&lt;p&gt;对于数据的处理习惯性就是：&lt;/p&gt;
-
-&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;c&quot;&gt;// data from server A &lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BaseB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;Offset&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int64&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;offset&quot;`&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;Limit&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;int64&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;limit&quot;`&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;// data from server B &lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BaseB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;Id&lt;/span&gt;    &lt;span class=&quot;kt&quot;&gt;int64&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;id&quot;`&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;name&quot;`&lt;/span&gt;
+<span class="c">// data from server B </span>
+<span class="k">type</span> <span class="n">BaseB</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Id</span>    <span class="kt">int64</span> <span class="s">`json:"id"`</span>
+    <span class="n">Name</span> <span class="kt">string</span> <span class="s">`json:"name"`</span>
 	  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<span class="p">}</span>
 
-&lt;span class=&quot;c&quot;&gt;// send to server C&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BaseC&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;BaseA&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;BaseB&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Addr&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;addr&quot;`&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<span class="c">// send to server C</span>
+<span class="k">type</span> <span class="n">BaseC</span>  <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">BaseA</span>
+	<span class="n">BaseB</span>
+    <span class="n">Addr</span>  <span class="kt">string</span> <span class="s">`json:"addr"`</span>
+<span class="p">}</span>
 
-&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BaseC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Offset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;199&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;kane&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Addr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;guangdong&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;baseC ----- &amp;gt; %+v&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baseC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+<span class="n">baseC</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="n">BaseC</span><span class="p">)</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Offset</span> <span class="o">=</span> <span class="m">199</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Id</span> <span class="o">=</span> <span class="m">1</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Name</span> <span class="o">=</span> <span class="s">"kane"</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Addr</span> <span class="o">=</span> <span class="s">"guangdong"</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"baseC ----- &gt; %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">baseC</span><span class="p">)</span>
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</code></pre></div></div>
 
-&lt;p&gt;这里对 BaseC 成员变量的操作和它继承的BaseB、BaseB 的成员一样，都按 BaseC的成员一样处理。&lt;/p&gt;
+<p>这里对 BaseC 成员变量的操作和它继承的BaseB、BaseB 的成员一样，都按 BaseC的成员一样处理。</p>
 
-&lt;p&gt;但是，在 fmt.Printf baseC 时，baseC 的结构却有点和想像中不一样。而是：&lt;/p&gt;
+<p>但是，在 fmt.Printf baseC 时，baseC 的结构却有点和想像中不一样。而是：</p>
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; baseC &lt;span class=&quot;nt&quot;&gt;-----&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &amp;amp;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;BaseA:&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;Offset:199 Limit:0&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; BaseB:&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;Id:1 Name:kane&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; Addr:guangdong&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;中包含了 “BaseA” “BaseB”。&lt;/p&gt;
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> baseC <span class="nt">-----</span> <span class="o">&gt;</span> &amp;<span class="o">{</span>BaseA:<span class="o">{</span>Offset:199 Limit:0<span class="o">}</span> BaseB:<span class="o">{</span>Id:1 Name:kane<span class="o">}</span> Addr:guangdong<span class="o">}</span>
+</code></pre></div></div>
+<p>中包含了 “BaseA” “BaseB”。</p>
 
-&lt;p&gt;多想一步，把这个结构体转 json 输出，如下：&lt;/p&gt;
+<p>多想一步，把这个结构体转 json 输出，如下：</p>
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;baseCByte &lt;span class=&quot;nt&quot;&gt;-----&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;offset&quot;&lt;/span&gt;:199,&lt;span class=&quot;s2&quot;&gt;&quot;limit&quot;&lt;/span&gt;:0,&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;:1,&lt;span class=&quot;s2&quot;&gt;&quot;name&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;kane&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;addr&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;guangdong&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>baseCByte <span class="nt">-----</span> <span class="o">&gt;</span> <span class="o">{</span><span class="s2">"offset"</span>:199,<span class="s2">"limit"</span>:0,<span class="s2">"id"</span>:1,<span class="s2">"name"</span>:<span class="s2">"kane"</span>,<span class="s2">"addr"</span>:<span class="s2">"guangdong"</span><span class="o">}</span>
+</code></pre></div></div>
 
-&lt;p&gt;想像上面 baseC 数据的结构应该是这样的。但事实却不一样。&lt;/p&gt;
+<p>想像上面 baseC 数据的结构应该是这样的。但事实却不一样。</p>
 
-&lt;p&gt;自己 golang 的底层知识不够导致的。&lt;/p&gt;
+<p>自己 golang 的底层知识不够导致的。</p>
 
-&lt;p&gt;go-zore 的  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;httpc.Do()&lt;/code&gt;在 post 数据带上设置头信息时，&lt;a href=&quot;https://go-zero.dev/docs/tutorials/http/client/index&quot;&gt;https://go-zero.dev/docs/tutorials/http/client/index&lt;/a&gt;&lt;/p&gt;
+<p>go-zore 的  <code class="language-plaintext highlighter-rouge">httpc.Do()</code>在 post 数据带上设置头信息时，<a href="https://go-zero.dev/docs/tutorials/http/client/index">https://go-zero.dev/docs/tutorials/http/client/index</a></p>
 
-&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">flag</span><span class="o">.</span><span class="n">Parse</span><span class="p">()</span>
 
-    &lt;span class=&quot;n&quot;&gt;req&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;s&quot;&gt;&quot;foo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;foo-header&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;foo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;bar&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;httpc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Do&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Background&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MethodPost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;domain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/nodes/:node&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    <span class="n">req</span> <span class="o">:=</span> <span class="n">Request</span><span class="p">{</span>
+        <span class="n">Node</span><span class="o">:</span>   <span class="s">"foo"</span><span class="p">,</span>
+        <span class="n">Header</span><span class="o">:</span> <span class="s">"foo-header"</span><span class="p">,</span>
+        <span class="n">Foo</span><span class="o">:</span> <span class="s">"foo"</span><span class="p">,</span>
+        <span class="n">Bar</span><span class="o">:</span> <span class="s">"bar"</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">httpc</span><span class="o">.</span><span class="n">Do</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">Background</span><span class="p">(),</span> <span class="n">http</span><span class="o">.</span><span class="n">MethodPost</span><span class="p">,</span> <span class="o">*</span><span class="n">domain</span><span class="o">+</span><span class="s">"/nodes/:node"</span><span class="p">,</span> <span class="n">req</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
 
-    &lt;span class=&quot;n&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Copy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Stdout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;当  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Request&lt;/code&gt; 用了继承的方式：
-如：&lt;/p&gt;
+    <span class="n">io</span><span class="o">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>当  <code class="language-plaintext highlighter-rouge">Request</code> 用了继承的方式：
+如：</p>
 
-&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Body&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;    &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;foo&quot;`&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;    &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;bar&quot;`&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Body</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">Foo</span>    <span class="kt">string</span> <span class="s">`json:"foo"`</span>
+    <span class="n">Bar</span>    <span class="kt">string</span> <span class="s">`json:"bar"`</span>
+<span class="p">}</span>
     
-&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Request&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Body&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Header&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`header:&quot;X-Header&quot;`&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<span class="k">type</span> <span class="n">Request</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">Body</span>
+    <span class="n">Header</span> <span class="kt">string</span> <span class="s">`header:"X-Header"`</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-&lt;p&gt;发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。&lt;/p&gt;
-</description>
-        <pubDate>Sat, 09 Mar 2024 17:08:12 +0800</pubDate>
-        <link>http://localhost:4000/go-zore-struct-httpc-do-problem</link>
-        <guid isPermaLink="true">http://localhost:4000/go-zore-struct-httpc-do-problem</guid>
-        
-        <category>golang</category>
-        
-        
-        <category>工作日志</category>
-        
-      </item>
-    
-      <item>
-        <title>golang 开发备忘</title>
-        <description>&lt;p&gt;go 常用命令&lt;/p&gt;
+<p>发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="golang" /><summary type="html"><![CDATA[golang 结构体的"继承"导致 go-zero 的 httpc.Do() 发送失败的问题]]></summary></entry><entry><title type="html">python mysql 插入更新一些特殊的字符</title><link href="http://localhost:4000/python-mysql-connector/" rel="alternate" type="text/html" title="python mysql 插入更新一些特殊的字符" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/python-mysql-connector</id><content type="html" xml:base="http://localhost:4000/python-mysql-connector/"><![CDATA[<p>写了一个脚本，把一个mysql 表的中数据从一个表更新到另一个表中。其他有字段是路径，包含有 <code class="language-plaintext highlighter-rouge">/</code> 和  <code class="language-plaintext highlighter-rouge">'</code>  等字符。</p>
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+<p>第一次的做法是：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<p>却发现了问题，就是在遇到特殊的字符会被转义。如：写入的路径后会没了斜杠 <code class="language-plaintext highlighter-rouge">\</code>。或遇到 <code class="language-plaintext highlighter-rouge">'</code> 出现 sql 解析异常。</p>
+
+<p>这是字符串被转义导致的。</p>
+
+<p>要<strong>使用参数化查询</strong>才可以，如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>  
+</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="python" /><summary type="html"><![CDATA[python mysql 使用参数化查询处理特殊字符]]></summary></entry><entry><title type="html">go-zero swagger 的使用</title><link href="http://localhost:4000/go-zore-swagger/" rel="alternate" type="text/html" title="go-zero swagger 的使用" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-swagger</id><content type="html" xml:base="http://localhost:4000/go-zore-swagger/"><![CDATA[<p>Swagger 是一个开源的 API 设计工具，它帮助开发者设计、构建、记录和使用RESTful Web服务。Swagger的核心是 OpenAPI 规范。</p>
+
+<p>官网：(https://swagger.io/)[https://swagger.io/]</p>
+
+<p>主要特点：</p>
+<ul>
+  <li>自动化文档生成：Swagger可以自动从代码注释和API定义生成API文档，这些文档可以被人类阅读，也可以被机器解析。</li>
+  <li>交互式API测试：Swagger UI提供了一个交互式的界面，允许开发者直接在浏览器中测试API，而无需编写代码。</li>
+</ul>
+
+<p>s</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[swagger]]></summary></entry><entry><title type="html">go-zero 日志输出的问题</title><link href="http://localhost:4000/go-zore-log-problem/" rel="alternate" type="text/html" title="go-zero 日志输出的问题" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-log-problem</id><content type="html" xml:base="http://localhost:4000/go-zore-log-problem/"><![CDATA[<p>go-zore 日志输出方式体验让我有一些不适。</p>
+
+<p>今天还遇到一个现象，日志输出如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span><span class="s2">"@timestamp"</span>:<span class="s2">"2024-03-09T15:48:08.026+08"</span>,<span class="s2">"caller"</span>:<span class="s2">"server/Helper.go:164"</span>,<span class="s2">"content"</span>:<span class="s2">"httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset=0</span><span class="se">\u</span><span class="s2">0026limit=10</span><span class="se">\u</span><span class="s2">0026order=desc</span><span class="se">\u</span><span class="s2">0026sortby=create_time</span><span class="se">\u</span><span class="s2">0026state=-1</span><span class="se">\u</span><span class="s2">0026states=0,1,2,3,4</span><span class="se">\u</span><span class="s2">0026biz_id=0</span><span class="se">\u</span><span class="s2">0026agent_id=512]"</span>,<span class="s2">"level"</span>:<span class="s2">"error"</span>,<span class="s2">"span"</span>:<span class="s2">"66a2ba1882458680"</span>,<span class="s2">"trace"</span>:<span class="s2">"c94c9ac8179690d592fc348b40666e16"</span><span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>出一些  <code class="language-plaintext highlighter-rouge">\u0026</code> 之类的。 但如果把 Encoding 设置为 plain，则正常。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2024-03-09T15:47:08.006+08       error  httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset<span class="o">=</span>0&amp;limit<span class="o">=</span>10&amp;order<span class="o">=</span>desc&amp;sortby<span class="o">=</span>create_time&amp;state<span class="o">=</span><span class="nt">-1</span>&amp;states<span class="o">=</span>0,1,2,3,4&amp;biz_id<span class="o">=</span>0&amp;agent_id<span class="o">=</span>512]      <span class="nb">caller</span><span class="o">=</span>server/Helper.go:164        <span class="nv">trace</span><span class="o">=</span>ca5e1ad81e7d0528f38b361c63a75f35  <span class="nv">span</span><span class="o">=</span>48b14f5d8bce91e9
+</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[用 json 格式输出时有字段显示不正常，用 plain 格式时正常]]></summary></entry><entry><title type="html">golang 开发备忘</title><link href="http://localhost:4000/golang-note/" rel="alternate" type="text/html" title="golang 开发备忘" /><published>2024-01-02T18:12:15+08:00</published><updated>2024-01-02T18:12:15+08:00</updated><id>http://localhost:4000/golang-note</id><content type="html" xml:base="http://localhost:4000/golang-note/"><![CDATA[<p>go 常用命令</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 go mod tidy 
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</code></pre></div></div>
 
-&lt;p&gt;如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：&lt;/p&gt;
+<p>如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：</p>
 
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;curl cip.ccsh   
-go mod require &amp;lt;module&amp;gt;@&amp;lt;branch&amp;gt;
-&lt;/code&gt;&lt;/p&gt;
-</description>
-        <pubDate>Tue, 02 Jan 2024 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/golang-note</link>
-        <guid isPermaLink="true">http://localhost:4000/golang-note</guid>
-        
-        <category>golang</category>
-        
-        
-        <category>golang</category>
-        
-      </item>
-    
-      <item>
-        <title>window11 wsl 使用问题记录</title>
-        <description>&lt;p&gt;1、wsl 内无法 ping 通 宿主机的IP，无法 ping 通 外网。 试了很多方式都没有成功，自己网络方面的知识也不够全面，我补一下。&lt;/p&gt;
+<p><code class="language-plaintext highlighter-rouge">curl cip.ccsh   
+go mod require &lt;module&gt;@&lt;branch&gt;
+</code></p>]]></content><author><name>kane</name></author><category term="golang" /><category term="golang" /><summary type="html"><![CDATA[golang 开发过程记录的]]></summary></entry><entry><title type="html">window11 wsl 使用问题记录</title><link href="http://localhost:4000/window-wsl/" rel="alternate" type="text/html" title="window11 wsl 使用问题记录" /><published>2023-09-01T18:12:15+08:00</published><updated>2023-09-01T18:12:15+08:00</updated><id>http://localhost:4000/window-wsl</id><content type="html" xml:base="http://localhost:4000/window-wsl/"><![CDATA[<p>1、wsl 内无法 ping 通 宿主机的IP，无法 ping 通 外网。 试了很多方式都没有成功，自己网络方面的知识也不够全面，我补一下。</p>
 
-&lt;p&gt;最后在网上找到一个方法：[修复 WSL 无 Internet 网络连接问题]（https://www.ghostchu.com/fix-wsl-no-internet-connection/）&lt;/p&gt;
-</description>
-        <pubDate>Fri, 01 Sep 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/window-wsl</link>
-        <guid isPermaLink="true">http://localhost:4000/window-wsl</guid>
-        
-        <category>wsl</category>
-        
-        
-        <category>window</category>
-        
-      </item>
-    
-      <item>
-        <title>《月亮与六便士》 毛姆</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/assets/reading/the-moon-and-sixpence-2023-06-21-09-53-03.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+<p>最后在网上找到一个方法：[修复 WSL 无 Internet 网络连接问题]（https://www.ghostchu.com/fix-wsl-no-internet-connection/）</p>]]></content><author><name>kane</name></author><category term="window" /><category term="wsl" /><summary type="html"><![CDATA[wsl 使用过程中出现了不少的问题]]></summary></entry><entry><title type="html">《月亮与六便士》 毛姆</title><link href="http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB/" rel="alternate" type="text/html" title="《月亮与六便士》 毛姆" /><published>2023-06-01T19:13:00+08:00</published><updated>2023-06-01T19:13:00+08:00</updated><id>http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</id><content type="html" xml:base="http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB/"><![CDATA[<p><img src="/assets/reading/the-moon-and-sixpence-2023-06-21-09-53-03.png" alt="" /></p>]]></content><author><name>kane</name></author><category term="reading" /><category term="读书" /><summary type="html"><![CDATA[我不明白为什么叫月亮与六便士]]></summary></entry><entry><title type="html">《面纱》 毛姆</title><link href="http://localhost:4000/%E9%9D%A2%E7%BA%B1/" rel="alternate" type="text/html" title="《面纱》 毛姆" /><published>2023-05-27T19:13:00+08:00</published><updated>2023-05-27T19:13:00+08:00</updated><id>http://localhost:4000/%E9%9D%A2%E7%BA%B1</id><content type="html" xml:base="http://localhost:4000/%E9%9D%A2%E7%BA%B1/"><![CDATA[<p><img src="/assets/reading/the-painted-veil-2023-06-21-10-02-35.png" alt="" /></p>
 
-</description>
-        <pubDate>Thu, 01 Jun 2023 19:13:00 +0800</pubDate>
-        <link>http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</link>
-        <guid isPermaLink="true">http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</guid>
-        
-        <category>读书</category>
-        
-        
-        <category>reading</category>
-        
-      </item>
-    
-      <item>
-        <title>《面纱》 毛姆</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/assets/reading/the-painted-veil-2023-06-21-10-02-35.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+<p>我最不喜欢的就是讲人性，但很多故事也是深刻的讲人性才有了冲突和升华。</p>
 
-&lt;p&gt;我最不喜欢的就是讲人性，但很多故事也是深刻的讲人性才有了冲突和升华。&lt;/p&gt;
+<p>《面纱》让人知道，我们看到人和事物就是人性上装饰的面纱，一切感觉很美好，和谐。可面纱之下才是真实的人性丑恶，很多人没看到过，很多人不相信人性如此，很多人就是喜欢表面的面纱。</p>
 
-&lt;p&gt;《面纱》让人知道，我们看到人和事物就是人性上装饰的面纱，一切感觉很美好，和谐。可面纱之下才是真实的人性丑恶，很多人没看到过，很多人不相信人性如此，很多人就是喜欢表面的面纱。&lt;/p&gt;
+<p>人生的常态是什么，是无论你喜欢否，知道否，面纱一直存在。大部分人并知道真实是什么，也不想知道真实是什么。</p>
 
-&lt;p&gt;人生的常态是什么，是无论你喜欢否，知道否，面纱一直存在。大部分人并知道真实是什么，也不想知道真实是什么。&lt;/p&gt;
+<p>这书和毛姆《月亮与六便士》、《刀锋》重点不一样。对比之下，《刀锋》和《月亮与六便士》更喜欢些吧。我不喜欢探讨太多的人性。</p>]]></content><author><name>kane</name></author><category term="reading" /><category term="读书" /><summary type="html"><![CDATA[我最不喜欢的就是讲人性，但很多故事也是深刻的讲人性才有了冲突和升华]]></summary></entry><entry><title type="html">《刀锋》 毛姆</title><link href="http://localhost:4000/%E5%88%80%E9%94%8B/" rel="alternate" type="text/html" title="《刀锋》 毛姆" /><published>2023-05-02T19:13:00+08:00</published><updated>2023-05-02T19:13:00+08:00</updated><id>http://localhost:4000/%E5%88%80%E9%94%8B</id><content type="html" xml:base="http://localhost:4000/%E5%88%80%E9%94%8B/"><![CDATA[<p><img src="/assets/reading/the-razors-edge-2023-06-20-09-45-10.png" alt="" /></p>
 
-&lt;p&gt;这书和毛姆《月亮与六便士》、《刀锋》重点不一样。对比之下，《刀锋》和《月亮与六便士》更喜欢些吧。我不喜欢探讨太多的人性。&lt;/p&gt;
-</description>
-        <pubDate>Sat, 27 May 2023 19:13:00 +0800</pubDate>
-        <link>http://localhost:4000/%E9%9D%A2%E7%BA%B1</link>
-        <guid isPermaLink="true">http://localhost:4000/%E9%9D%A2%E7%BA%B1</guid>
-        
-        <category>读书</category>
-        
-        
-        <category>reading</category>
-        
-      </item>
-    
-      <item>
-        <title>《刀锋》 毛姆</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/assets/reading/the-razors-edge-2023-06-20-09-45-10.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;拉里一直在追寻他活着的意义，在救赎自己，也在救赎身边的人。
+<p>拉里一直在追寻他活着的意义，在救赎自己，也在救赎身边的人。
 最终，他也不知道是否已经找到，或许找不到，或许根本没有。但他放下了，或说顿悟了。
-至此，他又回到了世俗的生活。却也不是当初的自己了。&lt;/p&gt;
+至此，他又回到了世俗的生活。却也不是当初的自己了。</p>
 
-&lt;p&gt;感觉他什么都可以放下，什么都可以不在意。不知道在空军时他好友的死给他带来了什么样的冲击。他才开始他与众不同的道路。&lt;/p&gt;
+<p>感觉他什么都可以放下，什么都可以不在意。不知道在空军时他好友的死给他带来了什么样的冲击。他才开始他与众不同的道路。</p>
 
-&lt;p&gt;总有人追求自己的世界，总有人的生活有别于世俗世界。&lt;/p&gt;
+<p>总有人追求自己的世界，总有人的生活有别于世俗世界。</p>
 
-&lt;p&gt;《月亮与六便士》的斯特里克兰同样走这不同于世俗的道路，但如疯狂，如疯子变态。不被世俗理解甚至被嘲笑厌恶。相比之下拉里的道路不被理解，但也温柔很多。&lt;/p&gt;
+<p>《月亮与六便士》的斯特里克兰同样走这不同于世俗的道路，但如疯狂，如疯子变态。不被世俗理解甚至被嘲笑厌恶。相比之下拉里的道路不被理解，但也温柔很多。</p>
 
-&lt;p&gt;斯特里克兰追求表达自己，拉里追求救赎自己。&lt;/p&gt;
+<p>斯特里克兰追求表达自己，拉里追求救赎自己。</p>
 
-&lt;p&gt;不明白为什么有那么多人喜欢当“人生导师”，肆无忌惮的指点和批评别人的生活或人生呢。可能最俗的人就是你自己。&lt;/p&gt;
+<p>不明白为什么有那么多人喜欢当“人生导师”，肆无忌惮的指点和批评别人的生活或人生呢。可能最俗的人就是你自己。</p>
 
-&lt;p&gt;人是可以有很多不同的道路去走，同样也应该宽容你身边的人的各种格格不入的生活态度和行为举止。可能他在救赎自己。&lt;/p&gt;
-
-</description>
-        <pubDate>Tue, 02 May 2023 19:13:00 +0800</pubDate>
-        <link>http://localhost:4000/%E5%88%80%E9%94%8B</link>
-        <guid isPermaLink="true">http://localhost:4000/%E5%88%80%E9%94%8B</guid>
-        
-        <category>读书</category>
-        
-        
-        <category>reading</category>
-        
-      </item>
-    
-      <item>
-        <title>storage learning list</title>
-        <description>&lt;p&gt;1、 QEMU/KVM 的基本使用方法： https://blog.wohin.me/posts/qemu-kvm-basic/&lt;/p&gt;
-
-&lt;p&gt;2、 qemu-nbd技术分析: https://cloud.tencent.com/developer/article/1087439&lt;/p&gt;
-
-&lt;p&gt;3、 Windows server 安装qemu-img : https://www.volcengine.com/docs/6627/114289&lt;/p&gt;
-
-&lt;p&gt;4、 qemu-img for Windows: https://zhuanlan.zhihu.com/p/543230850&lt;/p&gt;
-
-&lt;p&gt;5、 Linux 空洞文件 : https://banbanpeppa.github.io/2019/08/21/linux/holefile/&lt;/p&gt;
-
-&lt;p&gt;6、 qcow2 镜像 ：https://zhuanlan.zhihu.com/p/534033659&lt;/p&gt;
-
-&lt;p&gt;7、 KVM - qcow2 和 raw 格式对比 : https://blog.csdn.net/sssssuuuuu666/article/details/106999198&lt;/p&gt;
-
-&lt;p&gt;8、 NBD（Network Block Device）简介及基本使用: https://zhuanlan.zhihu.com/p/50460919&lt;/p&gt;
-
-&lt;p&gt;9、 qemu-nbd使用教程 : https://www.cnblogs.com/silvermagic/p/7666234.html&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、iSCSI 的基本架构及操作简介：https://zhuanlan.zhihu.com/p/60986068&lt;/p&gt;
-
-&lt;p&gt;2、什么是 ISCSI? ISCSI 又能干什么呢？https://blog.csdn.net/ZhangPengFeiToWinner/article/details/87926989&lt;/p&gt;
-
-&lt;p&gt;3、linux iscsi 网络的三种工具tgt iscsi_tgt targetcli  https://blog.csdn.net/qqqqqq999999/article/details/72547970&lt;/p&gt;
-
-&lt;p&gt;4、tgt+ceph-rbd创建iscsi链接流程 :  https://confluence.vrviu.com:8443/pages/viewpage.action?pageId=1580763526&lt;/p&gt;
-
-&lt;p&gt;5、TGT 学习总结 ： https://zhuanlan.zhihu.com/p/137047153  很好的文章，已经介绍到源码了。&lt;/p&gt;
-
-&lt;p&gt;5、tgt网关源码解读 ：https://blog.csdn.net/Morry_Chan/article/details/100891020&lt;/p&gt;
-
-&lt;p&gt;6、TGT github ：https://github.com/fujita/tgt&lt;/p&gt;
-
-&lt;p&gt;6、ipxe : https://www.jianshu.com/p/f9070d76892a&lt;/p&gt;
-
-&lt;p&gt;7 perf学习总结: https://zhuanlan.zhihu.com/p/141694060&lt;/p&gt;
-
-&lt;p&gt;8、RFC7143 ： https://www.rfc-editor.org/rfc/rfc7143.html rfc 标准协议&lt;/p&gt;
-
-&lt;p&gt;9、iscsi target tgt架构 : https://developer.aliyun.com/article/296888&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1、Ceph—Rbd https://blog.csdn.net/weixin_45413603/article/details/103782448&lt;/p&gt;
-
-&lt;p&gt;2、Ceph 存储介绍  https://blog.csdn.net/shenyuanhaojie/article/details/121261005&lt;/p&gt;
-
-&lt;p&gt;3、Ceph介绍及原理架构分享 https://blog.csdn.net/robinhunan/article/details/128488026&lt;/p&gt;
-
-&lt;p&gt;4、ceph学习路线https://www.zhihu.com/search?q=ceph%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF&amp;amp;utm_content=search_suggestion&amp;amp;type=content&lt;/p&gt;
-
-&lt;p&gt;5、Ceph v10.0 中文文档  https://www.bookstack.cn/read/ceph-10-zh/cd0dcad3545db7c0.md&lt;/p&gt;
-
-&lt;p&gt;6、RBD Mirror（镜像）（pacific版本） https://www.cnblogs.com/varden/p/16124316.html&lt;/p&gt;
-
-&lt;p&gt;7、openstack 推荐几个大咖，大家可以百度找他们的博客来看：陈沙克、何明桂、孔令贤，Cloudman。&lt;/p&gt;
-
-&lt;p&gt;8、块设备指南 ： https://access.redhat.com/documentation/zh-cn/red_hat_ceph_storage/4/html/block_device_guide/index&lt;/p&gt;
-
-&lt;p&gt;9、我所了解的各公司使用的 Ceph 存储集群 (携程、乐视、有云、宝德云、联通等) ： https://www.cnblogs.com/sammyliu/p/4908668.html&lt;/p&gt;
-
-&lt;p&gt;10、用Ceph搭个私人NAS网盘！ https://www.jianshu.com/p/25c7ca195aa7&lt;/p&gt;
-
-&lt;p&gt;11、CentOS7 下安装 iSCSI Target(tgt) ，使用 Ceph rbd ：https://www.cnblogs.com/zengzhihua/p/9910704.html&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 01 May 2023 18:12:15 +0800</pubDate>
-        <link>http://localhost:4000/ceph-tgt-qemu-kvm-image</link>
-        <guid isPermaLink="true">http://localhost:4000/ceph-tgt-qemu-kvm-image</guid>
-        
-        <category>tgt</category>
-        
-        <category>ceph</category>
-        
-        
-        <category>storage</category>
-        
-      </item>
-    
-  </channel>
-</rss>
+<p>人是可以有很多不同的道路去走，同样也应该宽容你身边的人的各种格格不入的生活态度和行为举止。可能他在救赎自己。</p>]]></content><author><name>kane</name></author><category term="reading" /><category term="读书" /><summary type="html"><![CDATA[我要走遍世上每一条路，经历深沉的悲伤、莫名的哀愁、无尽的喜悦， 只求放手一搏、体验人生，追求灵魂中的星辰。]]></summary></entry></feed>

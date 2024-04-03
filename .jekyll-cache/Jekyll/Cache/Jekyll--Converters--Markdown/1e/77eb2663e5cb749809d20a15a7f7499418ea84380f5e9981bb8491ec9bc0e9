@@ -1,0 +1,163 @@
+I"09<p>本来 一个线程一个EventLoop。很理想的状态下当然最好了。
+但是一个EventLoop对象还是可能被不同的线程执行。这就导致了可能出现，本不属于该线程的事务被它执行到。出现线程同步的问题。</p>
+
+<p>所以，EventLoop 用一种方式 	：runInLoop()和queueInLoop()</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">/// 线程安全，如果不是在当前线程，则被挂起，然后通知线程执行</span>
+<span class="c1">/// 这个意思就是这个Functor要被在它所属的线程调用。</span>
+<span class="kt">void</span> <span class="n">EventLoop</span><span class="o">::</span><span class="n">runInLoop</span><span class="p">(</span><span class="k">const</span> <span class="n">Functor</span> <span class="o">&amp;</span><span class="n">cb</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">isInLoopThread</span><span class="p">())</span>
+  <span class="p">{</span>
+    <span class="n">cb</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="n">queueInLoop</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>如果是在当前线程就直接执行即可。</p>
+
+<p>如果不是就加放到队列中去。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Functor</span><span class="o">&gt;</span> <span class="n">pendingFunctors_</span><span class="p">;</span> <span class="c1">// @GuardedBy mutex_ 这个成员会暴露给其他线程所以要 mutex_做保护。</span>
+
+<span class="c1">// 在线程中回调一个函数，线程安全</span>
+<span class="kt">void</span> <span class="n">EventLoop</span><span class="o">::</span><span class="n">queueInLoop</span><span class="p">(</span><span class="k">const</span> <span class="n">Functor</span> <span class="o">&amp;</span><span class="n">cb</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="p">{</span>
+    <span class="c1">// 回调函数之所要被挂, 因为是要被其他线程执行的。所以要加锁</span>
+    <span class="n">MutexLockGuard</span> <span class="n">lock</span><span class="p">(</span><span class="n">mutex_</span><span class="p">);</span> 
+    <span class="n">pendingFunctors_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="c1">// 如果在IO线程调用 queueInLoop()， 而此时正在调用 pending functor， 那么也必须唤醒。</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isInLoopThread</span><span class="p">()</span> <span class="o">||</span> <span class="n">callingPendingFunctors_</span><span class="p">)</span> 
+  <span class="p">{</span>
+    <span class="n">wakeup</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>queueInLoop有一个锁， 这个锁就是负责 pendingFunctors_的。也只负责pendingFunctors_。</p>
+
+<p>然后唤醒对应的线程。 怎么做到呢？　（如果同同一线程的情况下，可能就被直接执行了。）</p>
+
+<p>看一下 wakeup()</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">/// 往wakeupFd_写入一个uint64_t数据</span>
+<span class="kt">void</span> <span class="n">EventLoop</span><span class="o">::</span><span class="n">wakeup</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="kt">uint64_t</span> <span class="n">one</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="kt">ssize_t</span> <span class="n">n</span> <span class="o">=</span> <span class="n">sockets</span><span class="o">::</span><span class="n">write</span><span class="p">(</span><span class="n">wakeupFd_</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">one</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">one</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="k">sizeof</span> <span class="n">one</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">LOG_ERROR</span> <span class="o">&lt;&lt;</span> <span class="s">"EventLoop::wakeup() writes "</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="s">" bytes instead of 8"</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>wakeupFd_ 是什么 ？  在结造函数中是这样的  wakeupFd_(createEventfd()),</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">createEventfd</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">evtfd</span> <span class="o">=</span> <span class="o">::</span><span class="n">eventfd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">EFD_NONBLOCK</span> <span class="o">|</span> <span class="n">EFD_CLOEXEC</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">evtfd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">LOG_SYSERR</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed in eventfd"</span><span class="p">;</span>
+    <span class="n">abort</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">evtfd</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+<p>用的是 eventfd 事件。</p>
+
+<p>eventfd类似于管道的概念，可以实现线程间的事件通知，类似于pipe。而eventfd 是一个比 pipe 更高效的线程间事件通知机制，一方面它比 pipe 少用一个 file 
+descriper，节省了资源；</p>
+
+<p>另一方面，eventfd 的缓冲区管理也简单得多，全部“buffer”一共只有8字节，不像pipe那样可能有不定长的真正buffer。</p>
+
+<p>eventfd的缓冲区大小是sizeof(uint64_t)也就是8字节，它是一个64位的计数器，写入递增计数器，读取将得到计数器的值，并且清零。</p>
+
+<p>就是说，线程间的通知机制用的是eventfd 事件。</p>
+
+<p>唤醒其实就是往这个事件的fd写入一个uint64_t。</p>
+
+<p>而每一个EventLoop 都会注册对这个wakeupFd_ 的读事件。即构造函数中的 wakeupChannel_(new Channel(this, wakeupFd_)),</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">wakeupChannel_</span><span class="o">-&gt;</span><span class="n">setReadCallback</span><span class="p">(</span>
+      <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">EventLoop</span><span class="o">::</span><span class="n">handleRead</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span> <span class="c1">// 设置读的回调，用于被唤醒时</span>
+  <span class="c1">// we are always reading the wakeupfd</span>
+  <span class="n">wakeupChannel_</span><span class="o">-&gt;</span><span class="n">enableReading</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>当wakeupFd_ 有写入数据时。Channel是会被触发读事件的  poller_-&gt;poll。这时唤醒所以当有了读事件时 EventLoop::handleRead 被执行。</p>
+
+<p>然后会执行下面的 doPendingFunctors()</p>
+
+<p>一开始想 在主循环 void EventLoop::loop() 中while的循环下 加入 doPendingFunctors()</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">quit_</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">activeChannels_</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>                                        <span class="c1">// 被触发的活跃事件</span>
+    <span class="n">pollReturnTime_</span> <span class="o">=</span> <span class="n">poller_</span><span class="o">-&gt;</span><span class="n">poll</span><span class="p">(</span><span class="n">kPollTimeMs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">activeChannels_</span><span class="p">);</span> <span class="c1">// activeChannels返回激活的事件</span>
+    <span class="o">++</span><span class="n">iteration_</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Logger</span><span class="o">::</span><span class="n">logLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">Logger</span><span class="o">::</span><span class="n">TRACE</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">printActiveChannels</span><span class="p">();</span> <span class="c1">//打印出所有事件</span>
+    <span class="p">}</span>
+    <span class="c1">// TODO sort channel by priority</span>
+    <span class="n">eventHandling_</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">ChannelList</span><span class="o">::</span><span class="n">iterator</span> <span class="n">it</span> <span class="o">=</span> <span class="n">activeChannels_</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+         <span class="n">it</span> <span class="o">!=</span> <span class="n">activeChannels_</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">currentActiveChannel_</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="p">;</span>
+      <span class="n">currentActiveChannel_</span><span class="o">-&gt;</span><span class="n">handleEvent</span><span class="p">(</span><span class="n">pollReturnTime_</span><span class="p">);</span> <span class="c1">//处理事件</span>
+    <span class="p">}</span>
+    <span class="n">currentActiveChannel_</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">eventHandling_</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">doPendingFunctors</span><span class="p">();</span> <span class="c1">//处理被挂起的回调函数，</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>那么 doPendingFunctors() 不就一直被执行了吗？</p>
+
+<p>其实，不是这样子的。 因为 poller_-&gt;poll(); 在没有事件的情况下是会被阻塞的。 所以才要用eventfd做器事件通知。写入一个int64<em>t。这个时候才能唤醒  poller</em>-&gt;poll();</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
+回过头来看，muduo在处理多线程加锁访问共享数据的策略上，有一个很重要的原则:拼命减少临界区的长度
+试想一下，如果没有pendingFunctors_这个数据成员，我们要想往TimerQueue中添加timer，
+肯定要对TimerQueue里面的insert函数加锁，造成锁的争用，
+而pendingFunctors_这个成员将锁的范围减少到了一个vector的push_back操作上。
+此外，在doPendingFunctors中，利用一个栈对象减少临界区，也是很巧妙的一个重要技巧。
+*/</span>
+
+<span class="kt">void</span> <span class="n">EventLoop</span><span class="o">::</span><span class="n">doPendingFunctors</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Functor</span><span class="o">&gt;</span> <span class="n">functors</span><span class="p">;</span>
+  <span class="n">callingPendingFunctors_</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>  
+  
+  <span class="c1">// 减少了临界区的长度，其它线程调用queueInLoop对pendingFunctors加锁时，就不会被阻塞</span>
+  <span class="c1">// 避免了死锁，可能在functors里面也会调用queueInLoop()，从而造成死锁。</span>
+   
+  <span class="p">{</span>
+    <span class="n">MutexLockGuard</span> <span class="n">lock</span><span class="p">(</span><span class="n">mutex_</span><span class="p">);</span>
+    <span class="n">functors</span><span class="p">.</span><span class="n">swap</span><span class="p">(</span><span class="n">pendingFunctors_</span><span class="p">);</span> <span class="c1">// 直接swap出来，减少临界区 这也值得学习的地方</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">functors</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="c1">// 招待回调</span>
+  <span class="p">{</span>
+    <span class="n">functors</span><span class="p">[</span><span class="n">i</span><span class="p">]();</span>
+  <span class="p">}</span>
+  <span class="n">callingPendingFunctors_</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>这就完成了线程之间的事件通知。然后把事务交给它所属的线程进行执行的过程。</p>
+
+<hr />
+<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
+
+:ET

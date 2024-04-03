@@ -1,0 +1,85 @@
+I"�<p>有一次用valgrind对代码的热点进行分析。发现有一个函数的被调用百分比比较高。</p>
+
+<p>关键的函数是CGameBuffMgr::process()</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">CGameBuffMgr</span><span class="o">::</span><span class="n">process</span> <span class="p">(</span><span class="n">uint64</span> <span class="n">uTick</span><span class="p">,</span><span class="n">uint64</span> <span class="n">uTime</span><span class="p">,</span><span class="n">uint32</span> <span class="n">uSecond</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">m_uProcessTick</span> <span class="o">&gt;</span> <span class="n">uTick</span><span class="p">)</span>
+		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+
+	<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">m_uProcessTick</span><span class="p">)</span>
+		<span class="n">m_uProcessTick</span> <span class="o">=</span> <span class="n">uTick</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
+
+	<span class="n">POOL_BUFF</span><span class="o">::</span><span class="n">iterator</span> <span class="n">_pos</span><span class="p">;</span>
+	<span class="n">m_poolBuff</span><span class="p">.</span><span class="n">getHead</span><span class="p">(</span><span class="n">_pos</span><span class="p">);</span>
+	<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">m_poolBuff</span><span class="p">.</span><span class="n">isTail</span><span class="p">(</span><span class="n">_pos</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">CGameBuff</span><span class="o">*</span>	<span class="n">pBuff</span> <span class="o">=</span> <span class="n">m_poolBuff</span><span class="p">.</span><span class="n">getNext</span><span class="p">(</span><span class="n">_pos</span><span class="p">);</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pBuff</span><span class="p">)</span>
+			<span class="k">continue</span><span class="p">;</span>
+		<span class="n">pBuff</span><span class="o">-&gt;</span><span class="n">process</span><span class="p">(</span><span class="n">uTick</span><span class="p">,</span><span class="n">uTime</span><span class="p">,</span><span class="n">uSecond</span><span class="p">);</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">pBuff</span><span class="o">-&gt;</span><span class="n">isDelete</span><span class="p">())</span>
+			<span class="n">delBuff</span><span class="p">(</span><span class="n">pBuff</span><span class="p">,</span><span class="nb">true</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>process是由定时器调起，所以比较多是正常的。</p>
+
+<p>用 valgrind 做代码性能分析。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/bin/valgrind <span class="nt">--tool</span><span class="o">=</span>callgrind  <span class="nt">--trace-children</span><span class="o">=</span><span class="nb">yes</span>  /data/game_server/game_server
+</code></pre></div></div>
+
+<p>得到：callgrind.out.6578 文件。再用 kcachegrind进行分析。如下：</p>
+
+<p><img src="/assets/code-analysis/valgrind-stl-1.png" alt="" /></p>
+
+<p>CGameBuffMgr::process中的 getHead消耗比较大。感觉可能有问题。</p>
+
+<p>而getHead是这样的：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">_ValType</span><span class="p">,</span> <span class="kt">int</span> <span class="n">COUNT</span><span class="p">&gt;</span>
+<span class="kr">inline</span> <span class="kt">void</span>	<span class="n">CMemoryPool</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="n">_ValType</span><span class="p">,</span><span class="n">COUNT</span><span class="o">&gt;::</span><span class="n">getHead</span><span class="p">(</span><span class="n">iterator</span><span class="o">&amp;</span> <span class="n">pos</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="c1">//CCritLocker lock(m_csLock);</span>
+		<span class="n">pos</span> <span class="o">=</span> <span class="n">m_UseList</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+	<span class="p">}</span>
+	<span class="k">catch</span> <span class="p">(...)</span>
+	<span class="p">{</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+<p>getHead中只是对 hash_map进行begin操作。
+从图上看hash_map的begin消耗也很大。问题可能出在这个地方。</p>
+
+<p><img src="/assets/code-analysis/valgrind-stl-12.png" alt="" /></p>
+
+<p>在 <a href="http://blog.csdn.net/tototony/article/details/5689882">http://blog.csdn.net/tototony/article/details/5689882</a>这篇文章中，可以了解一些hash_map的原理。
+begin() 为了获得第一个元素，就在hashtable表中遍历，hashtale就是一个vector。
+所以说 一调用begin(), 说是遍历hashtable</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iterator</span> <span class="n">hashtable</span><span class="o">::</span><span class="n">begin</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">for</span><span class="p">(</span><span class="n">size_type</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">_M_buckets</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">__n</span><span class="p">)</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">_M_buckets</span><span class="p">[</span><span class="n">__n</span><span class="p">])</span>
+			<span class="k">return</span> <span class="n">iterator</span><span class="p">(</span><span class="n">_M_buckets</span><span class="p">[</span><span class="n">__n</span><span class="p">],</span> <span class="k">this</span><span class="p">);</span>
+	
+	<span class="k">return</span> <span class="n">end</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>找到了就返回，找到就会遍历完整个hashtable表，再返回end()。
+我想这就是为什么hash_map中的 begin() 效率不行的原因吧。</p>
+
+<p>最后，就动手把hash_map改成了map　stl中的map其实就是红黑树。
+改动后 重新跑一下valgrind。 得到如下图。已经没有getHead了。</p>
+
+<p><img src="/assets/code-analysis/valgrind-stl-2.png" alt="" /></p>
+
+<p>所以，如果要用到遍历的应尽量避免用hash_map。</p>
+:ET

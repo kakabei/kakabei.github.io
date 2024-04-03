@@ -1,0 +1,43 @@
+I"�<p>看TimerQueue  类时 看到一个函数如下：</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 这个函数直接的返回了局部的 vector 这个做没有什么问题吗？</span>
+<span class="c1">// </span>
+<span class="c1">// rvo realease版本优化 所以不需要返回引用或指针</span>
+<span class="c1">// RVO:即release版本中会对代码优化 使得返回一个对象不许调用拷贝构造函数 所以可以返回一个对象 不用指针或者引用</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">TimerQueue</span><span class="o">::</span><span class="n">Entry</span><span class="o">&gt;</span> <span class="n">TimerQueue</span><span class="o">::</span><span class="n">getExpired</span><span class="p">(</span><span class="n">Timestamp</span> <span class="n">now</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">timers_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">activeTimers_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Entry</span><span class="o">&gt;</span> <span class="n">expired</span><span class="p">;</span>
+  <span class="n">Entry</span> <span class="n">sentry</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">Timer</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">UINTPTR_MAX</span><span class="p">));</span>
+  <span class="n">TimerList</span><span class="o">::</span><span class="n">iterator</span> <span class="n">end</span> <span class="o">=</span> <span class="n">timers_</span><span class="p">.</span><span class="n">lower_bound</span><span class="p">(</span><span class="n">sentry</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">end</span> <span class="o">==</span> <span class="n">timers_</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">||</span> <span class="n">now</span> <span class="o">&lt;</span> <span class="n">end</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">);</span>   <span class="c1">//在这里做比较， 比now大的所有Entry</span>
+  <span class="c1">// 这里是从一个set拷贝到vector</span>
+  <span class="c1">// 最新版本改为如下：</span>
+  <span class="c1">// expired.assign(timers_.begin(), end);</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">timers_</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span><span class="p">,</span> <span class="n">back_inserter</span><span class="p">(</span><span class="n">expired</span><span class="p">));</span>
+  <span class="n">timers_</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">timers_</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span><span class="p">);</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Entry</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">it</span> <span class="o">=</span> <span class="n">expired</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+      <span class="n">it</span> <span class="o">!=</span> <span class="n">expired</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">ActiveTimer</span> <span class="n">timer</span><span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">,</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="o">-&gt;</span><span class="n">sequence</span><span class="p">());</span>
+    <span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="n">activeTimers_</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">timer</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">);</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">n</span><span class="p">;</span> <span class="c1">// 这里也出现了 对一个 整型 进行(void)? </span>
+  <span class="p">}</span>
+
+  <span class="n">assert</span><span class="p">(</span><span class="n">timers_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">activeTimers_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+  <span class="k">return</span> <span class="n">expired</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>就如我第一次的注释，我很奇怪为什么直接返回了一个函数里的对象
+后来才知道这叫RVO优化
+什么时候应当依靠返回值优化（RVO）？
+知乎上：
+<a href="https://www.zhihu.com/question/27000013">什么时候应当依靠返回值优化 (RVO) ?</a></p>
+
+<hr />
+<p>-– 《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
+
+:ET

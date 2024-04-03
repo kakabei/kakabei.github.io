@@ -1,0 +1,259 @@
+I"�j<p>C++11 标准引入了对线程的支持，这些支持主要包括以下内容：</p>
+
+<p><strong>std::thread</strong> 类：C++11中引入了 <code class="language-plaintext highlighter-rouge">std::thread</code> 类，它提供了一个可执行的线程对象，使得程序可以创建和管理线程。</p>
+
+<p><strong>std::mutex</strong> 类：<code class="language-plaintext highlighter-rouge">std::mutex </code>类提供了一种基本的互斥机制，允许程序员通过对共享资源的访问进行同步。</p>
+
+<p><strong>std::condition_variable</strong> 类：<code class="language-plaintext highlighter-rouge">std::condition_variable</code> 类提供了一种机制，使得线程能够等待某个条件成立，从而避免了线程轮询等待的问题。</p>
+
+<p><strong>std::future</strong> 和 <code class="language-plaintext highlighter-rouge">std::promise</code> 类：<code class="language-plaintext highlighter-rouge">std::future</code> 和 <code class="language-plaintext highlighter-rouge">std::promise</code> 类提供了一种异步编程的方式，允许程序员将任务提交到线程池中，并且可以得到返回值。</p>
+
+<p><strong>std::atomic</strong> 类：<code class="language-plaintext highlighter-rouge">std::atomic </code>类提供了一种基本的原子操作，用于在多线程环境下保证共享变量的原子性操作。</p>
+
+<p><strong>Thread-local storage</strong>：C++11 标准中引入了 <code class="language-plaintext highlighter-rouge">thread_local</code> 关键字，用于指定变量在每个线程中是唯一的。</p>
+
+<h1 id="stdthread">std::thread</h1>
+
+<p>创建两个线程，一个线程输出奇数，另一个线程输出偶数：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">printOddNumbers</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Odd number: "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">printEvenNumbers</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Even number: "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span><span class="p">(</span><span class="n">printOddNumbers</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span><span class="p">(</span><span class="n">printEvenNumbers</span><span class="p">);</span>
+
+    <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>在主函数中，我们创建了两个<code class="language-plaintext highlighter-rouge"> std::thread </code>对象 t1 和 t2，并将 <code class="language-plaintext highlighter-rouge">printOddNumbers()</code> 和 <code class="language-plaintext highlighter-rouge">printEvenNumbers()</code> 作为线程函数传递给它们。然后调用 <code class="language-plaintext highlighter-rouge">join()</code> 函数等待线程的结束。运行程序后，输出如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Odd number: 1
+Odd number: 3
+Odd number: 5
+Odd number: 7
+Odd number: 9
+Even number: 2
+Even number: 4
+Even number: 6
+Even number: 8
+Even number: 10
+</code></pre></div></div>
+
+<h1 id="stdthread-1">std::thread</h1>
+
+<p>定义了一个全局变量 counter，并使用两个线程分别对其进行加和减的操作：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">printOddNumbers</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Odd number: "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">printEvenNumbers</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Even number: "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span><span class="p">(</span><span class="n">printOddNumbers</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span><span class="p">(</span><span class="n">printEvenNumbers</span><span class="p">);</span>
+
+    <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">std::mutex</code> 的作用是对全局变量 <code class="language-plaintext highlighter-rouge">counter</code> 进行互斥访问，避免了两个线程同时对其进行修改导致的数据竞争问题。其中，在 <code class="language-plaintext highlighter-rouge">add</code> 和 <code class="language-plaintext highlighter-rouge">sub</code> 函数中，使用 <code class="language-plaintext highlighter-rouge">std::mutex</code> 的 <code class="language-plaintext highlighter-rouge">lock()</code> 和 <code class="language-plaintext highlighter-rouge">unlock()</code> 方法来对互斥量进行加锁和解锁，从而确保了两个线程之间的数据访问互斥性。</p>
+
+<h1 id="stdcondition_variable">std::condition_variable</h1>
+
+<p>用于线程间的条件变量等待和通知。它是配合 <code class="language-plaintext highlighter-rouge">std::unique_lock</code> 使用的，用于线程间共享数据的同步。</p>
+
+<p>下面是一个简单的示例程序，使用 std::condition_variable 实现两个线程间的同步：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;mutex&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;condition_variable&gt;</span><span class="cp">
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span> <span class="n">cv</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">ready</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">consumer</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">mtx</span><span class="p">);</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">ready</span><span class="p">)</span> <span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Consumer: data = "</span> <span class="o">&lt;&lt;</span> <span class="n">data</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">producer</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+    <span class="n">ready</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="n">cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">consumer_thread</span><span class="p">(</span><span class="n">consumer</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">producer_thread</span><span class="p">(</span><span class="n">producer</span><span class="p">);</span>
+
+    <span class="n">consumer_thread</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">producer_thread</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">consumer()</code> 和 <code class="language-plaintext highlighter-rouge">producer()</code> 分别运行在两个线程中。</p>
+
+<p><code class="language-plaintext highlighter-rouge">consumer()</code> 中使用 s<code class="language-plaintext highlighter-rouge">td::unique_lock</code> 对 mtx 进行加锁，并在 while 循环中等待条件变量 ready 的值为 true，以防止在数据未准备好时访问 data。</p>
+
+<p><code class="language-plaintext highlighter-rouge">producer()</code> 中首先等待 1 秒钟以模拟数据的准备过程，然后修改 data 的值为 42，并将 ready 的值设置为 true，最后通过调用 <code class="language-plaintext highlighter-rouge">cv.notify_one()</code> 通知等待中的线程可以开始访问数据了。</p>
+
+<p>最后在主线程中调用 <code class="language-plaintext highlighter-rouge">join()</code> 等待两个线程结束。</p>
+
+<h1 id="stdfuture">std::future</h1>
+
+<p><code class="language-plaintext highlighter-rouge">std::future</code> 和 <code class="language-plaintext highlighter-rouge">std::promise</code> 是 C++11 中提供的用于线程间通信的工具，其中 <code class="language-plaintext highlighter-rouge">std::promise</code> 是一个对象，它可以在某个线程中设置一个值，并让另一个线程等待该值的产生，而 <code class="language-plaintext highlighter-rouge">std::future</code> 则是用来获取这个值的。</p>
+
+<p>下面是一个简单的例子，用于演示如何使用 <code class="language-plaintext highlighter-rouge">std::future</code> 和 <code class="language-plaintext highlighter-rouge">std::promise</code>：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;future&gt;</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">printValue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">fut</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">fut</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Value: "</span> <span class="o">&lt;&lt;</span> <span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">prom</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">fut</span> <span class="o">=</span> <span class="n">prom</span><span class="p">.</span><span class="n">get_future</span><span class="p">();</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">th1</span><span class="p">(</span><span class="n">printValue</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">fut</span><span class="p">));</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">th2</span><span class="p">([](</span><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">prom</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+        <span class="n">prom</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+    <span class="p">},</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">prom</span><span class="p">));</span>
+
+    <span class="n">th1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">th2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>创建了一个 <code class="language-plaintext highlighter-rouge">std::promise</code> 对象 <code class="language-plaintext highlighter-rouge">prom</code>，并通过它获取了一个 <code class="language-plaintext highlighter-rouge">std::future</code> 对象 <code class="language-plaintext highlighter-rouge">fut</code>。接着，我们创建了两个线程 th1 和 th2，其中 th1 等待 fut 的值的产生，并在产生后将其打印出来；而 th2 则会等待 2 秒钟后，将值 10 设置到 prom 中，使得 th1 可以获取这个值并打印出来。</p>
+
+<p>需要注意的是，在将 <code class="language-plaintext highlighter-rouge">std::promise</code> 对象 prom 传递给线程 th2 的 <code class="language-plaintext highlighter-rouge">lambda</code> 表达式时，我们必须使用 <code class="language-plaintext highlighter-rouge">std::ref()</code> 函数将其包装成一个引用，否则编译器将无法正确地处理它。</p>
+
+<h1 id="stdatomic">std::atomic</h1>
+
+<p><code class="language-plaintext highlighter-rouge">std::atomic</code> 是 C++11 引入的一个用于原子操作的库，可以保证操作的原子性，避免多线程环境下的数据竞争。</p>
+
+<p>以下是一个使用 std::atomic 的简单示例，假设有两个线程同时对共享变量进行加一操作：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;atomic&gt;</span><span class="cp">
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">counter</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 定义原子变量</span>
+
+<span class="kt">void</span> <span class="nf">increment_counter</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">++</span><span class="n">counter</span><span class="p">;</span> <span class="c1">// 对原子变量进行加一操作</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span><span class="p">(</span><span class="n">increment_counter</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span><span class="p">(</span><span class="n">increment_counter</span><span class="p">);</span>
+
+    <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Counter value: "</span> <span class="o">&lt;&lt;</span> <span class="n">counter</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// 输出共享变量的值</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>定义了一个名为 <code class="language-plaintext highlighter-rouge">counter</code> 的原子变量，两个线程并行执行 <code class="language-plaintext highlighter-rouge">increment_counter()</code> 函数，对 <code class="language-plaintext highlighter-rouge">counter</code> 进行 10000 次加一操作。由于使用了<code class="language-plaintext highlighter-rouge"> std::atomic</code>，这个操作是原子的，不会发生数据竞争，保证了线程安全。最终输出 <code class="language-plaintext highlighter-rouge">counter</code> 的值。</p>
+
+<h1 id="thread-local-storage">Thread-local storage</h1>
+
+<p><strong>Thread-local storage（TLS）</strong>是指每个线程都有自己独立的存储空间，这些存储空间可以用来存储线程私有的数据，不同线程之间的数据互不干扰。TLS 是多线程编程中非常重要的一个概念，可以帮助开发者在多线程环境下更加高效地使用全局变量。</p>
+
+<p>C++11中引入了 <code class="language-plaintext highlighter-rouge">thread_local</code> 关键字，它可以用来修饰全局变量、静态变量和局部静态变量。使用 <code class="language-plaintext highlighter-rouge">thread_local</code> 修饰的变量只有在声明它的线程中可见，其他线程无法访问到该变量，也就是说，每个线程都有自己的变量副本。</p>
+
+<p>以下是一个使用 <code class="language-plaintext highlighter-rouge">thread_local</code> 修饰的全局变量的例子：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span>
+<span class="k">thread_local</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">x</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Thread "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">": "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
+    <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+<p>们定义了一个 <code class="language-plaintext highlighter-rouge">thread_local</code> 的全局变量x，并在 foo 函数中对其进行修改和打印。接着创建了两个线程 t1 和 t2，并分别执行 foo 函数，最后调用 join 函数等待线程执行结束。</p>
+
+<p>由于 x 是 <code class="language-plaintext highlighter-rouge">thread_local</code> 变量，因此在每个线程中都有自己的副本，两个线程对 x 的修改互不干扰。运行结果可能类似于：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Thread 139861759004416: 1
+Thread 139861750611712: 1
+
+</code></pre></div></div>
+
+<p>每个线程都有自己的x变量副本，并且只能访问到自己的副本。这样可以避免不同线程之间对同一全局变量的竞争和冲突，从而提高程序的稳定性和并发性能。</p>
+:ET

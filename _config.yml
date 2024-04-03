@@ -1,38 +1,15 @@
-# Site settings
-title: xyecho - just my notes
-author: carlos
-author_avatar: /images/header.png
-email: 1447675994@qq.com
-description: 读书，生活，技术
+future: true
+permalink: /:title/
 url: "http://blog.xyecho.com"
-domain: "xyecho.com"
-#github_username: dongyado
-github_site_repo: kakabei/kakabei.github.io
-#disqus: xyecho
-
-
-# Build settings
+name: xyecho - just my notes
+author: kane
+qq: 
+email: 1447675994@qq.com
+beian: 
+cnzz: 
+weibo: hustcat
+github: kakabei/kakabei.github.io
+paginate: 20
 highlighter: rouge
-markdown: kramdown
-kramdown:
-    input: GFM
-    syntax_highlighter: rouge
-    #extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
-    extensions: [ "fenced_code_blocks", "hard_wrap","autolink", "tables", "smart","strikethrough", "superscript", "with_toc_data", "highlight", "prettify","no_intra_emphasis"]
-    #extensions: [ "fenced_code_blocks", "hard_wrap","autolink", "tables", "strikethrough", "superscript", "with_toc_data", "highlight", "prettify","no_intra_emphasis"]
-
-sass:
-    style: :compressed
-    sass_dir: _sass
-
-permalink: /:title
-excerpt_separator: "<!-- more -->"
-
-# path
-categories_path: categories
-tags_path: tags
-
-
-gems:
-  - jekyll-sitemap
-
+truncate: true
+about: "YY哥(hustcat)"

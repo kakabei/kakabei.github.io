@@ -1,0 +1,33 @@
+I"e	<p>扩展的 friend 语法</p>
+
+<p>如：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Poly</span><span class="p">;</span> 
+<span class="k">typedef</span> <span class="n">Poly</span> <span class="n">P</span><span class="p">;</span>
+ <span class="k">class</span> <span class="nc">LiLei</span> <span class="p">{</span> 
+<span class="k">friend</span> <span class="k">class</span> <span class="nc">Poly</span><span class="p">;</span> <span class="c1">// C++ 98 通过, C++ 11 通过 </span>
+<span class="p">};</span>
+
+ <span class="k">class</span> <span class="nc">Jim</span> <span class="p">{</span>
+ <span class="k">friend</span> <span class="n">Poly</span><span class="p">;</span> <span class="c1">// C++ 98 失败, C++ 11 通过 </span>
+<span class="p">};</span> 
+
+<span class="k">class</span> <span class="nc">HanMeiMei</span> <span class="p">{</span>
+ <span class="k">friend</span> <span class="n">P</span><span class="p">;</span>    <span class="c1">// C++ 98 失败, C++ 11 通过 </span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>虽然 在 C++11 中这是一个小的改进，却会带来一点应用的变化是程序员可以为<strong>类模板声明友元</strong>了。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">P</span><span class="p">;</span> 
+<span class="k">template</span> <span class="o">&lt;</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">People</span> <span class="p">{</span> 
+<span class="k">friend</span> <span class="n">T</span><span class="p">;</span> 
+<span class="p">};</span> 
+<span class="n">People</span><span class="o">&lt;</span> <span class="n">P</span><span class="o">&gt;</span> <span class="n">PP</span><span class="p">;</span> <span class="c1">// 类型 P 在这里 是 People 类型 的 友 元 </span>
+<span class="n">People</span><span class="o">&lt;</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">Pi</span><span class="p">;</span> <span class="c1">// 对于 int 类型 模板 参数， 友 元 声明 被 忽略 </span>
+
+</code></pre></div></div>
+
+<hr />
+<p>1、《深入理解C++11：C++11新特性解析与应用》</p>
+:ET

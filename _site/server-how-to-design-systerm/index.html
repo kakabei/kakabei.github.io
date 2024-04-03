@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>如何处理一个系统设计</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>如何处理一个系统设计</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2022-03-21">2022-03-21</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#系统设计" title="系统设计">系统设计</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#工作经验" title="工作经验">工作经验</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>这是一个开放性问题， 这文章中提供了一个大概的思考步骤。<a href="https://github.com/donnemartin/system-design-primer/blob/master/README-zh-Hans.md#%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E4%B8%AA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98">如何处理一个系统设计的面试题</a>
+后续学习工作中，可以不断的完善这一些思考。</p>
+
+<h2 id="第一步描述使用场景约束和假设">第一步：描述使用场景，约束和假设</h2>
+
+<p>把所有需要的东西聚集在一起，审视问题。不停的提问，以至于我们可以明确使用场景和约束。讨论假设。</p>
+
+<ul>
+  <li>谁会使用它？</li>
+  <li>他们会怎样使用它？</li>
+  <li>有多少用户？</li>
+  <li>系统的作用是什么？</li>
+  <li>系统的输入输出分别是什么？</li>
+  <li>我们希望处理多少数据？</li>
+  <li>我们希望每秒钟处理多少请求？</li>
+  <li>我们希望的读写比率？分别什么场景？</li>
+</ul>
+
+<h2 id="第二步创造一个高层级的设计">第二步：创造一个高层级的设计</h2>
+
+<p>使用所有重要的组件来描绘出一个高层级的设计。</p>
+
+<ul>
+  <li>画出主要的组件和连接。 画出框架图，不宜太细仔。主要体现出组件的关系和数据流。</li>
+  <li>证明你的想法。 根据框架图，推演一下，能不能解决问题。</li>
+</ul>
+
+<h2 id="第三步设计核心组件">第三步：设计核心组件</h2>
+
+<p>对每一个核心组件进行详细深入的分析。举例来说，如果你被问到设计一个 url 缩写服务，开始讨论：</p>
+
+<ul>
+  <li>生成并储存一个完整 url 的 hash
+    <ul>
+      <li>MD5 和 Base62</li>
+      <li>Hash 碰撞</li>
+      <li>SQL 还是 NoSQL</li>
+      <li>数据库模型</li>
+    </ul>
+  </li>
+  <li>将一个 hashed url 翻译成完整的 url
+    <ul>
+      <li>数据库查找</li>
+    </ul>
+  </li>
+  <li>API 和面向对象设计</li>
+</ul>
+
+<h2 id="第四步扩展设计">第四步：扩展设计</h2>
+
+<p>确认和处理瓶颈以及一些限制。举例来说就是你需要下面的这些来完成扩展性的议题吗？</p>
+
+<ul>
+  <li>负载均衡</li>
+  <li>水平扩展</li>
+  <li>缓存</li>
+  <li>数据库分片</li>
+</ul>
+
+<p>论述可能的解决办法和代价。每件事情需要取舍。可以使用可扩展系统的设计原则来处理瓶颈。</p>
+
+<h2 id="预估计算量">预估计算量</h2>
+
+<p>你或许会被要求通过手算进行一些估算。</p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/kafka-transactions/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/%E9%BA%A6%E8%82%AF%E9%94%A1%E7%BB%93%E6%9E%84%E5%8C%96%E6%88%98%E7%95%A5%E6%80%9D%E7%BB%B4/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2022-01-16-server-how-to-design-systerm.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

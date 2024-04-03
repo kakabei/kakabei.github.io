@@ -1,0 +1,13 @@
+I"�<p>go 常用命令</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+go mod tidy 
+
+</code></pre></div></div>
+
+<p>如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：</p>
+
+<p><code class="language-plaintext highlighter-rouge">curl cip.ccsh   
+go mod require &lt;module&gt;@&lt;branch&gt;
+</code></p>
+:ET

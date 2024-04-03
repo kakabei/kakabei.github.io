@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>go-zero httpc.Do post 数据因 struct 继承导致的失败</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>go-zero httpc.Do post 数据因 struct 继承导致的失败</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2024-03-09">2024-03-09</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#工作日志" title="工作日志">工作日志</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#golang" title="golang">golang</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>工作时遇到的一个问题。</p>
+
+<p>背景大概可以简化为：请求不同服务过来的数据后做聚合，然后转发另一个服务。</p>
+
+<p>对于数据的处理习惯性就是：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c">// data from server A </span>
+<span class="k">type</span> <span class="n">BaseB</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Offset</span> <span class="kt">int64</span> <span class="s">`json:"offset"`</span>
+	<span class="n">Limit</span>  <span class="kt">int64</span> <span class="s">`json:"limit"`</span>
+<span class="p">}</span>
+
+<span class="c">// data from server B </span>
+<span class="k">type</span> <span class="n">BaseB</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Id</span>    <span class="kt">int64</span> <span class="s">`json:"id"`</span>
+    <span class="n">Name</span> <span class="kt">string</span> <span class="s">`json:"name"`</span>
+	  
+<span class="p">}</span>
+
+<span class="c">// send to server C</span>
+<span class="k">type</span> <span class="n">BaseC</span>  <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">BaseA</span>
+	<span class="n">BaseB</span>
+    <span class="n">Addr</span>  <span class="kt">string</span> <span class="s">`json:"addr"`</span>
+<span class="p">}</span>
+
+<span class="n">baseC</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="n">BaseC</span><span class="p">)</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Offset</span> <span class="o">=</span> <span class="m">199</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Id</span> <span class="o">=</span> <span class="m">1</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Name</span> <span class="o">=</span> <span class="s">"kane"</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Addr</span> <span class="o">=</span> <span class="s">"guangdong"</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"baseC ----- &gt; %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">baseC</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>这里对 BaseC 成员变量的操作和它继承的BaseB、BaseB 的成员一样，都按 BaseC的成员一样处理。</p>
+
+<p>但是，在 fmt.Printf baseC 时，baseC 的结构却有点和想像中不一样。而是：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> baseC <span class="nt">-----</span> <span class="o">&gt;</span> &amp;<span class="o">{</span>BaseA:<span class="o">{</span>Offset:199 Limit:0<span class="o">}</span> BaseB:<span class="o">{</span>Id:1 Name:kane<span class="o">}</span> Addr:guangdong<span class="o">}</span>
+</code></pre></div></div>
+<p>中包含了 “BaseA” “BaseB”。</p>
+
+<p>多想一步，把这个结构体转 json 输出，如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>baseCByte <span class="nt">-----</span> <span class="o">&gt;</span> <span class="o">{</span><span class="s2">"offset"</span>:199,<span class="s2">"limit"</span>:0,<span class="s2">"id"</span>:1,<span class="s2">"name"</span>:<span class="s2">"kane"</span>,<span class="s2">"addr"</span>:<span class="s2">"guangdong"</span><span class="o">}</span>
+</code></pre></div></div>
+
+<p>想像上面 baseC 数据的结构应该是这样的。但事实却不一样。</p>
+
+<p>自己 golang 的底层知识不够导致的。</p>
+
+<p>go-zore 的  <code class="language-plaintext highlighter-rouge">httpc.Do()</code>在 post 数据带上设置头信息时，<a href="https://go-zero.dev/docs/tutorials/http/client/index">https://go-zero.dev/docs/tutorials/http/client/index</a></p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">flag</span><span class="o">.</span><span class="n">Parse</span><span class="p">()</span>
+
+    <span class="n">req</span> <span class="o">:=</span> <span class="n">Request</span><span class="p">{</span>
+        <span class="n">Node</span><span class="o">:</span>   <span class="s">"foo"</span><span class="p">,</span>
+        <span class="n">Header</span><span class="o">:</span> <span class="s">"foo-header"</span><span class="p">,</span>
+        <span class="n">Foo</span><span class="o">:</span> <span class="s">"foo"</span><span class="p">,</span>
+        <span class="n">Bar</span><span class="o">:</span> <span class="s">"bar"</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">httpc</span><span class="o">.</span><span class="n">Do</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">Background</span><span class="p">(),</span> <span class="n">http</span><span class="o">.</span><span class="n">MethodPost</span><span class="p">,</span> <span class="o">*</span><span class="n">domain</span><span class="o">+</span><span class="s">"/nodes/:node"</span><span class="p">,</span> <span class="n">req</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="n">io</span><span class="o">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>当  <code class="language-plaintext highlighter-rouge">Request</code> 用了继承的方式：
+如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Body</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">Foo</span>    <span class="kt">string</span> <span class="s">`json:"foo"`</span>
+    <span class="n">Bar</span>    <span class="kt">string</span> <span class="s">`json:"bar"`</span>
+<span class="p">}</span>
+    
+<span class="k">type</span> <span class="n">Request</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">Body</span>
+    <span class="n">Header</span> <span class="kt">string</span> <span class="s">`header:"X-Header"`</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。</p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/golang-note/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/go-zore-log-problem/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/note/2024-02-29-go-zore-struct-httpc-do-problem.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

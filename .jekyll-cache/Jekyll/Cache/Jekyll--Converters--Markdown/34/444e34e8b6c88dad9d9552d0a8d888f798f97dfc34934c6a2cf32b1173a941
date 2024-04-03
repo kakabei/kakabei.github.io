@@ -1,0 +1,14 @@
+I"�<p>go-zore 日志输出方式体验让我有一些不适。</p>
+
+<p>今天还遇到一个现象，日志输出如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span><span class="s2">"@timestamp"</span>:<span class="s2">"2024-03-09T15:48:08.026+08"</span>,<span class="s2">"caller"</span>:<span class="s2">"server/Helper.go:164"</span>,<span class="s2">"content"</span>:<span class="s2">"httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset=0</span><span class="se">\u</span><span class="s2">0026limit=10</span><span class="se">\u</span><span class="s2">0026order=desc</span><span class="se">\u</span><span class="s2">0026sortby=create_time</span><span class="se">\u</span><span class="s2">0026state=-1</span><span class="se">\u</span><span class="s2">0026states=0,1,2,3,4</span><span class="se">\u</span><span class="s2">0026biz_id=0</span><span class="se">\u</span><span class="s2">0026agent_id=512]"</span>,<span class="s2">"level"</span>:<span class="s2">"error"</span>,<span class="s2">"span"</span>:<span class="s2">"66a2ba1882458680"</span>,<span class="s2">"trace"</span>:<span class="s2">"c94c9ac8179690d592fc348b40666e16"</span><span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>出一些  <code class="language-plaintext highlighter-rouge">\u0026</code> 之类的。 但如果把 Encoding 设置为 plain，则正常。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2024-03-09T15:47:08.006+08       error  httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset<span class="o">=</span>0&amp;limit<span class="o">=</span>10&amp;order<span class="o">=</span>desc&amp;sortby<span class="o">=</span>create_time&amp;state<span class="o">=</span><span class="nt">-1</span>&amp;states<span class="o">=</span>0,1,2,3,4&amp;biz_id<span class="o">=</span>0&amp;agent_id<span class="o">=</span>512]      <span class="nb">caller</span><span class="o">=</span>server/Helper.go:164        <span class="nv">trace</span><span class="o">=</span>ca5e1ad81e7d0528f38b361c63a75f35  <span class="nv">span</span><span class="o">=</span>48b14f5d8bce91e9
+</code></pre></div></div>
+
+:ET

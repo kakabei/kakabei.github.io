@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>TCP 协议头和三次握手和四次挥手</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>TCP 协议头和三次握手和四次挥手</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2014-10-15">2014-10-15</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#network" title="network">network</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#network" title="network">network</a>&nbsp;
+  
+  <a href="/tags/#tcp" title="tcp">tcp</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>从四个方面来理解TCP协议：</p>
+
+<p>1、 TCP 头部信息</p>
+
+<p>2、 TCP 状态转移过程</p>
+
+<p>3、 TCP 数据流</p>
+
+<p>4、 TCP 数据流的控制</p>
+
+<h1 id="一tcp-头部信息">一、TCP 头部信息</h1>
+
+<p><img src="/assets/network/tcp-base-1.png" alt="" /></p>
+
+<p>说明：</p>
+
+<p>1、<strong>16 位端口号</strong>：告知这个报文来自那个源端口和给上层协议或者应用那个目的端口。（注意IP是在IP协议层里的）</p>
+
+<p>2、<strong>32 位序号</strong>：一次 TCP 通信（从 TCP 连接到断开）过程中某一个传输方向上的字节流的每个字节编号。</p>
+
+<p>3、<strong>32 位确认号</strong>：用作对另一方发送来的 TCP 报文的响应。</p>
+
+<p>4、<strong>4 位头部长度</strong>：标识该 TCP 头部多少个 32 bit（4字节）因为 4 位最大能表示 15，所以TCP头最长 60 字节。（15*4=60）</p>
+
+<p><strong>5、6 位标志们包含好下</strong>：</p>
+
+<p>（1）<strong>URG</strong> 表示紧急指针是否有效</p>
+
+<p>（2）<strong>ACK</strong> 表示确认号是否有效</p>
+
+<p>（3）<strong>PSH</strong> 提示接收端应用程序应该即人TCP接收缓冲区中读走数据，为接收后续数据腾出空间。</p>
+
+<p>（4）<strong>RST</strong> 表示要求对方重新连接。</p>
+
+<p>（5）<strong>SYN</strong> 表示请求建立一个连接。</p>
+
+<p>（6）<strong>FIN</strong> 表示通知对方本端村关闭连接。</p>
+
+<p>6、<strong>16 位窗口大小</strong> : 是 TCP 流量控制的一个手段。它告诉对方本端的 TCP 接收缓冲区还能容纳多少字节的数据，这样对方就可以控制发送数据的速度。</p>
+
+<p>7、<strong>16 位校验和</strong> ：同发送方填充。用CRC对数据作检验，这个校验不肥包括TCP头部，也包括数据部分，TCP可靠传输的一个生要保障。</p>
+
+<p>8、<strong>16 位紧急指针</strong> ：是一个正的偏移量，它和序号字段的值相加表示最后一个紧急数据的下一字节的序号。</p>
+
+<p>9、<strong>TCP头部选项</strong> ：这部分最后含有40字节。</p>
+
+<p>kind=0：选项表结束选项。</p>
+
+<p>kind=1：空操作（nop）选项。</p>
+
+<p>kind=2：最大报文段长度选项，TCP 模块通常将 MSS 设置为（ MTU-40）字节（减掉的这40字节包括20字节的 TCP 头部和 20 字节的 IP 头部）对以太网而言，MSS 值是1460（1500-40）。</p>
+
+<p>kind=3：窗口扩大因子选项 。窗口扩大因了选项只能出现在同步报文段中。</p>
+
+<p>kind=4：选择性确认 。使 TCP 模块只能重新发送丢失的 TCP 报文段、不用发送所有未被确认的 TCP报文段。</p>
+
+<p>kind=5：SACK实际工作的选项。</p>
+
+<p>kind=8：时间戳选项 提供较为准确的计算通信双方之间的回路时间的方法。</p>
+
+<h1 id="二tcp-状态转移过程">二、TCP 状态转移过程</h1>
+
+<h2 id="半关闭状态">半关闭状态</h2>
+
+<p>TCP 连接是全双工的，所以它允许两个方向的数据传输被独立关闭，通信的一端可艰送结束报文给对方，告诉它本端已经完成了数据的发送。但允许继续接收来息对方的数据 ，直到对方也发送结束报文段以关闭连接。TCP连接的这种状态称为半关闭状态。</p>
+
+<p>服务器和客户端应用程序判断对方是否已经关闭连接的方法是：<code class="language-plaintext highlighter-rouge">read</code> 系统调用返回 0（收到结束报文段）。</p>
+
+<p>socket 网络编程接口通过 shutdown 函数提供了关闭的支持。</p>
+
+<h2 id="三次握手-四次挥手">三次握手 四次挥手</h2>
+
+<p><img src="/assets/network/tcp-base-2.png" alt="" /></p>
+
+<p><strong>TCP 客户端主动关闭后，服务端回包确认，为什么要发一次 ACK, 再发一 次  FIN 和 ACK 呢？</strong></p>
+
+<p>在TCP连接的关闭过程中，客户端和服务器端都需要发送 FIN 包来通知对方关闭连接，以确保连接的正确关闭。当客户端发送 FIN包 时，它将停止发送数据，但是它仍然可以接收数据。</p>
+
+<p>服务器端在接收到客户端的 FIN 包后，需要向客户端发送 ACK 包确认接收到了客户端的 FIN 包，然后服务器端会在适当的时间内关闭它的写入端。</p>
+
+<p>当服务器端准备好关闭连接时，它会发送 FIN 包给客户端，以通知客户端它也要关闭连接。此时，客户端将发送ACK包，以确认接收到服务器端发送的FIN包。这个 ACK 包是针对服务器端发送的 FIN 包而不是之前的 ACK 包，因为客户端在收到 FIN 包之前可能会发送其他数据，因此之前的 ACK 包不能确认已经接收到了服务器端发送的 FIN 包。</p>
+
+<p>因此，TCP 连接的正常关闭需要两次 FIN 握手，即客户端发送 FIN 包，服务器端发送 ACK 包，然后服务器端发送 FIN 包，客户端发送 ACK 包，这样连接才能正确关闭。</p>
+
+<p>服务端发送 FIN 包时带上 ACK 标志位，表示服务端已经接收到了客户端最后一次的 ACK 包，客户端会在接收到服务端的 FIN 包时立即回复一个 AC K包，表示自己已经接收到了服务端的 FIN 包，并且准备关闭连接。这样就能保证数据能够完整地传输完成，不会发生数据丢失的情况。</p>
+
+<p>因此，在TCP连接关闭的过程中，服务端发送FIN包时需要带上ACK标志位，以便客户端及时发送 AC K包，完成数据传输。</p>
+
+<h2 id="time_wait-状态">TIME_WAIT 状态</h2>
+
+<p>从图可以看，客户端连接在收到服务器的结束报文段之后，并没有直接进入 CLOSED 状态，而是转移到 TIME_WAIT 状态。在这个状态，客户端连接要等待一段时间为 2MSL 的时间。才能完全关闭。</p>
+
+<p><strong>MSL</strong> 指的是 Maximum Segment Lifetime（最大报文生存时间），它表示一个TCP报文段在网络中最长的存活时间。</p>
+
+<p>当 TCP 客户端和服务器之间的连接被终止时，TCP 协议要保证网络中所有的数据包都被正确地接收和处理。为了达到这个目的，TCP 使用了一种被称为“2MSL（2倍的MSL）算法”的机制。当TCP连接的一端发送了 FIN 报文段时，它会进入“等待时间”状态，等待另一端确认接收到了这个 FIN 报文段。此时如果接收到了另一端的 ACK 报文段，那么该 TCP 连接的一端就进入了“TIME_WAIT”状态。在这个状态下，它会等待2倍的 MSL 时间，以确保网络中所有的数据包都被正确地处理。在这个等待时间过去之后，该 TCP 连接的一端才会真正地关闭连接。</p>
+
+<p>MSL的具体数值由TCP协议实现的机器决定，一般为2分钟。</p>
+
+<h2 id="time_wait-状态存在的原因">TIME_WAIT 状态存在的原因</h2>
+
+<p>TIME_WAIT 状态表示等待一段时间以确保最后一个 ACK 分组被对端正确接收。它存在的原因主要是为了处理可能出现的网络延迟、分组丢失等问题，以保证连接的可靠关闭。</p>
+
+<p>1）可靠地终止 TCP 连接。</p>
+
+<p>2）保证让发来的 TCP 报文段有足够的时间被识别并丢弃。</p>
+
+<p>在 TCP 连接关闭时，主动关闭一方（即发送 FIN 分组的一方）进入 TIME_WAIT 状态，并等待一段时间（通常为 2 倍的 MSL 值）以确保已经发送的 ACK 分组已被接收，防止重复分组的出现。因为如果连接关闭后，被动关闭一方（即接收 FIN 分组的一方）后又重新启动，那么之前的未完成连接可能会导致问题的出现，如对之前连接的重复使用等。这个新连接被称了<strong>连接的化身</strong>。它可能会接收到属于原来的连接的应用程序数据。这是不应该发的事。</p>
+
+<h2 id="复位报文段">复位报文段</h2>
+
+<p>复位报文段（RST）是 TCP 协议中的一种特殊报文，用于终止TCP连接或通知异常情况。它可以由TCP的任一端发送，接收端在收到复位报文后，就会立即关闭连接。</p>
+
+<p>通常情况下，复位报文是在以下情况下发送的：</p>
+
+<p>1、接收到一个无法识别的序列号时：如果接收方收到一个包，其中的TCP序列号无法与其期望的序列号相匹配，则接收方会发送一个复位报文段，以关闭该连接并清除现有的状态信息。</p>
+
+<p>2、指定了一个错误的连接：如果TCP尝试将数据包发送到一个未建立的连接，则接收方可能会发送一个复位报文段以关闭连接。</p>
+
+<p>3、检测到一个错误的段：如果接收方检测到TCP段存在错误，比如检验和错误等，它可能会发送复位报文段以关闭连接。</p>
+
+<p>4、拒绝一个连接请求：如果服务器拒绝一个连接请求，它会发送一个复位报文段以通知客户端连接请求已被拒绝。</p>
+
+<p>在这些情况下，发送方在收到复位报文后应该立即关闭连接，不再进行数据的传输。复位报文被认为是一种强制性的关闭连接的方法，而不是通过正常的握手过程来关闭连接。</p>
+
+<p>收到 RST 后，TCP 连接会立即被关闭，应用程序必须在重新连接之前自行检查并处理错误。因此，如果需要重新连接，应用程序需要自己编写代码实现重新连接。在重新连接之前，应用程序可能需要等待一段时间，避免频繁尝试重新连接而影响网络性能。</p>
+
+<p>在 C++ 代码中，可以通过检查套接字（socket）返回值中的错误码来确定是否收到了 RST 包。如果发生了连接中断（connection reset），则系统会返回 <strong>ECONNRESET</strong> 错误码，表明对端重置了连接。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/socket.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cerrno&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">sockfd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="c1">// connect to the remote host</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">sockaddr</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">remote_addr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">remote_addr</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to connect: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">recv</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">==</span> <span class="n">ECONNRESET</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Connection was reset by peer."</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to receive data: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>如果 recv 函数返回 -1，我们会检查 errno 的值，如果为 ECONNRESET，则表明连接被重置。</p>
+
+<h2 id="异常终止连接">异常终止连接</h2>
+
+<p>TCP 提供了异常终止一个连接的方法，即给对方发送一个复位报文段。一旦发送了复位报文段，发送端所有排除等待的数据都将被丢弃。</p>
+
+<p>方法如下：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/socket.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;arpa/inet.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// 创建socket</span>
+    <span class="kt">int</span> <span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="n">IPPROTO_TCP</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sock</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to create socket."</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 连接到服务器</span>
+    <span class="k">struct</span> <span class="nc">sockaddr_in</span> <span class="n">server_addr</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">server_addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">server_addr</span><span class="p">));</span>
+    <span class="n">server_addr</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>
+    <span class="n">server_addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span> <span class="o">=</span> <span class="n">inet_addr</span><span class="p">(</span><span class="s">"127.0.0.1"</span><span class="p">);</span>
+    <span class="n">server_addr</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">sockaddr</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">server_addr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">server_addr</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to connect to server."</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 发送RST包</span>
+    <span class="k">struct</span> <span class="nc">tcp_info</span> <span class="n">info</span><span class="p">;</span>
+    <span class="n">socklen_t</span> <span class="n">len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">info</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">info</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">info</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">getsockopt</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">IPPROTO_TCP</span><span class="p">,</span> <span class="n">TCP_INFO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">info</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">len</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to get socket option."</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">info</span><span class="p">.</span><span class="n">tcpi_flags</span> <span class="o">|=</span> <span class="n">TCPI_FLAG_RST</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">IPPROTO_TCP</span><span class="p">,</span> <span class="n">TCP_INFO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">info</span><span class="p">,</span> <span class="n">len</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to set socket option."</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 关闭socket</span>
+    <span class="n">close</span><span class="p">(</span><span class="n">sock</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="处理半打开连接">处理半打开连接</h2>
+
+<p>服务器（或客户端）关闭或者异常终止了连接，而对方没有接收到结束报文段（比如发生了网络故障），此时，客户端（或服务端）还维持着原来的连接，而服务器（或客户端）即使重启，也已经没有该连接的任何信息了。我们将这种状态称为打开状态，处于这种连接称为半打开连接。如果客户端（或服务器）往处于关打开连接写入数据，则对方方将回应一个复位报文段。</p>
+
+<h2 id="tcp-交互数据流">TCP 交互数据流</h2>
+
+<p><strong>1、交互数据</strong></p>
+
+<p>交互数据指的是通过 TCP 连接传输的每一个分节（segment）的数据部分，即通过 TCP 协议进行交互的每一个数据包。TCP 将每一个数据包看作一个独立的数据单元，对于每一个数据包，它都会进行封装和传输。</p>
+
+<p><strong>2、成块数据</strong></p>
+
+<p>成块数据指的是通过应用层协议传输的数据，由于应用层协议可能将数据划分成多个小块进行传输，TCP 在传输过程中需要将这些小块数据合并成完整的数据块，然后再进行封装和传输。</p>
+
+<p>在 TCP 传输数据时，应用层传输的数据可能会被分成多个数据段进行传输，TCP 会将这些数据段进行合并并组成完整的数据块，然后再封装成 TCP 协议的数据包进行传输。接收端接收到数据包后，同样需要将数据包中的数据分离出来，并按照应用层协议的格式进行处理，最终交付给应用层处理。</p>
+
+<p>TCP 交互数据流的成块数据在传输时可以被划分成多个小块进行传输，这些小块被称为 TC P数据段。这些数据段的大小通常由 TCP 协议栈自己决定，称为 MSS (maximum segment size)，其最大值为 64KB，但实际上常常小于这个值。</p>
+
+<p>在应用程序发送数据时，如果超出了 MSS 的大小，TCP协议栈会将其分解为若干个MSS大小的数据段进行传输，同时在传输的数据段上加上TCP首部和IP首部等必要信息，然后发送给对端。而在接收端，TCP 协议栈会自动将接收到的数据段组装成原始数据，并交给应用程序处理。</p>
+
+<p>因此，对于应用程序而言，它不需要关心 TCP 数据段的分解和组装过程，TCP协议栈会自动完成这些工作。应用程序只需要向TCP协议栈提供需要发送的数据和接收到的数据的缓冲区，并对收到的数据进行处理即可。</p>
+
+<p>在 TCP 协议中，数据传输是按照字节流方式进行的，应用程序传输的数据是被视为一个连续的字节流，在传输过程中，TCP 会对数据进行分段（segmentation）并封装成 TCP 报文段（TCP segment）进行传输，而这些 TCP 报文段的大小是由操作系统决定的，应用程序无法直接控制。因此，应用程序不需要进行分包和组包，只需要向 TCP 提供需要发送的数据，TCP 会负责将其封装成 TCP 报文段进行传输，同时也会负责将接收到的 TCP 报文段还原成应用程序可读的数据。</p>
+
+<p>如果发送的数据块过大，可能会导致发送方的缓冲区不足，从而影响数据传输的效率。在应用程序中，通常会将大的数据块分割成小的数据块，然后逐个发送，以保证数据传输的效率。</p>
+
+<h2 id="带外数据">带外数据</h2>
+
+<p>外带数据也称为带外数据（Out-Of-Band Data）它是一种 TCP 连接上的紧急数据，不像常规数据那样按序传输。</p>
+
+<p>TCP 外带数据的传输方式是通过 TCP 报文段头部的 URG 标志实现的。当发送方需要发送外带数据时，将 URG 标志置为 1，然后将外带数据和普通数据一起发送给接收方。接收方在接收到带有 URG 标志的报文时，会根据紧急指针（URG pointer）找到报文中的外带数据并进行处理。处理完外带数据后，接收方会通过 ACK 报文向发送方发送确认信息。</p>
+
+<p>带外数据用于迅速通知对方本端发生的重要事件。因此，带外数据比普通数据（也称为带内数据）表更高的优先级。它应该总是立即被发送，而不论发送缓冲区中是否有排队等待发送的普通数据。
+UDP 没有实现带外数据传输，TCP 也没有真正的带外数据。不过TCP利用其头部中的紧急指针标志和紧急指针两个字段，给应用程序提供了一种紧急方式 。</p>
+
+<p>TCP 外带数据的使用是有限制的，因为它可能会影响 TCP 连接的稳定性。具体来说，发送方只能发送一个带外数据字节序列，而且接收方必须在接收到外带数据后立即将其处理掉，否则可能会对后续数据的传输和接收造成影响。</p>
+
+<p>在 C++ 中，可以通过设置 TCP 的 <strong>MSG_OOB</strong> 标志位来发送外带数据，示例如下：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/socket.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;netinet/in.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;arpa/inet.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// 创建 TCP 套接字</span>
+    <span class="kt">int</span> <span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="n">IPPROTO_TCP</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sock</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error: socket creation failed.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 连接服务器</span>
+    <span class="k">struct</span> <span class="nc">sockaddr_in</span> <span class="n">server_addr</span><span class="p">;</span>
+    <span class="n">server_addr</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>
+    <span class="n">server_addr</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+    <span class="n">server_addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span> <span class="o">=</span> <span class="n">inet_addr</span><span class="p">(</span><span class="s">"127.0.0.1"</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">sockaddr</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">server_addr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">server_addr</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error: connection failed.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 发送普通数据</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">message</span> <span class="o">=</span> <span class="s">"Hello, TCP!"</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">send</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">message</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">message</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error: sending message failed.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 发送外带数据</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">oob_message</span> <span class="o">=</span> <span class="s">"OOB data"</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">send</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">oob_message</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">oob_message</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">MSG_OOB</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error: sending OOB data failed.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 关闭连接</span>
+    <span class="n">close</span><span class="p">(</span><span class="n">sock</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>发送普通数据使用 send 函数，而发送外带数据则通过在 send 函数中设置 MSG_OOB 标志位来实现。在接收端，可以使用 recv 函数来接收外带数据，并且需要注意，在接收外带数据时需要将 MSG_OOB 标志位传给 recv 函数.</p>
+
+<p>接收端处理外带数据时，需要使用 MSG_OOB 参数来接收外带数据，如下：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/socket.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;netinet/in.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">listen_fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">listen_fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error creating socket"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">sockaddr_in</span> <span class="n">addr</span><span class="p">{};</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">));</span>
+    <span class="n">addr</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>
+    <span class="n">addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span> <span class="o">=</span> <span class="n">INADDR_ANY</span><span class="p">;</span>
+    <span class="n">addr</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">sockaddr</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error binding socket"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">listen</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span> <span class="n">SOMAXCONN</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error listening on socket"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">conn_fd</span> <span class="o">=</span> <span class="n">accept</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">conn_fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error accepting connection"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">recv</span><span class="p">(</span><span class="n">conn_fd</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error receiving data"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 处理外带数据</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">recv</span><span class="p">(</span><span class="n">conn_fd</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">MSG_OOB</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error receiving OOB data"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Received data: "</span> <span class="o">&lt;&lt;</span> <span class="n">buf</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">close</span><span class="p">(</span><span class="n">conn_fd</span><span class="p">);</span>
+    <span class="n">close</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>使用 <code class="language-plaintext highlighter-rouge">recv()</code> 函数接收数据。在接收完数据后，我们可以使用 MSG_OOB 参数接收外带数据，也就是上面代码中的第二个<code class="language-plaintext highlighter-rouge"> recv()</code> 函数</p>
+
+<h2 id="tcp-超时重传">TCP 超时重传</h2>
+
+<p>TCP 超时重传是指当发送端发送数据后，如果在一定时间内没有收到接收端的确认（ACK）信息，就会重新发送之前未收到确认的数据。其原理主要是基于 TCP 协议的可靠性传输机制和滑动窗口协议。</p>
+
+<p>在 TCP 中，发送方会根据接收方的 ACK 情况动态调整发送窗口的大小，确保传输的可靠性。发送方发送数据后会设置一个定时器，如果在定时器时间内没有收到 ACK 确认信息，则认为该数据丢失，触发重传机制。重传次数达到一定的限制后，将放弃该数据包的传输，并向上层协议报告传输失败。</p>
+
+<p>同时，为了防止网络传输延迟较大，导致的重传次数过多和网络负载过重等问题，TCP 协议还采用了一些优化策略，如<strong>快速重传</strong>和<strong>快速恢复</strong>，能够在一定程度上减少重传的次数和网络负载。</p>
+
+<p>总之，TCP 超时重传的原理是通过定时器和滑动窗口等机制保证传输的可靠性，当数据丢失或超时未收到 ACK 确认时，自动触发重传机制，确保数据的准确性和完整性。</p>
+
+<h2 id="拥塞控制">拥塞控制</h2>
+
+<p>TCP 拥塞控制是指在网络中有拥塞时，TCP 能够自动调整发送速率以避免网络拥塞加剧。TCP 通过四种机制来实现拥塞控制：</p>
+
+<p><strong>慢启动（slow start）</strong>：在连接刚开始时，TCP 发送窗口大小被设置为一个最大分段大小（MSS）的值，然后每收到一个 ACK，窗口大小就增加一个 MSS，直到窗口大小达到一个阈值（拥塞窗口阈值CWND），此时切换到拥塞避免状态。</p>
+
+<p><strong>拥塞避免（congestion avoidance）</strong>：在拥塞避免状态下，TCP 发送窗口大小线性增加，每个传输轮次（一个传输轮次指的是从一个数据包被发送出去，到该数据包对应的 ACK 被接收到这段时间内）增加一个 MSS 的大小，直到出现拥塞。一旦检测到拥塞，TCP 就会进入慢启动状态。</p>
+
+<p><strong>快速重传（fast retransmit）</strong>：如果发送方收到了3个重复的 ACK，就会假设发送的某个数据包已经丢失了，并快速地重传该数据包，而不是等待重传超时。</p>
+
+<p><strong>快速恢复（fast recovery）</strong>：如果发送方收到3个重复的 ACK，则会将拥塞窗口的值减半，并进入快速恢复状态，继续发送数据。当收到一个新的 ACK 时，窗口大小将增加，直到达到拥塞窗口阈值。如果在快速恢复状态下再次收到3个重复的 ACK，则意味着网络依然出现拥塞，TCP 将会重新进入慢启动状态。</p>
+
+<h2 id="其他">其他</h2>
+
+<p>TCP 为什么叫数据流：应用程序对数据的发送和接收是没有边界限制的。</p>
+
+<p>TCP 为什么是可靠的：TCP协议采用发送应答机制，即发送端发送的每个TCP报文段都必须得到接收方的应答，其次，采用超时重传机制。</p>
+
+<p>UDP 虽然说是不可靠服务，但是可以在上层协议来处理数据确认和超时重传。</p>
+
+<hr />
+
+<p>参考：</p>
+
+<p>1、chatGPT</p>
+
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/select/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/linux-gdb/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2014-10-15-tcp-base.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

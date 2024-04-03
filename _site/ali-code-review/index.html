@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>阿里技术:Code Review</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>阿里技术:Code Review</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2022-11-12">2022-11-12</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#总结" title="总结">总结</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#工作经验" title="工作经验">工作经验</a>&nbsp;
+  
+  <a href="/tags/#团队管理" title="团队管理">团队管理</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>阿里技术微信公众号：<a href="https://mp.weixin.qq.com/s/AejIOMNxsI_Ru5G0W8AeTg">七个建议让 Code Review 高效又高质</a></p>
+
+<h1 id="为什么要做代码评审">为什么要做代码评审</h1>
+
+<p>代码评审最本质的作用不是问题发现。除了代码评审，我们有更多更好的手段来发现问题。代码评审的作用更多是<strong>关于社会学的，是一种长期行为和组织文化</strong>。</p>
+
+<p>社会学？上了很高的层次了。</p>
+
+<h2 id="1编码者视角良性的社交压力">1. 编码者视角：良性的社交压力</h2>
+
+<p>一旦想到你的代码将会发出去给你的同事做 Review，有没有为刚才的这种想法产生一丝丝压力？这种压力是良性的，它能给你带来一种即时的反馈，阻止你去选择那些短期收益、长期损失的 “投机” 行为。如果没有代码评审这个环节，或许你就会真的 “为所欲为” 了，其实最终还是要为这种取巧行为买单。</p>
+
+<h2 id="2维护者视角代码可读性的保证">2. 维护者视角：代码可读性的保证</h2>
+
+<p>这段代码在编码完成之后，立即经历了可读性的检验。更理想地，如果组织已经有了编码规范和设计规范，还能确保这段代码遵循了这些规范。如果 CR 过程中发现这段代码没有遵循规范，那更是好事，它指向了 CR 的另外一个关键价值：知识传播。</p>
+
+<h2 id="3cr带来了知识传播和设计共识">3. CR 带来了知识传播和设计共识</h2>
+
+<p>抽象的概念如果不落到具体的事情上，就很难形成共识。有人或许知道海洋系的 “判例”，这是在法律层面形成共识的一种非常好的方法。代码评审，其实也是在形成判例：哪一类设计是合理的，哪一类设计是不合理的。通过针对具体的问题进行分析，团队就会逐渐形成设计共识，在过程中，对这些共识不那么熟悉的新同学，也可以慢慢融入。</p>
+
+<h2 id="4检验逻辑正确性">4. 检验逻辑正确性</h2>
+
+<p>1、保证代码逻辑正确，是设计者的责任。</p>
+
+<p>2、发现逻辑错误的其他方法。</p>
+
+<p>3、编写自动化单元测试。</p>
+
+<p>4、使用代码静态检查工具。</p>
+
+<h2 id="实际操作建议">实际操作建议</h2>
+
+<p>1、小批量——每次 Review 的代码量要少。</p>
+
+<p>2、多批次——Review 要频繁发生。</p>
+
+<p>3、找对人——合适的 Reviewer。</p>
+
+<p>4、快速响应。</p>
+
+<p>5、使用现代工具。</p>
+
+<p>6、考虑结对编程。</p>
+
+<p>7、综合在线 Review 和线下 Review。</p>
+
+<hr />
+<p>参考资料：</p>
+
+<p><a href="https://mp.weixin.qq.com/s/AejIOMNxsI_Ru5G0W8AeTg"># 七个建议让 Code Review 高效又高质</a></p>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/how-to-make-good-code-reviews-better/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2022-11-11-ali-code-review.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

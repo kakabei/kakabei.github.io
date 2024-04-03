@@ -1,0 +1,16 @@
+I"x<p>nginx 配置 负载方式：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> upstream xy_hello <span class="o">{</span>                                                                                                                                   
+     server 10.173.70.133:8080      <span class="nv">max_fails</span><span class="o">=</span>3 <span class="nv">fail_timeout</span><span class="o">=</span>30s<span class="p">;</span>
+     <span class="c">#server 10.101.62.231:8080     max_fails=3 fail_timeout=30s;</span>
+     <span class="c">#server 10.172.13.176:8080     max_fails=3 fail_timeout=30s;</span>
+ <span class="o">}</span>
+ 
+location ~ ^/xyhello/ <span class="o">{</span> 
+    proxy_set_header        Host xyhello.xyecho.com<span class="p">;</span>
+    proxy_set_header        X-Real-IP <span class="nv">$remote_addr</span><span class="p">;</span>
+    proxy_set_header        X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+    proxy_pass http://xy_hello<span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+:ET

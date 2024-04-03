@@ -1,0 +1,45 @@
+I"�	<h4 id="lag-和-lead-函数">LAG 和 LEAD 函数</h4>
+
+<p><strong>LAG</strong></p>
+
+<p>LAG(col,n,DEFAULT) 用于统计窗口内往上第n行值</p>
+
+<p>参数1为列名，参数2为往上第n行（可选，默认为1），参数3为默认值（当往上第n行为NULL时候，取默认值，如不指定，则为NULL）</p>
+
+<p><strong>LEAD</strong></p>
+
+<p>与LAG相反</p>
+
+<p>LEAD(col,n,DEFAULT) 用于统计窗口内往下第n行值</p>
+
+<p>参数1为列名，参数2为往下第n行（可选，默认为1），参数3为默认值（当往下第n行为NULL时候，取默认值，如不指定，则为NULL）</p>
+
+<p><a href="https://blog.csdn.net/kent7306/article/details/50441967"><strong>Hive 分析函数lead、lag实例应用</strong></a></p>
+
+<h3 id="关联表join">关联表（join）</h3>
+
+<p>在hive中，关联有4种方式：</p>
+
+<p>内关联：<code class="language-plaintext highlighter-rouge">join on</code></p>
+
+<p>左外关联：<code class="language-plaintext highlighter-rouge">left join on</code></p>
+
+<p>右外关联：<code class="language-plaintext highlighter-rouge">right join on</code></p>
+
+<p>全外关联：<code class="language-plaintext highlighter-rouge">full join on </code></p>
+
+<h3 id="hive-没有update-方法-只能insert">Hive 没有update 方法， 只能insert</h3>
+
+<h3 id="清除表中数据">清除表中数据</h3>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">db</span><span class="p">.</span><span class="k">table</span>  <span class="k">DROP</span> <span class="k">PARTITION</span> <span class="p">(</span><span class="n">dt</span><span class="o">=</span><span class="s1">'2019-12-31'</span><span class="p">);</span>
+
+<span class="c1">--添加多个字段</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="n">bron_lpss_lpss_order_info_cur</span> <span class="k">add</span> <span class="n">columns</span>
+<span class="p">(</span>
+    <span class="n">order_source</span> <span class="n">string</span> <span class="k">comment</span> <span class="s1">'订单来源'</span><span class="p">,</span>
+    <span class="n">mid</span> <span class="n">string</span> <span class="k">comment</span> <span class="s1">'新会员id'</span><span class="p">,</span>
+    <span class="n">bank_name</span> <span class="n">string</span> <span class="k">comment</span> <span class="s1">'银行行名'</span>
+<span class="p">);</span>
+</code></pre></div></div>
+:ET

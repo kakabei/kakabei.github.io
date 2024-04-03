@@ -1,0 +1,102 @@
+I"1<h3 id="一共被分为5个区">一共被分为5个区：</h3>
+
+<p>1、 <strong>栈区</strong> （stack） 从高地址向低地址增长。由编译器自动管理分配。在执行函数时，函数内局部变量的存储单元都可以在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是分配的内存容量有限。</p>
+
+<p>2、<strong>堆区</strong> （heap）动态内存分配。程序在运行的时候用 malloc 或 new 申请任意多少的内存，程序员自己负责在何时用 free 或 delete 释放内存。动态内存的生存期由我们决定，使用非常灵活，但问题也最多，存在忘记释放导致内存泄漏。</p>
+
+<p>3、<strong>BSS</strong> 存放<strong>未初始化</strong>的全局和静态变量。（默认设为0）</p>
+
+<p>4、<strong>数据区</strong> （Data Segment） 存放已初始化的全局和静态变量， 常量数据（如字符串常量）。</p>
+
+<p>5、<strong>代码区（Code Segment）</strong> 也称Text Segment，存放可执行程序的机器码。</p>
+
+<p><img src="./assets/programming-language/cplusplus-memory-2022-12-13_21-49-22.png" alt="" /></p>
+
+<h3 id="new-和-malloc">new 和 malloc</h3>
+
+<p>1、<code class="language-plaintext highlighter-rouge">new</code> 和 <code class="language-plaintext highlighter-rouge">malloc</code> 如何判断是否申请到内存？</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">malloc</code> ：成功申请到内存，返回指向该内存的指针；分配失败，返回 NULL 指针。</li>
+  <li><code class="language-plaintext highlighter-rouge">new</code> ：内存分配成功，返回该对象类型的指针；分配失败，抛出 bad_alloc 异常。</li>
+</ul>
+
+<p>可以使用 <code class="language-plaintext highlighter-rouge">std::nothrow</code> 让 <code class="language-plaintext highlighter-rouge">new</code> 在申请内存失败时也同 <code class="language-plaintext highlighter-rouge">malloc</code>  一样返回 <code class="language-plaintext highlighter-rouge">NULL</code> 指针，而不是抛出 <code class="language-plaintext highlighter-rouge">std::bad_alloc</code>   异常。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nothrow</span><span class="p">)</span> <span class="n">A</span><span class="p">();</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// add logs here</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>2、 <code class="language-plaintext highlighter-rouge">delete</code> 实现原理？<code class="language-plaintext highlighter-rouge">delete</code> 和 <code class="language-plaintext highlighter-rouge">delete[]</code> 的区别？</p>
+
+<p><code class="language-plaintext highlighter-rouge">delete</code> 的实现原理：首先执行该对象所属类的析构函数；进而通过调用 <code class="language-plaintext highlighter-rouge">operator delete</code> 的标准库函数来释放所占的内存空间。</p>
+
+<p><code class="language-plaintext highlighter-rouge">delete</code> 和 <code class="language-plaintext highlighter-rouge">delete []</code> 的区别：</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">delete</code> 用来释放单个对象所占的空间，只会调用一次析构函数；</li>
+  <li><code class="language-plaintext highlighter-rouge">delete []</code> 用来释放数组空间，会对数组中的每个成员都调用一次析构函数。</li>
+</ul>
+
+<p>对于像 <code class="language-plaintext highlighter-rouge">int</code> 、<code class="language-plaintext highlighter-rouge">char</code> 、<code class="language-plaintext highlighter-rouge">long</code>  、<code class="language-plaintext highlighter-rouge">int*</code> 等等简单数据类型，由于对象没有析构函数，所以用 <code class="language-plaintext highlighter-rouge">delete</code> 和 <code class="language-plaintext highlighter-rouge">delete []</code> 是一样的！都不会造成内存泄露！ 但通常为了规范起见，<code class="language-plaintext highlighter-rouge">new []</code>都配套使用 <code class="language-plaintext highlighter-rouge">delete []</code>。</p>
+
+<p>但是如果是 C++ 自定义对象数组就不同了！由于 <code class="language-plaintext highlighter-rouge">delete p</code> 只调用了一次析构函数，剩余的对象不会调用析构函数，所以剩余对象中如果有申请了新的内存或者其他系统资源，那么这部分内存和资源就无法被释放掉了，因此会造成内存泄露或者更严重的问题。</p>
+
+<p>3、<code class="language-plaintext highlighter-rouge">new</code> 和 <code class="language-plaintext highlighter-rouge">malloc</code> 的区别，<code class="language-plaintext highlighter-rouge">delete</code> 和 <code class="language-plaintext highlighter-rouge">free </code>的区别</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">malloc</code>、<code class="language-plaintext highlighter-rouge">free</code> 是库函数，而 <code class="language-plaintext highlighter-rouge">new</code>、<code class="language-plaintext highlighter-rouge">delete</code> 是关键字。</li>
+  <li><code class="language-plaintext highlighter-rouge">new</code> 申请空间时，无需指定分配空间的大小，编译器会根据类型自行计算；<code class="language-plaintext highlighter-rouge">malloc</code> 在申请空间时，需要确定所申请空间的大小。</li>
+  <li><code class="language-plaintext highlighter-rouge">new</code> 申请空间时，返回的类型是对象的指针类型，无需强制类型转换，是类型安全的操作符；<code class="language-plaintext highlighter-rouge">malloc</code> 申请空间时，返回的是 <code class="language-plaintext highlighter-rouge">void*</code> 类型，需要进行强制类型的转换，转换为对象类型的指针。</li>
+  <li><code class="language-plaintext highlighter-rouge">new</code> 分配失败时，会抛出 <code class="language-plaintext highlighter-rouge">bad_alloc</code> 异常，<code class="language-plaintext highlighter-rouge">malloc</code> 分配失败时返回空指针。</li>
+  <li>对于自定义的类型，<code class="language-plaintext highlighter-rouge">new </code>首先调用 <code class="language-plaintext highlighter-rouge">operator new()</code> 函数申请空间（底层通过 <code class="language-plaintext highlighter-rouge">malloc</code> 实现），然后调用构造函数进行初始化，最后返回自定义类型的指针；</li>
+  <li><code class="language-plaintext highlighter-rouge">delete</code> 首先调用析构函数，然后调用 <code class="language-plaintext highlighter-rouge">operator delete()</code> 释放空间（底层通过 <code class="language-plaintext highlighter-rouge">free</code> 实现）。<code class="language-plaintext highlighter-rouge">malloc</code>、<code class="language-plaintext highlighter-rouge">free</code> 无法进行自定义类型的对象的构造和析构。</li>
+  <li><code class="language-plaintext highlighter-rouge">new</code> 操作符从自由存储区上为对象动态分配内存，而 <code class="language-plaintext highlighter-rouge">malloc</code> 函数从堆上动态分配内存。（自由存储区不等于堆）</li>
+</ul>
+
+<p><strong>这里的自由存储区应该怎么理解？</strong></p>
+
+<p><a href="https://cloud.tencent.com/developer/article/1155154">C++ 自由存储区是否等价于堆？</a></p>
+
+<p>从技术上来说，堆（heap）是 C 语言和操作系统的术语。堆是操作系统所维护的一块特殊内存，它提供了动态分配的功能，当运行程序调用 <code class="language-plaintext highlighter-rouge">malloc()</code> 时就会从中分配，稍后调用<code class="language-plaintext highlighter-rouge">free()</code>可把内存交还。</p>
+
+<p>而自由存储是 C++ 中通过 <code class="language-plaintext highlighter-rouge">new()</code>和 <code class="language-plaintext highlighter-rouge">delete()</code> 动态分配和释放对象的抽象概念，通过<code class="language-plaintext highlighter-rouge">new()</code> 来申请的内存区域可称为自由存储区。基本上，所有的 C++ 编译器默认使用堆来实现自由存储，也即是缺省的全局运算符 <code class="language-plaintext highlighter-rouge">new()</code> 和 <code class="language-plaintext highlighter-rouge">delete()</code> 也许会按照<code class="language-plaintext highlighter-rouge">malloc()</code> 和 <code class="language-plaintext highlighter-rouge">free()</code> 的方式来被实现，这时藉由 <code class="language-plaintext highlighter-rouge">new()</code> 运算符分配的对象，说它在堆上也对，说它在自由存储区上也正确。但程序员也可以通过重载操作符，改用其他内存来实现自由存储，例如全局变量做的对象池，这时自由存储区就区别于堆了。我们所需要记住的就是：</p>
+
+<p><strong>堆是操作系统维护的一块内存，而自由存储是C++中通过new与delete动态分配和释放对象的抽象概念。堆与自由存储区并不等价。</strong></p>
+
+<p>4、malloc 的底层实现？</p>
+
+<p><strong>malloc 的原理:</strong></p>
+
+<p>当开辟的空间小于 128K 时，调用 <code class="language-plaintext highlighter-rouge">brk()</code> 函数，通过移动 <code class="language-plaintext highlighter-rouge">_enddata</code> 来实现；当开辟空间大于 128K 时，调用 <code class="language-plaintext highlighter-rouge">mmap() </code>函数，通过在虚拟地址空间中开辟一块内存空间来实现。</p>
+
+<p><code class="language-plaintext highlighter-rouge">brk()</code> 函数实现原理：向高地址的方向移动指向数据段的高地址的指针 <code class="language-plaintext highlighter-rouge">_enddata。</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">mmap()</code> 内存映射原理：</p>
+
+<p>进程启动映射过程，并在虚拟地址空间中为映射创建虚拟映射区域；</p>
+
+<p>调用内核空间的系统调用函数<code class="language-plaintext highlighter-rouge"> mmap()</code>，实现文件物理地址和进程虚拟地址的一一映射关系；进程发起对这片映射空间的访问，引发缺页异常，实现文件内容到物理内存（主存）的拷贝。</p>
+
+<p><strong>内存分配的原理</strong></p>
+
+<p>从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：<code class="language-plaintext highlighter-rouge">brk()</code> 和 <code class="language-plaintext highlighter-rouge">mmap()</code>（不考虑共享内存）。</p>
+
+<p>1、<code class="language-plaintext highlighter-rouge">brk()</code> 是将数据段(<code class="language-plaintext highlighter-rouge">.data</code>)的最高地址指针<code class="language-plaintext highlighter-rouge">_edata</code>往高地址推；</p>
+
+<p>2、<code class="language-plaintext highlighter-rouge">mmap()</code> 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。</p>
+
+<p>这两种方式分配的都是虚拟内存，没有分配物理内存。在第一次访问已分配的虚拟地址空间的时候，发生缺页中断，操作系统负责分配物理内存，然后建立虚拟内存和物理内存之间的映射关系。</p>
+
+<p>在标准C库中，提供了<code class="language-plaintext highlighter-rouge">malloc/free</code> 函数分配释放内存，这两个函数底层是由 <code class="language-plaintext highlighter-rouge">brk，mmap，munmap</code> 这些系统调用实现的。</p>
+
+<hr />
+<p>参考：</p>
+
+<p>1、<a href="https://zhuanlan.zhihu.com/p/344377490">深度阅读：深入 C++ 内存管理</a></p>
+
+<p>2、<a href="https://cloud.tencent.com/developer/article/1155154">C++ 自由存储区是否等价于堆？</a></p>
+
+:ET

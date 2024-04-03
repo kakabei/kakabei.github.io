@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <rss version="2.0"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+  >
+  <channel>
+    <title>xyecho - just my notes</title>
+    <link href="http://localhost:4000/feed/" rel="self" />
+    <link href="http://localhost:4000" />
+    <lastBuildDate>2024-04-03T13:59:06+08:00</lastBuildDate>
+    <webMaster>1447675994@qq.com</webMaster>
+    
+    <item>
+      <title>golang time.AddDate的问题</title>
+      <link href="http://localhost:4000/golang-time-adddate/"/>
+      <pubDate>2024-04-02T04:08:12+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/golang-time-adddate</guid>
+      <content:encoded><![CDATA[<p>周末线上出现一个问题，3月份的订单没有算出来，从数据库表数据上看，订单数据已经是完成状态，但数据为空。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>python mysql 插入更新一些特殊的字符</title>
+      <link href="http://localhost:4000/python-mysql-connector/"/>
+      <pubDate>2024-03-09T17:08:12+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/python-mysql-connector</guid>
+      <content:encoded><![CDATA[<p>写了一个脚本，把一个mysql 表的中数据从一个表更新到另一个表中。其他有字段是路径，包含有 <code class="language-plaintext highlighter-rouge">/</code> 和  <code class="language-plaintext highlighter-rouge">'</code>  等字符。</p>
+
+<p>第一次的做法是：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<p>却发现了问题，就是在遇到特殊的字符会被转义。如：写入的路径后会没了斜杠 <code class="language-plaintext highlighter-rouge">\</code>。或遇到 <code class="language-plaintext highlighter-rouge">'</code> 出现 sql 解析异常。</p>
+
+<p>这是字符串被转义导致的。</p>
+
+<p>要<strong>使用参数化查询</strong>才可以，如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>  
+</code></pre></div></div>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go-zero swagger 的使用</title>
+      <link href="http://localhost:4000/go-zore-swagger/"/>
+      <pubDate>2024-03-09T17:08:12+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/go-zore-swagger</guid>
+      <content:encoded><![CDATA[<p>Swagger 是一个开源的 API 设计工具，它帮助开发者设计、构建、记录和使用RESTful Web服务。Swagger的核心是 OpenAPI 规范。</p>
+
+<p>官网：(https://swagger.io/)[https://swagger.io/]</p>
+
+<p>主要特点：</p>
+<ul>
+  <li>自动化文档生成：Swagger可以自动从代码注释和API定义生成API文档，这些文档可以被人类阅读，也可以被机器解析。</li>
+  <li>交互式API测试：Swagger UI提供了一个交互式的界面，允许开发者直接在浏览器中测试API，而无需编写代码。</li>
+</ul>
+
+<p>s</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go-zero 日志输出的问题</title>
+      <link href="http://localhost:4000/go-zore-log-problem/"/>
+      <pubDate>2024-03-09T17:08:12+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/go-zore-log-problem</guid>
+      <content:encoded><![CDATA[<p>go-zore 日志输出方式体验让我有一些不适。</p>
+
+<p>今天还遇到一个现象，日志输出如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span><span class="s2">"@timestamp"</span>:<span class="s2">"2024-03-09T15:48:08.026+08"</span>,<span class="s2">"caller"</span>:<span class="s2">"server/Helper.go:164"</span>,<span class="s2">"content"</span>:<span class="s2">"httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset=0</span><span class="se">\u</span><span class="s2">0026limit=10</span><span class="se">\u</span><span class="s2">0026order=desc</span><span class="se">\u</span><span class="s2">0026sortby=create_time</span><span class="se">\u</span><span class="s2">0026state=-1</span><span class="se">\u</span><span class="s2">0026states=0,1,2,3,4</span><span class="se">\u</span><span class="s2">0026biz_id=0</span><span class="se">\u</span><span class="s2">0026agent_id=512]"</span>,<span class="s2">"level"</span>:<span class="s2">"error"</span>,<span class="s2">"span"</span>:<span class="s2">"66a2ba1882458680"</span>,<span class="s2">"trace"</span>:<span class="s2">"c94c9ac8179690d592fc348b40666e16"</span><span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>出一些  <code class="language-plaintext highlighter-rouge">\u0026</code> 之类的。 但如果把 Encoding 设置为 plain，则正常。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2024-03-09T15:47:08.006+08       error  httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset<span class="o">=</span>0&amp;limit<span class="o">=</span>10&amp;order<span class="o">=</span>desc&amp;sortby<span class="o">=</span>create_time&amp;state<span class="o">=</span><span class="nt">-1</span>&amp;states<span class="o">=</span>0,1,2,3,4&amp;biz_id<span class="o">=</span>0&amp;agent_id<span class="o">=</span>512]      <span class="nb">caller</span><span class="o">=</span>server/Helper.go:164        <span class="nv">trace</span><span class="o">=</span>ca5e1ad81e7d0528f38b361c63a75f35  <span class="nv">span</span><span class="o">=</span>48b14f5d8bce91e9
+</code></pre></div></div>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>go-zero httpc.Do post 数据因 struct 继承导致的失败</title>
+      <link href="http://localhost:4000/go-zore-struct-httpc-do-problem/"/>
+      <pubDate>2024-03-09T17:08:12+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/go-zore-struct-httpc-do-problem</guid>
+      <content:encoded><![CDATA[<p>工作时遇到的一个问题。</p>
+
+<p>背景大概可以简化为：请求不同服务过来的数据后做聚合，然后转发另一个服务。</p>
+
+<p>对于数据的处理习惯性就是：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c">// data from server A </span>
+<span class="k">type</span> <span class="n">BaseB</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Offset</span> <span class="kt">int64</span> <span class="s">`json:"offset"`</span>
+	<span class="n">Limit</span>  <span class="kt">int64</span> <span class="s">`json:"limit"`</span>
+<span class="p">}</span>
+
+<span class="c">// data from server B </span>
+<span class="k">type</span> <span class="n">BaseB</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Id</span>    <span class="kt">int64</span> <span class="s">`json:"id"`</span>
+    <span class="n">Name</span> <span class="kt">string</span> <span class="s">`json:"name"`</span>
+	  
+<span class="p">}</span>
+
+<span class="c">// send to server C</span>
+<span class="k">type</span> <span class="n">BaseC</span>  <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">BaseA</span>
+	<span class="n">BaseB</span>
+    <span class="n">Addr</span>  <span class="kt">string</span> <span class="s">`json:"addr"`</span>
+<span class="p">}</span>
+
+<span class="n">baseC</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="n">BaseC</span><span class="p">)</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Offset</span> <span class="o">=</span> <span class="m">199</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Id</span> <span class="o">=</span> <span class="m">1</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Name</span> <span class="o">=</span> <span class="s">"kane"</span>
+<span class="n">baseC</span><span class="o">.</span><span class="n">Addr</span> <span class="o">=</span> <span class="s">"guangdong"</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"baseC ----- &gt; %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">baseC</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>这里对 BaseC 成员变量的操作和它继承的BaseB、BaseB 的成员一样，都按 BaseC的成员一样处理。</p>
+
+<p>但是，在 fmt.Printf baseC 时，baseC 的结构却有点和想像中不一样。而是：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> baseC <span class="nt">-----</span> <span class="o">&gt;</span> &amp;<span class="o">{</span>BaseA:<span class="o">{</span>Offset:199 Limit:0<span class="o">}</span> BaseB:<span class="o">{</span>Id:1 Name:kane<span class="o">}</span> Addr:guangdong<span class="o">}</span>
+</code></pre></div></div>
+<p>中包含了 “BaseA” “BaseB”。</p>
+
+<p>多想一步，把这个结构体转 json 输出，如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>baseCByte <span class="nt">-----</span> <span class="o">&gt;</span> <span class="o">{</span><span class="s2">"offset"</span>:199,<span class="s2">"limit"</span>:0,<span class="s2">"id"</span>:1,<span class="s2">"name"</span>:<span class="s2">"kane"</span>,<span class="s2">"addr"</span>:<span class="s2">"guangdong"</span><span class="o">}</span>
+</code></pre></div></div>
+
+<p>想像上面 baseC 数据的结构应该是这样的。但事实却不一样。</p>
+
+<p>自己 golang 的底层知识不够导致的。</p>
+
+<p>go-zore 的  <code class="language-plaintext highlighter-rouge">httpc.Do()</code>在 post 数据带上设置头信息时，<a href="https://go-zero.dev/docs/tutorials/http/client/index">https://go-zero.dev/docs/tutorials/http/client/index</a></p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">flag</span><span class="o">.</span><span class="n">Parse</span><span class="p">()</span>
+
+    <span class="n">req</span> <span class="o">:=</span> <span class="n">Request</span><span class="p">{</span>
+        <span class="n">Node</span><span class="o">:</span>   <span class="s">"foo"</span><span class="p">,</span>
+        <span class="n">Header</span><span class="o">:</span> <span class="s">"foo-header"</span><span class="p">,</span>
+        <span class="n">Foo</span><span class="o">:</span> <span class="s">"foo"</span><span class="p">,</span>
+        <span class="n">Bar</span><span class="o">:</span> <span class="s">"bar"</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">httpc</span><span class="o">.</span><span class="n">Do</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">Background</span><span class="p">(),</span> <span class="n">http</span><span class="o">.</span><span class="n">MethodPost</span><span class="p">,</span> <span class="o">*</span><span class="n">domain</span><span class="o">+</span><span class="s">"/nodes/:node"</span><span class="p">,</span> <span class="n">req</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="n">io</span><span class="o">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>当  <code class="language-plaintext highlighter-rouge">Request</code> 用了继承的方式：
+如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Body</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">Foo</span>    <span class="kt">string</span> <span class="s">`json:"foo"`</span>
+    <span class="n">Bar</span>    <span class="kt">string</span> <span class="s">`json:"bar"`</span>
+<span class="p">}</span>
+    
+<span class="k">type</span> <span class="n">Request</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">Body</span>
+    <span class="n">Header</span> <span class="kt">string</span> <span class="s">`header:"X-Header"`</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>golang 开发备忘</title>
+      <link href="http://localhost:4000/golang-note/"/>
+      <pubDate>2024-01-02T18:12:15+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/golang-note</guid>
+      <content:encoded><![CDATA[<p>go 常用命令</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+go mod tidy 
+
+</code></pre></div></div>
+
+<p>如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：</p>
+
+<p><code class="language-plaintext highlighter-rouge">curl cip.ccsh   
+go mod require &lt;module&gt;@&lt;branch&gt;
+</code></p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>window11 wsl 使用问题记录</title>
+      <link href="http://localhost:4000/window-wsl/"/>
+      <pubDate>2023-09-01T18:12:15+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/window-wsl</guid>
+      <content:encoded><![CDATA[<p>1、wsl 内无法 ping 通 宿主机的IP，无法 ping 通 外网。 试了很多方式都没有成功，自己网络方面的知识也不够全面，我补一下。</p>
+
+<p>最后在网上找到一个方法：[修复 WSL 无 Internet 网络连接问题]（https://www.ghostchu.com/fix-wsl-no-internet-connection/）</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《月亮与六便士》 毛姆</title>
+      <link href="http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB/"/>
+      <pubDate>2023-06-01T19:13:00+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/月亮与六便士</guid>
+      <content:encoded><![CDATA[<p><img src="/assets/reading/the-moon-and-sixpence-2023-06-21-09-53-03.png" alt="" /></p>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《面纱》 毛姆</title>
+      <link href="http://localhost:4000/%E9%9D%A2%E7%BA%B1/"/>
+      <pubDate>2023-05-27T19:13:00+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/面纱</guid>
+      <content:encoded><![CDATA[<p><img src="/assets/reading/the-painted-veil-2023-06-21-10-02-35.png" alt="" /></p>
+
+<p>我最不喜欢的就是讲人性，但很多故事也是深刻的讲人性才有了冲突和升华。</p>
+
+<p>《面纱》让人知道，我们看到人和事物就是人性上装饰的面纱，一切感觉很美好，和谐。可面纱之下才是真实的人性丑恶，很多人没看到过，很多人不相信人性如此，很多人就是喜欢表面的面纱。</p>
+
+<p>人生的常态是什么，是无论你喜欢否，知道否，面纱一直存在。大部分人并知道真实是什么，也不想知道真实是什么。</p>
+
+<p>这书和毛姆《月亮与六便士》、《刀锋》重点不一样。对比之下，《刀锋》和《月亮与六便士》更喜欢些吧。我不喜欢探讨太多的人性。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《刀锋》 毛姆</title>
+      <link href="http://localhost:4000/%E5%88%80%E9%94%8B/"/>
+      <pubDate>2023-05-02T19:13:00+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/刀锋</guid>
+      <content:encoded><![CDATA[<p><img src="/assets/reading/the-razors-edge-2023-06-20-09-45-10.png" alt="" /></p>
+
+<p>拉里一直在追寻他活着的意义，在救赎自己，也在救赎身边的人。
+最终，他也不知道是否已经找到，或许找不到，或许根本没有。但他放下了，或说顿悟了。
+至此，他又回到了世俗的生活。却也不是当初的自己了。</p>
+
+<p>感觉他什么都可以放下，什么都可以不在意。不知道在空军时他好友的死给他带来了什么样的冲击。他才开始他与众不同的道路。</p>
+
+<p>总有人追求自己的世界，总有人的生活有别于世俗世界。</p>
+
+<p>《月亮与六便士》的斯特里克兰同样走这不同于世俗的道路，但如疯狂，如疯子变态。不被世俗理解甚至被嘲笑厌恶。相比之下拉里的道路不被理解，但也温柔很多。</p>
+
+<p>斯特里克兰追求表达自己，拉里追求救赎自己。</p>
+
+<p>不明白为什么有那么多人喜欢当“人生导师”，肆无忌惮的指点和批评别人的生活或人生呢。可能最俗的人就是你自己。</p>
+
+<p>人是可以有很多不同的道路去走，同样也应该宽容你身边的人的各种格格不入的生活态度和行为举止。可能他在救赎自己。</p>
+
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

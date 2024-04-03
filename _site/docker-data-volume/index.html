@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>Docker data volume</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>Docker data volume</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2023-03-14">2023-03-14</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#分布式" title="分布式">分布式</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#docker" title="docker">docker</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<p>容器用的分层存储技术，运行时，以镜像为基础层，在其上创建一个当前容器的存储层，叫“容器存储层”。容器消亡时，这个容器存储层也同样会消亡。</p>
+
+<p>所以运行的数据如果保存在这一层，则会丢失。</p>
+
+<p>docker 数据卷，就是绕过 union fs 的分层，而是直接读写在宿主的目录上。 有点类似于，把一个硬盘挂载到系统上一样。</p>
+
+<p>它的特点：</p>
+
+<ul>
+  <li>可以在多个容器上共享</li>
+  <li>即时生效</li>
+  <li>不会影响镜像</li>
+  <li>不会随着容器消亡而消失</li>
+</ul>
+
+<h1 id="创建数据卷">创建数据卷</h1>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 创建一个 nginx-log 的卷</span>
+ docker  volume create inspect nginx-log 
+ nginx-log
+
+ <span class="c"># 查看卷信息</span>
+ docker  volume  inspect nginx-log
+<span class="o">[</span>
+    <span class="o">{</span>
+        <span class="s2">"Driver"</span>: <span class="s2">"local"</span>,
+        <span class="s2">"Labels"</span>: <span class="o">{}</span>,
+        <span class="s2">"Mountpoint"</span>: <span class="s2">"/var/lib/docker/volumes/nginx-log/_data"</span>,
+        <span class="s2">"Name"</span>: <span class="s2">"nginx-log"</span>,
+        <span class="s2">"Options"</span>: <span class="o">{}</span>,
+        <span class="s2">"Scope"</span>: <span class="s2">"local"</span>
+    <span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div></div>
+
+<h1 id="启动容器时带上数据卷">启动容器时带上数据卷</h1>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> docker run <span class="nt">-d</span> <span class="nt">-it</span> <span class="nt">--name</span><span class="o">=</span>edc-nginx <span class="nt">-p</span> 8800:80 <span class="nt">-v</span> nginx-log:/usr/share/nginx/html nginx
+
+Unable to find image <span class="s1">'nginx:latest'</span> locally
+Trying to pull repository docker.io/library/nginx ...
+latest: Pulling from docker.io/library/nginx
+26c5c85e47da: Pull <span class="nb">complete
+</span>4f3256bdf66b: Pull <span class="nb">complete
+</span>2019c71d5655: Pull <span class="nb">complete
+</span>8c767bdbc9ae: Pull <span class="nb">complete
+</span>78e14bb05fd3: Pull <span class="nb">complete
+</span>75576236abf5: Pull <span class="nb">complete
+</span>Digest: sha256:63b44e8ddb83d5dd8020327c1f40436e37a6fffd3ef2498a6204df23be6e7e94
+Status: Downloaded newer image <span class="k">for </span>docker.io/nginx:latest
+a90f37d097e5e35b645b530a4dd20726a52819c688373c0d683a9244f411b570
+</code></pre></div></div>
+<p>-v 代表挂载数据卷，并且将数据卷挂载到 宿主的目录 /usr/share/nginx/html 下</p>
+
+<h1 id="查看数据">查看数据</h1>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker inspect nginx-log
+<span class="o">[</span>
+    <span class="o">{</span>
+        <span class="s2">"Driver"</span>: <span class="s2">"local"</span>,
+        <span class="s2">"Labels"</span>: <span class="o">{}</span>,
+        <span class="s2">"Mountpoint"</span>: <span class="s2">"/var/lib/docker/volumes/nginx-log/_data"</span>,
+        <span class="s2">"Name"</span>: <span class="s2">"nginx-log"</span>,
+        <span class="s2">"Options"</span>: <span class="o">{}</span>,
+        <span class="s2">"Scope"</span>: <span class="s2">"local"</span>
+    <span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div></div>
+<h1 id="删除数据卷">删除数据卷</h1>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stop edc-nginx
+docker <span class="nb">rm </span>edc-nginx
+docker inspect nginx-log
+<span class="o">[</span>
+    <span class="o">{</span>
+        <span class="s2">"Driver"</span>: <span class="s2">"local"</span>,
+        <span class="s2">"Labels"</span>: <span class="o">{}</span>,
+        <span class="s2">"Mountpoint"</span>: <span class="s2">"/var/lib/docker/volumes/nginx-log/_data"</span>,
+        <span class="s2">"Name"</span>: <span class="s2">"nginx-log"</span>,
+        <span class="s2">"Options"</span>: <span class="o">{}</span>,
+        <span class="s2">"Scope"</span>: <span class="s2">"local"</span>
+    <span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div></div>
+
+<p>停止并删除容器之后， 数据卷是依旧存在的。要自己手动清除</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker volume <span class="nb">rm </span>nginx-log
+nginx-log
+
+docker inspect nginx-log
+<span class="o">[]</span>
+Error: No such object: nginx-log
+</code></pre></div></div>
+
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/docker-image-container-repository/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/docker-overlay2/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2023-03-14-docker-data-volume .md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

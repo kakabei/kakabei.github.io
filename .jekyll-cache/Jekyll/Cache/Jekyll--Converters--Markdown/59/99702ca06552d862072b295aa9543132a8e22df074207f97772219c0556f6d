@@ -1,0 +1,84 @@
+I"u<p>initializer_list 是 c++11 的的一个新特性 。</p>
+
+<p>c++11 之前我们对 vector 的初始化是这样的：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="n">vec</span><span class="p">;</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<p>C++11 之后，可以用<strong>花括号直接经初始化</strong>。我们可以这样:</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+</code></pre></div></div>
+
+<p>这就是所谓的 initializer list。</p>
+
+<p>所以有 initializer_list C++11 允许构造函数和其他函数把初始化列表当做参数。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span>
+<span class="k">class</span> <span class="nc">MyHome</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">MyHome</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">vec</span><span class="p">){</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">item</span> <span class="o">:</span> <span class="n">vec</span><span class="p">){</span>
+            <span class="n">m_Vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">print</span><span class="p">(){</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">item</span> <span class="o">:</span> <span class="n">m_Vec</span><span class="p">){</span>
+        	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">item</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
+    	<span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">m_Vec</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">MyHome</span> <span class="n">m</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+    <span class="n">m</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>  <span class="c1">// 1 2 3</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="用-initializer_list-的好处">用 initializer_list 的好处：</h3>
+
+<p>1、initializer_list 不能修改，更符合参数的特点。</p>
+
+<p>vector 有 push_back 函数，也就是说 vector 可以在函数里面修改，所以必然 vector 必须在 heap 上分配空间来存储数据。
+而initializer_list 只有 begin 和 end 函数，函数内并不能修改它，所以编译器有机会在 stack 上存储 initializer_list 的数据来提高性能。</p>
+
+<p>2、initializer_list 是指针语义</p>
+
+<p>vector 是值语义，也就是说拷贝一个 vector，那里面的元素也会被拷贝一次。而 initializer_list 是指针语义，里面的元素并不会被拷贝，是指向了同一个空间。</p>
+
+<p>3、初始化列表还可以用于函数返回的情况。 返回一个初始化列表，通常会导致<strong>构造一个临时变量</strong>，比如：</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">Func</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>4.防止类型收窄</p>
+
+<p>用法很简单</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span> 
+<span class="k">const</span> <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> 
+<span class="kt">char</span> <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>             <span class="c1">// 收窄， 但可以通过编译 </span>
+
+<span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">};</span>           <span class="c1">// 收窄， 无法通过编译 </span>
+<span class="kt">char</span> <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">y</span><span class="p">};</span>           <span class="c1">// 可以通过编译</span>
+</code></pre></div></div>
+
+<hr />
+<p>1、《深入理解C++11：C++11新特性解析与应用》</p>
+:ET

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="kane" />
+    <title>lua metatables 元表</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
+    <link rel="stylesheet" href="/media/css/style.css" />
+    <link rel="stylesheet" href="/media/css/highlight.css" />
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="main" role="main">
+        <header>
+        <h1>lua metatables 元表</h1>
+        </header>
+        <nav>
+        <span><a title="Blog" class="content" href="/">Blog</a></span>
+        <span><a title="Categories" class="content" href="/categories/">Categories</a></span>
+        <span><a title="Tags" class="content" href="/tags/">Tags</a></span>
+        <span><a title="Links" class="content" href="/links/">Link</a></span>
+        <!--<span><a title="留言交流" class="" href="/guestbook/">Link</a></span>-->
+        <span><a title="About" class="content" href="/about/">About</a></span>
+        <span><a title="RSS" class="content" href="/feed/" target="_blank">RSS</a></span>
+        </nav>
+        <article class="content">
+        <section class="meta">
+<span class="time">
+  <time datetime="2017-03-16">2017-03-16</time>
+</span>
+
+ | 
+<span class="categories">
+  分类
+  
+  <a href="/categories/#lua" title="lua">lua</a>&nbsp;
+  
+</span>
+
+
+ | 
+<span class="tags">
+  标签
+  
+  <a href="/tags/#lua" title="lua">lua</a>&nbsp;
+  
+</span>
+
+</section>
+<section class="post">
+<blockquote>
+  <p>Metatables 允许我们改变 table 的行为，例如，使用 Metatables 我们可以定义 Lua 如
+何计算两个 table 的相加操作 a+b。</p>
+</blockquote>
+
+<p>这种方式很类似于C++中对运算符的重载。</p>
+
+<p>Lua 中的每一个表都可以有它自己的 Metatable。一般情况下 Lua默认创建一个不带 metatable 的新表。</p>
+
+<p>用getmetatable(table) 可以获取这个表的Metatable。</p>
+
+<p>用setmetatable(table, metatable) 对一个表设置Metatable。</p>
+
+<p>metatable 算术运算符域名 有__add(加)、__mul(乘)、__sub(减)、__div(除)、__unm(负)、__pow(幂)，我们也可以定义__concat 定义连接行为。</p>
+
+<p>metatable 关系运算符 ：__eq（等于），__lt（小于） ，和__le（小于等于）。</p>
+
+<p>Lua 选择 metamethod 的原则：如果第一个参数存在带有__add 域的 metatable，Lua
+使用它作为 metamethod，和第二个参数无关；
+否则第二个参数存在带有__add 域的 metatable， Lua 使用它作为 metamethod 否则报
+错。</p>
+
+<p>如果想保护你的集合使其使用者既看不到也不能修改 metatables。可以
+对 metatable 设置了__metatable 的值， getmetatable 将返回这个域的值，而调用 setmetatable
+将会出错：</p>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set</span><span class="p">.</span><span class="n">mt</span><span class="p">.</span><span class="n">__metatable</span> <span class="o">=</span> <span class="s2">"not your business"</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">Set</span><span class="p">.</span><span class="n">new</span><span class="p">{}</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">getmetatable</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span> <span class="c1">--&gt; not your business</span>
+<span class="nb">setmetatable</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="p">{})</span>
+<span class="n">stdin</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">change</span> <span class="n">protected</span> <span class="n">metatable</span>
+</code></pre></div></div>
+
+<p>table访问的元方法： 字段: __index __newindex</p>
+
+<p>__index:  查询：访问表中不存的字段  rawget(t, i)</p>
+
+<p>__newindex： 更新：向表中不存在索引赋值  rawswt(t, k, v)</p>
+
+<p>有默认值的表:</p>
+
+<p>在一个普通的表中任何域的默认值都是 nil。很容易通过 metatables 来改变默认值：</p>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">setDefault</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+	<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span><span class="n">__index</span> <span class="o">=</span> <span class="k">function</span> <span class="p">()</span> <span class="k">return</span> <span class="n">d</span> <span class="k">end</span><span class="p">}</span>
+	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">tab</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tab</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tab</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="c1">--&gt; 10 nil</span>
+
+<span class="n">setDefault</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tab</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tab</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="c1">--&gt; 10 0</span>
+</code></pre></div></div>
+
+<p>监控表:</p>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">-- create private index</span>
+<span class="kd">local</span> <span class="n">index</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1">-- create metatable</span>
+<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="n">__index</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">"*access to element "</span> <span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+		<span class="k">return</span> <span class="n">t</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="c1">-- access the original table</span>
+	<span class="k">end</span>
+
+	<span class="n">__newindex</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">"*update of element "</span> <span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">..</span> <span class="s2">" to "</span><span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+		<span class="n">t</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span> <span class="c1">-- update original table</span>
+	<span class="k">end</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">track</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+	<span class="kd">local</span> <span class="n">proxy</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">proxy</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+
+	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">proxy</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>只读表:</p>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">function</span> <span class="nf">readOnly</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span>
+	<span class="kd">local</span> <span class="n">proxy</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span> <span class="c1">-- create metatable</span>
+	<span class="n">__index</span> <span class="o">=</span> <span class="n">t</span><span class="p">,</span>
+	<span class="n">__newindex</span> <span class="o">=</span> <span class="k">function</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+		<span class="nb">error</span><span class="p">(</span><span class="s2">"attempt to update a read-only table"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="k">end</span>
+	<span class="p">}</span>
+	<span class="nb">setmetatable</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">proxy</span>
+<span class="k">end</span>
+
+<span class="n">days</span> <span class="o">=</span> <span class="n">readOnly</span><span class="p">{</span><span class="s2">"Sunday"</span><span class="p">,</span> <span class="s2">"Monday"</span><span class="p">,</span> <span class="s2">"Tuesday"</span><span class="p">,</span> <span class="s2">"Wednesday"</span><span class="p">,</span>
+<span class="s2">"Thursday"</span><span class="p">,</span> <span class="s2">"Friday"</span><span class="p">,</span> <span class="s2">"Saturday"</span><span class="p">}</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">days</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1">--&gt; Sunday</span>
+<span class="n">days</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Noday"</span>
+<span class="c1">-- stdin:1: attempt to update a read-only table</span>
+
+</code></pre></div></div>
+
+</section>
+<section align="right">
+<br/>
+<span>
+	<a  href="/lua-coroutine/" class="pageNav"  >上一篇</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="/linux-signal/" class="pageNav"  >下一篇</a>
+</span>
+</section>
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2121774" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+        </article>
+      </div>
+
+    <footer>
+        <p>
+          <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc91691cf4004b194f7847896cca17dbb' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+          <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56673760-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+        </p>
+        <p><small>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2017-03-15-lua-metatables.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+             | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
+             | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
+
+
+         </small></p>
+    </footer>
+
+    </div>
+  </body>
+</html>

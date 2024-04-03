@@ -1,0 +1,42 @@
+I"A<p>kafka 事务中，一个原子操作，根据操作类型可以分为3种情况：</p>
+
+<p>1、producer 发送多条消息组成一个事务， 这些消息需要同时可见或同时不可见。</p>
+
+<p>2、producer 给多个 topic 多个partition 发消息，这些消息也需要能放在一个事务里面，这就形成了一个典型的分布事务。</p>
+
+<p>3、程序先消费一个 topic，然后做处理再发到另一个 topic，这个 consume-transform-produce 过程需要放到一个事务里面，比如在消息处理或者发送的过程中如果失败了，消费位点也不能提交。</p>
+
+<p>4、producer 或者 producer 所在的应用可能会挂掉，新的producer启动以后需要知道怎么处理之前未完成的事务 。</p>
+
+<p>幂等性并不能跨多个分区运行，而事务可以弥补这个缺陷。</p>
+
+<p>程序必须提供唯一的transactionalId ,要通过客户端参数显示设置。</p>
+
+<p>transactionalId 与 PID 一一对应，两者之间所不同的是 transactionalId 由用户显示设置，而 PID 是由 kafka内部分配的。</p>
+
+<p><code class="language-plaintext highlighter-rouge">properties.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, “transacetionId”);</code></p>
+
+<p>KafkaProducer提供了5个与事务相关的方法，详细如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 初始化事务 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">initTransactions</span><span class="o">();</span> 
+<span class="c1">// 开启事务 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">beginTransaction</span><span class="o">();</span> 
+<span class="c1">// 消费 - 生产模型 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">producerRecord</span><span class="o">);</span> 
+<span class="c1">// 提交消费位移 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">sendOffsetsToTransaction</span><span class="o">(</span><span class="n">offsets</span><span class="o">,</span> <span class="s">"groupId"</span><span class="o">);</span> 
+<span class="c1">// 提交事务 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">commitTransaction</span><span class="o">();</span>
+
+<span class="c1">// 中止事务 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">abortTransaction</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>实现 Kafka 事务，主要使用到 Broker 端的<strong>事务协调器 (TransactionCoordinator)</strong>。每个 Producer 都会被指定一个特定的 TransactionalCoordinator，用来负责处理其事务，与消费者 Rebalance 时的 GroupCoordinator 作用类似。实现事务的流程如下图所示：</p>
+
+<p><img src="/assets/mq/kafka-2023-03-14-12-03-10.png" alt="" /></p>
+
+<hr />
+<p>1、<a href="https://cloud.tencent.com/developer/article/1657503">Kafka技术知识总结之二——Kafka事务</a></p>
+:ET

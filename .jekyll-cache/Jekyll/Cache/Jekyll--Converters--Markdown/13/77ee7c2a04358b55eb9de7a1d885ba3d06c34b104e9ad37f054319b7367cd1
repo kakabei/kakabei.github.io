@@ -1,0 +1,127 @@
+I"0<p>学习多线程编程面临的最大的思维方式的转变有两点：</p>
+
+<ul>
+  <li>当前线程可能随时会被切换出去，或者说被抢占（preempt）了。</li>
+  <li>多线程程序中事件的发生顺序不再有全局统一的先后关系 。</li>
+</ul>
+
+<h1 id="基本线程原语的选用">基本线程原语的选用</h1>
+
+<p><code class="language-plaintext highlighter-rouge">POSIX threads </code> 的函数有 110 多个，真正常用的不过十几个。而且在 C++ 程序中通常会有更为易用的 wrapper，不会直接调用 Pthreads 函数。这 11 个最基本的Pthreads函数是：</p>
+
+<ul>
+  <li>2个：线程的创建和等待结束（join）。封装为 <code class="language-plaintext highlighter-rouge">muduo::Thread</code>。</li>
+  <li>4个：<code class="language-plaintext highlighter-rouge">mutex</code> 的创建、销毁、加锁、解锁。封装为 <code class="language-plaintext highlighter-rouge">muduo::MutexLock</code>。</li>
+  <li>5个：条件变量的创建、销毁、等待、通知、广播。封装为 <code class="language-plaintext highlighter-rouge">muduo::Condition</code>。</li>
+</ul>
+
+<p>这些封装 class 都很直截了当，加起来也就一两百行代码，却已经构成了多线程编程的全部必备原语。用这三样东西（<code class="language-plaintext highlighter-rouge">thread</code>、<code class="language-plaintext highlighter-rouge">mutex</code>、<code class="language-plaintext highlighter-rouge">condition</code>）可以完成任何多线程编程任务。</p>
+
+<h1 id="cc-系统库的线程安全性">c/c++ 系统库的线程安全性</h1>
+
+<p>c++11 宣言了一个线程库。（std::thread）
+对于标准而言，关键的不是定义线程库，而是规定 内存模型（memory model）。特别是规定一个线程对某个共享变量的修改何时能被其他线程看到，这称为内存序（memory ordering）或者内存能见度（memory visibility）。</p>
+
+<p>** 这句话有三个名词：内存模型，内存有序，内存能见度。可以查找这方面的资料。**</p>
+
+<p>编写线程安全程序的一个难点在于线程安全是不可组合的（ <code class="language-plaintext highlighter-rouge">composable</code> ），一个函数 <code class="language-plaintext highlighter-rouge">foo()</code> 用了两个线程安全的函数，而这个foo() 函数本身很可能不是线程安全的。即便现在大多数 <code class="language-plaintext highlighter-rouge">glibc</code> 库函数是线程安全的，我们也不能像写单线程程序那样编写代码。</p>
+
+<p>C++ 的标准库容器和 <code class="language-plaintext highlighter-rouge">std::string</code> 都不是线程安全的，只有 <code class="language-plaintext highlighter-rouge">std::allocator</code> 保证是线程安全的。一方面的原因是为了避免不必要的性能开销，另一方面的原因是单个成员函数的线程安全并不具备可组合性（composable）</p>
+
+<h1 id="linux-上的线程标识">Linux 上的线程标识</h1>
+
+<p><code class="language-plaintext highlighter-rouge">pthread_t</code> 并不适合用作程序中对线程的标识符。 <code class="language-plaintext highlighter-rouge">pthread_t</code> 不一定是一个数值类型（整数或指针），也有可能是一个结构体</p>
+
+<p>无法打印输出 <code class="language-plaintext highlighter-rouge">pthread_t</code> ，因为不知道其确切类型。也就没法在日志中用它表示当前线程的 id。</p>
+
+<p>无法比较 <code class="language-plaintext highlighter-rouge">pthread_t</code> 的大小或计算其 hash 值，因此无法用作关联容器的 key。</p>
+
+<p>无法定义一个非法的 <code class="language-plaintext highlighter-rouge">pthread_t</code> 值，用来表示绝对不可能存在的线程 id，因此 <code class="language-plaintext highlighter-rouge">MutexLock class</code> 没有办法有效判断当前线程是否已经持有本锁。</p>
+
+<p><code class="language-plaintext highlighter-rouge">pthread_t</code> 值只在进程内有意义，与操作系统的任务调度之间无法建立有效关联。比方说在 /proc 文件系统中找不到 <code class="language-plaintext highlighter-rouge">pthread_t</code> 对应的 <code class="language-plaintext highlighter-rouge">task</code>。</p>
+
+<p>在 Linux 上，我建议使用 <code class="language-plaintext highlighter-rouge">gettid(2)</code> 系统调用的返回值作为线程id，这么做的好处有：</p>
+
+<p>它的类型是 <code class="language-plaintext highlighter-rouge">pid_t</code>，其值通常是一个小整数，便于在日志中输出。</p>
+
+<p>在现代 <code class="language-plaintext highlighter-rouge">Linux</code> 中，它直接表示内核的任务调度 id，因此在 /proc 文件系统中可以轻易找到对应项：<code class="language-plaintext highlighter-rouge">/proc/tid</code> 或 <code class="language-plaintext highlighter-rouge">/prod/pid/task/tid</code>。</p>
+
+<p>在其他系统工具中也容易定位到具体某一个线程，例如在 <code class="language-plaintext highlighter-rouge">top(1)</code> 中我们可以按线程列出任务，然后找出CPU使用率最高的线程id，再根据程序日志判断到底哪一个线程在耗用 CPU。</p>
+
+<p>任何时刻都是全局唯一的，并且由于 Linux 分配新 <code class="language-plaintext highlighter-rouge">pid</code> 采用递增轮回办法，短时间内启动的多个线程也会具有不同的线程id。</p>
+
+<p>0是非法值，因为操作系统第一个进程 <code class="language-plaintext highlighter-rouge">init</code> 的 <code class="language-plaintext highlighter-rouge">pid</code> 是 1。</p>
+
+<h1 id="线程的创建与销毁的守则">线程的创建与销毁的守则</h1>
+
+<p>线程的创建比销毁要容易得多，只需要遵循几条简单的原则：</p>
+
+<ul>
+  <li>程序库不应该在未提前告知的情况下创建自己的“背景线程”。</li>
+  <li>尽量用相同的方式创建线程，例如muduo::Thread。</li>
+  <li>在进入main()函数之前不应该启动线程。 程序中线程的创建最好能在初始化阶段全部完成。（C++保证在进入main()之前完成全局对象 ）</li>
+</ul>
+
+<h1 id="线程的销毁有几种方式">线程的销毁有几种方式</h1>
+
+<ul>
+  <li>自然死亡。从线程主函数返回，线程正常退出。</li>
+  <li>非正常死亡。从线程主函数抛出异常或线程触发segfault信号等非法操作 。</li>
+  <li>自杀。在线程中调用pthread_exit()来立刻退出线程。</li>
+  <li>他杀。其他线程调用pthread_cancel()来强制终止某个线程。</li>
+</ul>
+
+<h1 id="善用-__thread-关键字">善用 __thread 关键字</h1>
+
+<p><code class="language-plaintext highlighter-rouge">__thread</code> 使用规则27：只能用于修饰 <code class="language-plaintext highlighter-rouge">POD</code> 类型，不能修饰 <code class="language-plaintext highlighter-rouge">class</code> 类型， 因为无法自动调用构造函数和析构函数。 <code class="language-plaintext highlighter-rouge">__thread</code> 可以用于修饰全局变量、函数内的静态变量，但是不能用于修饰函数的局部变量或者 <code class="language-plaintext highlighter-rouge">class</code> 的普通成员变量。另外， <code class="language-plaintext highlighter-rouge">__thread</code> 变量的初始化只能用编译期常量。</p>
+
+<p>例如：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">__thread</span> <span class="n">string</span> <span class="nf">t_obj1</span><span class="p">(</span><span class="s">"Chen Shou"</span><span class="p">);</span>    <span class="c1">// 错误 不能对象的构造函数</span>
+<span class="kr">__thread</span> <span class="n">string</span> <span class="o">*</span> <span class="n">t_obj2</span><span class="o">=</span> <span class="n">new</span> <span class="n">string</span><span class="p">;</span>   <span class="c1">// 错误 初始化必须用编译期常量</span>
+<span class="kr">__thread</span> <span class="n">string</span> <span class="o">*</span> <span class="n">t_obj3</span><span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>         <span class="c1">// 正常 但是需要手工初始化并销毁对象</span>
+
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">__thread</code> 变量是每个线程有一份独立实体，各个线程的变量值互不干扰。除了这个主要用途， 它还可以修饰那些”值可能会变，带有全局性，但是又不值得用全局锁保护”的变量。muduo代码中用到了 好几处 <code class="language-plaintext highlighter-rouge">__thread</code> ，简单列举如下：</p>
+
+<ul>
+  <li>muduo/base/Logging.cc 缓存最近一条日志时间的年月日时分秒，如果一秒之内输出多条日志，可避免重复格式化。另外，muduo::strerror_tl把strerror_r(3)做成如同strerror(3)一样好用，而且是线程安全的。</li>
+  <li>muduo/base/ProcessINfo.cc 用线程局部变量来简化<code class="language-plaintext highlighter-rouge">::scandir(3)</code>的使用。</li>
+  <li>muduo/base/Thread.cc 缓存每个线程的id。</li>
+  <li>用于判断当前线程是否只有一个EventLoop对象。</li>
+</ul>
+
+<h1 id="多线程-与-io">多线程 与 IO</h1>
+
+<p>为了简单起见，我认为多线程程序应该遵循的原则是：每个文件描述符只由一个线程操作，从而轻松解决消息收发的顺序性问题，也避免了关闭文件描述符的各种 <code class="language-plaintext highlighter-rouge">race condition</code>。 一个线程可以操作多个文件描述符， 但一个线程不能操作别的线程拥有的文件描述符。 这一点不难做到， <code class="language-plaintext highlighter-rouge">muduo</code> 网络库已经把这些细节封装了。</p>
+
+<h1 id="raii-与-fork">RAII 与 fork()</h1>
+
+<p>通常我们会用 RAII 手法来管理以上种类的资源(加锁解锁、创建销毁定时器等等).</p>
+
+<p>但是在 fork() 出来的子进程中不一定正常工作，因为资源在 fork() 时已经被释放了。比方说用 RAII 技法封装 <code class="language-plaintext highlighter-rouge">timer_create()</code> /<code class="language-plaintext highlighter-rouge">timer_delete()</code>，在子进程中析构函数调用timer_delete()可能会出错。</p>
+
+<p>因为试图释放一个不存在的资源。或者更糟糕地把其他对象持有的 <code class="language-plaintext highlighter-rouge">timer</code> 给释放了（如果碰巧新建的 <code class="language-plaintext highlighter-rouge">timer_t</code> 与之重复的话）。</p>
+
+<h1 id="多线程与-fork">多线程与 fork()</h1>
+
+<p><code class="language-plaintext highlighter-rouge">fork()</code> 是单线程的产物。当有了多线程之后，<code class="language-plaintext highlighter-rouge">fork()</code> 就变得有一些不适应了。</p>
+
+<p><code class="language-plaintext highlighter-rouge">fork()</code> 一般不能在多线程程序中调用 ，因为 Linux 的 fork() 只克隆当前线程的 <code class="language-plaintext highlighter-rouge">thread of control</code>，不克隆其他线程。</p>
+
+<p><code class="language-plaintext highlighter-rouge">fork()</code> 之后，除了当前线程之外，其他线程都消失了。也就是说不能一下子 fork() 出一个和父进程一样的多线程子进程。</p>
+
+<p>Linux 没有 forkall() 这样的系统调用，forkall() 其实也是很难办的（从语意上），因为其他线程可能等在 condition。</p>
+
+<p>所以最好不要在多线程当中调用 fork(), 除非你调用后马上调用 exec()。彻底断了子进程和父进程的关系。</p>
+
+<h1 id="多线程与-signal">多线程与 signal</h1>
+
+<p>在多线程程序中， 使用signal的第一原则是不要使用 signal。</p>
+
+<p>关于多线程与signal关系。可以看<a href="http://blog.xyecho.com/linux-signal/">linux signal and threads</a></p>
+
+<hr />
+<p>1、《Linux多线程服务端编程：使用muduo C++ 网络库》 陈硕. 电子工业出版社. Kindle 版本.</p>
+
+:ET

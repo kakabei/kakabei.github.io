@@ -1,0 +1,101 @@
+I"�<h1 id="curl--常见的技巧">curl  常见的技巧</h1>
+
+<p>github 地址：<a href="https://github.com/curl/curl">https://github.com/curl/curl</a></p>
+
+<p><strong>参数：</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">-o</span> &lt;file&gt;    <span class="c"># --output: 写入文件</span>
+<span class="nt">-u</span> user:pass <span class="c"># --user: 验证</span>
+<span class="nt">-v</span>           <span class="c"># --verbose: 在操作期间使 curl 冗长</span>
+<span class="nt">-vv</span>          <span class="c"># 更冗长</span>
+<span class="nt">-s</span>           <span class="c"># --silent: 不显示进度表或错误</span>
+<span class="nt">-S</span>           <span class="c"># --show-error: 与 --silent (-sS) 一起使用时，显示错误但没有进度表</span>
+<span class="nt">-i</span>           <span class="c"># --include: 在输出中包含 HTTP 标头</span>
+<span class="nt">-I</span>           <span class="c"># --head: 仅标头</span>
+</code></pre></div></div>
+
+<p><strong>数据：</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># --data: HTTP post 数据</span>
+<span class="c"># URL 编码(例如，status="Hello")</span>
+<span class="nt">-d</span> <span class="s1">'data'</span>
+
+<span class="c"># --data 通过文件</span>
+<span class="nt">-d</span> @file
+
+<span class="c"># --get: 通过 get 发送 -d 数据</span>
+<span class="nt">-G</span>
+</code></pre></div></div>
+
+<p><strong>头信息 Headers：</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">-A</span> &lt;str&gt;     <span class="c"># --user-agent</span>
+<span class="nt">-b</span> <span class="nv">name</span><span class="o">=</span>val  <span class="c"># --cookie</span>
+
+<span class="c"># 从 URL 的指定文件加载 cookie</span>
+<span class="nt">-b</span>, <span class="nt">--cookie</span> FILE
+<span class="c"># 将 cookie 从 URL 保存到指定文件</span>
+<span class="nt">-c</span>, <span class="nt">--cookie-jar</span> FILE
+
+<span class="nt">-b</span> FILE          <span class="c"># --cookie</span>
+<span class="nt">-H</span> <span class="s2">"X-Foo: y"</span>    <span class="c"># --header</span>
+<span class="nt">--compressed</span>     <span class="c"># 使用 deflate/gzip </span>
+
+</code></pre></div></div>
+
+<p><strong>ssl :</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">--cacert</span> &lt;file&gt;
+    <span class="nt">--capath</span> &lt;<span class="nb">dir</span><span class="o">&gt;</span>
+<span class="nt">-E</span>, <span class="nt">--cert</span> &lt;cert&gt;     <span class="c"># --cert: 客户端证书文件</span>
+    <span class="nt">--cert-type</span>       <span class="c"># der/pem/eng</span>
+<span class="nt">-k</span>, <span class="nt">--insecure</span>        <span class="c"># 对于自签名证书</span>
+
+</code></pre></div></div>
+
+<p><strong>示例</strong></p>
+
+<p>1、GET 请求</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-I</span> https://www.baidu.com	 						             <span class="c"># curl 发请求</span>
+curl <span class="nt">-v</span> <span class="nt">-I</span> https://www.baidu.com						             <span class="c">#带有详细信息的 curl 发请求</span>
+curl <span class="nt">-X</span> GET https://www.baidu.com	 					             <span class="c">#使用显式 http 方法进行 curl</span>
+curl <span class="nt">--noproxy</span> 127.0.0.1 http://www.stackoverflow.com	 			 <span class="c">#没有 http 代理的 curl</span>
+curl <span class="nt">--connect-timeout</span> 10 <span class="nt">-I</span> <span class="nt">-k</span> https://www.baidu.com	 			 <span class="c">#curl 默认没有超时</span>
+curl <span class="nt">--verbose</span> <span class="nt">--header</span> <span class="s2">"Host: www.mytest.com:8182"</span> www.baidu.com	 <span class="c">#curl 得到额外的标题</span>
+curl <span class="nt">-k</span> <span class="nt">-v</span> https://www.google.com	                                 <span class="c">#curl 获取带有标题的响应</span>
+
+</code></pre></div></div>
+
+<p>2、POST 请求</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>url <span class="nt">-d</span> <span class="s2">"name=username&amp;password=123456"</span> &lt;URL&gt;	<span class="c"># curl 发请求</span>
+curl &lt;URL&gt; <span class="nt">-H</span> <span class="s2">"content-type: application/json"</span> <span class="nt">-d</span> <span class="s2">"{ </span><span class="se">\"</span><span class="s2">woof</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">bark</span><span class="se">\"</span><span class="s2">}"</span>	<span class="c"># curl 发送 json</span>
+</code></pre></div></div>
+
+<p>3、高级用法</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="nt">-s</span> http://ipecho.net/plain, curl <span class="nt">-L</span> <span class="nt">-s</span> http://whatismijnip.nl	<span class="c">#获取我的公共 IP</span>
+curl <span class="nt">-u</span> <span class="nv">$username</span>:<span class="nv">$password</span> http://repo.dennyzhang.com/README.txt	    <span class="c">#带凭证的 curl</span>
+curl <span class="nt">-v</span> <span class="nt">-F</span> <span class="nv">key1</span><span class="o">=</span>value1 <span class="nt">-F</span> <span class="nv">upload</span><span class="o">=</span>@localfilename &lt;URL&gt;				    <span class="c">#curl 上传</span>
+curl <span class="nt">-k</span> <span class="nt">-v</span> <span class="nt">--http2</span> https://www.google.com/	                            <span class="c">#使用 http2 curl</span>
+curl <span class="nt">-T</span> cryptopp552.zip <span class="nt">-u</span> <span class="nb">test</span>:test ftp://10.32.99.187/	             <span class="c">#url ftp 上传</span>
+curl <span class="nt">-u</span> <span class="nb">test</span>:test ftp://10.32.99.187/cryptopp552.zip <span class="nt">-o</span> cryptopp552.zip	curl <span class="c">#ftp 下载</span>
+curl <span class="nt">-v</span> <span class="nt">-u</span> admin:admin123 <span class="nt">--upload-file</span> package1.zip http://mysever:8081/dir/package1.zip	<span class="c">#使用凭证 curl 上传</span>
+</code></pre></div></div>
+
+<p>4、查询当前机器的出口IP</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="o">(</span>base<span class="o">)</span> C:<span class="se">\t</span>ools&gt; curl cip.cc
+IP      : 121.12.81.78
+地址    : 中国  广东  江门
+运营商  : 电信
+
+数据二  : 广东省深圳市 | 电信
+
+数据三  : 中国广东省深圳市 | 电信
+URL     : http://www.cip.cc/121.12.81.78
+
+</code></pre></div></div>
+
+:ET

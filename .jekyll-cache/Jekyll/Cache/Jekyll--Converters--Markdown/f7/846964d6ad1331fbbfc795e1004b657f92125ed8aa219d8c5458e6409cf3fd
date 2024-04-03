@@ -1,0 +1,17 @@
+I"�<p>1.查看 Git 所有配置</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--list</span>
+</code></pre></div></div>
+
+<p>2.删除全局配置项</p>
+
+<p>终端执行命令：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> <span class="nt">--unset</span> user.name
+</code></pre></div></div>
+
+<p>编辑配置文件：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> <span class="nt">--edit</span>
+</code></pre></div></div>
+:ET

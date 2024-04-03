@@ -1,0 +1,126 @@
+I"�8<h3 id="1c-和-c-struct-的区别">1、C 和 C++ <code class="language-plaintext highlighter-rouge">struct</code> 的区别？</h3>
+
+<p>在 C 语言中 <code class="language-plaintext highlighter-rouge">struct</code> 是用户自定义数据类型；在 C++ 中 <code class="language-plaintext highlighter-rouge">struct</code> 是抽象数据类型，支持成员函数的定义。</p>
+
+<p>C 语言中 <code class="language-plaintext highlighter-rouge">struct</code> 没有访问权限的设置，是一些变量的集合体，不能定义成员函数；C++ 中 <code class="language-plaintext highlighter-rouge">struct</code> 可以和类一样，有访问权限，并可以定义成员函数。</p>
+
+<p>C 语言中 <code class="language-plaintext highlighter-rouge">struct</code> 定义的自定义数据类型，在定义该类型的变量时，需要加上 <code class="language-plaintext highlighter-rouge">struct</code> 关键字，例如：<code class="language-plaintext highlighter-rouge">struct A var;</code>，定义 A 类型的变量；而 C++ 中，不用加该关键字，例如：A var;</p>
+
+<p>在c++中 <code class="language-plaintext highlighter-rouge">struct</code> 和 <code class="language-plaintext highlighter-rouge">class</code> 的唯一区别是成员的默认访问权限。<code class="language-plaintext highlighter-rouge">struct</code> 默认是 public，而 <code class="language-plaintext highlighter-rouge">class</code> 默认是 private。</p>
+
+<p>C++ 是在 C 语言的基础上发展起来的，为了与 C 语言兼容，C++ 中保留了 <code class="language-plaintext highlighter-rouge">struct</code>。</p>
+
+<h3 id="2-struct-和-class-的区别">2、 <code class="language-plaintext highlighter-rouge">struct</code> 和 <code class="language-plaintext highlighter-rouge">class</code> 的区别?</h3>
+
+<p><code class="language-plaintext highlighter-rouge">struct</code> 和 <code class="language-plaintext highlighter-rouge">class</code> 都可以自定义数据类型，也支持继承操作。</p>
+
+<p><code class="language-plaintext highlighter-rouge">struct</code> 中默认的访问级别是 public，默认的继承级别也是 public；<code class="language-plaintext highlighter-rouge">class</code> 中默认的访问级别是 private，默认的继承级别也是 private。</p>
+
+<p>当 <code class="language-plaintext highlighter-rouge">class</code> 继承 <code class="language-plaintext highlighter-rouge">struct</code> 或者 <code class="language-plaintext highlighter-rouge">struct</code> 继承 <code class="language-plaintext highlighter-rouge">class</code> 时，默认的继承级别取决于 <code class="language-plaintext highlighter-rouge">class</code> 或 <code class="language-plaintext highlighter-rouge">struct</code> 本身， <code class="language-plaintext highlighter-rouge">class</code>（private 继承），<code class="language-plaintext highlighter-rouge">struct</code>（public 继承），即取决于派生类的默认继承级别。</p>
+
+<h3 id="3-struct-和-union-的区别">3、 <code class="language-plaintext highlighter-rouge">struct</code> 和 <code class="language-plaintext highlighter-rouge">union</code> 的区别?</h3>
+
+<p><code class="language-plaintext highlighter-rouge">union</code> 是联合体，<code class="language-plaintext highlighter-rouge">struct</code> 是结构体。</p>
+
+<p>联合体和结构体都是由若干个数据类型不同的数据成员组成。使用时，联合体只有一个有效的成员；而结构体所有的成员都有效。</p>
+
+<p>对联合体的不同成员赋值，将会对覆盖其他成员的值，而对于结构体的对不同成员赋值时，相互不影响。</p>
+
+<p>联合体的大小为其内部所有变量的最大值，按照最大类型的倍数进行分配大小；结构体分配内存的大小遵循内存对齐原则。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">union</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="kt">char</span> <span class="n">cc1</span><span class="p">;</span> <span class="c1">// char 1 字节，按该类型的倍数分配大小</span>
+<span class="p">}</span> <span class="n">u11</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">union</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// int 4 字节，按该类型的倍数分配大小</span>
+<span class="p">}</span> <span class="n">u22</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">union</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span> <span class="c1">// double 8 字节，按该类型的倍数分配大小</span>
+<span class="p">}</span> <span class="n">u33</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">s1</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>   <span class="c1">// 1 字节</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span> <span class="c1">// 1（char）+ 7（内存对齐）+ 8（double）= 16 字节</span>
+<span class="p">}</span> <span class="n">s11</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">s2</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>   <span class="c1">// 1 字节</span>
+    <span class="kt">char</span> <span class="n">cc</span><span class="p">;</span>  <span class="c1">// 1（char）+ 1（char）= 2 字节</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span> <span class="c1">// 2 + 6（内存对齐）+ 8（double）= 16 字节</span>
+<span class="p">}</span> <span class="n">s22</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">s3</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>   <span class="c1">// 1 字节</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span> <span class="c1">// 1（char）+ 7（内存对齐）+ 8（double）= 16 字节</span>
+    <span class="kt">char</span> <span class="n">cc</span><span class="p">;</span>  <span class="c1">// 16 + 1（char）+ 7（内存对齐）= 24 字节</span>
+<span class="p">}</span> <span class="n">s33</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">u11</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 10</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">u22</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 12</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">u33</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 16</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">s11</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 16</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">s22</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 16</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">s33</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 24</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>    <span class="c1">// 4</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 8</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>u22 的 size 为什么等于12？</p>
+
+<p>结果是 <code class="language-plaintext highlighter-rouge">union</code> 内 max(最大字段的大小) + n(填充大小) 应该等于 <code class="language-plaintext highlighter-rouge">union</code> 中 max_basic(最大基本类型大小)的倍数
+res = max+n;
+例子中, 最大字段是 <code class="language-plaintext highlighter-rouge">char c[10]</code> 占10字节， 最大基本类型是 <code class="language-plaintext highlighter-rouge">int i</code> 占4字节， 按上述规则，填充2字节，答案即为 12（12= 4x3）</p>
+
+<p>4、如何判断结构体是否相等</p>
+
+<p>需要重载操作符 <code class="language-plaintext highlighter-rouge">==</code> 判断两个结构体是否相等，不能用函数 <code class="language-plaintext highlighter-rouge">memcmp</code> 来判断两个结构体是否相等，因为 <code class="language-plaintext highlighter-rouge">memcmp</code> 函数是逐个字节进行比较的，而结构体存在内存空间中保存时存在字节对齐，字节对齐时补的字节内容是随机的，会产生垃圾值，所以无法比较。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="nc">A</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+    <span class="n">A</span><span class="p">(</span><span class="kt">char</span> <span class="n">c_tmp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">tmp</span><span class="p">)</span> <span class="o">:</span> <span class="n">c</span><span class="p">(</span><span class="n">c_tmp</span><span class="p">),</span> <span class="n">val</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="p">{}</span>
+
+    <span class="k">friend</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">A</span> <span class="o">&amp;</span><span class="n">tmp1</span><span class="p">,</span> <span class="k">const</span> <span class="n">A</span> <span class="o">&amp;</span><span class="n">tmp2</span><span class="p">);</span> <span class="c1">//  友元运算符重载函数</span>
+<span class="p">};</span>
+
+<span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">A</span> <span class="o">&amp;</span><span class="n">tmp1</span><span class="p">,</span> <span class="k">const</span> <span class="n">A</span> <span class="o">&amp;</span><span class="n">tmp2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">tmp1</span><span class="p">.</span><span class="n">c</span> <span class="o">==</span> <span class="n">tmp2</span><span class="p">.</span><span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="n">tmp1</span><span class="p">.</span><span class="n">val</span> <span class="o">==</span> <span class="n">tmp2</span><span class="p">.</span><span class="n">val</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">A</span> <span class="n">ex1</span><span class="p">(</span><span class="sc">'a'</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span> <span class="n">ex2</span><span class="p">(</span><span class="sc">'b'</span><span class="p">,</span> <span class="mi">80</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ex1</span> <span class="o">==</span> <span class="n">ex2</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"ex1 == ex2"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"ex1 != ex2"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 输出</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+:ET
