@@ -1,6 +1,8 @@
 future: true
 permalink: /:title/
+author_avatar: /images/header.png
 url: "http://blog.xyecho.com"
+github_site_repo: kakabei/kakabei.github.io
 name: xyecho - just my notes
 author: kane
 qq: 
@@ -13,3 +15,4 @@ paginate: 20
 highlighter: rouge
 truncate: true
 about: "kane"
+excerpt_separator: "<!-- more -->"
