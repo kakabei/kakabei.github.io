@@ -71,33 +71,33 @@ github 地址：[https://github.com/curl/curl](https://github.com/curl/curl)
 1、GET 请求
 
 ```bash 
-curl -I https://www.baidu.com	 						             # curl 发请求
-curl -v -I https://www.baidu.com						             #带有详细信息的 curl 发请求
-curl -X GET https://www.baidu.com	 					             #使用显式 http 方法进行 curl
-curl --noproxy 127.0.0.1 http://www.stackoverflow.com	 			 #没有 http 代理的 curl
-curl --connect-timeout 10 -I -k https://www.baidu.com	 			 #curl 默认没有超时
-curl --verbose --header "Host: www.mytest.com:8182" www.baidu.com	 #curl 得到额外的标题
-curl -k -v https://www.google.com	                                 #curl 获取带有标题的响应
+curl -I https://www.baidu.com                                          # curl 发请求
+curl -v -I https://www.baidu.com                                     #带有详细信息的 curl 发请求
+curl -X GET https://www.baidu.com                                      #使用显式 http 方法进行 curl
+curl --noproxy 127.0.0.1 http://www.stackoverflow.com                  #没有 http 代理的 curl
+curl --connect-timeout 10 -I -k https://www.baidu.com                  #curl 默认没有超时
+curl --verbose --header "Host: www.mytest.com:8182" www.baidu.com     #curl 得到额外的标题
+curl -k -v https://www.google.com                                     #curl 获取带有标题的响应
 
 ```
 
 2、POST 请求
 
 ```bash
-url -d "name=username&password=123456" <URL>	# curl 发请求
-curl <URL> -H "content-type: application/json" -d "{ \"woof\": \"bark\"}"	# curl 发送 json
+url -d "name=username&password=123456" <URL>    # curl 发请求
+curl <URL> -H "content-type: application/json" -d "{ \"woof\": \"bark\"}"    # curl 发送 json
 ```
 
 3、高级用法
 
 ```bash 
-curl -L -s http://ipecho.net/plain, curl -L -s http://whatismijnip.nl	#获取我的公共 IP
-curl -u $username:$password http://repo.dennyzhang.com/README.txt	    #带凭证的 curl
-curl -v -F key1=value1 -F upload=@localfilename <URL>				    #curl 上传
-curl -k -v --http2 https://www.google.com/	                            #使用 http2 curl
-curl -T cryptopp552.zip -u test:test ftp://10.32.99.187/	             #url ftp 上传
-curl -u test:test ftp://10.32.99.187/cryptopp552.zip -o cryptopp552.zip	curl #ftp 下载
-curl -v -u admin:admin123 --upload-file package1.zip http://mysever:8081/dir/package1.zip	#使用凭证 curl 上传
+curl -L -s http://ipecho.net/plain, curl -L -s http://whatismijnip.nl         # 获取我的公共 IP撒··
+curl -u $username:$password http://repo.dennyzhang.com/README.txt             # 带凭证的 curl
+curl -v -F key1=value1 -F upload=@localfilename <URL>                         # curl 上传
+curl -k -v --http2 https://www.google.com/                                      # 使用 http2 curl
+curl -T cryptopp552.zip -u test:test ftp://10.32.99.187/                      # url ftp 上传
+curl -u test:test ftp://10.32.99.187/cryptopp552.zip -o cryptopp552.zip    curl  # ftp 下载
+curl -v -u admin:admin123 --upload-file package1.zip http://mysever:8081/dir/package1.zip    # 使用凭证 curl 上传
 ```
 
 4、查询当前机器的出口IP
