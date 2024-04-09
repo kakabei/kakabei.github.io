@@ -1,4 +1,4 @@
-I"�<h1 id="curl--常见的技巧">curl  常见的技巧</h1>
+I"�<h1 id="curl--常见的技巧">curl  常见的技巧</h1>
 
 <p>github 地址：<a href="https://github.com/curl/curl">https://github.com/curl/curl</a></p>
 
@@ -57,31 +57,31 @@
 
 <p>1、GET 请求</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-I</span> https://www.baidu.com	 						             <span class="c"># curl 发请求</span>
-curl <span class="nt">-v</span> <span class="nt">-I</span> https://www.baidu.com						             <span class="c">#带有详细信息的 curl 发请求</span>
-curl <span class="nt">-X</span> GET https://www.baidu.com	 					             <span class="c">#使用显式 http 方法进行 curl</span>
-curl <span class="nt">--noproxy</span> 127.0.0.1 http://www.stackoverflow.com	 			 <span class="c">#没有 http 代理的 curl</span>
-curl <span class="nt">--connect-timeout</span> 10 <span class="nt">-I</span> <span class="nt">-k</span> https://www.baidu.com	 			 <span class="c">#curl 默认没有超时</span>
-curl <span class="nt">--verbose</span> <span class="nt">--header</span> <span class="s2">"Host: www.mytest.com:8182"</span> www.baidu.com	 <span class="c">#curl 得到额外的标题</span>
-curl <span class="nt">-k</span> <span class="nt">-v</span> https://www.google.com	                                 <span class="c">#curl 获取带有标题的响应</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-I</span> https://www.baidu.com                                          <span class="c"># curl 发请求</span>
+curl <span class="nt">-v</span> <span class="nt">-I</span> https://www.baidu.com                                       <span class="c"># 带有详细信息的 curl 发请求</span>
+curl <span class="nt">-X</span> GET https://www.baidu.com                                      <span class="c"># 使用显式 http 方法进行 curl</span>
+curl <span class="nt">--noproxy</span> 127.0.0.1 http://www.stackoverflow.com                  <span class="c"># 没有 http 代理的 curl</span>
+curl <span class="nt">--connect-timeout</span> 10 <span class="nt">-I</span> <span class="nt">-k</span> https://www.baidu.com                  <span class="c"># curl 默认没有超时</span>
+curl <span class="nt">--verbose</span> <span class="nt">--header</span> <span class="s2">"Host: www.mytest.com:8182"</span> www.baidu.com      <span class="c"># curl 得到额外的标题</span>
+curl <span class="nt">-k</span> <span class="nt">-v</span> https://www.google.com                                      <span class="c"># curl 获取带有标题的响应</span>
 
 </code></pre></div></div>
 
 <p>2、POST 请求</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>url <span class="nt">-d</span> <span class="s2">"name=username&amp;password=123456"</span> &lt;URL&gt;	<span class="c"># curl 发请求</span>
-curl &lt;URL&gt; <span class="nt">-H</span> <span class="s2">"content-type: application/json"</span> <span class="nt">-d</span> <span class="s2">"{ </span><span class="se">\"</span><span class="s2">woof</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">bark</span><span class="se">\"</span><span class="s2">}"</span>	<span class="c"># curl 发送 json</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>url <span class="nt">-d</span> <span class="s2">"name=username&amp;password=123456"</span> &lt;URL&gt;    <span class="c"># curl 发请求</span>
+curl &lt;URL&gt; <span class="nt">-H</span> <span class="s2">"content-type: application/json"</span> <span class="nt">-d</span> <span class="s2">"{ </span><span class="se">\"</span><span class="s2">woof</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">bark</span><span class="se">\"</span><span class="s2">}"</span>    <span class="c"># curl 发送 json</span>
 </code></pre></div></div>
 
 <p>3、高级用法</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="nt">-s</span> http://ipecho.net/plain, curl <span class="nt">-L</span> <span class="nt">-s</span> http://whatismijnip.nl	<span class="c">#获取我的公共 IP</span>
-curl <span class="nt">-u</span> <span class="nv">$username</span>:<span class="nv">$password</span> http://repo.dennyzhang.com/README.txt	    <span class="c">#带凭证的 curl</span>
-curl <span class="nt">-v</span> <span class="nt">-F</span> <span class="nv">key1</span><span class="o">=</span>value1 <span class="nt">-F</span> <span class="nv">upload</span><span class="o">=</span>@localfilename &lt;URL&gt;				    <span class="c">#curl 上传</span>
-curl <span class="nt">-k</span> <span class="nt">-v</span> <span class="nt">--http2</span> https://www.google.com/	                            <span class="c">#使用 http2 curl</span>
-curl <span class="nt">-T</span> cryptopp552.zip <span class="nt">-u</span> <span class="nb">test</span>:test ftp://10.32.99.187/	             <span class="c">#url ftp 上传</span>
-curl <span class="nt">-u</span> <span class="nb">test</span>:test ftp://10.32.99.187/cryptopp552.zip <span class="nt">-o</span> cryptopp552.zip	curl <span class="c">#ftp 下载</span>
-curl <span class="nt">-v</span> <span class="nt">-u</span> admin:admin123 <span class="nt">--upload-file</span> package1.zip http://mysever:8081/dir/package1.zip	<span class="c">#使用凭证 curl 上传</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="nt">-s</span> http://ipecho.net/plain, curl <span class="nt">-L</span> <span class="nt">-s</span> http://whatismijnip.nl            <span class="c"># 获取我的公共 IP撒··</span>
+curl <span class="nt">-u</span> <span class="nv">$username</span>:<span class="nv">$password</span> http://repo.dennyzhang.com/README.txt                <span class="c"># 带凭证的 curl</span>
+curl <span class="nt">-v</span> <span class="nt">-F</span> <span class="nv">key1</span><span class="o">=</span>value1 <span class="nt">-F</span> <span class="nv">upload</span><span class="o">=</span>@localfilename &lt;URL&gt;                            <span class="c"># curl 上传</span>
+curl <span class="nt">-k</span> <span class="nt">-v</span> <span class="nt">--http2</span> https://www.google.com/                                       <span class="c"># 使用 http2 curl</span>
+curl <span class="nt">-T</span> cryptopp552.zip <span class="nt">-u</span> <span class="nb">test</span>:test ftp://10.32.99.187/                         <span class="c"># url ftp 上传</span>
+curl <span class="nt">-u</span> <span class="nb">test</span>:test ftp://10.32.99.187/cryptopp552.zip <span class="nt">-o</span> cryptopp552.zip    curl  <span class="c"># ftp 下载</span>
+curl <span class="nt">-v</span> <span class="nt">-u</span> admin:admin123 <span class="nt">--upload-file</span> package1.zip http://mysever:8081/dir/package1.zip    <span class="c"># 使用凭证 curl 上传</span>
 </code></pre></div></div>
 
 <p>4、查询当前机器的出口IP</p>
