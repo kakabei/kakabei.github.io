@@ -4,7 +4,11 @@ title: Link
 comments: yes
 thread: 616
 ---
+## leaning 
 
+小白入门必备的计算机网线基础知识 : [https://www.bilibili.com/video/BV1Ux4y1e7zn/?vd_source=6e6fca9271a12c4f326e671c95904150](https://www.bilibili.com/video/BV1Ux4y1e7zn/?vd_source=6e6fca9271a12c4f326e671c95904150)
+
+李宏毅2024春《生成式人工智能导论》:[https://www.bilibili.com/video/BV1BJ4m1e7g8/?vd_source=6e6fca9271a12c4f326e671c95904150](https://www.bilibili.com/video/BV1BJ4m1e7g8/?vd_source=6e6fca9271a12c4f326e671c95904150)
 
 ## tools
 
@@ -21,7 +25,6 @@ Learning Git Branching :[https://learngitbranching.js.org ](https://learngitbran
 常用命令 git :[https://blog.xyecho.com/frequently-used-command-reference-git](https://blog.xyecho.com/frequently-used-command-reference-git)
 
 MP3 剪切: [https://mp3cut.net/cn/](https://mp3cut.net/cn/)
-
 
 ## AI 
 
