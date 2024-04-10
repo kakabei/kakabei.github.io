@@ -88,6 +88,8 @@ git ckeckout  -b feature/1.15.1-kane
 git push origin feature/1.15.1-kane 
 ``` 
 
+-----
 
-基于 Merge Request 的开发流程 : https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request
-如何撤销 Merge Request？https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request-revert
+基于 Merge Request 的开发流程 :[https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request]( https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request)
+
+如何撤销 Merge Request？[https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request-revert](https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request-revert)
