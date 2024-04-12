@@ -34,6 +34,8 @@ The AI search engine for developers:  [www.phind.com](https://www.phind.com/agen
 
 百度问心一言：[https://yiyan.baidu.com/](https://yiyan.baidu.com/)
 
+poe : [https://poe.com/chats](https://poe.com/chats)
+
 openAI :[https://chat.openai.com](https://chat.openai.com/)
 
 声音生成 AI elevnelabs :[https://elevenlabs.io](https://elevenlabs.io/)
