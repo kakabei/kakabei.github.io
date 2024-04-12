@@ -48,7 +48,7 @@ system-design: [github.com/systemdesign42/system-design](github.com/systemdesign
 
 1、YY哥：[http://hustcat.github.io/](http://hustcat.github.io/)
 
-2、刘未鹏: [http://zhangtielei.com/](http://zhangtielei.com/)
+2、张铁雷: [http://zhangtielei.com/](http://zhangtielei.com/)
 
 3、刘未鹏:[http://mindhacks.cn/](http://mindhacks.cn/)
 

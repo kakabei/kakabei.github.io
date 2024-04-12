@@ -1,7 +1,7 @@
 ---
 layout: post
 title: golang painc 发生了
-date: 2024-03-09 9:08:12
+date: 2024-04-11 9:08:12
 categories: 工作日志
 tags: golang  
 excerpt: 无论有意还是无意，painc 就是发生了
