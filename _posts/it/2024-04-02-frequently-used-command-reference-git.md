@@ -88,6 +88,14 @@ git ckeckout  -b feature/1.15.1-kane
 git push origin feature/1.15.1-kane 
 ``` 
 
+合并分支，把本地的分支 feat1 合并到  feat2 中去
+
+```sh 
+git checkout feat2          #  更新  feat2 分支
+git merge feat1             # 合并 feat1 到  feat2
+git push origin feat2       # 推送 feat2
+```
+
 -----
 
 基于 Merge Request 的开发流程 :[https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request]( https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request)

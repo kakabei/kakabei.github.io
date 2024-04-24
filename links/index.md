@@ -44,6 +44,17 @@ openAI :[https://chat.openai.com](https://chat.openai.com/)
 
 system-design: [github.com/systemdesign42/system-design](github.com/systemdesign42/system-design)
 
+## disk-tool 
+
+1、treesize window 查看文件，目录的大小 [https://www.appinn.com/treesize-free-for-windows/](https://www.appinn.com/treesize-free-for-windows/)
+
+2、Linux Reader 在window 上读出mac和 linux 的文件系统 [https://www.diskinternals.com/linux-reader/](https://www.diskinternals.com/linux-reader/) 
+
+## computer 
+
+1、CPU 天梯图：[https://www.mydrivers.com/zhuanti/tianti/cpu/index.html](https://www.mydrivers.com/zhuanti/tianti/cpu/index.html)
+
+
 ## blog
 
 1、YY哥：[http://hustcat.github.io/](http://hustcat.github.io/)
