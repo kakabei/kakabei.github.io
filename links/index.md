@@ -26,6 +26,8 @@ Learning Git Branching :[https://learngitbranching.js.org ](https://learngitbran
 
 MP3 剪切: [https://mp3cut.net/cn/](https://mp3cut.net/cn/)
 
+图片压缩工具：[https://saerasoft.com/caesium/#downloads](https://saerasoft.com/caesium/#downloads)
+
 ## AI 
 
 The AI search engine for developers:  [www.phind.com](https://www.phind.com/agent?home=true)
