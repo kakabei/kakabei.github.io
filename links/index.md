@@ -24,6 +24,7 @@ Learning Git Branching :[https://learngitbranching.js.org ](https://learngitbran
 
 常用命令 git :[https://blog.xyecho.com/frequently-used-command-reference-git](https://blog.xyecho.com/frequently-used-command-reference-git)
 
+vscode list :[https://blog.xyecho.com/vscode-plug-in-list/](https://blog.xyecho.com/vscode-plug-in-list/)
 
 ## AI 
 
