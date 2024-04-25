@@ -20,13 +20,9 @@ golang play: [https://go.dev/play/](https://go.dev/play/)
 
 Learning Git Branching :[https://learngitbranching.js.org ](https://learngitbranching.js.org/?locale=zh_CN&NODEMO=)
 
-常用命令 curl :[https://blog.xyecho.com/frequently-used-command-reference](https://blog.xyecho.com/frequently-used-command-reference)
+常用命令 curl :[https://blog.xyecho.com/frequently-used-command-reference-curl](https://blog.xyecho.com/frequently-used-command-reference-curl)
 
 常用命令 git :[https://blog.xyecho.com/frequently-used-command-reference-git](https://blog.xyecho.com/frequently-used-command-reference-git)
-
-MP3 剪切: [https://mp3cut.net/cn/](https://mp3cut.net/cn/)
-
-图片压缩工具：[https://saerasoft.com/caesium/#downloads](https://saerasoft.com/caesium/#downloads)
 
 ## AI 
 
@@ -40,7 +36,6 @@ poe : [https://poe.com/chats](https://poe.com/chats)
 
 openAI :[https://chat.openai.com](https://chat.openai.com/)
 
-声音生成 AI elevnelabs :[https://elevenlabs.io](https://elevenlabs.io/)
 
 ## github  
 
@@ -56,6 +51,13 @@ system-design: [github.com/systemdesign42/system-design](github.com/systemdesign
 
 1、CPU 天梯图：[https://www.mydrivers.com/zhuanti/tianti/cpu/index.html](https://www.mydrivers.com/zhuanti/tianti/cpu/index.html)
 
+## material tools
+
+MP3 剪切: [https://mp3cut.net/cn/](https://mp3cut.net/cn/)
+
+图片压缩工具：[https://saerasoft.com/caesium/#downloads](https://saerasoft.com/caesium/#downloads)
+
+声音生成 AI elevnelabs :[https://elevenlabs.io](https://elevenlabs.io/)
 
 ## blog
 
