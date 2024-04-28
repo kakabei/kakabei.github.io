@@ -28,6 +28,9 @@ vscode list :[https://blog.xyecho.com/vscode-plug-in-list/](https://blog.xyecho.
 
 ## AI 
 
+
+AI search perplexity: [https://www.perplexity.ai/](https://www.perplexity.ai/)
+
 The AI search engine for developers:  [www.phind.com](https://www.phind.com/agent?home=true)
 
 阿里通义千问：[https://tongyi.aliyun.com/qianwen/](https://tongyi.aliyun.com/qianwen/)
