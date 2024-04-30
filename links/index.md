@@ -26,6 +26,12 @@ Learning Git Branching :[https://learngitbranching.js.org ](https://learngitbran
 
 vscode list :[https://blog.xyecho.com/vscode-plug-in-list/](https://blog.xyecho.com/vscode-plug-in-list/)
 
+Totalcmd64 [https://pan.baidu.com/s/1UHiqkMRYLbJYaYs_8ZV4yg?pwd=bq3r](https://pan.baidu.com/s/1UHiqkMRYLbJYaYs_8ZV4yg?pwd=bq3r)
+
+SecureCRT_7.0.0_x64 : [https://pan.baidu.com/s/1RtDaJcManDyYhLpUaWcjxg?pwd=acdh](https://pan.baidu.com/s/1RtDaJcManDyYhLpUaWcjxg?pwd=acdh)
+
+Beyond Compare V4 :[https://www.beyondcomparepro.com/download](https://www.beyondcomparepro.com/download)
+
 ## AI 
 
 
@@ -55,6 +61,8 @@ system-design: [github.com/systemdesign42/system-design](github.com/systemdesign
 ## computer 
 
 1、CPU 天梯图：[https://www.mydrivers.com/zhuanti/tianti/cpu/index.html](https://www.mydrivers.com/zhuanti/tianti/cpu/index.html)
+
+2、显卡天梯图：[https://www.mydrivers.com/zhuanti/tianti/gpu/index.html](https://www.mydrivers.com/zhuanti/tianti/gpu/index.html)
 
 ## material tools
 
