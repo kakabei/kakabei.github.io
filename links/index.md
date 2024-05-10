@@ -32,6 +32,13 @@ SecureCRT_7.0.0_x64 : [https://pan.baidu.com/s/1RtDaJcManDyYhLpUaWcjxg?pwd=acdh]
 
 Beyond Compare V4 :[https://www.beyondcomparepro.com/download](https://www.beyondcomparepro.com/download)
 
+
+## SecureCRT
+
+Secure CRT 使用教程：[https://www.bilibili.com/video/BV1zK411q7xu?p=1](https://www.bilibili.com/video/BV1zK411q7xu?p=1)
+
+Secure CRT 配色方案：[https://www.bilibili.com/video/BV1jt421j7s5?p=1](https://www.bilibili.com/video/BV1jt421j7s5?p=1)
+
 ## AI 
 
 
