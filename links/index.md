@@ -37,10 +37,9 @@ Beyond Compare V4 :[https://www.beyondcomparepro.com/download](https://www.beyon
 
 Secure CRT 使用教程：[https://www.bilibili.com/video/BV1zK411q7xu?p=1](https://www.bilibili.com/video/BV1zK411q7xu?p=1)
 
-Secure CRT 配色方案：[https://www.bilibili.com/video/BV1jt421j7s5?p=1](https://www.bilibili.com/video/BV1jt421j7s5?p=1)
+Secure CRT 配色方案：[https://www.bilibili.com/video/BV1jt421j7s5/?p=1&vd_source=6e6fca9271a12c4f326e671c95904150](https://www.bilibili.com/video/BV1jt421j7s5/?p=1&vd_source=6e6fca9271a12c4f326e671c95904150)
 
 ## AI 
-
 
 AI search perplexity: [https://www.perplexity.ai/](https://www.perplexity.ai/)
 
