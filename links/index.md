@@ -49,6 +49,8 @@ The AI search engine for developers:  [www.phind.com](https://www.phind.com/agen
 
 devv : [https://devv.ai/](https://devv.ai/)
 
+codeium : [https://codeium.com/playground](https://codeium.com/playground)
+
 豆包：[https://www.doubao.com/chat/?from_login=1](https://www.doubao.com/chat/?from_login=1)
 
 阿里通义千问：[https://tongyi.aliyun.com/qianwen/](https://tongyi.aliyun.com/qianwen/)
