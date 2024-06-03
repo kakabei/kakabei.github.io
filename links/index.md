@@ -47,6 +47,8 @@ AI search perplexity: [https://www.perplexity.ai/](https://www.perplexity.ai/)
 
 The AI search engine for developers:  [www.phind.com](https://www.phind.com/agent?home=true)
 
+devv : [https://devv.ai/](https://devv.ai/)
+
 豆包：[https://www.doubao.com/chat/?from_login=1](https://www.doubao.com/chat/?from_login=1)
 
 阿里通义千问：[https://tongyi.aliyun.com/qianwen/](https://tongyi.aliyun.com/qianwen/)
