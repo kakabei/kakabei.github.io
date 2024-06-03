@@ -18,9 +18,9 @@ Quick Reference: [https://wangchujiang.com/reference/](https://wangchujiang.com/
 
 golang play: [https://go.dev/play/](https://go.dev/play/)
 
-golang jsontogo tools : [https://www.bejson.com/transfor/json2go/(https://www.bejson.com/transfor/json2go/)
+golang jsontogo tools : [https://www.bejson.com/transfor/json2go/](https://www.bejson.com/transfor/json2go/)
 
-Learning Git Branching :[https://learngitbranching.js.org ](https://learngitbranching.js.org/?locale=zh_CN&NODEMO=)
+Learning Git Branching : [https://learngitbranching.js.org ](https://learngitbranching.js.org/?locale=zh_CN&NODEMO=)
 
 常用命令 curl :[https://blog.xyecho.com/frequently-used-command-reference-curl](https://blog.xyecho.com/frequently-used-command-reference-curl)
 
@@ -46,6 +46,8 @@ Secure CRT 配色方案：[https://www.bilibili.com/video/BV1jt421j7s5/?p=1&vd_s
 AI search perplexity: [https://www.perplexity.ai/](https://www.perplexity.ai/)
 
 The AI search engine for developers:  [www.phind.com](https://www.phind.com/agent?home=true)
+
+豆包：[https://www.doubao.com/chat/?from_login=1](https://www.doubao.com/chat/?from_login=1)
 
 阿里通义千问：[https://tongyi.aliyun.com/qianwen/](https://tongyi.aliyun.com/qianwen/)
 
