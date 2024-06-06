@@ -10,6 +10,8 @@ thread: 616
 
 李宏毅2024春《生成式人工智能导论》:[https://www.bilibili.com/video/BV1BJ4m1e7g8/?vd_source=6e6fca9271a12c4f326e671c95904150](https://www.bilibili.com/video/BV1BJ4m1e7g8/?vd_source=6e6fca9271a12c4f326e671c95904150)
 
+零知识证明（zero-knowledge proof）入门教程: [https://github.com/WTFAcademy/WTF-zk](https://github.com/WTFAcademy/WTF-zk)
+
 ## tools
 
 drawio:[https://app.diagrams.net/?src=about](https://app.diagrams.net/?src=about)
@@ -61,10 +63,17 @@ poe : [https://poe.com/chats](https://poe.com/chats)
 
 openAI :[https://chat.openai.com](https://chat.openai.com/)
 
+# system 
+
+强大的混沌工程平台 : [https://chaos-mesh.org/website-zh/?continueFlag=d5490667caa63d66b43697894ac52925](https://chaos-mesh.org/website-zh/?continueFlag=d5490667caa63d66b43697894ac52925)
+
+
 
 ## github  
 
 system-design: [github.com/systemdesign42/system-design](github.com/systemdesign42/system-design)
+
+零知识证明（zero-knowledge proof）入门教程: [https://github.com/WTFAcademy/WTF-zk](https://github.com/WTFAcademy/WTF-zk)
 
 ## disk-tool 
 
