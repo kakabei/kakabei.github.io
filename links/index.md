@@ -67,9 +67,6 @@ openAI :[https://chat.openai.com](https://chat.openai.com/)
 
 强大的混沌工程平台 : [https://chaos-mesh.org/website-zh/?continueFlag=d5490667caa63d66b43697894ac52925](https://chaos-mesh.org/website-zh/?continueFlag=d5490667caa63d66b43697894ac52925)
 
-# golang 
-
-Go 语言高性能编程 ： [https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925](https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925)
 
 ## github  
 

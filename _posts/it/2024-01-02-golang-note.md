@@ -7,17 +7,8 @@ tags: golang
 excerpt: golang 开发过程记录的
 ---
 
+# golang  资料
 
-go 常用命令
+Go 语言高性能编程 ： [https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925](https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925)
 
-```sh 
-
-go mod tidy 
-
-```
-
-如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：
-
-```curl cip.ccsh   
-go mod require <module>@<branch>
-```
+# golang 笔记
