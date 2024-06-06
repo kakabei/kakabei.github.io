@@ -12,21 +12,29 @@ thread: 616
 
 零知识证明（zero-knowledge proof）入门教程: [https://github.com/WTFAcademy/WTF-zk](https://github.com/WTFAcademy/WTF-zk)
 
-## tools
+Rust 程序设计语言 :[https://rust.bootcss.com/](https://rust.bootcss.com/)
 
-drawio:[https://app.diagrams.net/?src=about](https://app.diagrams.net/?src=about)
+## devlop 
 
-Quick Reference: [https://wangchujiang.com/reference/](https://wangchujiang.com/reference/)
+golang 开发备忘:[https://blog.xyecho.com/golang-note/](https://blog.xyecho.com/golang-note/)
 
 golang play: [https://go.dev/play/](https://go.dev/play/)
 
 golang jsontogo tools : [https://www.bejson.com/transfor/json2go/](https://www.bejson.com/transfor/json2go/)
+
+Quick Reference: [https://wangchujiang.com/reference/](https://wangchujiang.com/reference/)
 
 Learning Git Branching : [https://learngitbranching.js.org ](https://learngitbranching.js.org/?locale=zh_CN&NODEMO=)
 
 常用命令 curl :[https://blog.xyecho.com/frequently-used-command-reference-curl](https://blog.xyecho.com/frequently-used-command-reference-curl)
 
 常用命令 git :[https://blog.xyecho.com/frequently-used-command-reference-git](https://blog.xyecho.com/frequently-used-command-reference-git)
+
+## tools
+
+drawio:[https://app.diagrams.net/?src=about](https://app.diagrams.net/?src=about)
+
+
 
 vscode list :[https://blog.xyecho.com/vscode-plug-in-list/](https://blog.xyecho.com/vscode-plug-in-list/)
 
