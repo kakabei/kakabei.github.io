@@ -16,7 +16,7 @@ excerpt: 工作中 vscode 常有插件列表
 4、AI Coding Autocomplete codeium [https://marketplace.visualstudio.com/items?itemName=Codeium.codeium](https://marketplace.visualstudio.com/items?itemName=Codeium.codeium)
 5、Project Manager [https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager](https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager)
 6、golang [https://marketplace.visualstudio.com/items?itemName=golang.Go](https://marketplace.visualstudio.com/items?itemName=golang.Go)
-
+7、 Markdown Preview Enhanced [https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced)
 #  配置
 
 1、[https://github.com/kakabei/configbox/tree/main/vscode](https://github.com/kakabei/configbox/tree/main/vscode)
