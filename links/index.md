@@ -16,6 +16,8 @@ Rust 程序设计语言 :[https://rust.bootcss.com/](https://rust.bootcss.com/)
 
 kubernetes  中文文档：[ https://www.kubernetes.org.cn/doc-11](https://www.kubernetes.org.cn/doc-11)
 
+argocd : [https://argocd.devops.gold/](https://argocd.devops.gold/)
+
 ## devlop 
 
 golang 开发备忘:[https://blog.xyecho.com/golang-note/](https://blog.xyecho.com/golang-note/)
