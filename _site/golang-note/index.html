@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="kane" />
-    <title>golang 开发备忘</title>
+    <title>golang 学习笔记</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>golang 开发备忘</h1>
+        <h1>golang 学习笔记</h1>
         </header>
         <nav>
         <span><a title="Blog" class="content" href="/">Blog</a></span>
@@ -35,7 +35,7 @@
 <span class="categories">
   分类
   
-  <a href="/categories/#golang" title="golang">golang</a>&nbsp;
+  <a href="/categories/#开发语言" title="开发语言">开发语言</a>&nbsp;
   
 </span>
 
@@ -50,11 +50,2404 @@
 
 </section>
 <section class="post">
-<h1 id="golang--资料">golang  资料</h1>
+<h1 id="golang-介绍">golang 介绍</h1>
 
-<p>Go 语言高性能编程 ： <a href="https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925">https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925</a></p>
+<p>Go语言最主要的特性：</p>
 
-<h1 id="golang-笔记">golang 笔记</h1>
+<ul>
+  <li>自动垃圾回收</li>
+  <li>更丰富的内置类型</li>
+  <li>函数多返回值</li>
+  <li>错误处理</li>
+  <li>匿名函数和闭包</li>
+  <li>类型和接口</li>
+  <li>并发编程</li>
+  <li>反射</li>
+  <li>语言交互性</li>
+</ul>
+
+<h1 id="golang-环境">golang 环境</h1>
+
+<p>下载 golang 的安装包：<a href="https://studygolang.com/dl"> Go 安装包下载</a></p>
+
+<p>如果你是 M1 之后的 Mac，下载 go1.17.6.darwin-arm64.pkg，否则下载 go1.17.6.darwin-amd64.pkg。之后双击下载的安装包，按提示一步步操作即可。</p>
+
+<p>把安装路径加到 PATH 上 (~/.bashrc)</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim ~/.bashrc
+
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/local/go/bin/
+</code></pre></div></div>
+
+<p>查看是否已经安装好。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$go</span> version
+go version go1.19.3 darwin/amd64
+</code></pre></div></div>
+
+<p>代理： https://goproxy.io/zh/</p>
+
+<p><strong>Bash (Linux or macOS)</strong></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 配置 GOPROXY 环境变量</span>
+<span class="nb">export </span><span class="nv">GOPROXY</span><span class="o">=</span>https://proxy.golang.com.cn,direct
+<span class="c"># 还可以设置不走 proxy 的私有仓库或组，多个用逗号相隔（可选）</span>
+<span class="nb">export </span><span class="nv">GOPRIVATE</span><span class="o">=</span>git.mycompany.com,github.com/my/private
+</code></pre></div></div>
+
+<h2 id="环境变量">环境变量</h2>
+
+<p>3 个环境变量，也就是  <code class="language-plaintext highlighter-rouge">GOROOT</code>、<code class="language-plaintext highlighter-rouge">GOPATH</code> 和 <code class="language-plaintext highlighter-rouge">GOBIN</code>。</p>
+
+<ul>
+  <li>GOROOT ：golang 安装根目录的路径，也就是 golang 的安装路径。</li>
+  <li>GOPATH：若干工作区目录的路径。是我们自己定义的工作空间。</li>
+  <li>GOBIN：golang  程序生成的可执行文件（executable file）的路径。</li>
+</ul>
+
+<h2 id="golang-源码的组织方式">golang 源码的组织方式</h2>
+
+<p>golang  语言源码的组织方式就是以环境变量 GOPATH、工作区、src 目录和代码包为主线的。一般情况下，golang 语言的源码文件都需要被存放在环境变量 GOPATH 包含的某个工作区（目录）中的 src 目录下的某个代码包（目录）中。</p>
+
+<h2 id="源码安装后的结果">源码安装后的结果</h2>
+
+<p>某个工作区的 src 子目录下的源码文件在安装后一般会被放置到当前工作区的 pkg 子目录下对应的目录中，或者被直接放置到该工作区的 bin 子目录中。</p>
+
+<p>那么在安装后如果产生了归档文件（以“.a”为扩展名的文件），就会放进该工作区的 pkg 子目录；如果产生了可执行文件，就可能会放进该工作区的 bin 子目录。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">go</span> <span class="n">install</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">labstack</span><span class="o">/</span><span class="n">echo</span>
+</code></pre></div></div>
+
+<p>生成的归档文件的相对目录就是 <code class="language-plaintext highlighter-rouge">github.com/labstack</code>，文件名为 echo.a 。</p>
+
+<p>上面这个代码包导入路径还有另外一层含义，那就是：该代码包的源码文件存在于 GitHub 网站的 labstack 组的代码仓库 echo 中。</p>
+
+<h2 id="理解构建和安装-go-程序的过程">理解构建和安装 Go 程序的过程</h2>
+
+<p>构建使用命令go build，安装使用命令go install。构建和安装代码包的时候都会执行编译、打包等操作。</p>
+
+<p>如果安装的是库源码文件，那么结果文件会被搬运到它所在工作区的 pkg 目录下的某个子目录中。</p>
+
+<p>如果安装的是命令源码文件，那么结果文件会被搬运到它所在工作区的 bin 目录中，或者环境变量GOBIN指向的目录中。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go build <span class="nt">-a</span>       <span class="c"># 目标代码包和依赖包都会被编译。</span>
+go build <span class="nt">-i</span>       <span class="c"># 编译依赖的代码包,安装归档文件。</span>
+go build <span class="nt">-x</span>       <span class="c"># 可以看到具体都执行了哪些操作。</span>
+go build <span class="nt">-n</span>       <span class="c"># 只查看具体操作而不执行它们。</span>
+go get <span class="nt">-u</span>         <span class="c"># 下载并安装代码包，不论工作区中是否已存在它们。</span>
+go get <span class="nt">-d</span>         <span class="c"># 只下载代码包，不安装代码包。</span>
+go get <span class="nt">-fix</span>       <span class="c"># 在下载代码包后先运行一个用于根据当前 Go 语言版本修正代码的工具，然后再安装代码包。</span>
+go get <span class="nt">-t</span>         <span class="c"># 同时下载测试所需的代码包。</span>
+go get <span class="nt">-insecure</span>  <span class="c"># 允许通过非安全的网络协议下载和安装代码包。HTTP 就是这样的协议</span>
+</code></pre></div></div>
+
+<p>依赖管理工具：glide、gb以及官方出品的dep、vgo。</p>
+
+<h2 id="go-命令行工具">go 命令行工具</h2>
+
+<p>查看版本:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> go version
+go version go1.19.3 darwin/amd64
+</code></pre></div></div>
+
+<p>查看帮助：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> go <span class="nb">help
+</span>Go is a tool <span class="k">for </span>managing Go <span class="nb">source </span>code.
+
+Usage:
+
+	go &lt;<span class="nb">command</span><span class="o">&gt;</span> <span class="o">[</span>arguments]
+
+The commands are:
+
+	bug         start a bug report
+	build       compile packages and dependencies
+	......
+	
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">go tool</code> 可以完成以下几类工作：</p>
+
+<ul>
+  <li>代码格式化</li>
+  <li>代码质量分析和修复</li>
+  <li>工程构建</li>
+  <li>代码文档的提取和展示</li>
+  <li>依赖包管理</li>
+  <li>执行其他的包含指令，比如6g等</li>
+</ul>
+
+<p><strong>go vet</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">go vet</code> 命令是 <code class="language-plaintext highlighter-rouge">go tool vet</code> 命令的简单封装。</p>
+
+<p>命令<code class="language-plaintext highlighter-rouge">go vet</code> 是一个用于检查 Go 语言源码中静态错误的简单工具。</p>
+
+<p><code class="language-plaintext highlighter-rouge">go vet</code> 命令可以接受 <code class="language-plaintext highlighter-rouge">-n</code> 标记和 <code class="language-plaintext highlighter-rouge">-x</code> 标记。</p>
+
+<p><code class="language-plaintext highlighter-rouge">go vet</code> 命令的参数既可以是代码包的导入路径，也可以是 go 源码文件的绝对路径或相对路径。<strong>但是，这两种参数不能混用</strong>。</p>
+
+<p><strong>指定分支的库</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go get  gitlab.vrviu.com/diskless_stack/instance_service/types@分支名
+</code></pre></div></div>
+
+<h2 id="远程-import-支持">远程 import 支持</h2>
+
+<p>Go 语言不仅允许我们导入本地包，还支持在语言级别调用远程的包。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+<span class="k">import</span> <span class="p">(</span> 
+    <span class="s">"fmt"</span>
+    <span class="s">"github.com/myteam/exp/crc32"</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">"github.com/myteam/exp/crc32"</code> 就是远程的包</p>
+
+<p>然后，在执行<code class="language-plaintext highlighter-rouge">go build</code>或者<code class="language-plaintext highlighter-rouge">go install</code>之前，只需要加这么一句:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go get github.com/myteam/exp/crc32
+</code></pre></div></div>
+
+<h2 id="vscode-golang">vscode golang</h2>
+
+<p>安装 Go 插件依赖工具</p>
+
+<p>快捷键 Ctrl + Shift + p 打开命令面板，输入go install tools，选择第一项 Go: install/Update Tools</p>
+
+<p><img src="../assets/programming-language/go-2024-06-19_01-02-06.png" alt="" /></p>
+
+<p><img src="../assets/programming-language/go-2024-06-19_01-02-07.png" alt="" /></p>
+
+<h2 id="vscode-golang--debug-断点调试">vscode golang  Debug 断点调试</h2>
+
+<p>在程序运行的过程中，将运行程序停在具体的断点处，查询当前程序运行的状态。</p>
+
+<p>vscode 创建 <code class="language-plaintext highlighter-rouge">launch.json</code></p>
+
+<p><img src="../assets/programming-language/go-2024-06-19_01-02-08.png" alt="" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">launch.json</code> 文件内容：</p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.2.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"configurations"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Launch Package"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"go"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"request"</span><span class="p">:</span><span class="w"> </span><span class="s2">"launch"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auto"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"program"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${fileDirname}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div></div>
+
+<p>运行go程序:</p>
+
+<p><img src="../assets/programming-language/go-2024-06-19_01-02-09.png" alt="" /></p>
+
+<p>参考：</p>
+
+<p>1、<a href="https://www.cnblogs.com/sinberya/p/17593087.html">https://www.cnblogs.com/sinberya/p/17593087.html</a>
+2、【未看】vscode-golang-远程调试 <a href="https://blog.happyhack.io/2023/08/25/vscode-golang-remote-debug/">https://blog.happyhack.io/2023/08/25/vscode-golang-remote-debug/</a></p>
+
+<h2 id="文档管理-swaggo">文档管理 swaggo</h2>
+
+<p>可以用 swaggo，根据注释自动生成 API 文档，注释即文档。 <a href="https://github.com/swaggo/swag">https://github.com/swaggo/swag</a></p>
+
+<p><strong>方法</strong></p>
+
+<p>在 window 下 安装 swaggo</p>
+
+<p>1、命令如下： <code class="language-plaintext highlighter-rouge">go get -u github.com/swaggo/swag/cmd/swag</code></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> go get <span class="nt">-u</span> github.com/swaggo/swag/cmd/swag
+go: downloading github.com/swaggo/swag v1.8.12
+go: downloading github.com/urfave/cli/v2 v2.3.0
+.......
+</code></pre></div></div>
+
+<p>没有在 gopath 中生成 swag.exe 可执行文件 。</p>
+
+<p>要在安装的路径上执行 go install .</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>c:<span class="se">\U</span>sers<span class="se">\1</span>4476<span class="se">\g</span>o<span class="se">\p</span>kg<span class="se">\m</span><span class="nb">od</span><span class="se">\g</span>ithub.com<span class="se">\s</span>waggo<span class="se">\s</span>wag@v1.8.12<span class="se">\c</span>md<span class="se">\s</span>wag<span class="se">\</span>
+go <span class="nb">install</span> 
+</code></pre></div></div>
+
+<p>2、在根目录 执行 swag init 。 该目录下要有main.go。 会在根目录下生成 docs 文件夹。 如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:<span class="se">\k</span>ane<span class="se">\d</span>ev<span class="se">\s</span>ervice<span class="se">\d</span>ocs
+    docs.go
+    swagger.json
+    swagger.yaml
+</code></pre></div></div>
+
+<p>3、在 routers.go 中设置路由</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">beego</span><span class="o">.</span><span class="n">Handler</span><span class="p">(</span><span class="s">"/v1/swagger"</span><span class="p">,</span> <span class="n">httpSwagger</span><span class="o">.</span><span class="n">Handler</span><span class="p">(</span>
+	<span class="n">httpSwagger</span><span class="o">.</span><span class="n">URL</span><span class="p">(</span><span class="s">"/v1/swagger/doc.json"</span><span class="p">),</span> <span class="c">//The url pointing to API definition</span>
+  <span class="p">),</span> <span class="no">true</span><span class="p">)</span>
+  <span class="n">beego</span><span class="o">.</span><span class="n">SetStaticPath</span><span class="p">(</span><span class="s">"/swagger"</span><span class="p">,</span> <span class="s">"swagger"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>我遇到的问题是，看到的例子没有 beego.SetStaticPath(“/swagger”, “swagger”) 导致请求页面失败。</p>
+
+<p>4、在接口处写好注释如下：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// linksService godoc</span>
+<span class="c">//</span>
+<span class="c">//  @Summary        linksService</span>
+<span class="c">//  @Description    接口描述</span>
+<span class="c">//  @Tags           linksService</span>
+<span class="c">//  @Accept         json</span>
+<span class="c">//  @Produce        json</span>
+<span class="c">//  @Param          FlowId      query       string                          false   "流水ID"</span>
+<span class="c">//  @Param          Uid         query       int64                           false   "用户ID"</span>
+<span class="c">//  @Param          Business    query       int                             false   "业务类型"</span>
+<span class="c">//  @Success        200         {object}    HTTPCommonHead{Body=[]string}   "success"</span>
+<span class="c">//  @Failure        400         {object}    HTTPCommonHead{}                "failed"</span>
+<span class="c">//  @Router         /v1/linksService/release [post]</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">MyController</span><span class="p">)</span> <span class="n">LinkServiceRelease</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">req</span> <span class="n">models</span><span class="o">.</span><span class="n">LinkServiceReleaseRequest</span>
+    <span class="n">body</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="n">Ctx</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RequestBody</span>
+
+    <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">json</span><span class="o">.</span><span class="n">Unmarshal</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">req</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">vlog</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s">"json unmarshal err, body:%+v, err: %s"</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">SendRespErrCode</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">ErrorCodeParam</span><span class="p">,</span> <span class="s">"unmarshal LinkServiceRelease error"</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span> 
+    <span class="n">vlog</span><span class="o">.</span><span class="n">Infof</span><span class="p">(</span><span class="s">"LinkServiceRelease success, req: %+v, resp: %+v"</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">resp</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>5、 请求url : http://localhost:5566/v1/swagger/index.html#!</p>
+
+<p>这个图片要换掉</p>
+
+<p><img src="../assets/programming-language/golang-swagger-2023-05-04-11-43-32.png" alt="Image" /></p>
+
+<p>到这里，基本上就可以了。</p>
+
+<p>另一个问题 如何安装 swagger.exe 生成 markdown 说明文件</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>swagger generate markdown <span class="nt">-f</span> docs/swagger.yaml <span class="nt">--output</span> Readme.md
+</code></pre></div></div>
+
+<p>方法：<a href="https://tool.4xseo.com/a/30831.html">https://tool.4xseo.com/a/30831.html</a></p>
+
+<p>从这里下载 <a href="https://github.com/go-swagger/go-swagger/releases">https://github.com/go-swagger/go-swa</a><a href="https://github.com/go-swagger/go-swagger/releases">gger/releases</a> 下载 swagger_windows_amd64.exe 然后放到 gobin 的目录中。</p>
+
+<p>执行 ：swagger generate markdown -f docs/swagger.yaml –output Readme.md</p>
+
+<p>生成如下：　这</p>
+
+<p><img src="../assets/programming-language/golang-swagger-2023-05-04-11-43-32.png" alt="" /></p>
+
+<p>生成这个说明文档，也不能满足接口说明的要求，如果返回值的类型，就无法很好的体现出来。也可能是我还没搞明白吧，还是自己写文档吧。</p>
+
+<blockquote>
+  <p>感觉beego 并不能很友好的支持 swaggo   。
+按照例子试了很久，页面也没有请求出来。网上看到有人说是 
+beego swagger的坑——要设置swagger路由 (https://blog.51cto.com/3xxx/3023955) 
+必须在route的namespace下面设置swagger路由 <code class="language-plaintext highlighter-rouge">beego.SetStaticPath("/swagger", "swagger")</code></p>
+
+  <p>试了一下，可以用，请求地址是：http://localhost:5566/v1/swagger/index.html#!</p>
+</blockquote>
+
+<p>参考：</p>
+
+<p>1、<a href="https://juejin.cn/post/7126802030944878600">https://juejin.cn/post/7126802030944878600</a></p>
+
+<p>2、<a href="https://swagger.io/docs/">https://swagger.io/docs/</a></p>
+
+<p>3、<a href="https://www.lixueduan.com/posts/go/swagger/">https://swagger.io/docs/</a></p>
+
+<h2 id="工程构建">工程构建</h2>
+
+<p>支持 makefile 方式</p>
+
+<p>golang 可以用 makefile 的方式编译文件。</p>
+
+<p>如：build 的时候加  -ldflags， 可以把一些信息编译入程序中。 方便后续定位。</p>
+
+<div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">REPO</span> <span class="o">=</span> kakaxi.github.com/golang-test/link-service
+
+<span class="nv">GIT_COMMIT</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">shell</span> git show-branch <span class="nt">--no-name</span> HEAD<span class="nf">)</span>
+<span class="nv">GIT_BRANCH</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">shell</span> git rev-parse <span class="nt">--abbrev-ref</span> HEAD<span class="nf">)</span>
+<span class="nv">GIT_DIRTY</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">shell</span> <span class="nb">test</span> <span class="nt">-n</span> <span class="s2">"</span><span class="sb">`</span>git status <span class="nt">--porcelain</span><span class="sb">`</span><span class="s2">"</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"*"</span> <span class="o">||</span> <span class="nb">true</span><span class="nf">)</span>
+<span class="nv">BUILD_VERSION</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">shell</span> git describe <span class="nt">--abbrev</span><span class="o">=</span>10 <span class="nt">--tags</span> <span class="nt">--always</span><span class="nf">)</span>
+<span class="nv">BUILD_TIME</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">shell</span> <span class="nb">date</span> +%FT%T%z<span class="nf">)</span>
+
+<span class="nv">LDFLAGS</span> <span class="o">:=</span> <span class="s2">"</span><span class="se">\</span><span class="s2">
+-X </span><span class="se">\"</span><span class="nv">${REPO}</span><span class="s2">/internal/version.buildGitCommit=</span><span class="nv">${GIT_COMMIT}</span><span class="s2"> </span><span class="nv">${GIT_DIRTY}</span><span class="se">\"</span><span class="s2"> </span><span class="se">\</span><span class="s2">
+-X </span><span class="se">\"</span><span class="nv">${REPO}</span><span class="s2">/internal/version.buildGitBranch=</span><span class="nv">${GIT_BRANCH}</span><span class="se">\"</span><span class="s2"> </span><span class="se">\</span><span class="s2">
+-X </span><span class="se">\"</span><span class="nv">${REPO}</span><span class="s2">/internal/version.buildVersion=</span><span class="nv">${BUILD_VERSION}</span><span class="se">\"</span><span class="s2"> </span><span class="se">\</span><span class="s2">
+-X </span><span class="se">\"</span><span class="nv">${REPO}</span><span class="s2">/internal/version.buildTime=</span><span class="nv">${BUILD_TIME}</span><span class="se">\"</span><span class="s2">"</span>
+
+<span class="nl">all</span><span class="o">:</span> <span class="nf">release</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">debug</span>
+<span class="nl">debug</span><span class="o">:</span>
+  <span class="err">go</span> <span class="err">vet</span> <span class="err">./...</span>
+  <span class="err">go</span> <span class="err">build</span> <span class="err">-ldflags</span> <span class="err">$(LDFLAGS)</span>
+  
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">release</span>
+<span class="nl">release</span><span class="o">:</span>
+  <span class="err">go</span> <span class="err">vet</span> <span class="err">./...</span>
+  <span class="nv">GOWORK</span><span class="o">=</span>off go build <span class="nt">-ldflags</span> <span class="nv">$(LDFLAGS)</span>
+  
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">docs</span>
+<span class="nl">docs</span><span class="o">:</span>
+  <span class="err">swag</span> <span class="err">init</span>
+</code></pre></div></div>
+
+<h2 id="golang-包">golang 包</h2>
+
+<p>可以区别空间（一个文件夹中不能有两个同名的文件），也可以更好的管理项目。 一般一个包对应一个文件夹。文件夹中的go 文件都是使用 package 关键字声明名的名称。 文件夹名和包通常相同。</p>
+
+<p><strong>包导入</strong></p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">fmt</span> 
+
+<span class="k">import</span> <span class="p">(</span>
+	<span class="s">"io"</span>
+  <span class="s">"sync"</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>**包的注意事项: **</p>
+
+<p>一个文件夹只有一个 package</p>
+<ul>
+  <li>import 后面的是 <code class="language-plaintext highlighter-rouge">GOPATH</code> 开始的相对目路径，包括最后一段。但由于一个目录下只能有一个 package, 所以 import 一个路径就等于是 import 了这个路径下的包。</li>
+  <li>如果有子目录，那么子目录和父目录是完全两个包。</li>
+</ul>
+
+<p>一个 package 的文件不能在多个文件夹下</p>
+<ul>
+  <li>如果多个文件夹下有重名的 package ，它们是彼此无关的 package 。</li>
+  <li>如果一个 go 文件需要同时使用不同目录下的同名 package, 需要在 import 这些目录时为每一个目录指定一个 package 的别名。
+    <h1 id="变量">变量</h1>
+  </li>
+</ul>
+
+<p>Go 语言的变量声明方式与 C 和 C++ 语言有明显的不同。对于纯粹的变量声明，G o语言引入了关键字 var，而类型信息放在变量名之后。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">var</span> <span class="n">v1</span> <span class="kt">int</span>
+<span class="k">var</span> <span class="n">v2</span> <span class="kt">string</span> 
+<span class="k">var</span> <span class="n">v3</span> <span class="p">[</span><span class="m">10</span><span class="p">]</span> <span class="kt">int</span>  <span class="c">// 数组 </span>
+<span class="k">var</span> <span class="n">v4</span> <span class="p">[]</span> <span class="kt">int</span>    <span class="c">// 数组切片 </span>
+
+<span class="k">var</span> <span class="n">v5</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">f</span> <span class="kt">int</span>
+    <span class="n">v</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="n">v6</span> <span class="o">*</span> <span class="kt">int</span> <span class="c">// 指针</span>
+<span class="k">var</span> <span class="n">v7</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span> <span class="kt">int</span>  <span class="c">// map，key为string类型，value为int类型</span>
+<span class="k">var</span> <span class="n">v8</span> <span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="c">// 函数变量</span>
+
+</code></pre></div></div>
+
+<p>变量声明语句不需要使用分号作为结束符。</p>
+
+<p>var 关键字的另一种用法是可以将若干个需要声明的变量放置在一起，免得程序员需要重复 写 var 关键字。</p>
+
+<h2 id="变量初始化">变量初始化</h2>
+
+<p>对于声明变量时需要进行初始化的场景，var关键字可以保留，但不再是必要的元素。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">v1</span> <span class="kt">int</span>  <span class="o">=</span> <span class="m">10</span> <span class="c">// 方法一，规范方式</span>
+<span class="k">var</span> <span class="n">v2</span> <span class="o">=</span> <span class="m">10</span>      <span class="c">// 方法二</span>
+<span class="n">v3</span> <span class="o">:=</span> <span class="m">10</span>         <span class="c">// 方法三，偷懒方法，常用</span>
+</code></pre></div></div>
+
+<p>冒号和等号的组合<code class="language-plaintext highlighter-rouge">:=</code>，用于明确表达同时进行变量声明和初始化的工作。</p>
+
+<h2 id="变量赋值">变量赋值</h2>
+
+<p>多重赋值：</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span>
+</code></pre></div></div>
+
+<h2 id="匿名变量">匿名变量</h2>
+
+<p>我们在使用传统的强类型语言编程时，经常会出现这种情况，即在调用函数时为了获取一个 值，却因为该函数返回多个值而不得不定义一堆没用的变量。在 Go 中这种情况可以通过结合使 用多重返回和匿名变量来避免这种丑陋的写法，让代码看起来更加优雅。</p>
+
+<p>如：</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">nickName</span> <span class="o">:=</span> <span class="n">GetName</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="变量后面的点后面直接跟括号">变量后面的点后面直接跟括号</h2>
+
+<p>1、类型转换</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span><span class="o">.</span><span class="p">(</span><span class="kt">string</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>2、获取类型，使用场景有限制</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">switch</span> <span class="n">value</span><span class="o">.</span><span class="p">(</span><span class="k">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">string</span><span class="o">:</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="常量">常量</h1>
+
+<p>常量是指编译期间就已知且不可改变的值。常量可以是数值类型(包括整型、浮点型和复数类型)、布尔类型、字符串类型等。</p>
+
+<h2 id="字面常量">字面常量</h2>
+
+<p>所谓字面常量(literal)，是指程序中硬编码的常量。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="m">3.14159265358979323846</span> <span class="c">// 浮点类型的常量</span>
+<span class="s">"foo"</span>                  <span class="c">// 字符串常量</span>
+<span class="no">true</span>                   <span class="c">// 布尔类型的常量</span>
+</code></pre></div></div>
+
+<h2 id="常量定义">常量定义</h2>
+
+<p>通过const关键字，你可以给字面常量指定一个友好的名字:</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="n">Pi</span> <span class="kt">float64</span>  <span class="o">=</span> <span class="m">3.14159265358979323846</span>
+
+<span class="k">const</span> <span class="p">(</span>
+    <span class="n">size</span> <span class="kt">int64</span> <span class="o">=</span> <span class="m">1024</span> 
+    <span class="n">eof</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="预定义常量">预定义常量</h2>
+
+<p>Go 语言预定义了这些常量: <code class="language-plaintext highlighter-rouge">true</code>、<code class="language-plaintext highlighter-rouge">false</code> 和 <code class="language-plaintext highlighter-rouge">iota</code>。</p>
+
+<p><code class="language-plaintext highlighter-rouge">iota</code> 比较特殊，可以被认为是一个可被编译器修改的常量，在每一个 const 关键字出现时被重置为 0，然后在下一个const 出现之前，每出现一次 iota，其所代表的数字会自动增1。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="p">(</span>
+    <span class="n">c0</span> <span class="o">=</span> <span class="no">iota</span>   <span class="c">// c0 = 0</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="no">iota</span>   <span class="c">// c1 = 1</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="no">iota</span>   <span class="c">// c2 = 2</span>
+<span class="p">)</span>
+
+<span class="k">const</span> <span class="p">(</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="no">iota</span>  <span class="c">// a == 1 </span>
+    <span class="n">b</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="no">iota</span>  <span class="c">// b == 2</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="no">iota</span>  <span class="c">// c == 4</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>如果两个 const 的赋值语句的表达式是一样的，那么可以省略后一个赋值表达式。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="p">(</span>
+    <span class="n">c0</span> <span class="o">=</span> <span class="no">iota</span>   <span class="c">// c0 = 0</span>
+    <span class="n">c1</span>          <span class="c">// c1 = 1</span>
+    <span class="n">c2</span>          <span class="c">// c2 = 2</span>
+<span class="p">)</span>
+
+<span class="k">const</span> <span class="p">(</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="no">iota</span>  <span class="c">// a == 1 </span>
+    <span class="n">b</span>              <span class="c">// b == 2</span>
+    <span class="n">c</span>              <span class="c">// c == 4</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="枚举">枚举</h2>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="p">(</span>
+    <span class="n">Sunday</span> <span class="o">=</span> <span class="no">iota</span>
+    <span class="n">Monday</span>
+    <span class="n">Tuesday</span>
+    <span class="n">Wednesday</span>
+    <span class="n">Thursday</span>
+    <span class="n">Friday</span>
+    <span class="n">Saturday</span>
+    <span class="n">numberOfDays</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>同 golang 语言的其他符号(symbol)一样，以<strong>大写字母开头的常量在包外可见</strong>。以上例子中 numberOfDays 为包内私有，其他符号则可被其他包访问。</p>
+
+<p>参考: 
+1、<a href="https://www.cnblogs.com/zsy/p/5370052.html">https://www.cnblogs.com/zsy/p/5370052.html</a></p>
+<h1 id="类型">类型</h1>
+
+<p>基础类型 (Basic Types)</p>
+
+<ul>
+  <li>布尔型（Boolean）：bool，值为true或false。</li>
+  <li>数字类型：包括整数和浮点数。</li>
+  <li>整数类型：int、int8、int16、int32、int64。int的大小取决于运行环境，通常为32位或64位。</li>
+  <li>无符号整数类型：uint、uint8、uint16、uint32、uint64。</li>
+  <li>浮点数类型：float32、float64。</li>
+  <li>复数类型：complex64、complex128。</li>
+  <li>字符串类型：string，用于表示文本。</li>
+  <li>字节类型：byte，等同于uint8，用于表示ASCII字符。</li>
+  <li>运行时类型：interface{}，可以接受任何类型的值。</li>
+</ul>
+
+<p>复合类型 (Composite Types)</p>
+
+<ul>
+  <li>数组（Array）：固定长度的序列，所有元素都是同一类型。</li>
+  <li>切片（Slice）：动态大小的序列，可以包含任何类型的元素。</li>
+  <li>结构体（Struct）：用于组合数据，可以包含不同类型的字段。</li>
+  <li>映射（Map）：键值对的集合，键和值可以是任何类型。</li>
+  <li>通道（Channel）：用于在协程之间传递数据的通道。</li>
+  <li>函数（Function）：定义了一组参数和返回值的函数类型。</li>
+  <li>指针（Pointer）：指向其他变量的内存地址的类型。</li>
+</ul>
+
+<h2 id="布尔类型">布尔类型</h2>
+
+<p>关键字为bool，可赋值为预定义的 true 和 false。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span>  <span class="n">v1</span> <span class="kt">bool</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="no">true</span>
+<span class="n">v2</span> <span class="o">:=</span> <span class="p">(</span><span class="m">1</span> <span class="o">==</span> <span class="m">2</span><span class="p">)</span> <span class="c">// v2也会被推导为bool类型</span>
+</code></pre></div></div>
+
+<p>布尔类型不能接受其他类型的赋值，不支持自动或强制的类型转换。</p>
+
+<h2 id="整型">整型</h2>
+
+<p>go 所支持的类型和长度：</p>
+
+<p><img src="../assets/programming-language/go-2022-12-01_00-54-53.png" alt="" /></p>
+
+<p>使用强制类型转换：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value2</span> <span class="o">=</span> <span class="kt">int32</span><span class="p">(</span><span class="n">value1</span><span class="p">)</span> <span class="c">// 编译通过</span>
+</code></pre></div></div>
+
+<p>在做强制类型转换时，需要注意数据长度被截短而发生的数据精度损失(比如将浮点数强制转为整数)和值溢出(值超过转换的目标类型的值范围时)问题。</p>
+
+<p>数值运算： <code class="language-plaintext highlighter-rouge">+</code>、<code class="language-plaintext highlighter-rouge">-</code>、<code class="language-plaintext highlighter-rouge">*</code>、<code class="language-plaintext highlighter-rouge">/</code>  和<code class="language-plaintext highlighter-rouge">%</code></p>
+
+<p>比较运算: <code class="language-plaintext highlighter-rouge">&gt;、&lt;、==、&gt;=、&lt;=  、!=</code></p>
+
+<p>位运算:</p>
+
+<p>注意取反的</p>
+
+<p><img src="../assets/programming-language/go-2022-12-01_01-02-06.png" alt="" /></p>
+
+<h2 id="浮点型">浮点型</h2>
+
+<p>Go 语言定义了两个类型 <code class="language-plaintext highlighter-rouge">float32</code> 和<code class="language-plaintext highlighter-rouge"> float64</code> 。</p>
+
+<p>浮点数比较： 因为浮点数不是一种精确的表达方式，所以像整型那样直接用 ==  来判断两个浮点数是否相等 是不可行的，这可能会导致不稳定的结果。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"math"</span>
+
+<span class="c">// p为用户自定义的比较精度，比如0.00001 </span>
+<span class="k">func</span> <span class="n">IsEqual</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">p</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">return</span>  <span class="n">math</span><span class="o">.</span><span class="n">Fdim</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">p</span> 
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="复数类型">复数类型</h2>
+
+<p>复数表示:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">value1</span> <span class="kt">complex64</span>
+
+<span class="n">value1</span> <span class="o">=</span> <span class="m">3.2</span> <span class="o">+</span> <span class="m">12i</span>
+<span class="n">value2</span> <span class="o">:=</span> <span class="m">3.2</span> <span class="o">+</span> <span class="m">12i</span>
+<span class="n">value3</span> <span class="o">:=</span> <span class="nb">complex</span><span class="p">(</span><span class="m">3.2</span><span class="p">,</span> <span class="m">12</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>实部与虚部:</p>
+
+<p>对于一个复数 <code class="language-plaintext highlighter-rouge">z = complex(x, y)</code>，就可以通过 Go 语言内置函数<code class="language-plaintext highlighter-rouge">real(z)</code>获得该复数的实部，也就是 x，通过 <code class="language-plaintext highlighter-rouge">imag(z)</code> 获得该复数的虚部，也就是 y 。</p>
+
+<h2 id="字符串">字符串</h2>
+
+<p>字符串的声明和初始化如下：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">str</span> <span class="kt">string</span> <span class="c">// 声明一个字符串变量</span>
+<span class="n">str</span> <span class="o">=</span> <span class="s">"Hello world"</span> <span class="c">// 字符串赋值</span>
+<span class="n">ch</span> <span class="o">:=</span> <span class="n">str</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="c">// 取字符串的第一个字符</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"The length of </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> is %d </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">str</span><span class="p">))</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"The first character of </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> is %c.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">ch</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>字符串的内容可以用类似于数组下标的方式获取，但与数组不同，字符串的内容不能在初始 化后被修改。</p>
+
+<h2 id="字符类型">字符类型</h2>
+
+<p>在 golang 中支持两个字符类型，</p>
+
+<p><code class="language-plaintext highlighter-rouge">uint8</code> 类型，或叫 <code class="language-plaintext highlighter-rouge">byte</code> 型。代表了 ASCII 码的一个字符。</p>
+
+<p><code class="language-plaintext highlighter-rouge">rune</code> 类型，代表一个 UTF-8 字符，当需要处理复合字符时，则需要用到 <code class="language-plaintext highlighter-rouge">rune</code> 类型。 <code class="language-plaintext highlighter-rouge">rune</code> 类型等价 <code class="language-plaintext highlighter-rouge">int32</code> 类型。</p>
+
+<p>传统 ASCII 编码只占用 1 个字节，所以可以用 byte 类型来表示， 如</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">ch</span> <span class="kt">byte</span><span class="o">=</span><span class="sc">'A'</span> 		<span class="c">// 字符使用单引号括起来。</span>
+<span class="k">var</span> <span class="n">ch</span> <span class="kt">byte</span> <span class="o">=</span> <span class="m">65</span> 		<span class="c">// 十进制表示</span>
+<span class="k">var</span> <span class="n">ch</span> <span class="kt">byte</span> <span class="o">=</span> <span class="sc">'\x41'</span>    <span class="c">//（\x 总是紧跟着长度为 2 的 16 进制数）</span>
+</code></pre></div></div>
+
+<p>在书写 <code class="language-plaintext highlighter-rouge">Unicode</code> 字符时，需要在 16 进制数之前加上前缀\u或者\U。因为 <code class="language-plaintext highlighter-rouge">Unicode</code> 至少占用 2 个字节，所以我们使用 <code class="language-plaintext highlighter-rouge">int16</code> 或者 <code class="language-plaintext highlighter-rouge">int</code> 类型来表示。如果需要使用到 4 字节，则使用<code class="language-plaintext highlighter-rouge">\u</code>前缀，如果需要使用到 8 个字节，则使用<code class="language-plaintext highlighter-rouge">\U</code>前缀。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">ch1</span> <span class="kt">int</span> <span class="o">=</span> <span class="sc">'\u0041'</span>
+<span class="k">var</span> <span class="n">ch2</span> <span class="kt">int</span> <span class="o">=</span> <span class="sc">'\u03B2'</span>
+<span class="k">var</span> <span class="n">ch3</span> <span class="kt">int</span> <span class="o">=</span> <span class="sc">'\U00101234'</span>
+</code></pre></div></div>
+
+<p>Unicode 包中内置了一些用于测试字符的函数，这些函数的返回值都是一个布尔值，如下所示（其中 ch 代表字符）：</p>
+
+<ul>
+  <li>判断是否为字母：unicode.IsLetter(ch)</li>
+  <li>判断是否为数字：unicode.IsDigit(ch)</li>
+  <li>判断是否为空白符号：unicode.IsSpace(ch)</li>
+</ul>
+
+<h2 id="数组">数组</h2>
+
+<p>数组中包含的每个数据被称为数组元素(element)，一个数组包含的元素个数被称为数 组的长度。</p>
+
+<p>以下为一些常规的数组声明方法:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="m">32</span><span class="p">]</span> <span class="kt">byte</span>                     <span class="c">// 长度为32的数组，每个元素为一个字节 </span>
+<span class="p">[</span><span class="m">2</span><span class="o">*</span><span class="n">N</span><span class="p">]</span> <span class="k">struct</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="n">_int32_</span> <span class="p">}</span> <span class="c">// 复杂类型数组</span>
+<span class="p">[</span><span class="m">1000</span><span class="p">]</span> <span class="o">*</span> <span class="kt">float64</span>              <span class="c">// 指针数组</span>
+<span class="p">[</span><span class="m">3</span><span class="p">][</span><span class="m">5</span><span class="p">]</span> <span class="kt">int</span>                    <span class="c">// 二维数组</span>
+<span class="p">[</span><span class="m">2</span><span class="p">][</span><span class="m">2</span><span class="p">][</span><span class="m">2</span><span class="p">]</span> <span class="kt">float64</span>             <span class="c">// 等同于[2]([2]([2]float64))</span>
+</code></pre></div></div>
+
+<p>组长度在定义后就不可更改，在声明时长度可以为一个常量或者一个常量表达式(常量表达式是指在编译期即可计算结果的表达式)。数组的长度是该数组类型的一个内 置常量，可以用 Go 语言的内置函数 <code class="language-plaintext highlighter-rouge">len()</code> 来获取。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arrLength</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>元素访问</strong></p>
+
+<p>可以使用数组下标来访问数组中的元素。与 C 语言相同，数组下标从 0 开始，<code class="language-plaintext highlighter-rouge">len(array)-1</code> 则表示最后一个元素的下标。下面的示例遍历整型数组并逐个打印元素内容:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Element"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s">"of array is "</span><span class="p">,</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Go 语言还提供了一个关键字 <code class="language-plaintext highlighter-rouge">range</code>，用于便捷地遍历容器中的元素。当然，数组也是 <code class="language-plaintext highlighter-rouge">range</code> 的支持范围。上面的遍历过程可以简化为如下的写法:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">array</span> <span class="p">{</span>
+   <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Array element ["</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s">"]="</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>值类型</strong></p>
+
+<p>在 Go 语言中数组是一个值类型(value type)。所有的值类型变量在赋值和作为参数传递时都将产生一次复制动作。如果将数组作为函数的参数类型，则在函数调用时该参数将发生数据复制。因此，在函数体中无法修改传入的数组的内容，因为函数内操作的只是所传入数组的一个副本。</p>
+
+<h2 id="切片-slice">切片 slice</h2>
+
+<p>切片 slice 就像一个指向数组的指针。实际上它拥有自己的数据结构，而不仅仅是个指针。数组切片的数据结构可以抽象为以下3个变量:</p>
+
+<ul>
+  <li>一个指向原生数组的指针。</li>
+  <li>数组切片中的元素个数。</li>
+  <li>数组切片已分配的存储空间。</li>
+</ul>
+
+<p><strong>创建数组切片</strong></p>
+
+<p>创建数组切片的方法主要有两种——基于数组和直接创建。</p>
+
+<p><strong>基于数组</strong></p>
+
+<p>数组切片可以基于一个已存在的数组创建。数组切片可以只使用数组的一部分元素或者整个数组来创建，甚至可以创建一个比所基于的数组还要大的数组切片。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 先定义一个数组</span>
+<span class="k">var</span> <span class="n">myArray</span> <span class="p">[</span><span class="m">10</span><span class="p">]</span> <span class="kt">int</span> <span class="o">=</span> <span class="p">[</span><span class="m">10</span><span class="p">]</span> <span class="kt">int</span> <span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">9</span><span class="p">,</span> <span class="m">10</span> <span class="p">}</span> <span class="c">// 基于数组创建一个数组切片</span>
+<span class="k">var</span> <span class="n">mySlice</span> <span class="p">[]</span> <span class="kt">int</span> <span class="o">=</span> <span class="n">myArray</span><span class="p">[</span><span class="o">:</span><span class="m">5</span><span class="p">]</span>
+
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">myArray[first:last]</code> 这样的方式来基于数组生成一 个数组切片。</p>
+
+<p>基于myArray的所有元素创建数组切片:  <code class="language-plaintext highlighter-rouge">mySlice = myArray[:]</code>
+基于myArray的前5个元素创建数组切片:<code class="language-plaintext highlighter-rouge">mySlice = myArray[:5]</code>
+基于从第5个元素开始的所有元素创建数组切片: <code class="language-plaintext highlighter-rouge">mySlice = myArray[5:]</code></p>
+
+<p><strong>直接创建</strong></p>
+
+<p>并非一定要事先准备一个数组才能创建数组切片。Go 语言提供的内置函数 <code class="language-plaintext highlighter-rouge">make()</code> 可以用于灵活地创建数组切片。</p>
+
+<p>创建一个初始元素个数为5的数组切片，元素初始值为0:</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mySlice1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span> <span class="kt">int</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<p>创建一个初始元素个数为5的数组切片，元素初始值为0，并预留10个元素的存储空间:</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mySlice2</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span> <span class="kt">int</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">10</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<p>直接创建并初始化包含5个元素的数组切片:</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mySlice3</span> <span class="o">:=</span> <span class="p">[]</span> <span class="kt">int</span> <span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>元素遍历</strong></p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">mySlice</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span> 
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"mySlice["</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s">"] ="</span><span class="p">,</span> <span class="n">mySlice</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>使用 <code class="language-plaintext highlighter-rouge">range</code> 关键字可以让遍历代码显得更整洁。range表达式有两个返回值，第一个是索引，第二个是元素的值:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">mySlice</span> <span class="p">{</span> 
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"mySlice["</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s">"] ="</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>动态增减元素</strong></p>
+
+<p>当存储的数据比创建时设置的多时，数组切片会自动的重新分配。</p>
+
+<p><code class="language-plaintext highlighter-rouge">cap()</code>:  返回的是数组切片分配的空间大小。
+<code class="language-plaintext highlighter-rouge">len()</code> :  返回的是 数组切片中当前所存储的元素个数。
+<code class="language-plaintext highlighter-rouge">append()</code>: 从后面追加数据。第二个参数其实是一个不定参数，我们可以按自己需求添加若干个元素，甚至直接将一个数组切片追加到另一个数组切片的末尾。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mySlice</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">mySlice</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
+
+<span class="n">mySlice2</span> <span class="o">:=</span> <span class="p">[]</span><span class="n">_int_</span><span class="p">{</span><span class="m">8</span><span class="p">,</span> <span class="m">9</span><span class="p">,</span> <span class="m">10</span><span class="p">}</span>
+
+<span class="c">// 给mySlice后面添加另一个数组切片</span>
+<span class="n">mySlice</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">mySlice</span><span class="p">,</span> <span class="n">mySlice2</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>实现方式：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">appendInt</span><span class="p">(</span><span class="n">x</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">y</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">z</span> <span class="p">[]</span><span class="kt">int</span>
+    <span class="n">zlen</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="m">1</span>
+    
+    <span class="k">if</span> <span class="n">zlen</span> <span class="o">&lt;=</span> <span class="nb">cap</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">]</span>
+    <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+        <span class="n">zcap</span> <span class="o">:=</span> <span class="n">zlen</span>
+        <span class="k">if</span> <span class="nb">cap</span> <span class="o">&lt;</span> <span class="m">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">zcap</span> <span class="o">=</span> <span class="m">2</span><span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">mak</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">zlen</span><span class="p">,</span> <span class="n">zcap</span><span class="p">)</span>
+        <span class="nb">copy</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">z</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">z</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">copy()</code> : 将内容从一个数组切片复制到另一个数组切片。</p>
+
+<p><strong>其他：</strong></p>
+
+<p>1、slice 的语法和数据有很像，只是没有固定长度。
+2、多个 slice 之间可以共享底层的数据，并全引用的数组部分区间可能重叠。
+3、和数组不同的时是,slice 之间不能比较。因此我们不能使用 == 操作来判两个 slice 是否含有全部相等元素。
+4、之所以不直接比较去运算符，有两方面，一是 slice 的元素是间接引用，一个 slice 甚至可以包含自身。二是 slice 在不同的时间可能包含不同元素，底层数据的元素可能会被修改。
+5、测试一个 slice 是否是空的， <code class="language-plaintext highlighter-rouge">len(s) == 0</code>, 不应该用<code class="language-plaintext highlighter-rouge">s==nil</code> 来判断。
+6、<code class="language-plaintext highlighter-rouge">x[m:n]</code> 切处操作对于字符串则生成一个新字符串，如果x是<code class="language-plaintext highlighter-rouge">[]byte</code>的话则生成一个新<code class="language-plaintext highlighter-rouge">[]byte</code>。</p>
+
+<h2 id="map">map</h2>
+
+<p>map是一堆键值对的未排序集合，底层是用<strong>哈希表</strong>做的。</p>
+
+<p>变量声明：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">myMap</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span> <span class="n">PersonInfo</span>
+</code></pre></div></div>
+
+<p>内置的函数make()来创建:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">myMap</span> <span class="o">=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span> <span class="n">PersonInfo</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>元素赋值:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">myMap</span><span class="p">[</span><span class="s">"1234"</span><span class="p">]</span> <span class="o">=</span> <span class="n">PersonInfo</span><span class="p">{</span><span class="s">"1"</span><span class="p">,</span> <span class="s">"Jack"</span><span class="p">,</span> <span class="s">"Room 101,..."</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>元素删除用内置函数<code class="language-plaintext highlighter-rouge">delete()</code></p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">delete</span><span class="p">(</span><span class="n">myMap</span><span class="p">,</span> <span class="s">"1234"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>元素查找:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">myMap</span><span class="p">[</span><span class="s">"1234"</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">ok</span><span class="p">{</span><span class="c">// 找到了</span>
+
+<span class="c">// 处理找到的value </span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>其他：</p>
+
+<p>1、不能对 map 的元素进行取址操作</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">_</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ages</span><span class="p">[</span><span class="s">"bob"</span><span class="p">]</span> <span class="c">// compile error :cannot take address of map `elemnet</span>
+</code></pre></div></div>
+
+<p>2、随着 map 的元素的增多，可能会重新进行分配空间。</p>
+
+<p>3、和 clice一样，map之间不能进行相等的比较，唯一的例外是和 nil 进行比较。要判断两个是否包含相同的 key 和 value。要循环一个一个来。</p>
+
+<h2 id="结构体">结构体</h2>
+
+<p>通常一行对应一个结构体成员，成员的名字在前类型在后，不过如果相邻的成员类型如果相同的话，可以被合并到一行。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Employee</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">ID</span> <span class="kt">int</span>
+    <span class="n">Name</span><span class="p">,</span> <span class="n">Address</span> <span class="kt">string</span>
+    <span class="n">Dob</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>1、结构体成员的输入顺序也有重要的意义。 如果要交换 Name 和 Address 出现的顺序，那么就是定义不同的结构类型。</p>
+
+<p>2、如果结构体成员名字是以大写字母开头的，那么成员就是导出的，这是 GO 语言导出决定的。一个结构体可能同时包含导出和未导出的成员。</p>
+
+<p>3、一个命名为 S 的结构体类型不能含有 S 类型的成员。因为一个聚合的值不能包含它自身。但是 S 类型的结构可以包含<code class="language-plaintext highlighter-rouge">*S</code>指针类型成员。</p>
+
+<p>4、结构体的零值是每个成员都是零值。</p>
+
+<p>5、结构体没有任何成员的是空结构体，写作<code class="language-plaintext highlighter-rouge">struct{}</code>。它的大小为 0,不包含任何信息。</p>
+
+<p>6、如果考虑效率的话，较大的结构体通常会用指针的方式传入和返回。</p>
+
+<p>7、结构体嵌入和匿名成员。Go 语言有一个特性让我们只声明一个成员对应的数据类型而不指名成员的名字，这类成员就是叫匿名成员。匿名成员的数据类型必须是命名的类型或指向一个命名的类型的指针。</p>
+
+<p>8、不能同进包含两个类型相同的匿名成员，这会导致名字冲突。成员的名字是由其类型隐匿地决定的。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Point</span> <span class="k">struct</span><span class="p">{</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Cirecle</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">Point</span>
+    <span class="n">Radius</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Wheel</span> <span class="k">struct</span><span class="p">{</span>
+    <span class="n">Circle</span>
+    <span class="n">Spokes</span> <span class="kt">int</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="json">Json</h2>
+
+<p>在 golang  中，结构体系和 json 是可以相互相转换的。</p>
+
+<p>如通过下面的代码</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">address</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Street</span>  <span class="kt">string</span> <span class="s">`json:"street"`</span>
+	<span class="n">Ste</span>     <span class="kt">string</span> <span class="s">`json:"suite,omitempty"`</span>
+	<span class="n">City</span>    <span class="kt">string</span> <span class="s">`json:"city"`</span>
+	<span class="n">State</span>   <span class="kt">string</span> <span class="s">`json:"state"`</span>
+	<span class="n">Zipcode</span> <span class="kt">string</span> <span class="s">`json:"zipcode"`</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"street"</span><span class="p">:</span><span class="w"> </span><span class="s2">"200 Larkin St"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"suite"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="err">这个字段不展示</span><span class="w">
+    </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"San Francisco"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"zipcode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"94102"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>其实中，结构体中的 <code class="language-plaintext highlighter-rouge">omitempty </code> 表示，如果Ste没有值，则序列化时不展示这个字段。</p>
+
+<p><code class="language-plaintext highlighter-rouge">omitempty</code> 在用时，会一个地方要注意的，即无法直接忽略掉嵌套结构体。如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">address</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Street</span>     <span class="kt">string</span>     <span class="s">`json:"street"`</span>
+	<span class="n">Ste</span>        <span class="kt">string</span>     <span class="s">`json:"suite,omitempty"`</span>
+	<span class="n">City</span>       <span class="kt">string</span>     <span class="s">`json:"city"`</span>
+	<span class="n">State</span>      <span class="kt">string</span>     <span class="s">`json:"state"`</span>
+	<span class="n">Zipcode</span>    <span class="kt">string</span>     <span class="s">`json:"zipcode"`</span>
+	<span class="n">Coordinate</span> <span class="n">coordinate</span> <span class="s">`json:"coordinate,omitempty"`</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">coordinate</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Lat</span> <span class="kt">float64</span> <span class="s">`json:"latitude"`</span>
+	<span class="n">Lng</span> <span class="kt">float64</span> <span class="s">`json:"longitude"`</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">Coordinate</code> 是 嵌套结构体，并使用了 <code class="language-plaintext highlighter-rouge">omitempty</code> 关键字。但是在序列化成 json 时则还是无法忽略掉这个字段 。</p>
+
+<pre><code class="language-joson">{
+    "street": "200 Larkin St",
+    "city": "San Francisco",
+    "state": "CA",
+    "zipcode": "94102",
+    "coordinate": {
+        "latitude": 0,
+        "longitude": 0
+    }
+}
+</code></pre>
+
+<p>想要达到忽略掉嵌套结构体的目的，就要使用指针才行。如下：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">address</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Street</span>     <span class="kt">string</span>      <span class="s">`json:"street"`</span>
+	<span class="n">Ste</span>        <span class="kt">string</span>      <span class="s">`json:"suite,omitempty"`</span>
+	<span class="n">City</span>       <span class="kt">string</span>      <span class="s">`json:"city"`</span>
+	<span class="n">State</span>      <span class="kt">string</span>      <span class="s">`json:"state"`</span>
+	<span class="n">Zipcode</span>    <span class="kt">string</span>      <span class="s">`json:"zipcode"`</span>
+	<span class="n">Coordinate</span> <span class="o">*</span><span class="n">coordinate</span> <span class="s">`json:"coordinate,omitempty"`</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">coordinate</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Lat</span> <span class="kt">float64</span> <span class="s">`json:"latitude"`</span>
+	<span class="n">Lng</span> <span class="kt">float64</span> <span class="s">`json:"longitude"`</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>另一个要注意的地方，是标记 <code class="language-plaintext highlighter-rouge">omitempty </code>关键字的 字段，如果赋值正好是默认为空的时候，它也是会被忽略掉的。 同样道理，要将结构体内的定义换成指针，如下：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">coordinate</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Lat</span> <span class="kt">float64</span> <span class="s">`json:"latitude,omitempty"`</span>
+	<span class="n">Lng</span> <span class="kt">float64</span> <span class="s">`json:"longitude,omitempty"`</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>当 <code class="language-plaintext highlighter-rouge">Lat</code> 、<code class="language-plaintext highlighter-rouge">Lng</code> 默认为 0 时，则输出了空 <code class="language-plaintext highlighter-rouge">{}</code> 。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">coordinate</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Lat</span> <span class="o">*</span><span class="kt">float64</span> <span class="s">`json:"latitude,omitempty"`</span>
+	<span class="n">Lng</span> <span class="o">*</span><span class="kt">float64</span> <span class="s">`json:"longitude,omitempty"`</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>当用指针来有定义时，则可以输出默认值为0的情况 。</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="三目运算">三目运算</h2>
+
+<p>golang  为什么没有三目运算？</p>
+
+<p>1、<a href="https://voidint.github.io/post/golang/conditional-expressions/">https://voidint.github.io/post/golang/conditional-expressions/</a></p>
+
+<p>2、<a href="https://go.dev/doc/faq#Does_Go_have_a_ternary_form">https://go.dev/doc/faq#Does_Go_have_a_ternary_form</a></p>
+
+<h1 id="流程控制">流程控制</h1>
+
+<p>流程控制只是为了控制程序语句的执行顺序，一般需要与各种条件配合，因此， 在各种流程中，会加入条件判断语句。流程控制语句一般起以下3个作用：</p>
+
+<ul>
+  <li><strong>选择</strong>，即根据条件跳转到不同的执行序列。</li>
+  <li><strong>循环</strong>，即根据条件反复执行某个序列，当然每一次循环执行的输入输出可能会发生变化。</li>
+  <li><strong>跳转</strong>，即根据条件返回到某执行序列。</li>
+</ul>
+
+<p>Go 语言支持如下的几种流程控制语句:</p>
+
+<ul>
+  <li><strong>条件语句</strong>，对应的关键字为if、else 和 else if。</li>
+  <li><strong>选择语句</strong>，对应的关键字为switch、case 和select (将在介绍channel的时候细说)。</li>
+  <li><strong>循环语句</strong>，对应的关键字为 for 和 range。</li>
+  <li><strong>跳转语句</strong>，对应的关键字为 goto。</li>
+</ul>
+
+<p>左花括号<code class="language-plaintext highlighter-rouge">{</code>必须与<code class="language-plaintext highlighter-rouge">for</code> 处于同一行。
+如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// if </span>
+<span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="m">5</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="m">0</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="m">1</span>
+<span class="p">}</span>
+
+<span class="c">// switch </span>
+<span class="k">switch</span> <span class="n">i</span> <span class="p">{</span> 
+    <span class="k">case</span> <span class="m">0</span><span class="o">:</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"0"</span><span class="p">)</span> 
+    <span class="k">case</span> <span class="m">1</span><span class="o">:</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"1"</span><span class="p">)</span> 
+    <span class="k">case</span> <span class="m">2</span><span class="o">:</span>
+        <span class="k">fallthrough</span> 
+    <span class="k">case</span> <span class="m">3</span><span class="o">:</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"3"</span><span class="p">)</span> 
+    <span class="k">case</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">6</span><span class="o">:</span>
+         <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"4, 5, 6"</span><span class="p">)</span> 
+    <span class="k">default</span><span class="o">:</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"Default"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c">// for </span>
+<span class="n">sum</span> <span class="o">:=</span> <span class="m">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+    <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span> 
+<span class="p">}</span>
+
+<span class="c">// break，可以选择中断哪一个循环</span>
+<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="m">5</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="m">5</span> <span class="p">{</span> 
+            <span class="k">break</span> <span class="n">JLoop</span>
+        <span class="p">}</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+
+<span class="n">JLoop</span><span class="o">:</span> 
+<span class="c">// ...</span>
+
+</code></pre></div></div>
+
+<h1 id="函数">函数</h1>
+
+<p>函数的定义：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">mymath</span> 
+<span class="k">import</span> <span class="s">"errors"</span>
+
+<span class="k">func</span> <span class="n">Add</span><span class="p">(</span><span class="n">a</span> <span class="kt">int</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ret</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span> <span class="c">// 假设这个函数只支持两个非负数字的加法</span>
+        <span class="n">err</span><span class="o">=</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"Should be non-negative numbers!"</span><span class="p">)</span>
+       <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="no">nil</span> <span class="c">// 支持多重返回值 </span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>如果参数列表中若干个相邻的参数类型的相同，比如上面例子中的 a 和 b，则可以在参数列表中省略前面变量的类型声明，如果返回值列表中多个返回值的类型相同，也可以用同样的方式合并。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span>  <span class="n">Add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="n">_int_</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span> 
+   <span class="c">// ...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>函数调用:</p>
+
+<p>函数调用非常方便，只要事先导入了该函数所在的包。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"mymath"</span><span class="c">// 假设Add被放在一个叫mymath的包中 // ...</span>
+
+<span class="n">c</span> <span class="o">:=</span> <span class="n">mymath</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Go 语言中函数名字的大小写不仅仅是风格，更直接体现了该函数的可见性。<strong>写字母开头的函数只在本包内可见，大写字母开头的函数才能被其他包使用。</strong></p>
+
+<h2 id="不定参数">不定参数</h2>
+
+<p><strong>1、不定参数类型</strong></p>
+
+<p>不定参数是指函数传入的参数个数为不定数量。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">myfunc</span><span class="p">(</span><span class="n">args</span> <span class="o">...</span><span class="n">_int_</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">arg</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">args</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">// 方式调用:</span>
+<span class="n">myfunc</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span>
+<span class="n">myfunc</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">13</span><span class="p">)</span>
+</code></pre></div></div>
+<p>形如 <code class="language-plaintext highlighter-rouge">...type</code> 格式的类型只能作为函数的参数类型存在，并且必须是最后一个参数。</p>
+
+<p>类型<code class="language-plaintext highlighter-rouge">...type</code> 本质上是一个数组切片，也就是[]type，这也是为 什么上面的参数 args 可以用 for 循环来获得每个传入的参数。</p>
+
+<p><strong>2、 不定参数的传递</strong></p>
+
+<p>有另一个变参函数叫做<code class="language-plaintext highlighter-rouge">myfunc3(args ...int)</code>，下面的例子演示了如何向其传递变参:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">myfunc</span><span class="p">(</span><span class="n">args</span> <span class="o">...</span><span class="n">_int_</span><span class="p">)</span> <span class="p">{</span> <span class="c">// 按原样传递</span>
+    <span class="n">myfunc3</span><span class="p">(</span><span class="n">args</span><span class="o">...</span><span class="p">)</span>
+   <span class="c">// 传递片段，实际上任意的int slice都可以传进去</span>
+   <span class="n">myfunc3</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span><span class="o">...</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>3、任意类型的不定参数</strong></p>
+
+<p>如果希望传任意类型，可以指定类型为 <code class="language-plaintext highlighter-rouge">interface{}</code>。下面是 Go 语言标准库中 <code class="language-plaintext highlighter-rouge">fmt.Printf()</code> 的函数原型:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">Printf</span><span class="p">(</span><span class="n">format</span> <span class="n">_string_</span><span class="p">,</span> <span class="n">args</span> <span class="o">...</span><span class="k">interface</span><span class="p">{})</span> <span class="p">{</span> <span class="c">// ...</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="多返回值">多返回值</h2>
+
+<p>go 语言的函数可以用多个返回值如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">File</span><span class="p">)</span> <span class="n">Read</span><span class="p">(</span><span class="n">b</span> <span class="p">[]</span><span class="n">_byte_</span><span class="p">)</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="n">Error</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Go语言并不需要强制命名返回值，但是命名后的返回值可以让代码更清晰，可读性更强， 同时也可以用于文档。</p>
+
+<h2 id="匿名函数">匿名函数</h2>
+
+<p><strong>匿名函数</strong>是指不需要定义函数名的一种函数实现方式。函数可以像普通变量一样被传递或使用。匿名函数可以直接赋值给一个变量或者直接执行：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">f</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span> 
+   <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="闭包">闭包</h2>
+
+<p>闭包可以理解成定义在一个函数内部的函数。在本质，闭包是将函数内部和函数外部连接起来的桥梁。或者说是函数和其此乃环境的组合体。</p>
+
+<p>闭包指的是一个函数和与其相关的引用环境组合而成的实体。简单来说，闭包=函数+引用环境。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">func</span> <span class="n">add</span><span class="p">()</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">x</span> <span class="kt">int</span>
+	<span class="k">return</span> <span class="k">func</span><span class="p">(</span><span class="n">y</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="n">x</span> <span class="o">+=</span> <span class="n">y</span>
+		<span class="k">return</span> <span class="n">x</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">f</span> <span class="o">=</span> <span class="n">add</span><span class="p">()</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="m">10</span><span class="p">))</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="m">20</span><span class="p">))</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="m">30</span><span class="p">))</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"------------"</span><span class="p">)</span>
+
+	<span class="n">f1</span> <span class="o">:=</span> <span class="n">add</span><span class="p">()</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f1</span><span class="p">(</span><span class="m">40</span><span class="p">))</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f1</span><span class="p">(</span><span class="m">50</span><span class="p">))</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>输出结果：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10
+30
+60
+<span class="nt">------------</span>
+40
+90
+</code></pre></div></div>
+
+<p>变量  f 是一个函数并且它引用了其外部作用域中的 x 变量，此时 f 就是一个闭包。<strong>在 f 的生命周期内，变量 x 也是一直有效</strong>。</p>
+
+<p>例子：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">func</span> <span class="n">cal</span><span class="p">(</span><span class="n">base</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">add</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">a</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="n">base</span> <span class="o">+=</span> <span class="n">a</span>
+		<span class="k">return</span> <span class="n">base</span>
+	<span class="p">}</span>
+	<span class="n">sub</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">a</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="n">base</span> <span class="o">-=</span> <span class="n">a</span>
+		<span class="k">return</span> <span class="n">base</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">add</span><span class="p">,</span> <span class="n">sub</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+	<span class="n">add</span><span class="p">,</span> <span class="n">sub</span> <span class="o">:=</span> <span class="n">cal</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
+	<span class="n">r</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"r:%v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+	<span class="n">r</span> <span class="o">=</span> <span class="n">sub</span><span class="p">(</span><span class="m">50</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"r:%v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+
+	<span class="n">add1</span><span class="p">,</span> <span class="n">sub1</span> <span class="o">:=</span> <span class="n">cal</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
+	<span class="n">r</span> <span class="o">=</span> <span class="n">add1</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"r:%v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+	<span class="n">r</span> <span class="o">=</span> <span class="n">sub1</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"r:%v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="init-函数">init 函数</h2>
+
+<p>golang 有一个特殊的函数 <code class="language-plaintext highlighter-rouge">init </code>函数，先于<code class="language-plaintext highlighter-rouge">main</code>函数执行，作用实现包的一些初始化操作。</p>
+
+<p><strong>init 函数的特点</strong>：</p>
+
+<ul>
+  <li>init 函数先于 main 函数自动执行， 不能被其他函数调用。</li>
+  <li>init 函数没有输入参数和返回值。</li>
+  <li>每个包可以有多个init 函数</li>
+  <li>包的每个源文件也可以有多个init 函数。</li>
+  <li>同一个包的init 执行顺序，golang 没有明确的定义，所以要逻辑注意不要依赖这个执行顺序。</li>
+  <li>不同包的init 函数按照包饿的依赖关系决定挂靠顺顺序。</li>
+</ul>
+
+<p><strong>golang 初始化顺序</strong></p>
+
+<p>初始化顺序： 变量初始化-&gt;<code class="language-plaintext highlighter-rouge"> init()</code>-&gt; <code class="language-plaintext highlighter-rouge">main()</code></p>
+
+<p>如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">var</span> <span class="n">i</span> <span class="kt">int</span> <span class="o">=</span> <span class="n">initVer</span><span class="p">()</span>
+
+<span class="k">func</span> <span class="n">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"0 : init......"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">initVer</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"0 : initVer....."</span><span class="p">)</span>
+	<span class="k">return</span> <span class="m">100</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"1 : main......"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>结果：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0 : initVer.....
+0 : init......
+1 : main......
+
+Program exited.
+</code></pre></div></div>
+
+<h1 id="错误处理">错误处理</h1>
+
+<h2 id="error-接口">error 接口</h2>
+
+<p>Go 语言引入了一个关于错误处理的标准模式，即 error 接口，该接口的定义如下：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="kt">error</span> <span class="k">interface</span> <span class="p">{</span> 
+    <span class="n">Error</span><span class="p">()</span> <span class="kt">string</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="defer-函数">defer 函数</h2>
+
+<p>当 defer 语句被执行时，跟在 defer 后面的函数会被延迟执行。直到包含该 defer 语句的函数执行完毕时，defer 后的函数才会被执行，不论包含 defer 语句的函数是通过 return 正常结束，还是由于 panic 导致的异常结束。你可以在一个函数中执行多条 defer 语句。如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">CopyFile</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span> <span class="n">_string_</span><span class="p">)</span> <span class="p">(</span><span class="n">w</span> <span class="n">_int64_</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> 
+
+    <span class="n">srcFile</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="k">defer</span> <span class="n">srcFile</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+    <span class="n">dstFile</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">dstName</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="k">defer</span> <span class="n">dstFile</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">io</span><span class="o">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">dstFile</span><span class="p">,</span> <span class="n">srcFile</span><span class="p">)</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>defer 语句的调用是遵照 <strong>先进后出的原则，即最后一个defer语句将最先被执行</strong>。</p>
+
+<p>defer 语句经常被用于处理成对的操作，如打开、关闭、连接、断开连接、加锁、释放锁。释放资源的 defer 应该直接跟在请求资源的语句后。</p>
+
+<p>调试复杂程序时，defer机制也常被用于记录何时进入和退出函数。下例中的bigSlowOperation函数，直接调用trace记录函数的被调用情况。通过这种方式，我们可以只通过一个语句控制函数的入口和所有的出口，甚至可以记录函数的运行时间，需要注意一点：不要忘记defer语句的圆的括号。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">func</span> <span class="n">bigSlowOperation</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="k">defer</span> <span class="n">trace</span><span class="p">(</span><span class="s">"bigSlowOperation"</span><span class="p">)()</span> <span class="c">// don't forget the</span>
+
+<span class="n">extra</span> <span class="n">parentheses</span>
+
+<span class="c">// ...lots of work…</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">10</span> <span class="o">*</span> <span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">)</span> <span class="c">// simulate slow</span>
+
+<span class="n">operation</span> <span class="n">by</span> <span class="n">sleeping</span>
+
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">trace</span><span class="p">(</span><span class="n">msg</span> <span class="kt">string</span><span class="p">)</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="n">start</span> <span class="o">:=</span> <span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"enter %s"</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+<span class="k">return</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"exit %s (%s)"</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">Since</span><span class="p">(</span><span class="n">start</span><span class="p">))</span>
+
+<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="panic-和-recover-函数">panic() 和 recover() 函数</h2>
+
+<p>Go 语言引入了两个内置函数 <code class="language-plaintext highlighter-rouge">panic()</code> 和<code class="language-plaintext highlighter-rouge">recover()</code> 以报告和处理运行时错误和程序中的错误场景。简单的说是：抛出一个panic 的异常，然后在 defer 中通过 recover 捕获这个异常，然后正常处理。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"c"</span><span class="p">)</span>
+     <span class="k">defer</span> <span class="k">func</span><span class="p">(){</span> <span class="c">// 必须要先声明defer，否则不能捕获到panic异常</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"d"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">err</span><span class="o">:=</span><span class="nb">recover</span><span class="p">();</span><span class="n">err</span><span class="o">!=</span><span class="no">nil</span><span class="p">{</span>
+            <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="c">// 这里的err其实就是panic传入的内容，55</span>
+        <span class="p">}</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"e"</span><span class="p">)</span>
+    <span class="p">}()</span>
+
+    <span class="n">f</span><span class="p">()</span> <span class="c">//开始调用f</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"f"</span><span class="p">)</span> <span class="c">//这里开始下面代码不会再执行</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">f</span><span class="p">(){</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"a"</span><span class="p">)</span>
+    <span class="nb">panic</span><span class="p">(</span><span class="s">"异常信息"</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"b"</span><span class="p">)</span> <span class="c">//这里开始下面代码不会再执行</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"f"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>输出结果：</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c
+a
+d
+异常信息
+e
+</code></pre></div></div>
+
+<h1 id="反射">反射</h1>
+
+<p>反射( reflection )是在 Java 出现后迅速流行起来的一种概念。通过反射，你可以获取丰富的类型信息，并可以利用这些类型信息做非常灵活的工作。</p>
+
+<h2 id="基本概念">基本概念</h2>
+
+<p>Type 和 Value，它们也是 Go 语言包中 reflect 空间里最重要的两个类型。</p>
+
+<p>对所有接口进行反射，都可以得到一个包含 Type 和 Value 的信息结构。</p>
+
+<p>如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">reader</span> <span class="n">io</span><span class="o">.</span><span class="n">Reader</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">MyReader</span><span class="p">{</span><span class="s">"a.txt"</span><span class="p">}</span>
+</code></pre></div></div>
+<p>对上例的 reader 进行反射，也将得到一个 Type 和 Value。</p>
+
+<p>Type 为 <code class="language-plaintext highlighter-rouge">io.Reader</code>，Value 为 <code class="language-plaintext highlighter-rouge">MyReader{"a.txt"}</code>。</p>
+
+<p>顾名思义，Type主要表达的是被反射的这个变量本身的类型信息，而Value则为该变量实例本身的信息。</p>
+
+<h2 id="基本用法">基本用法</h2>
+
+<h2 id="获取类型信息">获取类型信息</h2>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+<span class="k">import</span> <span class="p">(</span> 
+    <span class="s">"fmt"</span>
+    <span class="s">"reflect"</span> <span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">x</span> <span class="kt">float64</span> <span class="o">=</span> <span class="m">3.4</span> 
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"type:"</span><span class="p">,</span> <span class="n">reflect</span><span class="o">.</span><span class="n">TypeOf</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>以上代码将输出如下的结果: <code class="language-plaintext highlighter-rouge">type: float64</code></p>
+
+<h2 id="获取值类型">获取值类型</h2>
+
+<p>类型 Type 中有一个成员函数 <code class="language-plaintext highlighter-rouge">CanSet()</code> 。 Go语言中所有的类型都是值类型。在 调用 <code class="language-plaintext highlighter-rouge">ValueOf()</code> 的地方，需要注意到 x 将会产生一个副本，因此 <code class="language-plaintext highlighter-rouge">ValueOf()</code>内部对 x 的操作其实 都是对着 x 的一个副本。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+    <span class="s">"fmt"</span>
+    <span class="s">"reflect"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="k">var</span> <span class="n">x</span> <span class="kt">float64</span> <span class="o">=</span> <span class="m">3.4</span>
+    <span class="n">p</span> <span class="o">:=</span> <span class="n">reflect</span><span class="o">.</span><span class="n">ValueOf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="c">// 注意:得到X的地址</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"type of p:"</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">Type</span><span class="p">())</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"settability of p:"</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">CanSet</span><span class="p">())</span>
+    <span class="n">v</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">Elem</span><span class="p">()</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"settability of v:"</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">CanSet</span><span class="p">())</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">SetFloat</span><span class="p">(</span><span class="m">7.1</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">Interface</span><span class="p">())</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>可以通过 <code class="language-plaintext highlighter-rouge">Elem()</code> 让值成可设属性。</p>
+
+<h2 id="对结构的反射操作">对结构的反射操作</h2>
+
+<p>对于结构的反射操作并没有根本上的不同，只是用了 <code class="language-plaintext highlighter-rouge">Field()</code> 方法来按索引获取 对应的成员。
+在试图修改成员的值时，也需要注意可赋值属性。</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">T</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">A</span> <span class="kt">int</span>
+    <span class="n">B</span> <span class="kt">string</span> 
+<span class="p">}</span>
+
+<span class="n">t</span> <span class="o">:=</span> <span class="n">T</span><span class="p">{</span><span class="m">203</span><span class="p">,</span> <span class="s">"mh203"</span><span class="p">}</span>
+<span class="n">s</span> <span class="o">:=</span> <span class="n">reflect</span><span class="o">.</span><span class="n">ValueOf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">Elem</span><span class="p">()</span> 
+<span class="n">typeOfT</span> <span class="o">:=</span> <span class="n">s</span><span class="o">.</span><span class="n">Type</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="n">NumField</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">f</span> <span class="o">:=</span> <span class="n">s</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"%d: %s %s = %v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">typeOfT</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">Type</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">Interface</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="类型系统">类型系统</h1>
+
+<p>类型系统是指一个语言的类型体系结构。通常包含如下基本 内容:</p>
+
+<ul>
+  <li>基础类型，如： byte、int、bool、float等。</li>
+  <li>复合类型，如： 数组、结构体、指针等。</li>
+  <li>可以指向任意对象的类型(Any类型)。</li>
+  <li>值语义和引用语义。</li>
+  <li>面向对象，即所有具备面向对象特征(比如成员方法)的类型。</li>
+  <li>接口。</li>
+</ul>
+
+<h2 id="为类型添加方法">为类型添加方法</h2>
+
+<p>在 golang 语言中，除了指针类型，可以给任意类型添加相应的方法.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Integer</span> <span class="kt">int</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">Integer</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">b</span> <span class="n">Integer</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>定义了一个新类型 Integer，它和 int 没有本质不同，只是它为内置的 int 类型增加了个新方法 Less()。</p>
+
+<p>golang 语言中的面向对象最为直观，也无需支付额外的成本。如果要求对象必须以指针传递， 这有时会是个额外成本，因为对象有时很小(比如4字节)，用指针传递并不划算。只有在你需要修改对象的时候，才必须用指针。</p>
+
+<p>如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">Integer</span><span class="p">)</span> <span class="n">Add</span><span class="p">(</span><span class="n">b</span> <span class="n">Integer</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="o">*</span><span class="n">a</span> <span class="o">+=</span> <span class="n">b</span>
+ <span class="p">}</span>
+</code></pre></div></div>
+
+<p>会改变 a 的值。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">Integer</span><span class="p">)</span> <span class="n">Add</span><span class="p">(</span><span class="n">b</span> <span class="n">Integer</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="n">a</span> <span class="o">+=</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>不会改变 a 的值。</p>
+
+<p>因为 golang 语言和 C 语言一样，类型都是基于<strong>值传递</strong>的。要想修改变量的值，只能传递指针。</p>
+
+<h2 id="值语义和引用语义">值语义和引用语义</h2>
+
+<p>值语义和引用语义的差别在于赋值，比如下面的例子:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="n">b</span><span class="o">.</span><span class="n">Modify</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>如果 b 的修改不会影响 a 的值，那么此类型属于值类型。如果会影响 a 的值，那么此类型是引用类型。</p>
+
+<p>golang 语言中的大多数类型都基于值语义，包括:</p>
+
+<ul>
+  <li>基本类型，如： byte、int、bool、float32、float64和string等。</li>
+  <li>复合类型，如： 数组(array)、结构体(struct)和指针(pointer)等。</li>
+</ul>
+
+<p>Go语言中的数组和基本类型没有区别，是很纯粹的值类型。要想表达引用，需要用指针。</p>
+
+<p>Go语言中有 4 个类型是引用类型</p>
+
+<ul>
+  <li>数组切片: 指向数组(array)的一个区间。</li>
+  <li>map: 极其常见的数据结构，提供键值查询能力。</li>
+  <li>channel: 执行体(goroutine)间的通信设施。</li>
+  <li>接口(interface):对一组满足某个契约的类型的抽象。</li>
+</ul>
+
+<h2 id="结构体-1">结构体</h2>
+
+<p>golang 语言的结构体(struct)和其他语言的类(class)有同等的地位，但 golang 语言放弃了包括继承在内的大量面向对象特性，只保留了<strong>组合</strong>(composition)这个最基础的特性。</p>
+
+<p>所有的 golang 语言类型(指针类型除外)都可以有自己的方法。结构体只是很普通的复合类型，平淡无奇。</p>
+
+<p>例如，我们要定义一个矩形类型:</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Rect</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="kt">float64</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="kt">float64</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>然后我们定义成员方法 <code class="language-plaintext highlighter-rouge">Area()</code> 来计算矩形的面积:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span><span class="n">Rect</span><span class="p">)</span> <span class="n">Area</span><span class="p">()</span> <span class="kt">float64</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">r</span><span class="o">.</span><span class="n">height</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>可以看出， golang 语言中结构体的使用方式与 C 语言并没有明显不同。</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">goang</span> <span class="k">struct</span><span class="p">{}</span> <span class="p">{}</span>   
+</code></pre></div></div>
+
+<p>它构造了一个struct {}类型的值，该值也是空。</p>
+<h1 id="初始化">初始化</h1>
+
+<p>在 golang 语言中，未进行显式初始化的变量都会被初始化为该类型的零值，例如 bool 类型的零 值为 false，int 类型的零值为 0，string 类型的零值为空字符串。</p>
+
+<p>在 golang 语言中没有构造函数的概念。对象的创建通常交由一个全局的创建函数来完成，以 <code class="language-plaintext highlighter-rouge">NewXXX</code> 来命名，表示“构造函数”。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">NewRect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="kt">float64</span><span class="p">)</span> <span class="o">*</span><span class="n">Rect</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="o">&amp;</span><span class="n">Rect</span><span class="p">{</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="匿名组合">匿名组合</h1>
+
+<p>golang 语言也提供了继承，但是采用了组合的方法，所以我们将其称为匿名组合。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Base</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">Name</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">base</span> <span class="o">*</span><span class="n">Base</span><span class="p">)</span> <span class="n">Foo</span><span class="p">()</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">base</span> <span class="o">*</span><span class="n">Base</span><span class="p">)</span> <span class="n">Bar</span><span class="p">()</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Foo</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">Base</span>
+    <span class="c">// ... </span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">foo</span> <span class="o">*</span><span class="n">Foo</span><span class="p">)</span> <span class="n">Bar</span><span class="p">()</span> <span class="p">{</span> 
+    <span class="n">foo</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Bar</span><span class="p">()</span>
+    <span class="c">// ... </span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>定义了一个 Base 类, 实现了 Foo() 和 Bar () 两个成员方法，然后定义了一个 Foo 类，该类从 Base 类“继承”并改写了 Bar() 方法, 该方法实现时先调用了基类的Bar() 方法。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Foo</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="o">*</span><span class="n">Base</span>
+    <span class="c">// ... </span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>代码仍然有“派生”的效果，只是 Foo 创建实例的时候，需要外部提供一个 Base 类 实例的指针。</p>
+
+<p>组合的类型有重名时，外部的名称会隐藏掉内部的名称。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">X</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">Name</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Y</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">X</span>
+    <span class="n">Name</span> <span class="kt">string</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>X 中的 Name 会被隐藏。</p>
+
+<h1 id="可见性">可见性</h1>
+
+<p>要使某个符号对其他包( package )可以访问，需要将该符号定义为以大写字母开头。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">type</span> <span class="n">Rect</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="kt">float64</span>
+    <span class="n">Width</span><span class="p">,</span> <span class="n">Height</span> <span class="kt">float64</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Rect 类型的成员变量就全部被导出了，可以被所有其他引用了 Rect 所在包的代码访问到。</p>
+
+<h1 id="接口">接口</h1>
+
+<h2 id="定义接口">定义接口</h2>
+
+<p>关键字 interface 用来定义接口：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">interface_name</span> <span class="k">interface</span> <span class="p">{</span>
+   <span class="n">method_name1</span><span class="p">([</span><span class="n">args</span> <span class="o">...</span><span class="n">arg_type</span><span class="p">])</span> <span class="p">[</span><span class="n">return_type</span><span class="p">]</span>
+   <span class="n">method_name2</span><span class="p">([</span><span class="n">args</span> <span class="o">...</span><span class="n">arg_type</span><span class="p">])</span> <span class="p">[</span><span class="n">return_type</span><span class="p">]</span>
+   <span class="n">method_name3</span><span class="p">([</span><span class="n">args</span> <span class="o">...</span><span class="n">arg_type</span><span class="p">])</span> <span class="p">[</span><span class="n">return_type</span><span class="p">]</span>
+   <span class="c">//...</span>
+   <span class="n">method_namen</span><span class="p">([</span><span class="n">args</span> <span class="o">...</span><span class="n">arg_type</span><span class="p">])</span> <span class="p">[</span><span class="n">return_type</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="实现接口">实现接口</h2>
+
+<p>一个结构体实现了某个接口的所有方法，则此结构体就实现了该接口。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c">// 接口</span>
+<span class="k">type</span> <span class="n">IFile</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">Read</span><span class="p">(</span><span class="n">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+    <span class="n">Write</span><span class="p">(</span><span class="n">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+    <span class="n">Seek</span><span class="p">(</span><span class="n">off</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">whence</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">pos</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="n">Close</span><span class="p">()</span> <span class="kt">error</span>
+<span class="p">}</span>
+
+<span class="c">// File 实现接口</span>
+<span class="k">type</span> <span class="n">File</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="c">// ...</span>
+<span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">f</span> <span class="o">*</span><span class="n">File</span><span class="p">)</span> <span class="n">Read</span><span class="p">(</span><span class="n">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">f</span> <span class="o">*</span><span class="n">File</span><span class="p">)</span> <span class="n">Write</span><span class="p">(</span><span class="n">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">f</span> <span class="o">*</span><span class="n">File</span><span class="p">)</span> <span class="n">Seek</span><span class="p">(</span><span class="n">off</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">whence</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">pos</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">f</span> <span class="o">*</span><span class="n">File</span><span class="p">)</span> <span class="n">Close</span><span class="p">()</span> <span class="kt">error</span>
+</code></pre></div></div>
+
+<p>File 实现了 IFile 的所有方法，即表式 结构体 File 实现了 IFile 的所有接口。</p>
+
+<h2 id="any-类型">Any 类型</h2>
+
+<p>任何对象实例都满足空接口 interface{}，所以 interface{} 看起来像是可以指向任何对象的Any类型.</p>
+
+<p>空接口 ：<code class="language-plaintext highlighter-rouge">interface{}</code></p>
+
+<p>不包含任何的方法，正因为如此，所有的类型都实现了空接口，因此空接口可以存储任意类型的数值。</p>
+
+<p>fmt 包下的 Print 系列函数，其参数大多是空接口类型，也可以说支持任意类型：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">Print</span><span class="p">(</span><span class="n">a</span> <span class="o">...</span><span class="k">interface</span><span class="p">{})</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">Println</span><span class="p">(</span><span class="n">format</span> <span class="kt">string</span><span class="p">,</span> <span class="n">a</span> <span class="o">...</span><span class="k">interface</span><span class="p">{})</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">Println</span><span class="p">(</span><span class="n">a</span> <span class="o">...</span><span class="k">interface</span><span class="p">{})</span> <span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="c">// 定义一个空接口</span>
+<span class="k">type</span> <span class="n">Empyt_interface</span> <span class="k">interface</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="c">// 定义一个入参为任意类型的函数</span>
+<span class="k">func</span> <span class="n">getInfo</span><span class="p">(</span><span class="n">arg</span> <span class="n">Empyt_interface</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"getInfo 函数....."</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c">// 也可以写成如下形式，更推荐</span>
+<span class="k">func</span> <span class="n">getInfo2</span><span class="p">(</span><span class="n">arg</span> <span class="k">interface</span><span class="p">{})</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"getInfo2 函数....."</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<h2 id="接口嵌套">接口嵌套</h2>
+
+<p>接口嵌套就是一个接口中包含了其他接口，如果要实现外部接口，那么就要把内部嵌套的接口对应的所有方法全实现了。</p>
+
+<p>如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 定义3个接口</span>
+<span class="k">type</span> <span class="n">A</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">test1</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">B</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">test2</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="c">// 定义嵌套接口</span>
+<span class="k">type</span> <span class="n">C</span> <span class="k">interface</span> <span class="p">{</span>
+    <span class="n">A</span>
+    <span class="n">B</span>
+    <span class="n">test3</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Person</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="c">// 如果想实现接口C，那不止要实现接口C的方法，还要实现接口A，B中的方法</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="n">Person</span><span class="p">)</span> <span class="n">test1</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"test1 方法................"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="n">Person</span><span class="p">)</span> <span class="n">test2</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"test2 方法................"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="n">Person</span><span class="p">)</span> <span class="n">test3</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"test3 方法................"</span><span class="p">)</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+<h2 id="接口赋值">接口赋值</h2>
+
+<p>接口赋值在 golang 语言中分为如下两种情况:</p>
+
+<ul>
+  <li>将对象实例赋值给接口。</li>
+  <li>将一个接口赋值给另一个接口。</li>
+</ul>
+
+<h2 id="类型查询">类型查询</h2>
+
+<p>在Go语言中，还可以更加直截了当地询问接口指向的对象实例的类型，例如:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">v1</span> <span class="k">interface</span><span class="p">{}</span> <span class="o">=</span> <span class="o">...</span> 
+<span class="k">switch</span> <span class="n">v</span> <span class="o">:=</span> <span class="n">v1</span><span class="o">.</span><span class="p">(</span><span class="k">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">int</span><span class="o">:</span> <span class="c">// 现在v的类型是int </span>
+    <span class="k">case</span> <span class="kt">string</span><span class="o">:</span> <span class="c">// 现在v的类型是string </span>
+    <span class="c">//...</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>参考：</p>
+
+<p>1、<a href="https://learnku.com/articles/44099">Golang 学习——interface 接口学习（一）</a></p>
+
+<p>2、<a href="https://learnku.com/articles/44168">Golang 学习——interface 接口学习（二）</a></p>
+
+<h1 id="golang-mod">golang mod</h1>
+
+<p>golang  1.11 版本新引入的<strong>包管理工具</strong>， 意思就是 Module 。 源代码交换和版本控制单元。</p>
+
+<p>module 和 传统的 GOPATH 不同， 不用有 src 和 bin 这样的目录。目录中只要有 go.mod 即可。</p>
+
+<p>go 的环境变量： <code class="language-plaintext highlighter-rouge">GO111MODULE</code></p>
+
+<p>可以用命令： <code class="language-plaintext highlighter-rouge">go env</code>查看，如：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go <span class="nb">env</span>  | <span class="nb">grep </span>MODULE
+<span class="nv">GO111MODULE</span><span class="o">=</span><span class="s2">"auto"</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">GO111MODULE</code> 有三个值：<code class="language-plaintext highlighter-rouge">off</code>, <code class="language-plaintext highlighter-rouge">on</code> 和 <code class="language-plaintext highlighter-rouge">auto</code>（默认值）。</p>
+
+<ul>
+  <li>off，go 命令行将不会支持 module 功能，寻找依赖包的方式将会沿用旧版本那种通过 vendor 目录或者 GOPATH 模式来查找。</li>
+  <li>on，go 命令行会使用 module，而一点也不会去 <code class="language-plaintext highlighter-rouge">GOPATH</code> 目录下查找。</li>
+  <li>auto，默认值，go 命令行将会根据当前目录来决定是否启用 module 功能。这种情况下可以分为两种情形：
+    <ul>
+      <li>当前目录在GOPATH/src之外且该目录包含 go.mod 文件。</li>
+      <li>当前文件在包含go.mod文件的目录下面。</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>命令用法</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span>go mod <span class="nb">help
+
+</span>Go mod provides access to operations on modules.
+
+Note that support <span class="k">for </span>modules is built into all the go commands,
+not just <span class="s1">'go mod'</span><span class="nb">.</span> For example, day-to-day adding, removing, upgrading,
+and downgrading of dependencies should be <span class="k">done </span>using <span class="s1">'go get'</span><span class="nb">.</span>
+See <span class="s1">'go help modules'</span> <span class="k">for </span>an overview of module functionality.
+sage:
+
+	go mod &lt;<span class="nb">command</span><span class="o">&gt;</span> <span class="o">[</span>arguments]
+
+The commands are:
+
+	download    download modules to <span class="nb">local </span>cache
+	edit        edit go.mod from tools or scripts
+	graph       print module requirement graph
+	init        initialize new module <span class="k">in </span>current directory
+	tidy        add missing and remove unused modules
+	vendor      make vendored copy of dependencies
+	verify      verify dependencies have expected content
+	why         explain why packages or modules are needed
+
+Use <span class="s2">"go help mod &lt;command&gt;"</span> <span class="k">for </span>more information about a command.
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">go.mod</code> 文件内提供了<code class="language-plaintext highlighter-rouge">module</code>, <code class="language-plaintext highlighter-rouge">require</code>、<code class="language-plaintext highlighter-rouge">replace</code> 和 <code class="language-plaintext highlighter-rouge">exclude</code> 四个关键字，这里注意区分与上表中命令的区别，一个是管理 <code class="language-plaintext highlighter-rouge">go mod</code>命令，一个是 <code class="language-plaintext highlighter-rouge">go mod</code> 文件内的关键字。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">module</code> 语句指定包的名字（路径）</li>
+  <li><code class="language-plaintext highlighter-rouge">require</code> 语句指定的依赖项模块</li>
+  <li><code class="language-plaintext highlighter-rouge">replace</code> 语句可以替换依赖项模块</li>
+  <li><code class="language-plaintext highlighter-rouge">exclude</code> 语句可以忽略依赖项模块</li>
+</ul>
+
+<p><strong>工程用法</strong></p>
+
+<p>初始化：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go mod init Gone
+</code></pre></div></div>
+
+<p>go.mod</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module hello
+
+go 1.19
+</code></pre></div></div>
+
+<p>在代码中添加引用，会自动下载t相应的包并加入到 go.mod中。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+    <span class="s">"github.com/gin-gonic/gin"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">r</span> <span class="o">:=</span> <span class="n">gin</span><span class="o">.</span><span class="n">Default</span><span class="p">()</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="s">"/hello"</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">gin</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="m">200</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span>
+            <span class="s">"message"</span><span class="o">:</span> <span class="s">"hello world"</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">Run</span><span class="p">()</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>执行 go run main.go</p>
+
+<p>go.mod 如下：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">module</span> <span class="n">hello</span>
+
+<span class="k">go</span> <span class="m">1.19</span>
+
+<span class="n">require</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">gin</span><span class="o">-</span><span class="n">gonic</span><span class="o">/</span><span class="n">gin</span> <span class="n">v1</span><span class="m">.6.3</span>
+</code></pre></div></div>
+
+<p>go module 安装 package 的原则是先拉最新的 release tag，若无tag则拉最新的commit, go 会自动生成一个 go.sum 文件来记录 dependency tree</p>
+
+<p><strong>使用replace替换无法直接获取的package</strong></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>replace <span class="o">(</span>
+    golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a <span class="o">=&gt;</span> github.com/golang/crypto v0.0.0-20190313024323-a1f597ede03a
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>参考：</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>1、[go mod使用</td>
+      <td>全网最详细](https://zhuanlan.zhihu.com/p/482014524)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="网络">网络</h1>
+
+<h2 id="socket-编程">socket 编程</h2>
+
+<p>golang 语言标准库对此过程进行了抽象和封装。无论我们期望使用什么协议建立什么形式的连接，都只需要调用<code class="language-plaintext highlighter-rouge">net.Dial()</code>即可。</p>
+
+<h3 id="dial函数">Dial()函数</h3>
+
+<p><code class="language-plaintext highlighter-rouge">Dial()</code> 函数的原型如下:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">Dial</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">addr</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">Conn</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>其中 net 参数是网络协议的名字，addr 参数是 IP 地址或域名，而端口号以“:”的形式跟随在地址 或域名的后面，端口号可选。如果连接成功，返回连接对象，否则返回 error。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// TCP链接:</span>
+<span class="n">conn</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">net</span><span class="o">.</span><span class="n">Dial</span><span class="p">(</span><span class="s">"tcp"</span><span class="p">,</span> <span class="s">"192.168.0.10:2100"</span><span class="p">)</span>
+
+<span class="c">// UDP链接:</span>
+<span class="n">conn</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">net</span><span class="o">.</span><span class="n">Dial</span><span class="p">(</span><span class="s">"udp"</span><span class="p">,</span> <span class="s">"192.168.0.12:975"</span><span class="p">)</span>
+
+<span class="c">// ICMP 链接(使用协议名称):</span>
+<span class="n">conn</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">net</span><span class="o">.</span><span class="n">Dial</span><span class="p">(</span><span class="s">"ip4:icmp"</span><span class="p">,</span> <span class="s">"www.baidu.com"</span><span class="p">)</span>
+
+<span class="c">// ICMP链接(使用协议编号):</span>
+<span class="n">conn</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">net</span><span class="o">.</span><span class="n">Dial</span><span class="p">(</span><span class="s">"ip4:1"</span><span class="p">,</span> <span class="s">"10.0.0.3"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>目前，<code class="language-plaintext highlighter-rouge">Dial()</code> 函数支持如下几种网络协议: “tcp”、”tcp4”(仅限IPv4)、”tcp6”(仅限 IPv6)、”udp”、”udp4”(仅限IPv4)、”udp6”(仅限IPv6)、”ip”、”ip4”(仅限IPv4)和”ip6”(仅限IPv6)。</p>
+
+<p>在成功建立连接后，我们就可以进行数据的发送和接收。发送数据时，使用 conn 的 <code class="language-plaintext highlighter-rouge">Write()</code> 成员方法，接收数据时使用 Read()方法。</p>
+
+<h3 id="tcp示例程序">TCP示例程序</h3>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+<span class="k">import</span> <span class="p">(</span><span class="s">"net"</span>
+        <span class="s">"os"</span>
+        <span class="s">"bytes"</span>
+        <span class="s">"fmt"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Args</span><span class="p">)</span> <span class="o">!=</span> <span class="m">2</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Fprintf</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stderr</span><span class="p">,</span> <span class="s">"Usage: %s host:port"</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">Args</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="m">1</span><span class="p">)</span> 
+    <span class="p">}</span>
+
+    <span class="n">service</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">Args</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+    <span class="n">conn</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">net</span><span class="o">.</span><span class="n">Dial</span><span class="p">(</span><span class="s">"tcp"</span><span class="p">,</span> <span class="n">service</span><span class="p">)</span>
+    <span class="n">checkError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">Write</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="s">"HEAD / HTTP/1.0</span><span class="se">\r\n\r\n</span><span class="s">"</span><span class="p">))</span> 
+    <span class="n">checkError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+    <span class="n">result</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">readFully</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+    <span class="n">checkError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="kt">string</span><span class="p">(</span><span class="n">result</span><span class="p">))</span> 
+    <span class="n">os</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="m">0</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">checkError</span><span class="p">(</span><span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+      <span class="n">fmt</span><span class="o">.</span><span class="n">Fprintf</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stderr</span><span class="p">,</span> <span class="s">"Fatal error: %s"</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+      <span class="n">os</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">readFully</span><span class="p">(</span><span class="n">conn</span> <span class="n">net</span><span class="o">.</span><span class="n">Conn</span><span class="p">)</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+     <span class="k">defer</span> <span class="n">conn</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">:=</span> <span class="n">bytes</span><span class="o">.</span><span class="n">NewBuffer</span><span class="p">(</span><span class="no">nil</span><span class="p">)</span> 
+    <span class="k">var</span> <span class="n">buf</span> <span class="p">[</span><span class="m">512</span><span class="p">]</span><span class="kt">byte</span>
+    <span class="k">for</span> <span class="p">{</span>
+        <span class="n">n</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">conn</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="m">0</span><span class="o">:</span><span class="p">])</span> 
+        <span class="n">result</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="m">0</span><span class="o">:</span><span class="n">n</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="n">io</span><span class="o">.</span><span class="n">EOF</span> <span class="p">{</span> 
+                <span class="k">break</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="no">nil</span><span class="p">,</span> <span class="n">err</span> 
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">Bytes</span><span class="p">(),</span> <span class="no">nil</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="更丰富的网络通信">更丰富的网络通信</h3>
+
+<p><code class="language-plaintext highlighter-rouge">Dial()</code> 函数是对 <code class="language-plaintext highlighter-rouge">DialTCP()</code>、<code class="language-plaintext highlighter-rouge">DialUDP()</code>、<code class="language-plaintext highlighter-rouge">DialIP()</code> 和 <code class="language-plaintext highlighter-rouge">DialUnix()</code> 的封装。我们也可以直接调用这些函数，它们的功能是一致的。这些函数的原型如下:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">DialTCP</span><span class="p">(</span><span class="n">net</span> <span class="kt">string</span><span class="p">,</span> <span class="n">laddr</span><span class="p">,</span> <span class="n">raddr</span> <span class="o">*</span><span class="n">TCPAddr</span><span class="p">)</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">TCPConn</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> 
+<span class="k">func</span> <span class="n">DialUDP</span><span class="p">(</span><span class="n">net</span> <span class="kt">string</span><span class="p">,</span> <span class="n">laddr</span><span class="p">,</span> <span class="n">raddr</span> <span class="o">*</span><span class="n">UDPAddr</span><span class="p">)</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">UDPConn</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> 
+<span class="k">func</span> <span class="n">DialIP</span><span class="p">(</span><span class="n">netProto</span> <span class="kt">string</span><span class="p">,</span> <span class="n">laddr</span><span class="p">,</span> <span class="n">raddr</span> <span class="o">*</span><span class="n">IPAddr</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="n">IPConn</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">DialUnix</span><span class="p">(</span><span class="n">net</span> <span class="kt">string</span><span class="p">,</span> <span class="n">laddr</span><span class="p">,</span> <span class="n">raddr</span> <span class="o">*</span><span class="n">UnixAddr</span><span class="p">)</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">UnixConn</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>验证IP地址有效性；</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">net</span><span class="o">.</span><span class="n">ParseIP</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>根据域名查找IP的代码如下:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">ResolveIPAddr</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">addr</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="n">IPAddr</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">LookupHost</span><span class="p">(</span><span class="n">name</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">cname</span> <span class="kt">string</span><span class="p">,</span> <span class="n">addrs</span> <span class="p">[]</span><span class="kt">string</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="http-编程">HTTP 编程</h2>
+
+<p>golang 语言标准库内建提供了net/http包，涵盖了HTTP客户端和服务端的具体实现。使用 <code class="language-plaintext highlighter-rouge">net/http</code> 包，我们可以很方便地编写 HTTP 客户端或服务端的程序。</p>
+
+<h3 id="http-客户端">HTTP 客户端</h3>
+
+<p>golang 内置的 <code class="language-plaintext highlighter-rouge">net/http</code> 包提供了最简洁的 HTTP 客户端实现，我们无需借助第三方网络通信库 (比如 libcurl )就可以直接使用 HTTP 中用得最多的 GET 和 POST 方式请求数据。</p>
+
+<h3 id="基本方法">基本方法</h3>
+
+<p><code class="language-plaintext highlighter-rouge">net/http</code> 包的 Client 类型提供了如下几个方法，让我们可以用最简洁的方式实现 HTTP 请求:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">Client</span><span class="p">)</span> <span class="n">Get</span><span class="p">(</span><span class="n">url</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span><span class="n">Response</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">Client</span><span class="p">)</span> <span class="n">Post</span><span class="p">(</span><span class="n">url</span> <span class="kt">string</span><span class="p">,</span> <span class="n">bodyType</span> <span class="kt">string</span><span class="p">,</span> <span class="n">body</span> <span class="n">io</span><span class="o">.</span><span class="n">Reader</span><span class="p">)</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span><span class="n">Response</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">Client</span><span class="p">)</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">url</span> <span class="kt">string</span><span class="p">,</span> <span class="n">data</span> <span class="n">url</span><span class="o">.</span><span class="n">Values</span><span class="p">)</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span><span class="n">Response</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> 
+<span class="k">func</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">Client</span><span class="p">)</span> <span class="n">Head</span><span class="p">(</span><span class="n">url</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span><span class="n">Response</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">Client</span><span class="p">)</span> <span class="n">Do</span><span class="p">(</span><span class="n">req</span> <span class="o">*</span><span class="n">Request</span><span class="p">)</span> <span class="p">(</span><span class="n">resp</span> <span class="o">*</span><span class="n">Response</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>http.Get()</strong></p>
+
+<p>要请求一个资源，只需调用 <code class="language-plaintext highlighter-rouge">http.Get()</code> 方法(等价于 <code class="language-plaintext highlighter-rouge">http.DefaultClient.Get()</code> )即可。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="s">"http://example.com/"</span><span class="p">)</span> 
+<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+    <span class="c">// 处理错误 ...</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+
+<span class="k">defer</span> <span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="nb">close</span><span class="p">()</span>
+<span class="n">io</span><span class="o">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>http.Post()</strong></p>
+
+<p>调用<code class="language-plaintext highlighter-rouge">http.Post()</code>方法并依次传递下面的3个参数即可</p>
+
+<ul>
+  <li>请求的目标 URL</li>
+  <li>将要 POST 数据的资源类型( MIMEType )</li>
+  <li>数据的比特流(<code class="language-plaintext highlighter-rouge">[]byte</code> 形式)</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">Post</span><span class="p">(</span><span class="s">"http://example.com/upload"</span><span class="p">,</span> <span class="s">"image/jpeg"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">imageDataBuf</span><span class="p">)</span> 
+<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+    <span class="c">// 处理错误</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">StatusCode</span> <span class="o">!=</span> <span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span> <span class="p">{</span> <span class="c">// 处理错误</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+<span class="c">// ...</span>
+</code></pre></div></div>
+
+<p><strong>http.PostForm()</strong></p>
+
+<p>实现了标准编码格式为<code class="language-plaintext highlighter-rouge">application/x-www-form-urlencoded</code>的表单提交</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">PostForm</span><span class="p">(</span><span class="s">"http://example.com/posts"</span><span class="p">,</span> 
+                            <span class="n">url</span><span class="o">.</span><span class="n">Values</span><span class="p">{</span><span class="s">"title"</span><span class="o">:</span> <span class="p">{</span><span class="s">"article title"</span><span class="p">},</span> <span class="s">"content"</span><span class="o">:</span> <span class="p">{</span><span class="s">"article body"</span><span class="p">}})</span>
+<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span> <span class="c">// 处理错误</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+<span class="c">// ...</span>
+</code></pre></div></div>
+
+<p><strong>http.Head()</strong></p>
+
+<p>HTTP 中的 Head 请求方式表明只请求目标 URL 的头部信息，即 HTTP Header 而不返回 HTTP Body。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">Head</span><span class="p">(</span><span class="s">"http://example.com/"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>(*http.Client).Do()</strong></p>
+
+<p>在多数情况下，<code class="language-plaintext highlighter-rouge">http.Get()</code> 和 <code class="language-plaintext highlighter-rouge">http.PostForm()</code> 就可以满足需求，但是如果我们发起的 HTTP 请求需要更多的定制信息，我们希望设定一些自定义的 Http Header 字段。</p>
+
+<ul>
+  <li>设定自定义的”User-Agent”。</li>
+  <li>传递 Cookie</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">req</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">NewRequest</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"http://example.com"</span><span class="p">,</span> <span class="no">nil</span><span class="p">)</span> <span class="c">// ...</span>
+<span class="n">req</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"User-Agent"</span><span class="p">,</span> <span class="s">"Gobook Custom User-Agent"</span><span class="p">)</span>
+
+<span class="c">// ...</span>
+<span class="n">client</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">http</span><span class="o">.</span><span class="n">Client</span><span class="p">{</span> 
+<span class="c">//... </span>
+<span class="p">}</span>
+
+<span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">client</span><span class="o">.</span><span class="n">Do</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="c">// ...</span>
+</code></pre></div></div>
+
+<h3 id="http-服务端">HTTP 服务端</h3>
+
+<p><strong>处理 HTTP 请求</strong></p>
+
+<p>使用 <code class="language-plaintext highlighter-rouge">net/http</code> 包提供的 <code class="language-plaintext highlighter-rouge">http.ListenAndServe()</code> 方法，可以在指定的地址进行监听， 开启一个 HTTP，服务端该方法的原型如下:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">ListenAndServe</span><span class="p">(</span><span class="n">addr</span> <span class="kt">string</span><span class="p">,</span> <span class="n">handler</span> <span class="n">Handler</span><span class="p">)</span> <span class="kt">error</span>
+</code></pre></div></div>
+
+<p>该方法用于在指定的 TCP 网络地址 addr 进行监听，然后调用服务端处理程序来处理传入的连接请求。该方法有两个参数:</p>
+
+<p>1、 addr 即监听地址;</p>
+
+<p>2、表示服务端处理程序，通常为空，这意味着服务端调用 <code class="language-plaintext highlighter-rouge">http.DefaultServeMux</code> 进行处理，而服务端编写的业务逻 辑处理程序 <code class="language-plaintext highlighter-rouge">http.Handle()</code> 或 <code class="language-plaintext highlighter-rouge">http.HandleFunc()</code> 默认注入 <code class="language-plaintext highlighter-rouge">http.DefaultServeMux</code> 中。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">http</span><span class="o">.</span><span class="n">Handle</span><span class="p">(</span><span class="s">"/foo"</span><span class="p">,</span> <span class="n">fooHandler</span><span class="p">)</span>
+<span class="n">http</span><span class="o">.</span><span class="n">HandleFunc</span><span class="p">(</span><span class="s">"/bar"</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">w</span> <span class="n">http</span><span class="o">.</span><span class="n">ResponseWriter</span><span class="p">,</span> <span class="n">r</span> <span class="o">*</span><span class="n">http</span><span class="o">.</span><span class="n">Request</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">fmt</span><span class="o">.</span><span class="n">Fprintf</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="s">"Hello, %q"</span><span class="p">,</span> <span class="n">html</span><span class="o">.</span><span class="n">EscapeString</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">URL</span><span class="o">.</span><span class="n">Path</span><span class="p">))</span>
+                        <span class="p">})</span> 
+<span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">ListenAndServe</span><span class="p">(</span><span class="s">":8080"</span><span class="p">,</span> <span class="no">nil</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>如果想更多地控制服务端的行为，可以自定义 <code class="language-plaintext highlighter-rouge">http.Server</code></p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">http</span><span class="o">.</span><span class="n">Server</span><span class="p">{</span>
+    <span class="n">Addr</span><span class="o">:</span>               <span class="s">":8080"</span><span class="p">,</span>
+    <span class="n">Handler</span><span class="o">:</span>            <span class="n">myHandler</span><span class="p">,</span>
+    <span class="n">ReadTimeout</span><span class="o">:</span>        <span class="m">10</span><span class="o">*</span><span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">,</span>
+    <span class="n">WriteTimeout</span><span class="o">:</span>       <span class="m">10</span><span class="o">*</span><span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">,</span>
+    <span class="n">MaxHeaderBytes</span><span class="o">:</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">20</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">ListenAndServe</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p><strong>处理 HTTPS 请求</strong></p>
+
+<p>net/http 包还提供  <code class="language-plaintext highlighter-rouge">http.ListenAndServeTLS()</code> 方法，用于处理 HTTPS 连接请求:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">ListenAndServeTLS</span><span class="p">(</span><span class="n">addr</span> <span class="kt">string</span><span class="p">,</span> <span class="n">certFile</span> <span class="kt">string</span><span class="p">,</span> <span class="n">keyFile</span> <span class="kt">string</span><span class="p">,</span> <span class="n">handler</span> <span class="n">Handler</span><span class="p">)</span> <span class="kt">error</span>
+</code></pre></div></div>
+
+<p>certFile 对应 SSL 证书文件存放路径，keyFile 对应证书私钥文件路径。如果证书是由证书颁发机构签署的，certFile 参数指定的路径必须是存放在服务器上的经由 CA 认证过的 SSL 证书。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">http</span><span class="o">.</span><span class="n">Handle</span><span class="p">(</span><span class="s">"/foo"</span><span class="p">,</span> <span class="n">fooHandler</span><span class="p">)</span>
+<span class="n">http</span><span class="o">.</span><span class="n">HandleFunc</span><span class="p">(</span><span class="s">"/bar"</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">w</span> <span class="n">http</span><span class="o">.</span><span class="n">ResponseWriter</span><span class="p">,</span> <span class="n">r</span> <span class="o">*</span><span class="n">http</span><span class="o">.</span><span class="n">Request</span><span class="p">)</span> <span class="p">{</span>
+                                <span class="n">fmt</span><span class="o">.</span><span class="n">Fprintf</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="s">"Hello, %q"</span><span class="p">,</span> <span class="n">html</span><span class="o">.</span><span class="n">EscapeString</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">URL</span><span class="o">.</span><span class="n">Path</span><span class="p">))</span> 
+                            <span class="p">})</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">ListenAndServeTLS</span><span class="p">(</span><span class="s">":10443"</span><span class="p">,</span> <span class="s">"cert.pem"</span><span class="p">,</span> <span class="s">"key.pem"</span><span class="p">,</span> <span class="no">nil</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h2 id="json-处理">Json 处理</h2>
+
+<p>golang 语言内建对 JSON 的 支持。使用 golang 语言内置的 <code class="language-plaintext highlighter-rouge">encoding/json</code> 标准库。</p>
+
+<h3 id="编码为json格式">编码为JSON格式</h3>
+
+<p>使用 <code class="language-plaintext highlighter-rouge">json.Marshal()</code> 函数可以对一组数据进行JSON格式的编码。<code class="language-plaintext highlighter-rouge">json.Marshal()</code> 函数的声明如下:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">Marshal</span><span class="p">(</span><span class="n">v</span> <span class="k">interface</span><span class="p">{})</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">type</span> <span class="n">Book</span> <span class="k">struct</span> <span class="p">{</span> 
+    <span class="n">Title</span> <span class="kt">string</span>
+    <span class="n">Authors</span> <span class="p">[]</span><span class="kt">string</span> 
+    <span class="n">Publisher</span> <span class="kt">string</span> 
+    <span class="n">IsPublished</span> <span class="kt">bool</span> <span class="n">Price</span> <span class="n">float</span>
+<span class="p">}</span>
+
+<span class="n">gobook</span> <span class="o">:=</span> <span class="n">Book</span><span class="p">{</span> <span class="s">"Go语言编程"</span><span class="p">,</span>
+                <span class="p">[</span><span class="s">"XuShiwei"</span><span class="p">,</span> <span class="s">"HughLv"</span><span class="p">,</span> <span class="s">"Pandaman"</span><span class="p">,</span> <span class="s">"GuaguaSong"</span><span class="p">,</span> <span class="s">"HanTuo"</span><span class="p">,</span> <span class="s">"BertYuan"</span><span class="p">,</span> <span class="s">"XuDaoli"</span><span class="p">],</span>
+                <span class="s">"ituring.com.cn"</span><span class="p">,</span> <span class="no">true</span><span class="p">,</span>
+                <span class="m">9.99</span>
+            <span class="p">}</span>
+
+<span class="n">b</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">json</span><span class="o">.</span><span class="n">Marshal</span><span class="p">(</span><span class="n">gobook</span><span class="p">)</span> <span class="c">// 将 gobook 实例生成一段 JSON 格式的文本</span>
+<span class="n">b</span> <span class="o">==</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="s">`{
+"Title": "Go语言编程",
+"Authors": ["XuShiwei", "HughLv", "Pandaman", "GuaguaSong", "HanTuo", "BertYuan",
+             "XuDaoli"],
+         "Publisher": "ituring.com.cn",
+         "IsPublished": true,
+         "Price": 9.99
+}`</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>golang 语言的大多数数据类型都可以转化为有效的 JSON 文本，但 channel、complex 和函数这几种类型除外。</p>
+
+<p>如果转化前的数据结构中出现指针，那么将会转化指针所指向的值，如果指针指向的是零值， 那么 null 将作为转化后的结果输出。</p>
+
+<p>在 golang 中，JSON 转化前后的数据类型映射如下：</p>
+
+<ul>
+  <li>布尔值转化为 JSON 后还是布尔类型。</li>
+  <li>浮点数和整型会被转化为 JSON 里边的常规数字。</li>
+  <li>字符串将以 UTF-8 编码转化输出为 Unicode 字符集的字符串，特殊字符比如 &lt; 将会被转义为 \u003c。</li>
+  <li>数组和切片会转化为 JSON 里边的数组，但 <code class="language-plaintext highlighter-rouge">[]byte</code> 类型的值将会被转化为 Base64 编码后的字符串，slice 类型的零值会被转化为 null。</li>
+  <li>结构体会转化为 JSON 对象，并且只有结构体里边以大写字母开头的可被导出的字段才会被转化输出，而这些可导出的字段会作为JSON对象的字符串索引。</li>
+  <li>转化一个map类型的数据结构时，该数据的类型必须是 <code class="language-plaintext highlighter-rouge">map[string]T</code> (T 可以是 <code class="language-plaintext highlighter-rouge">encoding/json</code> 包支持的任意数据类型)。</li>
+</ul>
+
+<h3 id="解码-json-数据">解码 JSON 数据</h3>
+
+<p>可以使用 <code class="language-plaintext highlighter-rouge">json.Unmarshal()</code> 函数将JSON格式的文本解码为Go里边预期的数据结构。 <code class="language-plaintext highlighter-rouge">json.Unmarshal()</code> 函数的原型如下:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">Unmarshal</span><span class="p">(</span><span class="n">data</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="n">v</span> <span class="k">interface</span><span class="p">{})</span> <span class="kt">error</span>
+</code></pre></div></div>
+
+<p>如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">book</span> <span class="n">Book</span>
+
+<span class="n">err</span> <span class="o">:=</span> <span class="n">json</span><span class="o">.</span><span class="n">Unmarshal</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">book</span><span class="p">)</span>
+
+<span class="n">book</span> <span class="o">:=</span> <span class="n">Book</span><span class="p">{</span> <span class="s">"Go语言编程"</span><span class="p">,</span>
+                <span class="p">[</span><span class="s">"XuShiwei"</span><span class="p">,</span> <span class="s">"HughLv"</span><span class="p">,</span> <span class="s">"Pandaman"</span><span class="p">,</span> <span class="s">"GuaguaSong"</span><span class="p">,</span> <span class="s">"HanTuo"</span><span class="p">,</span> <span class="s">"BertYuan"</span><span class="p">,</span> <span class="s">"XuDaoli"</span><span class="p">],</span>
+                <span class="s">"ituring.com.cn"</span><span class="p">,</span> 
+                <span class="no">true</span><span class="p">,</span>
+                <span class="m">9.99</span>
+            <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="解码未知结构的-json-数据">解码未知结构的 JSON 数据</h3>
+
+<p>要解码一段未知结构的 JSON，只需将这段 JSON 数据解码输出到一个空接口即可。</p>
+
+<p>golang 的标准库 <code class="language-plaintext highlighter-rouge">encoding/json</code> 包中，允许使用 <code class="language-plaintext highlighter-rouge">map[string]interface{}</code> 和<code class="language-plaintext highlighter-rouge">[]interface{}</code> 类型的值来分别存放未知结构的 JSON 对象或数组。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="s">`{
+            "Title": "Go语言编程",
+            "Authors": ["XuShiwei", "HughLv", "Pandaman", "GuaguaSong", "HanTuo", "BertYuan","XuDaoli"],
+            "Publisher": "ituring.com.cn",
+            "IsPublished": true,
+            "Price": 9.99,
+            "Sales": 1000000
+}`</span><span class="p">)</span>
+
+<span class="k">var</span> <span class="n">r</span> <span class="k">interface</span><span class="p">{}</span>
+<span class="n">err</span> <span class="o">:=</span> <span class="n">json</span><span class="o">.</span><span class="n">Unmarshal</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">r</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>最终 r 将会是一个键值对的 <code class="language-plaintext highlighter-rouge">map[string]interface{}</code> 结构:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{}{</span>
+    <span class="s">"Title"</span><span class="o">:</span> <span class="s">"Go语言编程"</span><span class="p">,</span>
+    <span class="s">"Authors"</span><span class="o">:</span> <span class="p">[</span><span class="s">"XuShiwei"</span><span class="p">,</span> <span class="s">"HughLv"</span><span class="p">,</span> <span class="s">"Pandaman"</span><span class="p">,</span> <span class="s">"GuaguaSong"</span><span class="p">,</span> <span class="s">"HanTuo"</span><span class="p">,</span> <span class="s">"BertYuan"</span><span class="p">,</span> <span class="s">"XuDaoli"</span><span class="p">],</span>
+    <span class="s">"Publisher"</span><span class="o">:</span> <span class="s">"ituring.com.cn"</span><span class="p">,</span>
+    <span class="s">"IsPublished"</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span>
+    <span class="s">"Price"</span><span class="o">:</span> <span class="m">9.99</span><span class="p">,</span>
+    <span class="s">"Sales"</span><span class="o">:</span> <span class="m">1000000</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="json-的流式读写">JSON 的流式读写</h3>
+
+<p>golang 内建的 <code class="language-plaintext highlighter-rouge">encoding/json</code> 包还提供 Decoder 和 Encoder 两个类型，用于支持JSON数据的 流式读写，并提供 <code class="language-plaintext highlighter-rouge">NewDecoder()</code>和<code class="language-plaintext highlighter-rouge">NewEncoder()</code>两个函数来便于具体实现:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">NewDecoder</span><span class="p">(</span><span class="n">r</span> <span class="n">io</span><span class="o">.</span><span class="n">Reader</span><span class="p">)</span> <span class="o">*</span><span class="n">Decoder</span> 
+<span class="k">func</span> <span class="n">NewEncoder</span><span class="p">(</span><span class="n">w</span> <span class="n">io</span><span class="o">.</span><span class="n">Writer</span><span class="p">)</span> <span class="o">*</span><span class="n">Encoder</span>
+</code></pre></div></div>
+
+<p>如：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span> <span class="k">import</span> <span class="p">(</span>
+        <span class="s">"encoding/json"</span>
+        <span class="s">"log"</span>
+        <span class="s">"os"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">dec</span> <span class="o">:=</span> <span class="n">json</span><span class="o">.</span><span class="n">NewDecoder</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdin</span><span class="p">)</span> 
+    <span class="n">enc</span> <span class="o">:=</span> <span class="n">json</span><span class="o">.</span><span class="n">NewEncoder</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">)</span> 
+    <span class="k">for</span> <span class="p">{</span>
+        <span class="k">var</span> <span class="n">v</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{}</span>
+        <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">dec</span><span class="o">.</span><span class="n">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">v</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s">"Title"</span> <span class="p">{</span> 
+                <span class="n">v</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="no">nil</span><span class="p">,</span> <span class="no">false</span>
+            <span class="p">}</span> 
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">enc</span><span class="o">.</span><span class="n">Encode</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span> 
+            <span class="n">log</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="单元测试-go-test">单元测试 go test</h1>
+
+<p>go test 官方文档：<a href="https://go.dev/doc/tutorial/add-a-test">https://go.dev/doc/tutorial/add-a-test</a></p>
+
+<p>rpc test 例子:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">test</span>
+
+<span class="k">import</span> <span class="p">(</span>
+	<span class="s">"cag-wx-proxy/pb"</span>
+	<span class="s">"context"</span>
+	<span class="s">"fmt"</span>
+	<span class="s">"testing"</span>
+	<span class="s">"time"</span>
+
+	<span class="s">"github.com/zeromicro/go-zero/zrpc"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">WxRpcConfig</span><span class="p">()</span> <span class="n">zrpc</span><span class="o">.</span><span class="n">RpcClientConf</span> <span class="p">{</span>
+
+	<span class="k">return</span> <span class="n">zrpc</span><span class="o">.</span><span class="n">RpcClientConf</span><span class="p">{</span>
+		<span class="n">Endpoints</span><span class="o">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"10.86.0.101:30384"</span><span class="p">},</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">const</span> <span class="p">(</span>
+	<span class="n">Appid</span> <span class="o">=</span> <span class="s">"wx125cd80edcd2cc57"</span> <span class="c">// 小程序appid</span>
+<span class="p">)</span>
+
+<span class="c">// 测试获取小程序二维码</span>
+<span class="k">func</span> <span class="n">Test_GetUnlimitedQRCode_1</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="n">rpcCofnig</span> <span class="o">:=</span> <span class="n">WxRpcConfig</span><span class="p">()</span>
+	<span class="n">WxProxyRpc</span> <span class="o">:=</span> <span class="n">pb</span><span class="o">.</span><span class="n">NewCagWxProxyClient</span><span class="p">(</span><span class="n">zrpc</span><span class="o">.</span><span class="n">MustNewClient</span><span class="p">(</span><span class="n">rpcCofnig</span><span class="p">)</span><span class="o">.</span><span class="n">Conn</span><span class="p">())</span>
+
+	<span class="n">info</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">WxProxyRpc</span><span class="o">.</span><span class="n">GetUnlimitedQRCode</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">Background</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">pb</span><span class="o">.</span><span class="n">GetUnlimitedQRCodeReq</span><span class="p">{</span>
+		<span class="n">FlowId</span><span class="o">:</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">"miniapp_test_%d"</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span><span class="o">.</span><span class="n">Unix</span><span class="p">()),</span>
+		<span class="n">AppId</span><span class="o">:</span>  <span class="n">Appid</span><span class="p">,</span>
+		<span class="n">Scene</span><span class="o">:</span>  <span class="s">"devId=AABBCCDDEEFF"</span><span class="p">,</span>
+	<span class="p">})</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">Log</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">QRBuffer</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"len(info.QRBuffer) == 0"</span><span class="p">)</span>
+	<span class="p">}</span>
+
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>一些常用的命令：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go <span class="nb">test</span> <span class="nt">-v</span>  <span class="c"># 输出完整的过程</span>
+go <span class="nb">test</span> <span class="nt">-v</span> <span class="nt">-run</span> Test_GetUserNumber <span class="c"># 指定测试用例的方法</span>
+ go <span class="nb">test</span> <span class="nt">-list</span> <span class="nb">.</span>  <span class="c">#有那一些测试用例</span>
+</code></pre></div></div>
+
+<h1 id="golang-rpc">golang RPC</h1>
+
+<p>grpc 测试工具 <code class="language-plaintext highlighter-rouge">grpcurl </code> , 地址：https://github.com/fullstorydev/grpcurl</p>
+
+<p>安装：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
+</code></pre></div></div>
+
+<h1 id="其他">其他</h1>
+
+<p>Go 程序的代码注释与 C++ 保持一致，即同时支持以下两种用法:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/*
+    块注释
+*/</span>
+
+<span class="c">// 行注释</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="待学习">待学习</h1>
+
+<ul>
+  <li>错误处理</li>
+  <li>接口</li>
+  <li>并发</li>
+  <li>channel</li>
+  <li>网络编程</li>
+  <li>反射</li>
+</ul>
+
+<hr />
+
+<p>参考资料：</p>
+
+<p>1、<a href="https://learnku.com/articles/44099">Golang 学习——interface 接口学习（一）</a></p>
+
+<p>2、<a href="https://learnku.com/articles/44168">Golang 学习——interface 接口学习（二）</a></p>
 
 </section>
 <section align="right">
