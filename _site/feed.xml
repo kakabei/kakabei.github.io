@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-22T08:14:09+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">xyecho - just my notes</title><author><name>kane</name></author><entry><title type="html">golang painc 发生了</title><link href="http://localhost:4000/golang-panic/" rel="alternate" type="text/html" title="golang painc 发生了" /><published>2024-04-11T17:08:12+08:00</published><updated>2024-04-11T17:08:12+08:00</updated><id>http://localhost:4000/golang-panic</id><content type="html" xml:base="http://localhost:4000/golang-panic/"><![CDATA[<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">Config1</span> <span class="o">:=</span> <span class="n">mapConf</span><span class="p">[</span><span class="s">"game"</span><span class="p">]</span><span class="o">.</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{})</span>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-22T18:23:54+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">xyecho - just my notes</title><author><name>kane</name></author><entry><title type="html">golang painc 发生了</title><link href="http://localhost:4000/golang-panic/" rel="alternate" type="text/html" title="golang painc 发生了" /><published>2024-04-11T17:08:12+08:00</published><updated>2024-04-11T17:08:12+08:00</updated><id>http://localhost:4000/golang-panic</id><content type="html" xml:base="http://localhost:4000/golang-panic/"><![CDATA[<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">Config1</span> <span class="o">:=</span> <span class="n">mapConf</span><span class="p">[</span><span class="s">"game"</span><span class="p">]</span><span class="o">.</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{})</span>
 	<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">confMap</span> <span class="p">{</span>
 		<span class="n">Config1</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 	<span class="p">}</span>
@@ -316,24 +316,17 @@ git push origin feat2       <span class="c"># 推送 feat2</span>
 
 <p>基于 Merge Request 的开发流程 :<a href="https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request">https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request</a></p>
 
-<p>如何撤销 Merge Request？<a href="https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request-revert">https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request-revert</a></p>]]></content><author><name>kane</name></author><category term="工具" /><category term="工作提效" /><summary type="html"><![CDATA[Frequently Used Command Reference git]]></summary></entry><entry><title type="html">python mysql 插入更新一些特殊的字符</title><link href="http://localhost:4000/python-mysql-connector/" rel="alternate" type="text/html" title="python mysql 插入更新一些特殊的字符" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/python-mysql-connector</id><content type="html" xml:base="http://localhost:4000/python-mysql-connector/"><![CDATA[<p>写了一个脚本，把一个mysql 表的中数据从一个表更新到另一个表中。其他有字段是路径，包含有 <code class="language-plaintext highlighter-rouge">/</code> 和  <code class="language-plaintext highlighter-rouge">'</code>  等字符。</p>
+<p>如何撤销 Merge Request？<a href="https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request-revert">https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request-revert</a></p>]]></content><author><name>kane</name></author><category term="工具" /><category term="工作提效" /><summary type="html"><![CDATA[Frequently Used Command Reference git]]></summary></entry><entry><title type="html">go-zero swagger 的使用</title><link href="http://localhost:4000/go-zore-swagger/" rel="alternate" type="text/html" title="go-zero swagger 的使用" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-swagger</id><content type="html" xml:base="http://localhost:4000/go-zore-swagger/"><![CDATA[<p>Swagger 是一个开源的 API 设计工具，它帮助开发者设计、构建、记录和使用RESTful Web服务。Swagger的核心是 OpenAPI 规范。</p>
 
-<p>第一次的做法是：</p>
+<p>官网：(https://swagger.io/)[https://swagger.io/]</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span> 
-</code></pre></div></div>
+<p>主要特点：</p>
+<ul>
+  <li>自动化文档生成：Swagger可以自动从代码注释和API定义生成API文档，这些文档可以被人类阅读，也可以被机器解析。</li>
+  <li>交互式API测试：Swagger UI提供了一个交互式的界面，允许开发者直接在浏览器中测试API，而无需编写代码。</li>
+</ul>
 
-<p>却发现了问题，就是在遇到特殊的字符会被转义。如：写入的路径后会没了斜杠 <code class="language-plaintext highlighter-rouge">\</code>。或遇到 <code class="language-plaintext highlighter-rouge">'</code> 出现 sql 解析异常。</p>
-
-<p>这是字符串被转义导致的。</p>
-
-<p>要<strong>使用参数化查询</strong>才可以，如下：</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span>
-    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>  
-</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="python" /><summary type="html"><![CDATA[python mysql 使用参数化查询处理特殊字符]]></summary></entry><entry><title type="html">go-zero 日志输出的问题</title><link href="http://localhost:4000/go-zore-log-problem/" rel="alternate" type="text/html" title="go-zero 日志输出的问题" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-log-problem</id><content type="html" xml:base="http://localhost:4000/go-zore-log-problem/"><![CDATA[<p>go-zore 日志输出方式体验让我有一些不适。</p>
+<p>s</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[swagger]]></summary></entry><entry><title type="html">go-zero 日志输出的问题</title><link href="http://localhost:4000/go-zore-log-problem/" rel="alternate" type="text/html" title="go-zero 日志输出的问题" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-log-problem</id><content type="html" xml:base="http://localhost:4000/go-zore-log-problem/"><![CDATA[<p>go-zore 日志输出方式体验让我有一些不适。</p>
 
 <p>今天还遇到一个现象，日志输出如下：</p>
 
@@ -431,17 +424,24 @@ git push origin feat2       <span class="c"># 推送 feat2</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="golang" /><summary type="html"><![CDATA[golang 结构体的"继承"导致 go-zero 的 httpc.Do() 发送失败的问题]]></summary></entry><entry><title type="html">go-zero swagger 的使用</title><link href="http://localhost:4000/go-zore-swagger/" rel="alternate" type="text/html" title="go-zero swagger 的使用" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-swagger</id><content type="html" xml:base="http://localhost:4000/go-zore-swagger/"><![CDATA[<p>Swagger 是一个开源的 API 设计工具，它帮助开发者设计、构建、记录和使用RESTful Web服务。Swagger的核心是 OpenAPI 规范。</p>
+<p>发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="golang" /><summary type="html"><![CDATA[golang 结构体的"继承"导致 go-zero 的 httpc.Do() 发送失败的问题]]></summary></entry><entry><title type="html">python mysql 插入更新一些特殊的字符</title><link href="http://localhost:4000/python-mysql-connector/" rel="alternate" type="text/html" title="python mysql 插入更新一些特殊的字符" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/python-mysql-connector</id><content type="html" xml:base="http://localhost:4000/python-mysql-connector/"><![CDATA[<p>写了一个脚本，把一个mysql 表的中数据从一个表更新到另一个表中。其他有字段是路径，包含有 <code class="language-plaintext highlighter-rouge">/</code> 和  <code class="language-plaintext highlighter-rouge">'</code>  等字符。</p>
 
-<p>官网：(https://swagger.io/)[https://swagger.io/]</p>
+<p>第一次的做法是：</p>
 
-<p>主要特点：</p>
-<ul>
-  <li>自动化文档生成：Swagger可以自动从代码注释和API定义生成API文档，这些文档可以被人类阅读，也可以被机器解析。</li>
-  <li>交互式API测试：Swagger UI提供了一个交互式的界面，允许开发者直接在浏览器中测试API，而无需编写代码。</li>
-</ul>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span> 
+</code></pre></div></div>
 
-<p>s</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[swagger]]></summary></entry><entry><title type="html">golang 开发备忘</title><link href="http://localhost:4000/golang-note/" rel="alternate" type="text/html" title="golang 开发备忘" /><published>2024-01-02T18:12:15+08:00</published><updated>2024-01-02T18:12:15+08:00</updated><id>http://localhost:4000/golang-note</id><content type="html" xml:base="http://localhost:4000/golang-note/"><![CDATA[<h1 id="golang--资料">golang  资料</h1>
+<p>却发现了问题，就是在遇到特殊的字符会被转义。如：写入的路径后会没了斜杠 <code class="language-plaintext highlighter-rouge">\</code>。或遇到 <code class="language-plaintext highlighter-rouge">'</code> 出现 sql 解析异常。</p>
+
+<p>这是字符串被转义导致的。</p>
+
+<p>要<strong>使用参数化查询</strong>才可以，如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>  
+</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="python" /><summary type="html"><![CDATA[python mysql 使用参数化查询处理特殊字符]]></summary></entry><entry><title type="html">golang 开发备忘</title><link href="http://localhost:4000/golang-note/" rel="alternate" type="text/html" title="golang 开发备忘" /><published>2024-01-02T18:12:15+08:00</published><updated>2024-01-02T18:12:15+08:00</updated><id>http://localhost:4000/golang-note</id><content type="html" xml:base="http://localhost:4000/golang-note/"><![CDATA[<h1 id="golang--资料">golang  资料</h1>
 
 <p>Go 语言高性能编程 ： <a href="https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925">https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925</a></p>
 
