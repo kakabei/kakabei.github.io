@@ -1,4 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-04-09T10:40:56+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">xyecho - just my notes</title><author><name>kane</name></author><entry><title type="html">golang time.AddDate的问题</title><link href="http://localhost:4000/golang-time-adddate/" rel="alternate" type="text/html" title="golang time.AddDate的问题" /><published>2024-04-02T04:08:12+08:00</published><updated>2024-04-02T04:08:12+08:00</updated><id>http://localhost:4000/golang-time-adddate</id><content type="html" xml:base="http://localhost:4000/golang-time-adddate/"><![CDATA[<p>周末线上出现一个问题，3月份的订单没有算出来，从数据库表数据上看，订单数据已经是完成状态，但数据为空。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-22T08:14:09+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">xyecho - just my notes</title><author><name>kane</name></author><entry><title type="html">golang painc 发生了</title><link href="http://localhost:4000/golang-panic/" rel="alternate" type="text/html" title="golang painc 发生了" /><published>2024-04-11T17:08:12+08:00</published><updated>2024-04-11T17:08:12+08:00</updated><id>http://localhost:4000/golang-panic</id><content type="html" xml:base="http://localhost:4000/golang-panic/"><![CDATA[<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">Config1</span> <span class="o">:=</span> <span class="n">mapConf</span><span class="p">[</span><span class="s">"game"</span><span class="p">]</span><span class="o">.</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{})</span>
+	<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">confMap</span> <span class="p">{</span>
+		<span class="n">Config1</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+	<span class="p">}</span>
+</code></pre></div></div>
+<p>mapConf[“game”]为nil：如果mapConf[“game”]是 nil，那么在尝试进行类型断言时也会导致 panic。</p>
+
+<p>改成：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Config1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{})</span>
+	<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">confMap</span> <span class="p">{</span>
+		<span class="n">Config1</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+	<span class="p">}</span>
+	<span class="n">mapConf</span><span class="p">[</span><span class="s">"game"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Config1</span>
+</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="golang" /><summary type="html"><![CDATA[无论有意还是无意，painc 就是发生了]]></summary></entry><entry><title type="html">vscode 插件列表</title><link href="http://localhost:4000/vscode-plug-in-list/" rel="alternate" type="text/html" title="vscode 插件列表" /><published>2024-04-10T05:00:30+08:00</published><updated>2024-04-10T05:00:30+08:00</updated><id>http://localhost:4000/vscode-plug-in-list</id><content type="html" xml:base="http://localhost:4000/vscode-plug-in-list/"><![CDATA[<h1 id="常有插件">常有插件</h1>
+
+<p>1、Draw.io Integration : <a href="https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio">https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio</a>
+2、Git Graph <a href="https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph">https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph</a>
+3、sonhero.io tools for VS Code： <a href="https://marketplace.visualstudio.com/items?itemName=JSONHero.jsonhero-vscode">https://marketplace.visualstudio.com/items?itemName=JSONHero.jsonhero-vscode</a>
+4、AI Coding Autocomplete codeium <a href="https://marketplace.visualstudio.com/items?itemName=Codeium.codeium">https://marketplace.visualstudio.com/items?itemName=Codeium.codeium</a>
+5、Project Manager <a href="https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager">https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager</a>
+6、golang <a href="https://marketplace.visualstudio.com/items?itemName=golang.Go">https://marketplace.visualstudio.com/items?itemName=golang.Go</a>
+7、 Markdown Preview Enhanced <a href="https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced">https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced</a></p>
+
+<p>Tutorial :<a href="https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/">https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/</a></p>
+
+<h1 id="配置">配置</h1>
+
+<p>1、<a href="https://github.com/kakabei/configbox/tree/main/vscode">https://github.com/kakabei/configbox/tree/main/vscode</a></p>]]></content><author><name>kane</name></author><category term="tools" /><category term="工作提效" /><category term="工作经验" /><summary type="html"><![CDATA[工作中 vscode 常有插件列表]]></summary></entry><entry><title type="html">golang time.AddDate的问题</title><link href="http://localhost:4000/golang-time-adddate/" rel="alternate" type="text/html" title="golang time.AddDate的问题" /><published>2024-04-02T04:08:12+08:00</published><updated>2024-04-02T04:08:12+08:00</updated><id>http://localhost:4000/golang-time-adddate</id><content type="html" xml:base="http://localhost:4000/golang-time-adddate/"><![CDATA[<p>周末线上出现一个问题，3月份的订单没有算出来，从数据库表数据上看，订单数据已经是完成状态，但数据为空。</p>
 
 <p>业务上的逻辑是，每天会计算上个月的订单和当月的订单和。一月的订单周期是一个有1日12点到下个月的1日12点。</p>
 
@@ -109,7 +137,214 @@ today :20241231 nextDay :20241201
 <hr />
 <p>1、令人困惑的 Go time.AddDate <a href="https://learnku.com/articles/71760">https://learnku.com/articles/71760</a></p>
 
-<p>2、Go time 包中的 AddDate 的逻辑避坑指南 <a href="https://cloud.tencent.com/developer/article/1803695">https://cloud.tencent.com/developer/article/1803695</a></p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[olang time.AddDate出现你意料之外的结果]]></summary></entry><entry><title type="html">go-zero httpc.Do post 数据因 struct 继承导致的失败</title><link href="http://localhost:4000/go-zore-struct-httpc-do-problem/" rel="alternate" type="text/html" title="go-zero httpc.Do post 数据因 struct 继承导致的失败" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-struct-httpc-do-problem</id><content type="html" xml:base="http://localhost:4000/go-zore-struct-httpc-do-problem/"><![CDATA[<p>工作时遇到的一个问题。</p>
+<p>2、Go time 包中的 AddDate 的逻辑避坑指南 <a href="https://cloud.tencent.com/developer/article/1803695">https://cloud.tencent.com/developer/article/1803695</a></p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[olang time.AddDate出现你意料之外的结果]]></summary></entry><entry><title type="html">常用命令 curl</title><link href="http://localhost:4000/frequently-used-command-reference-curl/" rel="alternate" type="text/html" title="常用命令 curl" /><published>2024-04-02T03:21:12+08:00</published><updated>2024-04-02T03:21:12+08:00</updated><id>http://localhost:4000/frequently-used-command-reference-curl</id><content type="html" xml:base="http://localhost:4000/frequently-used-command-reference-curl/"><![CDATA[<h1 id="curl--常见的技巧">curl  常见的技巧</h1>
+
+<p>github 地址：<a href="https://github.com/curl/curl">https://github.com/curl/curl</a></p>
+
+<p><strong>参数：</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">-o</span> &lt;file&gt;    <span class="c"># --output: 写入文件</span>
+<span class="nt">-u</span> user:pass <span class="c"># --user: 验证</span>
+<span class="nt">-v</span>           <span class="c"># --verbose: 在操作期间使 curl 冗长</span>
+<span class="nt">-vv</span>          <span class="c"># 更冗长</span>
+<span class="nt">-s</span>           <span class="c"># --silent: 不显示进度表或错误</span>
+<span class="nt">-S</span>           <span class="c"># --show-error: 与 --silent (-sS) 一起使用时，显示错误但没有进度表</span>
+<span class="nt">-i</span>           <span class="c"># --include: 在输出中包含 HTTP 标头</span>
+<span class="nt">-I</span>           <span class="c"># --head: 仅标头</span>
+</code></pre></div></div>
+
+<p><strong>数据：</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># --data: HTTP post 数据</span>
+<span class="c"># URL 编码(例如，status="Hello")</span>
+<span class="nt">-d</span> <span class="s1">'data'</span>
+
+<span class="c"># --data 通过文件</span>
+<span class="nt">-d</span> @file
+
+<span class="c"># --get: 通过 get 发送 -d 数据</span>
+<span class="nt">-G</span>
+</code></pre></div></div>
+
+<p><strong>头信息 Headers：</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">-A</span> &lt;str&gt;     <span class="c"># --user-agent</span>
+<span class="nt">-b</span> <span class="nv">name</span><span class="o">=</span>val  <span class="c"># --cookie</span>
+
+<span class="c"># 从 URL 的指定文件加载 cookie</span>
+<span class="nt">-b</span>, <span class="nt">--cookie</span> FILE
+<span class="c"># 将 cookie 从 URL 保存到指定文件</span>
+<span class="nt">-c</span>, <span class="nt">--cookie-jar</span> FILE
+
+<span class="nt">-b</span> FILE          <span class="c"># --cookie</span>
+<span class="nt">-H</span> <span class="s2">"X-Foo: y"</span>    <span class="c"># --header</span>
+<span class="nt">--compressed</span>     <span class="c"># 使用 deflate/gzip </span>
+
+</code></pre></div></div>
+
+<p><strong>ssl :</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">--cacert</span> &lt;file&gt;
+    <span class="nt">--capath</span> &lt;<span class="nb">dir</span><span class="o">&gt;</span>
+<span class="nt">-E</span>, <span class="nt">--cert</span> &lt;cert&gt;     <span class="c"># --cert: 客户端证书文件</span>
+    <span class="nt">--cert-type</span>       <span class="c"># der/pem/eng</span>
+<span class="nt">-k</span>, <span class="nt">--insecure</span>        <span class="c"># 对于自签名证书</span>
+
+</code></pre></div></div>
+
+<p><strong>示例</strong></p>
+
+<p>1、GET 请求</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-I</span> https://www.baidu.com                                          <span class="c"># curl 发请求</span>
+curl <span class="nt">-v</span> <span class="nt">-I</span> https://www.baidu.com                                       <span class="c"># 带有详细信息的 curl 发请求</span>
+curl <span class="nt">-X</span> GET https://www.baidu.com                                      <span class="c"># 使用显式 http 方法进行 curl</span>
+curl <span class="nt">--noproxy</span> 127.0.0.1 http://www.stackoverflow.com                  <span class="c"># 没有 http 代理的 curl</span>
+curl <span class="nt">--connect-timeout</span> 10 <span class="nt">-I</span> <span class="nt">-k</span> https://www.baidu.com                  <span class="c"># curl 默认没有超时</span>
+curl <span class="nt">--verbose</span> <span class="nt">--header</span> <span class="s2">"Host: www.mytest.com:8182"</span> www.baidu.com      <span class="c"># curl 得到额外的标题</span>
+curl <span class="nt">-k</span> <span class="nt">-v</span> https://www.google.com                                      <span class="c"># curl 获取带有标题的响应</span>
+
+</code></pre></div></div>
+
+<p>2、POST 请求</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>url <span class="nt">-d</span> <span class="s2">"name=username&amp;password=123456"</span> &lt;URL&gt;    <span class="c"># curl 发请求</span>
+curl &lt;URL&gt; <span class="nt">-H</span> <span class="s2">"content-type: application/json"</span> <span class="nt">-d</span> <span class="s2">"{ </span><span class="se">\"</span><span class="s2">woof</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">bark</span><span class="se">\"</span><span class="s2">}"</span>    <span class="c"># curl 发送 json</span>
+</code></pre></div></div>
+
+<p>3、高级用法</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="nt">-s</span> http://ipecho.net/plain, curl <span class="nt">-L</span> <span class="nt">-s</span> http://whatismijnip.nl            <span class="c"># 获取我的公共 IP撒··</span>
+curl <span class="nt">-u</span> <span class="nv">$username</span>:<span class="nv">$password</span> http://repo.dennyzhang.com/README.txt                <span class="c"># 带凭证的 curl</span>
+curl <span class="nt">-v</span> <span class="nt">-F</span> <span class="nv">key1</span><span class="o">=</span>value1 <span class="nt">-F</span> <span class="nv">upload</span><span class="o">=</span>@localfilename &lt;URL&gt;                            <span class="c"># curl 上传</span>
+curl <span class="nt">-k</span> <span class="nt">-v</span> <span class="nt">--http2</span> https://www.google.com/                                       <span class="c"># 使用 http2 curl</span>
+curl <span class="nt">-T</span> cryptopp552.zip <span class="nt">-u</span> <span class="nb">test</span>:test ftp://10.32.99.187/                         <span class="c"># url ftp 上传</span>
+curl <span class="nt">-u</span> <span class="nb">test</span>:test ftp://10.32.99.187/cryptopp552.zip <span class="nt">-o</span> cryptopp552.zip    curl  <span class="c"># ftp 下载</span>
+curl <span class="nt">-v</span> <span class="nt">-u</span> admin:admin123 <span class="nt">--upload-file</span> package1.zip http://mysever:8081/dir/package1.zip    <span class="c"># 使用凭证 curl 上传</span>
+</code></pre></div></div>
+
+<p>4、查询当前机器的出口IP</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="o">(</span>base<span class="o">)</span> C:<span class="se">\t</span>ools&gt; curl cip.cc
+IP      : 121.12.81.78
+地址    : 中国  广东  江门
+运营商  : 电信
+
+数据二  : 广东省深圳市 | 电信
+
+数据三  : 中国广东省深圳市 | 电信
+URL     : http://www.cip.cc/121.12.81.78
+
+</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工具" /><category term="工作提效" /><summary type="html"><![CDATA[Frequently Used Command Reference Curl]]></summary></entry><entry><title type="html">常用命令 git</title><link href="http://localhost:4000/frequently-used-command-reference-git/" rel="alternate" type="text/html" title="常用命令 git" /><published>2024-04-02T03:21:12+08:00</published><updated>2024-04-02T03:21:12+08:00</updated><id>http://localhost:4000/frequently-used-command-reference-git</id><content type="html" xml:base="http://localhost:4000/frequently-used-command-reference-git/"><![CDATA[<h1 id="撤销修改">撤销修改</h1>
+
+<h4 id="一未使用-git-add-缓存代码">一、未使用 git add 缓存代码</h4>
+
+<p>撤销指定文件：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">--</span> filepathname
+</code></pre></div></div>
+
+<p>撤销所有的文件修改可以使用 </p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>对新建文件无效</p>
+
+<h4 id="二已经使用了-git-add-缓存了代码">二、已经使用了  git add 缓存了代码</h4>
+
+<p>撤销指定文件:  </p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reset HEAD filepathname
+</code></pre></div></div>
+
+<p>撤销所有的文件修改可以使用  </p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reset HEAD <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>清除 git  对于文件修改的缓存。相当于撤销 git add 命令所在的工作。</p>
+
+<h4 id="三已经用-git-commit-提交了代码">三、已经用 git commit  提交了代码</h4>
+
+<p>来回退到上一次commit的状态 :</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reset <span class="nt">--hard</span> HEAD^ 
+</code></pre></div></div>
+
+<p>此命令可以用来回退到任意版本：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reset <span class="nt">--hard</span>  commitid
+
+</code></pre></div></div>
+
+<h1 id="分支">分支</h1>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch <span class="nt">--prune</span>  <span class="c"># 刷新本地和远程一样</span>
+
+git branch <span class="nt">-d</span> 分支名  <span class="c">#  删除本地分支</span>
+
+git checkout <span class="nt">-b</span> fix-instance-count origin/main  <span class="c"># 在本地创建一个分支，同时把远程的分支同步下来</span>
+
+git push <span class="nt">-u</span> origin new-branch   <span class="c"># 把分支同步到远程仓库</span>
+</code></pre></div></div>
+
+<p>git 提交一个分支，发现远程已经被删除，如何再次提交可以用 ：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin develop_2.0.4
+</code></pre></div></div>
+
+<p><a href="https://www.freecodecamp.org/chinese/news/git-undo-merge-how-to-revert-the-last-merge-commit-in-git/">Git 撤销合并——如何在 Git 中恢复之前的合并提交</a></p>
+
+<p>创建切换分支：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git ckeckout  <span class="nt">-b</span> feature/1.15.1-kane
+</code></pre></div></div>
+<p>提交分支</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin feature/1.15.1-kane 
+</code></pre></div></div>
+
+<p>合并分支，把本地的分支 feat1 合并到  feat2 中去</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout feat2          <span class="c">#  更新  feat2 分支</span>
+git merge feat1             <span class="c"># 合并 feat1 到  feat2</span>
+git push origin feat2       <span class="c"># 推送 feat2</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>基于 Merge Request 的开发流程 :<a href="https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request">https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request</a></p>
+
+<p>如何撤销 Merge Request？<a href="https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request-revert">https://wikinote.gitbook.io/git-learning/gitlab-cao-zuo/gitlab-merge-request-revert</a></p>]]></content><author><name>kane</name></author><category term="工具" /><category term="工作提效" /><summary type="html"><![CDATA[Frequently Used Command Reference git]]></summary></entry><entry><title type="html">python mysql 插入更新一些特殊的字符</title><link href="http://localhost:4000/python-mysql-connector/" rel="alternate" type="text/html" title="python mysql 插入更新一些特殊的字符" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/python-mysql-connector</id><content type="html" xml:base="http://localhost:4000/python-mysql-connector/"><![CDATA[<p>写了一个脚本，把一个mysql 表的中数据从一个表更新到另一个表中。其他有字段是路径，包含有 <code class="language-plaintext highlighter-rouge">/</code> 和  <code class="language-plaintext highlighter-rouge">'</code>  等字符。</p>
+
+<p>第一次的做法是：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<p>却发现了问题，就是在遇到特殊的字符会被转义。如：写入的路径后会没了斜杠 <code class="language-plaintext highlighter-rouge">\</code>。或遇到 <code class="language-plaintext highlighter-rouge">'</code> 出现 sql 解析异常。</p>
+
+<p>这是字符串被转义导致的。</p>
+
+<p>要<strong>使用参数化查询</strong>才可以，如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>  
+</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="python" /><summary type="html"><![CDATA[python mysql 使用参数化查询处理特殊字符]]></summary></entry><entry><title type="html">go-zero 日志输出的问题</title><link href="http://localhost:4000/go-zore-log-problem/" rel="alternate" type="text/html" title="go-zero 日志输出的问题" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-log-problem</id><content type="html" xml:base="http://localhost:4000/go-zore-log-problem/"><![CDATA[<p>go-zore 日志输出方式体验让我有一些不适。</p>
+
+<p>今天还遇到一个现象，日志输出如下：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span><span class="s2">"@timestamp"</span>:<span class="s2">"2024-03-09T15:48:08.026+08"</span>,<span class="s2">"caller"</span>:<span class="s2">"server/Helper.go:164"</span>,<span class="s2">"content"</span>:<span class="s2">"httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset=0</span><span class="se">\u</span><span class="s2">0026limit=10</span><span class="se">\u</span><span class="s2">0026order=desc</span><span class="se">\u</span><span class="s2">0026sortby=create_time</span><span class="se">\u</span><span class="s2">0026state=-1</span><span class="se">\u</span><span class="s2">0026states=0,1,2,3,4</span><span class="se">\u</span><span class="s2">0026biz_id=0</span><span class="se">\u</span><span class="s2">0026agent_id=512]"</span>,<span class="s2">"level"</span>:<span class="s2">"error"</span>,<span class="s2">"span"</span>:<span class="s2">"66a2ba1882458680"</span>,<span class="s2">"trace"</span>:<span class="s2">"c94c9ac8179690d592fc348b40666e16"</span><span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>出一些  <code class="language-plaintext highlighter-rouge">\u0026</code> 之类的。 但如果把 Encoding 设置为 plain，则正常。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2024-03-09T15:47:08.006+08       error  httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset<span class="o">=</span>0&amp;limit<span class="o">=</span>10&amp;order<span class="o">=</span>desc&amp;sortby<span class="o">=</span>create_time&amp;state<span class="o">=</span><span class="nt">-1</span>&amp;states<span class="o">=</span>0,1,2,3,4&amp;biz_id<span class="o">=</span>0&amp;agent_id<span class="o">=</span>512]      <span class="nb">caller</span><span class="o">=</span>server/Helper.go:164        <span class="nv">trace</span><span class="o">=</span>ca5e1ad81e7d0528f38b361c63a75f35  <span class="nv">span</span><span class="o">=</span>48b14f5d8bce91e9
+</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[用 json 格式输出时有字段显示不正常，用 plain 格式时正常]]></summary></entry><entry><title type="html">go-zero httpc.Do post 数据因 struct 继承导致的失败</title><link href="http://localhost:4000/go-zore-struct-httpc-do-problem/" rel="alternate" type="text/html" title="go-zero httpc.Do post 数据因 struct 继承导致的失败" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-struct-httpc-do-problem</id><content type="html" xml:base="http://localhost:4000/go-zore-struct-httpc-do-problem/"><![CDATA[<p>工作时遇到的一个问题。</p>
 
 <p>背景大概可以简化为：请求不同服务过来的数据后做聚合，然后转发另一个服务。</p>
 
@@ -196,24 +431,7 @@ today :20241231 nextDay :20241201
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="golang" /><summary type="html"><![CDATA[golang 结构体的"继承"导致 go-zero 的 httpc.Do() 发送失败的问题]]></summary></entry><entry><title type="html">python mysql 插入更新一些特殊的字符</title><link href="http://localhost:4000/python-mysql-connector/" rel="alternate" type="text/html" title="python mysql 插入更新一些特殊的字符" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/python-mysql-connector</id><content type="html" xml:base="http://localhost:4000/python-mysql-connector/"><![CDATA[<p>写了一个脚本，把一个mysql 表的中数据从一个表更新到另一个表中。其他有字段是路径，包含有 <code class="language-plaintext highlighter-rouge">/</code> 和  <code class="language-plaintext highlighter-rouge">'</code>  等字符。</p>
-
-<p>第一次的做法是：</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span> 
-</code></pre></div></div>
-
-<p>却发现了问题，就是在遇到特殊的字符会被转义。如：写入的路径后会没了斜杠 <code class="language-plaintext highlighter-rouge">\</code>。或遇到 <code class="language-plaintext highlighter-rouge">'</code> 出现 sql 解析异常。</p>
-
-<p>这是字符串被转义导致的。</p>
-
-<p>要<strong>使用参数化查询</strong>才可以，如下：</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-    <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span>
-    <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>  
-</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="python" /><summary type="html"><![CDATA[python mysql 使用参数化查询处理特殊字符]]></summary></entry><entry><title type="html">go-zero swagger 的使用</title><link href="http://localhost:4000/go-zore-swagger/" rel="alternate" type="text/html" title="go-zero swagger 的使用" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-swagger</id><content type="html" xml:base="http://localhost:4000/go-zore-swagger/"><![CDATA[<p>Swagger 是一个开源的 API 设计工具，它帮助开发者设计、构建、记录和使用RESTful Web服务。Swagger的核心是 OpenAPI 规范。</p>
+<p>发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="golang" /><summary type="html"><![CDATA[golang 结构体的"继承"导致 go-zero 的 httpc.Do() 发送失败的问题]]></summary></entry><entry><title type="html">go-zero swagger 的使用</title><link href="http://localhost:4000/go-zore-swagger/" rel="alternate" type="text/html" title="go-zero swagger 的使用" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-swagger</id><content type="html" xml:base="http://localhost:4000/go-zore-swagger/"><![CDATA[<p>Swagger 是一个开源的 API 设计工具，它帮助开发者设计、构建、记录和使用RESTful Web服务。Swagger的核心是 OpenAPI 规范。</p>
 
 <p>官网：(https://swagger.io/)[https://swagger.io/]</p>
 
@@ -223,52 +441,8 @@ today :20241231 nextDay :20241201
   <li>交互式API测试：Swagger UI提供了一个交互式的界面，允许开发者直接在浏览器中测试API，而无需编写代码。</li>
 </ul>
 
-<p>s</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[swagger]]></summary></entry><entry><title type="html">go-zero 日志输出的问题</title><link href="http://localhost:4000/go-zore-log-problem/" rel="alternate" type="text/html" title="go-zero 日志输出的问题" /><published>2024-03-09T17:08:12+08:00</published><updated>2024-03-09T17:08:12+08:00</updated><id>http://localhost:4000/go-zore-log-problem</id><content type="html" xml:base="http://localhost:4000/go-zore-log-problem/"><![CDATA[<p>go-zore 日志输出方式体验让我有一些不适。</p>
+<p>s</p>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[swagger]]></summary></entry><entry><title type="html">golang 开发备忘</title><link href="http://localhost:4000/golang-note/" rel="alternate" type="text/html" title="golang 开发备忘" /><published>2024-01-02T18:12:15+08:00</published><updated>2024-01-02T18:12:15+08:00</updated><id>http://localhost:4000/golang-note</id><content type="html" xml:base="http://localhost:4000/golang-note/"><![CDATA[<h1 id="golang--资料">golang  资料</h1>
 
-<p>今天还遇到一个现象，日志输出如下：</p>
+<p>Go 语言高性能编程 ： <a href="https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925">https://geektutu.com/post/high-performance-go.html?continueFlag=d5490667caa63d66b43697894ac52925</a></p>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span><span class="s2">"@timestamp"</span>:<span class="s2">"2024-03-09T15:48:08.026+08"</span>,<span class="s2">"caller"</span>:<span class="s2">"server/Helper.go:164"</span>,<span class="s2">"content"</span>:<span class="s2">"httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset=0</span><span class="se">\u</span><span class="s2">0026limit=10</span><span class="se">\u</span><span class="s2">0026order=desc</span><span class="se">\u</span><span class="s2">0026sortby=create_time</span><span class="se">\u</span><span class="s2">0026state=-1</span><span class="se">\u</span><span class="s2">0026states=0,1,2,3,4</span><span class="se">\u</span><span class="s2">0026biz_id=0</span><span class="se">\u</span><span class="s2">0026agent_id=512]"</span>,<span class="s2">"level"</span>:<span class="s2">"error"</span>,<span class="s2">"span"</span>:<span class="s2">"66a2ba1882458680"</span>,<span class="s2">"trace"</span>:<span class="s2">"c94c9ac8179690d592fc348b40666e16"</span><span class="o">}</span>
-
-</code></pre></div></div>
-
-<p>出一些  <code class="language-plaintext highlighter-rouge">\u0026</code> 之类的。 但如果把 Encoding 设置为 plain，则正常。</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2024-03-09T15:47:08.006+08       error  httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset<span class="o">=</span>0&amp;limit<span class="o">=</span>10&amp;order<span class="o">=</span>desc&amp;sortby<span class="o">=</span>create_time&amp;state<span class="o">=</span><span class="nt">-1</span>&amp;states<span class="o">=</span>0,1,2,3,4&amp;biz_id<span class="o">=</span>0&amp;agent_id<span class="o">=</span>512]      <span class="nb">caller</span><span class="o">=</span>server/Helper.go:164        <span class="nv">trace</span><span class="o">=</span>ca5e1ad81e7d0528f38b361c63a75f35  <span class="nv">span</span><span class="o">=</span>48b14f5d8bce91e9
-</code></pre></div></div>]]></content><author><name>kane</name></author><category term="工作日志" /><category term="galang" /><summary type="html"><![CDATA[用 json 格式输出时有字段显示不正常，用 plain 格式时正常]]></summary></entry><entry><title type="html">golang 开发备忘</title><link href="http://localhost:4000/golang-note/" rel="alternate" type="text/html" title="golang 开发备忘" /><published>2024-01-02T18:12:15+08:00</published><updated>2024-01-02T18:12:15+08:00</updated><id>http://localhost:4000/golang-note</id><content type="html" xml:base="http://localhost:4000/golang-note/"><![CDATA[<p>go 常用命令</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-go mod tidy 
-
-</code></pre></div></div>
-
-<p>如果您想在您的项目中添加一个特定的分支作为依赖项，可以使用以下命令：</p>
-
-<p><code class="language-plaintext highlighter-rouge">curl cip.ccsh   
-go mod require &lt;module&gt;@&lt;branch&gt;
-</code></p>]]></content><author><name>kane</name></author><category term="golang" /><category term="golang" /><summary type="html"><![CDATA[golang 开发过程记录的]]></summary></entry><entry><title type="html">window11 wsl 使用问题记录</title><link href="http://localhost:4000/window-wsl/" rel="alternate" type="text/html" title="window11 wsl 使用问题记录" /><published>2023-09-01T18:12:15+08:00</published><updated>2023-09-01T18:12:15+08:00</updated><id>http://localhost:4000/window-wsl</id><content type="html" xml:base="http://localhost:4000/window-wsl/"><![CDATA[<p>1、wsl 内无法 ping 通 宿主机的IP，无法 ping 通 外网。 试了很多方式都没有成功，自己网络方面的知识也不够全面，我补一下。</p>
-
-<p>最后在网上找到一个方法：[修复 WSL 无 Internet 网络连接问题]（https://www.ghostchu.com/fix-wsl-no-internet-connection/）</p>]]></content><author><name>kane</name></author><category term="window" /><category term="wsl" /><summary type="html"><![CDATA[wsl 使用过程中出现了不少的问题]]></summary></entry><entry><title type="html">《月亮与六便士》 毛姆</title><link href="http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB/" rel="alternate" type="text/html" title="《月亮与六便士》 毛姆" /><published>2023-06-01T19:13:00+08:00</published><updated>2023-06-01T19:13:00+08:00</updated><id>http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB</id><content type="html" xml:base="http://localhost:4000/%E6%9C%88%E4%BA%AE%E4%B8%8E%E5%85%AD%E4%BE%BF%E5%A3%AB/"><![CDATA[<p><img src="/assets/reading/the-moon-and-sixpence-2023-06-21-09-53-03.png" alt="" /></p>]]></content><author><name>kane</name></author><category term="reading" /><category term="读书" /><summary type="html"><![CDATA[我不明白为什么叫月亮与六便士]]></summary></entry><entry><title type="html">《面纱》 毛姆</title><link href="http://localhost:4000/%E9%9D%A2%E7%BA%B1/" rel="alternate" type="text/html" title="《面纱》 毛姆" /><published>2023-05-27T19:13:00+08:00</published><updated>2023-05-27T19:13:00+08:00</updated><id>http://localhost:4000/%E9%9D%A2%E7%BA%B1</id><content type="html" xml:base="http://localhost:4000/%E9%9D%A2%E7%BA%B1/"><![CDATA[<p><img src="/assets/reading/the-painted-veil-2023-06-21-10-02-35.png" alt="" /></p>
-
-<p>我最不喜欢的就是讲人性，但很多故事也是深刻的讲人性才有了冲突和升华。</p>
-
-<p>《面纱》让人知道，我们看到人和事物就是人性上装饰的面纱，一切感觉很美好，和谐。可面纱之下才是真实的人性丑恶，很多人没看到过，很多人不相信人性如此，很多人就是喜欢表面的面纱。</p>
-
-<p>人生的常态是什么，是无论你喜欢否，知道否，面纱一直存在。大部分人并知道真实是什么，也不想知道真实是什么。</p>
-
-<p>这书和毛姆《月亮与六便士》、《刀锋》重点不一样。对比之下，《刀锋》和《月亮与六便士》更喜欢些吧。我不喜欢探讨太多的人性。</p>]]></content><author><name>kane</name></author><category term="reading" /><category term="读书" /><summary type="html"><![CDATA[我最不喜欢的就是讲人性，但很多故事也是深刻的讲人性才有了冲突和升华]]></summary></entry><entry><title type="html">《刀锋》 毛姆</title><link href="http://localhost:4000/%E5%88%80%E9%94%8B/" rel="alternate" type="text/html" title="《刀锋》 毛姆" /><published>2023-05-02T19:13:00+08:00</published><updated>2023-05-02T19:13:00+08:00</updated><id>http://localhost:4000/%E5%88%80%E9%94%8B</id><content type="html" xml:base="http://localhost:4000/%E5%88%80%E9%94%8B/"><![CDATA[<p><img src="/assets/reading/the-razors-edge-2023-06-20-09-45-10.png" alt="" /></p>
-
-<p>拉里一直在追寻他活着的意义，在救赎自己，也在救赎身边的人。
-最终，他也不知道是否已经找到，或许找不到，或许根本没有。但他放下了，或说顿悟了。
-至此，他又回到了世俗的生活。却也不是当初的自己了。</p>
-
-<p>感觉他什么都可以放下，什么都可以不在意。不知道在空军时他好友的死给他带来了什么样的冲击。他才开始他与众不同的道路。</p>
-
-<p>总有人追求自己的世界，总有人的生活有别于世俗世界。</p>
-
-<p>《月亮与六便士》的斯特里克兰同样走这不同于世俗的道路，但如疯狂，如疯子变态。不被世俗理解甚至被嘲笑厌恶。相比之下拉里的道路不被理解，但也温柔很多。</p>
-
-<p>斯特里克兰追求表达自己，拉里追求救赎自己。</p>
-
-<p>不明白为什么有那么多人喜欢当“人生导师”，肆无忌惮的指点和批评别人的生活或人生呢。可能最俗的人就是你自己。</p>
-
-<p>人是可以有很多不同的道路去走，同样也应该宽容你身边的人的各种格格不入的生活态度和行为举止。可能他在救赎自己。</p>]]></content><author><name>kane</name></author><category term="reading" /><category term="读书" /><summary type="html"><![CDATA[我要走遍世上每一条路，经历深沉的悲伤、莫名的哀愁、无尽的喜悦， 只求放手一搏、体验人生，追求灵魂中的星辰。]]></summary></entry></feed>
+<h1 id="golang-笔记">golang 笔记</h1>]]></content><author><name>kane</name></author><category term="golang" /><category term="golang" /><summary type="html"><![CDATA[golang 开发过程记录的]]></summary></entry></feed>

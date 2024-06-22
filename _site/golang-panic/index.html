@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="kane" />
-    <title>c++ 类型转换时溢出</title>
+    <title>golang painc 发生了</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/feed/" rel="alternate" title="kane" type="application/atom+xml" />
     <link rel="stylesheet" href="/media/css/style.css" />
@@ -14,7 +14,7 @@
     <div id="container">
       <div id="main" role="main">
         <header>
-        <h1>c++ 类型转换时溢出</h1>
+        <h1>golang painc 发生了</h1>
         </header>
         <nav>
         <span><a title="Blog" class="content" href="/">Blog</a></span>
@@ -28,14 +28,14 @@
         <article class="content">
         <section class="meta">
 <span class="time">
-  <time datetime="2019-10-26">2019-10-26</time>
+  <time datetime="2024-04-11">2024-04-11</time>
 </span>
 
  | 
 <span class="categories">
   分类
   
-  <a href="/categories/#c++" title="c++">c++</a>&nbsp;
+  <a href="/categories/#工作日志" title="工作日志">工作日志</a>&nbsp;
   
 </span>
 
@@ -44,38 +44,35 @@
 <span class="tags">
   标签
   
-  <a href="/tags/#c++" title="c++">c++</a>&nbsp;
-  
-  <a href="/tags/#bug" title="bug">bug</a>&nbsp;
-  
-  <a href="/tags/#工作经验" title="工作经验">工作经验</a>&nbsp;
+  <a href="/tags/#golang" title="golang">golang</a>&nbsp;
   
 </span>
 
 </section>
 <section class="post">
-<p>几天出现过一个 bug，很隐蔽, 记录一下。</p>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint64_t</span> <span class="n">lastTime</span><span class="p">;</span> <span class="c1">// 毫秒</span>
-<span class="n">uin32_t</span> <span class="n">nowTime</span> <span class="o">=</span> <span class="n">time</span><span class="p">();</span> 
-<span class="k">if</span> <span class="p">(</span><span class="n">lastTime</span> <span class="o">&lt;</span>  <span class="p">(</span><span class="kt">uint64_t</span><span class="p">)(</span><span class="n">nowTime</span><span class="o">*</span><span class="mi">1000</span><span class="p">)){</span> <span class="c1">// bug</span>
-
-<span class="p">}</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="n">lastTime</span> <span class="o">&lt;</span>  <span class="p">(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">nowTime</span><span class="o">*</span><span class="mi">1000</span><span class="p">){</span> <span class="c1">// ok</span>
-
-<span class="p">}</span>
-
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">Config1</span> <span class="o">:=</span> <span class="n">mapConf</span><span class="p">[</span><span class="s">"game"</span><span class="p">]</span><span class="o">.</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{})</span>
+	<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">confMap</span> <span class="p">{</span>
+		<span class="n">Config1</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+	<span class="p">}</span>
 </code></pre></div></div>
-<p>这个逻辑判断是有问题的。nowTime是32位 *1000后可能就溢出了，然后再转成64位，结果已经被截断了。</p>
+<p>mapConf[“game”]为nil：如果mapConf[“game”]是 nil，那么在尝试进行类型断言时也会导致 panic。</p>
+
+<p>改成：</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Config1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{})</span>
+	<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">confMap</span> <span class="p">{</span>
+		<span class="n">Config1</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+	<span class="p">}</span>
+	<span class="n">mapConf</span><span class="p">[</span><span class="s">"game"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Config1</span>
+</code></pre></div></div>
 
 </section>
 <section align="right">
 <br/>
 <span>
-	<a  href="/nginx-conf/" class="pageNav"  >上一篇</a>
+	<a  href="/vscode-plug-in-list/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/hive-note/" class="pageNav"  >下一篇</a>
+	<a   class="pageNavInvalid"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
@@ -125,7 +122,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 </script>
         </p>
         <p><small>
-            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/it/2019-10-25-bug-time-error.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
+            <a href="http://github.com/kakabei/kakabei.github.io/new/gh-pages/_posts" target="_blank" title="撰写文章">Po</a>wer<a href="http://github.com/kakabei/kakabei.github.io/edit/gh-pages/_posts/note/2024-04-11-golang-panic.md" target="_blank" title="编辑页面">ed</a> by <a href="http://jekyllrb.com" target="_blank">Jekyll</a> @ <a href="http://github.com/kakabei/kakabei.github.io/kakabei.github.io" target="_blank" title="项目主页">GitHub</a>
              | <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank" title="许可协议">©</a> 2014 - 2024 <a href="/about/">kane</a>
              | <a href="https://github.com/kakabei/kakabei.github.io" target="_blank">@github</a>
 

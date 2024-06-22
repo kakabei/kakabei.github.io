@@ -53,6 +53,7 @@
 </section>
 <section class="post">
 <h1 id="mq">MQ</h1>
+
 <p>微服务开发中，经常用到了一个比较重要的组件就是 <code class="language-plaintext highlighter-rouge">MQ</code>。比较流行的 MQ 有 <code class="language-plaintext highlighter-rouge">ActiveMQ</code>、<code class="language-plaintext highlighter-rouge">RabbitMQ</code>、<code class="language-plaintext highlighter-rouge">RocketMQ</code>、<code class="language-plaintext highlighter-rouge">Kafka</code> 等。</p>
 
 <p>在工作中有使用到 <code class="language-plaintext highlighter-rouge">MQ</code> 的场景，主要目的就是有：</p>
@@ -145,6 +146,271 @@
   <li>订阅主题的分区数发生变化</li>
 </ul>
 
+<h1 id="生产者-producer-1">生产者 Producer</h1>
+
+<p>kafka 生产者的流程大致如下图：</p>
+
+<p><img src="/assets/mq/kafka-mq-2023-02-17-22-07-19.png" alt="" /></p>
+
+<p>1、 <code class="language-plaintext highlighter-rouge">Producer</code> 通过 <code class="language-plaintext highlighter-rouge">RroducerPecord</code> 封装消息 主要的数据有:topic、partition、key、value、timestamp 等数据。</p>
+
+<p>2、通过序列化器把数据序列化，序列化器可以在初始化时指定。 然后再到分区器，由分区器分配到哪个 partition。</p>
+
+<p>3、这个数据被记录到对应的 <code class="language-plaintext highlighter-rouge">topic</code> 和 <code class="language-plaintext highlighter-rouge">partition</code> 分类的缓冲区中, 多条消息会被封装成为一个批次（batch），默认一个批次的大小是 16K。</p>
+
+<p>4、再由独立的线程 Sender 把这些数据发到对应的 <code class="language-plaintext highlighter-rouge">broker</code> 中。</p>
+
+<p>5、如果服务器（<code class="language-plaintext highlighter-rouge">broker</code>） 将消息成功写入，就返回 <code class="language-plaintext highlighter-rouge">RecordMetaData</code> 对象，告诉 <code class="language-plaintext highlighter-rouge">Producer</code> 客户端主题、分区信息和偏移量。</p>
+
+<p>6、主题的分区只能增加，不能减少。</p>
+
+<p>7、如果写入失败，则返回错误信息，让 Producer 重试。</p>
+
+<p>如果没有指明 partition 值，但有 key 的情况下，将 key hash 后与topic 的 partition 数目进行取余操作，得到 partition 值。</p>
+
+<p>工作中，我会把业务一个惟一标识当作 key。像 sku、商家ID 等。</p>
+
+<p>没有 partition 值又没有 key 的情况下，第一次调用时随机生成一个整数（后面每次调用在这个整数上自增），将这个值与 topic 可用的 partition 总数取余得到 partition 值，也就是 round-robin 算法。</p>
+
+<h2 id="分区策略">分区策略</h2>
+
+<p>kafka 的分区策略有：</p>
+
+<ul>
+  <li>轮询策略（Round-robin）</li>
+  <li>随机策略（Randomness）</li>
+  <li>按消息键保序策略（Key-ordering）</li>
+</ul>
+
+<p>kafka 也开放性的提供了自定义分区策略 <code class="language-plaintext highlighter-rouge">org.apache.kafka.clients.producer.Partitioner</code></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Partitioner</span> <span class="kd">extends</span> <span class="nc">Configurable</span><span class="o">,</span> <span class="nc">Closeable</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * Compute the partition for the given record.
+     *
+     * @param topic The topic name
+     * @param key The key to partition on (or null if no key)
+     * @param keyBytes The serialized key to partition on( or null if no key)
+     * @param value The value to partition on or null
+     * @param valueBytes The serialized value to partition on or null
+     * @param cluster The current cluster metadata
+     */</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">partition</span><span class="o">(</span><span class="nc">String</span> <span class="n">topic</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">key</span><span class="o">,</span> <span class="kt">byte</span><span class="o">[]</span> <span class="n">keyBytes</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">value</span><span class="o">,</span> <span class="kt">byte</span><span class="o">[]</span> <span class="n">valueBytes</span><span class="o">,</span> <span class="nc">Cluster</span> <span class="n">cluster</span><span class="o">);</span>
+
+    <span class="cm">/**
+     * This is called when partitioner is closed.
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">();</span>
+
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="轮询策略">轮询策略</h3>
+
+<p>Round-robin 策略，就是按序分配，这是一种默认的策略。 如果 RroducerPecord 没有 partition 值又没有 key。</p>
+
+<p>假如有四个 partition, 第一个消息分配到 分区 0， 第二消息分配到 分区1 依次类推。到第五个消息又分配到分区0。如下图：</p>
+
+<p><img src="/assets/mq/kafka-mq-2023-02-28-18-05-23.png" alt="" /></p>
+
+<p>这种策略表现非常好，负载比较均衡。</p>
+
+<h3 id="随机策略">随机策略</h3>
+
+<p>Randomness 策略。就是我们随意地将消息放置到任意一个分区上</p>
+
+<p><img src="/assets/mq/kafka-mq-2023-02-28-18-16-58.png" alt="" /></p>
+
+<p>实现随机策略方法: 拿到 topic 的 partition 数，然后用  ThreadLocalRandom 随机出一个比它小的数。</p>
+
+<p>这种方法可能会出不均衡的情况。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span> <span class="n">partitions</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="na">partitionsForTopic</span><span class="o">(</span><span class="n">topic</span><span class="o">);</span>
+<span class="k">return</span> <span class="nc">ThreadLocalRandom</span><span class="o">.</span><span class="na">current</span><span class="o">().</span><span class="na">nextInt</span><span class="o">(</span><span class="n">partitions</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+</code></pre></div></div>
+<h3 id="按消息键保序策略">按消息键保序策略</h3>
+
+<p>Key-ordering 策略。就是为每一条消息定义一个消息键（key），可以有明确的业务含义，如果 业务编码、部门ID等。</p>
+
+<p>相同的消息键（key) 会被放到相同的 partition 中。这个策略有一个缺点就是导致数据倾斜。 如下图：</p>
+
+<p><img src="/assets/mq/kafka-mq-2023-02-28-18-29-52.png" alt="" /></p>
+
+<p>代码实现是 用 key hash 之后 对 partition 取模。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span> <span class="n">partitions</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="na">partitionsForTopic</span><span class="o">(</span><span class="n">topic</span><span class="o">);</span>
+<span class="k">return</span> <span class="nc">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">())</span> <span class="o">%</span> <span class="n">partitions</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+</code></pre></div></div>
+<p>在分区器上执行策略之后，就会被分发到对应的 partition 上。</p>
+
+<h2 id="缓冲区">缓冲区</h2>
+
+<p><a href="https://cloud.tencent.com/developer/article/1698563">深度剖析 Kafka Producer 的缓冲池机制</a>
+这个篇文章写的很好，后面自己再分析一下。</p>
+
+<h1 id="消息者-consumer消费组-consumer-group">消息者 Consumer，消费组 Consumer Group</h1>
+
+<p>消费者人订阅的主题消费消息，消费消费的偏移量保存 kafka 的名字是 __consumer_offsets 的主题中。</p>
+
+<p>消息者还可以将自己的偏移理存储到 zookeeper， 需要设置 offset.storage=zookeeper.  不适合高并发。</p>
+
+<p>多个从一个主题消费的消费者可以加入到一个消费组中，消费线中的消费者共享group_id。</p>
+
+<p>分区和消费组中的消费者可以一一对应，分区的个数可以多个消费组中的消费者，即有存在一个消费者消费多个分区的情况
+如果，分区数少于消费组中的消费者个数，则出现有消费者空跑的情况。如下图：</p>
+
+<p><img src="/assets/mq/kafka-2023-03-12-20-33-13.png" alt="" /></p>
+
+<p><img src="/assets/mq/kafka-2023-03-12-20-33-58.png" alt="" /></p>
+
+<p>消费组与消费组之间是不相互影响的。</p>
+
+<p><img src="/assets/mq/kafka-2023-03-12-20-35-33.png" alt="" />
+消费者负载均衡策略</p>
+
+<p> 一个消费者组中的一个分片对应一个消费者成员，他能保证每个消费者成员都能访问，如果组中成员太多会有空闲的成员。</p>
+
+<p>kafaka 生产数据时数据的分组策略 </p>
+
+<p>生产者决定数据产生到集群的哪个 partition 中 </p>
+
+<p>每一条消息都是以(key，value)格式</p>
+
+<p>Key 是由生产者发送数据传入 所以生产者(key)决定了数据产生到集群的哪个 partition</p>
+
+<h2 id="心跳机制">心跳机制</h2>
+
+<p>消费者宕机，退出消费组，触发再平衡，重新给消费组中的消费者分配分区。</p>
+
+<p><img src="/assets/mq/kafka-2023-03-12-20-46-48.png" alt="" /></p>
+
+<p>由于 broker 宕机，主题的分区 3 宕机，此时分区3没有 leader 副本，触发再平衡，消费者4没有对应的主题分区，则消费4闲置。</p>
+
+<p>kafka 的心跳是 kafka consumer 和 broker 之前的健康检查， 只有当broker coordinatio 正常时， consumer 才会发送心跳。</p>
+
+<p>对应的参数：</p>
+
+<p>broker 端： sessionTimeoutMs   心跳过期时间。 
+consumer 端： sessionTimeoutMs, rebalanceTimeouMs  如果客户端发现心跳超期，客户端会coordinator 为不可用，并阻塞心跳线程，如果超过poll 消息的间隔超过了 rebalanceTimeoutMs, 则 consumer 告知 broker 主动离开消费组，也会触发再平衡。</p>
+
+<h2 id="再均衡">再均衡</h2>
+
+<p>再均衡（ rebalance ）本质上是一种协议，规定了一个消费组所有消费者如何达成一致来分配订阅主题的每个分区。</p>
+
+<p>比如某个消费组有20 个消费组，订阅了一个具有100个分区的主题。正常情况下，kafka 平均会为每个消费分配5个分区。这个分配过程就是再均衡。</p>
+
+<p>如何进行组内分区分配？</p>
+
+<p>三种分配策略： RangeAssignor 和 RoundrobinAssignor 以及 StickyAssignor。</p>
+
+<p>谁来执行再均衡和消费组管理</p>
+
+<p>kafka 提供了一个角色： Group Coordinator 来执行对于消费组的管理。</p>
+
+<p>Group Coordinator ：每个消费组分配一个消费组协调器用于组管理和位移管理。当消费组的第一个消费者启动的时候，它会去和kafka broker 确定谁是它们的组的组协调器。之后该消费组所有消费者和该组协调器协调通信。</p>
+
+<h2 id="幂等性">幂等性</h2>
+
+<p><strong>幂等性</strong>： 保证上在消息重发的时候，消费者不会重复处理。即使在消费者收到重复消息的时候，重复处理，也要保证最终结果的一致性。</p>
+
+<p>kafka 在引入幂等性之前， producer 向 broker 发送消息，然后 broker 将消息追加到消息流的给 producer 返回 ack 信号值。如下图：</p>
+
+<p><img src="/assets/mq/kafka-2023-03-14-08-43-08.png" alt="" />
+生产环境中，存在各种不确定因素，比如： producer 在发送给 broker 的时候出现网络异常。比如在回复确认的时候失败了。
+<img src="/assets/mq/kafka-2023-03-14-08-43-34.png" alt="" /></p>
+
+<p>图中的情况是： 当produce 第一次发送消息给 broker 时， broker 将消息（x2,y2）添加到消息流后返回 ack 确认信息给 producer 时失败了。</p>
+
+<p>此时， producer 端触发生试机制，将消息（x2,y2）再发给 Broker， 再次被追加到消息流中，然后返回 ack 确认消息。</p>
+
+<p>这时，消息流中就有两条相同的（x2,y2）的消息。</p>
+
+<p><strong>幂等性实现</strong></p>
+
+<p>添加唯一ID，类似于数据库的主键，用于唯一票房一个消息。</p>
+
+<p>kafka 为了实现幂等性，它在底层设计架构中引入了producerID 和 sequenceNumber。</p>
+<ul>
+  <li>producerID: 在每个新的producer 初始化时，会被分配一个唯一的 ProducerID, 这个producerID 对客户端使用者是不可见的。</li>
+  <li>sequenceNumber : 对于每个 Producer 发㳠数据的每个 topic 和 partiion 都对应一个从0 开始中单调递增的 sequenceNumber 值。</li>
+</ul>
+
+<p><img src="/assets/mq/kafka-2023-03-1-08-55-13.png" alt="" /></p>
+
+<p>同样，这是一个理想状态下的发送流程，实际情况下，会有很多不确定的因素，比如 broker 发送 ack 信息给 producer 时出现网络异常，导致发送失败。异常情况如下图所示：</p>
+
+<p><img src="/assets/mq/kafka-2023-03-14-08-56-26.png" alt="" /></p>
+
+<p>当 producer 发送消息（x2,y2） 给 broker 时，broker 接收消息并将其追加到消息流中。此时， broker 返回 ack 信息给 producer 失败，producer 触发重试机制，将消息（x2,y2）再次发送，但是由于引入了幂等性，在每条消息中附带了PID 和 sequenceNumber。相同的PID 和 sequenceNumber 发送给 broker， broker 会检测是否已经在有重复的，保存不存在相同的记录。</p>
+
+<h2 id="消费者位移管理">消费者位移管理</h2>
+
+<p>kafka 中，消费者根据消息的位移顺序消费消息。</p>
+
+<h2 id="消费者管理">消费者管理</h2>
+
+<p>consumer group 是 kafka 提供可扩展且具有容错性的消费者机制。</p>
+
+<p>三个特性：</p>
+
+<p>1、消费组有一个或多个消费者，消费者可以是一个进程，也可以是一个线程。
+2、group.id 是一个字符串，唯一标识一个消费组。
+3、消费组订阅的主题每个分区只能分配给消费一个消费者。</p>
+
+<p>消费者位移</p>
+
+<p>消费者在消费的过程中记录已消费的数据，即消费位移（offset） 信息。
+每个消费组只在自己的位移信息，那么只需要简单的一个整数表示位置就够了；同时可以引入 checkpoint 机制定期持久化。</p>
+
+<h2 id="位移管理">位移管理</h2>
+
+<p>kafka 默认定期自动提交位移，定期把 group 消费情况保存起来，做成一个 offset map 如下图所示：</p>
+
+<p><img src="/assets/mq/kafka-2023-03-13-22-31-41.png" alt="" /></p>
+
+<h1 id="事务">事务</h1>
+
+<p>kafka 事务中，一个原子操作，根据操作类型可以分为3种情况：</p>
+
+<p>1、producer 发送多条消息组成一个事务， 这些消息需要同时可见或同时不可见。</p>
+
+<p>2、producer 给多个 topic 多个partition 发消息，这些消息也需要能放在一个事务里面，这就形成了一个典型的分布事务。</p>
+
+<p>3、程序先消费一个 topic，然后做处理再发到另一个 topic，这个 consume-transform-produce 过程需要放到一个事务里面，比如在消息处理或者发送的过程中如果失败了，消费位点也不能提交。</p>
+
+<p>4、producer 或者 producer 所在的应用可能会挂掉，新的producer启动以后需要知道怎么处理之前未完成的事务 。</p>
+
+<p>幂等性并不能跨多个分区运行，而事务可以弥补这个缺陷。</p>
+
+<p>程序必须提供唯一的transactionalId ,要通过客户端参数显示设置。</p>
+
+<p>transactionalId 与 PID 一一对应，两者之间所不同的是 transactionalId 由用户显示设置，而 PID 是由 kafka内部分配的。</p>
+
+<p><code class="language-plaintext highlighter-rouge">properties.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, “transacetionId”);</code></p>
+
+<p>KafkaProducer提供了5个与事务相关的方法，详细如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 初始化事务 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">initTransactions</span><span class="o">();</span> 
+<span class="c1">// 开启事务 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">beginTransaction</span><span class="o">();</span> 
+<span class="c1">// 消费 - 生产模型 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">producerRecord</span><span class="o">);</span> 
+<span class="c1">// 提交消费位移 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">sendOffsetsToTransaction</span><span class="o">(</span><span class="n">offsets</span><span class="o">,</span> <span class="s">"groupId"</span><span class="o">);</span> 
+<span class="c1">// 提交事务 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">commitTransaction</span><span class="o">();</span>
+
+<span class="c1">// 中止事务 </span>
+<span class="n">producer</span><span class="o">.</span><span class="na">abortTransaction</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>实现 Kafka 事务，主要使用到 Broker 端的<strong>事务协调器 (TransactionCoordinator)</strong>。每个 Producer 都会被指定一个特定的 TransactionalCoordinator，用来负责处理其事务，与消费者 Rebalance 时的 GroupCoordinator 作用类似。实现事务的流程如下图所示：</p>
+
+<p><img src="/assets/mq/kafka-2023-03-14-12-03-10.png" alt="" /></p>
+
 <h1 id="最后">最后</h1>
 
 <p>这个就是 <code class="language-plaintext highlighter-rouge">kafka</code> 最简单的理解了。先熟悉这大致的流程再一步一步深入的去学习里面的细节和原理。</p>
@@ -158,11 +424,15 @@
 
 <hr />
 
+<p>参考：</p>
+
 <p>1、<a href="https://kafka.apachecn.org/">https://kafka.apachecn.org/</a></p>
 
 <p>2、<a href="https://www.cnblogs.com/sodawoods-blogs/p/8969774.html">https://www.cnblogs.com/sodawoods-blogs/p/8969774.html</a></p>
 
 <p>3、<a href="https://mp.weixin.qq.com/s/OQrKeFSrNcyTiFXR21pENA">https://mp.weixin.qq.com/s/OQrKeFSrNcyTiFXR21pENA</a></p>
+
+<p>4、<a href="https://cloud.tencent.com/developer/article/1657503">Kafka技术知识总结之二——Kafka事务</a></p>
 
 </section>
 <section align="right">
@@ -170,7 +440,7 @@
 <span>
 	<a  href="/%E5%BA%95%E5%B1%82%E9%80%BB%E8%BE%91/" class="pageNav"  >上一篇</a>
 	&nbsp;&nbsp;&nbsp;
-	<a  href="/kafka-producer/" class="pageNav"  >下一篇</a>
+	<a  href="/server-how-to-design-systerm/" class="pageNav"  >下一篇</a>
 </span>
 </section>
 <!-- JiaThis Button BEGIN -->
