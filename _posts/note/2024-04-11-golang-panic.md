@@ -2,7 +2,7 @@
 layout: post
 title: golang painc 发生了
 date: 2024-04-11 9:08:12
-categories: 工作日志
+categories: 开发语言
 tags: golang  
 excerpt: 无论有意还是无意，painc 就是发生了
 ---
@@ -18,7 +18,7 @@ mapConf["game"]为nil：如果mapConf["game"]是 nil，那么在尝试进行类�
 改成：
 
 ```go
-Config1 := make(map[string]interface{})
+    Config1 := make(map[string]interface{})
 	for key, value := range confMap {
 		Config1[key] = value
 	}

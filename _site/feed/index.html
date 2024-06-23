@@ -7,7 +7,7 @@
     <title>xyecho - just my notes</title>
     <link href="http://localhost:4000/feed/" rel="self" />
     <link href="http://localhost:4000" />
-    <lastBuildDate>2024-06-22T23:58:27+08:00</lastBuildDate>
+    <lastBuildDate>2024-06-23T11:06:45+08:00</lastBuildDate>
     <webMaster>1447675994@qq.com</webMaster>
     
     <item>
@@ -25,7 +25,7 @@
 
 <p>改成：</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Config1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{})</span>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">Config1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{})</span>
 	<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">confMap</span> <span class="p">{</span>
 		<span class="n">Config1</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 	<span class="p">}</span>
@@ -613,26 +613,6 @@ URL     : http://www.cip.cc/121.12.81.78
     <span class="n">sql</span> <span class="o">=</span> <span class="s">"update t_softname set icon=%s, start_cmd=%s where name=%s"</span>
     <span class="n">cursor</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,(</span><span class="n">icon</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>  
 </code></pre></div></div>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>go-zero swagger 的使用</title>
-      <link href="http://localhost:4000/go-zore-swagger/"/>
-      <pubDate>2024-03-09T17:08:12+08:00</pubDate>
-      <author>kane</author>
-      <guid>http://localhost:4000/go-zore-swagger</guid>
-      <content:encoded><![CDATA[<p>Swagger 是一个开源的 API 设计工具，它帮助开发者设计、构建、记录和使用RESTful Web服务。Swagger的核心是 OpenAPI 规范。</p>
-
-<p>官网：(https://swagger.io/)[https://swagger.io/]</p>
-
-<p>主要特点：</p>
-<ul>
-  <li>自动化文档生成：Swagger可以自动从代码注释和API定义生成API文档，这些文档可以被人类阅读，也可以被机器解析。</li>
-  <li>交互式API测试：Swagger UI提供了一个交互式的界面，允许开发者直接在浏览器中测试API，而无需编写代码。</li>
-</ul>
-
-<p>s</p>
 ]]></content:encoded>
     </item>
     
@@ -3159,6 +3139,18 @@ go <span class="nb">test</span> <span class="nt">-v</span> <span class="nt">-run
 <p>1、<a href="https://learnku.com/articles/44099">Golang 学习——interface 接口学习（一）</a></p>
 
 <p>2、<a href="https://learnku.com/articles/44168">Golang 学习——interface 接口学习（二）</a></p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>window11 wsl 使用问题记录</title>
+      <link href="http://localhost:4000/window-wsl/"/>
+      <pubDate>2023-09-01T18:12:15+08:00</pubDate>
+      <author>kane</author>
+      <guid>http://localhost:4000/window-wsl</guid>
+      <content:encoded><![CDATA[<p>1、wsl 内无法 ping 通 宿主机的IP，无法 ping 通 外网。 试了很多方式都没有成功，自己网络方面的知识也不够全面，我补一下。</p>
+
+<p>最后在网上找到一个方法：[修复 WSL 无 Internet 网络连接问题]（https://www.ghostchu.com/fix-wsl-no-internet-connection/）</p>
 ]]></content:encoded>
     </item>
     

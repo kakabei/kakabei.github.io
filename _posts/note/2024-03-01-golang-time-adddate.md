@@ -2,7 +2,7 @@
 layout: post
 title: golang time.AddDate的问题
 date: 2024-04-01 20:08:12
-categories: 工作日志
+categories: 开发语言
 tags: galang 
 excerpt: olang time.AddDate出现你意料之外的结果
 ---
