@@ -1,4 +1,0 @@
-I"E<p>1、wsl 内无法 ping 通 宿主机的IP，无法 ping 通 外网。 试了很多方式都没有成功，自己网络方面的知识也不够全面，我补一下。</p>
-
-<p>最后在网上找到一个方法：[修复 WSL 无 Internet 网络连接问题]（https://www.ghostchu.com/fix-wsl-no-internet-connection/）</p>
-:ET
