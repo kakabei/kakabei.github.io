@@ -38,8 +38,6 @@ Learning Git Branching : [https://learngitbranching.js.org ](https://learngitbra
 
 drawio:[https://app.diagrams.net/?src=about](https://app.diagrams.net/?src=about)
 
-
-
 vscode list :[https://blog.xyecho.com/vscode-plug-in-list/](https://blog.xyecho.com/vscode-plug-in-list/)
 
 Totalcmd64 [https://pan.baidu.com/s/1UHiqkMRYLbJYaYs_8ZV4yg?pwd=bq3r](https://pan.baidu.com/s/1UHiqkMRYLbJYaYs_8ZV4yg?pwd=bq3r)
@@ -56,6 +54,8 @@ Secure CRT 使用教程：[https://www.bilibili.com/video/BV1zK411q7xu?p=1](http
 Secure CRT 配色方案：[https://www.bilibili.com/video/BV1jt421j7s5/?p=1&vd_source=6e6fca9271a12c4f326e671c95904150](https://www.bilibili.com/video/BV1jt421j7s5/?p=1&vd_source=6e6fca9271a12c4f326e671c95904150)
 
 ## AI 
+
+通往 AGI 之路: [https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?](https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?)
 
 AI search perplexity: [https://www.perplexity.ai/](https://www.perplexity.ai/)
 
