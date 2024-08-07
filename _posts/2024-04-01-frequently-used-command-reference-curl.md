@@ -2,8 +2,8 @@
 layout: post
 title: 常用命令 curl 
 date: 2024-04-01 19:21:12
-categories: 工具
-tags: 工作提效
+categories: tool
+tags: curl
 excerpt: Frequently Used Command Reference Curl 
 ---
 

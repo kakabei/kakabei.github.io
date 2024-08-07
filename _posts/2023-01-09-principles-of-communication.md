@@ -3,7 +3,7 @@ layout: post
 title: 沟通原则
 date: 2023-01-09 10:12:15
 categories: 总结   
-tags:  工作经验 团队管理
+tags:  工作经验 
 excerpt: 坚持去做，不小心做错了就抄一遍。
 ---
 

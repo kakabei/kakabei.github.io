@@ -3,7 +3,7 @@ layout: post
 title: 团队能力的提升
 date: 2022-10-21 16:12:15
 categories: 总结  
-tags: 工作经验 团队管理
+tags: 工作经验
 excerpt: 无论是做为 leader 还是成员，都应该思考如何提升个人能力，同时也应该思考如何提升团队能力。
 ---
 

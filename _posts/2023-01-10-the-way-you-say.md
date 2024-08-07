@@ -3,7 +3,7 @@ layout: post
 title: 说话的方式
 date: 2023-01-10 10:12:15
 categories: 总结  
-tags:   工作经验 团队管理
+tags:   工作经验
 excerpt: 总结了一下适合自己的说话、汇报的方式
 ---
 

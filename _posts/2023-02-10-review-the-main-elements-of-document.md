@@ -3,7 +3,7 @@ layout: post
 title: 复盘文档的要素
 date: 2023-02-10 10:12:15
 categories: 总结   
-tags:  工作经验 团队管理
+tags:  工作经验
 excerpt: Review the main elements of a document
 ---
 

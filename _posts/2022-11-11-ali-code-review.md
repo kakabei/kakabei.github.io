@@ -3,7 +3,7 @@ layout: post
 title: 阿里技术:Code Review
 date: 2022-11-11 16:12:15
 categories: 总结  
-tags:  工作经验  团队管理 
+tags:  工作经验 
 excerpt: 代码 review 规范是一个团队能力的体现
 ---
 

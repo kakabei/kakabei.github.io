@@ -2,7 +2,7 @@
 layout: post
 title: golang 资料
 date: 2023-1-03 10:12:15
-categories: 开发语言 
+categories: 开发 
 tags: golang
 excerpt: golang 整理资料
 ---

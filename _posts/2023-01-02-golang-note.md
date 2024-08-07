@@ -2,7 +2,7 @@
 layout: post
 title: golang 学习笔记
 date: 2023-1-02 10:12:15
-categories: 开发语言 
+categories: 开发 
 tags: golang
 excerpt: golang 学习开发过程记录的
 ---

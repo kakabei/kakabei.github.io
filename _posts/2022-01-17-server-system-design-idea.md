@@ -3,7 +3,7 @@ layout: post
 title: 系统设计方案注意事项
 date: 2022-01-24 16:12:15
 categories: 系统设计  
-tags: 工作经验 团队管理
+tags: 工作经验
 excerpt: 工作中，对于系统设计一些要注意事项，总结汇总到一起，方便方案的 review。
 ---
 
